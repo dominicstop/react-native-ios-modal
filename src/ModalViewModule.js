@@ -1,5 +1,5 @@
 import { NativeModules } from 'react-native';
-import * as Helpers from 'app/src/functions/helpers';
+import * as Helpers from './functions/helpers';
 
 const moduleName   = "ModalViewModule";
 const NativeModule = NativeModules[moduleName];
