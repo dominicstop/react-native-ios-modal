@@ -20,6 +20,9 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libIosModal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIosModal.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		881736C425339A2900563DE3 /* Helpers+Utilities */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Helpers+Utilities"; sourceTree = "<group>"; };
+		881736C525339A2900563DE3 /* Extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extensions; sourceTree = "<group>"; };
+		881736C625339A2900563DE3 /* React Native */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "React Native"; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* IosModal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IosModal-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -53,6 +56,9 @@
 		881736982532BBCA00563DE3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				881736C525339A2900563DE3 /* Extensions */,
+				881736C425339A2900563DE3 /* Helpers+Utilities */,
+				881736C625339A2900563DE3 /* React Native */,
 				F4FF95D5245B92E700C19C63 /* IosModal-Bridging-Header.h */,
 			);
 			path = src;
