@@ -2,7 +2,6 @@ import React from 'react';
 import Proptypes from 'prop-types';
 import { requireNativeComponent, UIManager, findNodeHandle, StyleSheet, View, ScrollView } from 'react-native';
 
-import _ from 'lodash';
 import * as Helpers from './functions/helpers';
 import { RequestFactory } from './functions/RequestFactory';
 
@@ -158,7 +157,7 @@ export class ModalView extends React.PureComponent {
         await Helpers.setStateAsync(this, {
           visible: nextVisible, 
           // pass down received props to childProps via state
-          childProps: (_.isObject(childProps)
+          childProps: (Helpers.isObject(childProps)
             ? childProps
             : null
           ),
@@ -343,7 +342,7 @@ export class ModalView extends React.PureComponent {
                   ref        : this._handleChildRef   ,
                   getModalRef: this._handleChildGetRef,
                   // pass down props received from setVisibility
-                  ...(_.isObject(state.childProps) && state.childProps),
+                  ...(Helpers.isObject(state.childProps) && state.childProps),
                   // pass down modalID
                   modalID: props[PROP_KEYS.modalID]
                 })}

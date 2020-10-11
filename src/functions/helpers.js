@@ -30,3 +30,8 @@ export function promiseWithTimeout(ms, promise){
   // Returns a race between our timeout and the passed in promise
   return Promise.race([promise, timeoutPromise]);
 };
+
+export function isObject(value) {
+  const type = typeof value
+  return value != null && (type === 'object' || type === 'function')
+};
