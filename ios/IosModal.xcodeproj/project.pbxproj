@@ -6,6 +6,26 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8899D6E62534321D00E1D36F /* WeakElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6CF2534321D00E1D36F /* WeakElement.swift */; };
+		8899D6E72534321D00E1D36F /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D02534321D00E1D36F /* MulticastDelegate.swift */; };
+		8899D6E82534321D00E1D36F /* UIModalTransitionStyle+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D32534321D00E1D36F /* UIModalTransitionStyle+Helpers.swift */; };
+		8899D6E92534321D00E1D36F /* UIBlurEffect+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D42534321D00E1D36F /* UIBlurEffect+Helpers.swift */; };
+		8899D6EA2534321D00E1D36F /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D52534321D00E1D36F /* UIView+Helpers.swift */; };
+		8899D6EB2534321D00E1D36F /* UIModalPresentationStyle+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D62534321D00E1D36F /* UIModalPresentationStyle+Helpers.swift */; };
+		8899D6EC2534321D00E1D36F /* KeyWindow+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6D72534321D00E1D36F /* KeyWindow+Helpers.swift */; };
+		8899D6ED2534321D00E1D36F /* RCTSwiftLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6DA2534321D00E1D36F /* RCTSwiftLog.m */; };
+		8899D6EE2534321D00E1D36F /* RCTLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6DB2534321D00E1D36F /* RCTLog.swift */; };
+		8899D6EF2534321D00E1D36F /* RCTModalViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6DE2534321D00E1D36F /* RCTModalViewModule.swift */; };
+		8899D6F02534321D00E1D36F /* RCTModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6DF2534321D00E1D36F /* RCTModalView.swift */; };
+		8899D6F12534321D00E1D36F /* RCTModalViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E02534321D00E1D36F /* RCTModalViewDelegate.swift */; };
+		8899D6F22534321D00E1D36F /* RCTModalViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E12534321D00E1D36F /* RCTModalViewManager.swift */; };
+		8899D6F32534321D00E1D36F /* RCTModalViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E22534321D00E1D36F /* RCTModalViewModule.m */; };
+		8899D6F42534321D00E1D36F /* RCTModalViewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E32534321D00E1D36F /* RCTModalViewError.swift */; };
+		8899D6F52534321D00E1D36F /* RCTModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E42534321D00E1D36F /* RCTModalViewController.swift */; };
+		8899D6F62534321D00E1D36F /* RCTModalViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8899D6E52534321D00E1D36F /* RCTModalViewManager.m */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -20,10 +40,25 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libIosModal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIosModal.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		881736C425339A2900563DE3 /* Helpers+Utilities */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Helpers+Utilities"; sourceTree = "<group>"; };
-		881736C525339A2900563DE3 /* Extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extensions; sourceTree = "<group>"; };
-		881736C625339A2900563DE3 /* React Native */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "React Native"; sourceTree = "<group>"; };
-		F4FF95D5245B92E700C19C63 /* IosModal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IosModal-Bridging-Header.h"; sourceTree = "<group>"; };
+		8899D6CF2534321D00E1D36F /* WeakElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakElement.swift; sourceTree = "<group>"; };
+		8899D6D02534321D00E1D36F /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
+		8899D6D12534321D00E1D36F /* IosModal-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IosModal-Bridging-Header.h"; sourceTree = "<group>"; };
+		8899D6D32534321D00E1D36F /* UIModalTransitionStyle+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIModalTransitionStyle+Helpers.swift"; sourceTree = "<group>"; };
+		8899D6D42534321D00E1D36F /* UIBlurEffect+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBlurEffect+Helpers.swift"; sourceTree = "<group>"; };
+		8899D6D52534321D00E1D36F /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
+		8899D6D62534321D00E1D36F /* UIModalPresentationStyle+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIModalPresentationStyle+Helpers.swift"; sourceTree = "<group>"; };
+		8899D6D72534321D00E1D36F /* KeyWindow+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeyWindow+Helpers.swift"; sourceTree = "<group>"; };
+		8899D6DA2534321D00E1D36F /* RCTSwiftLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTSwiftLog.m; sourceTree = "<group>"; };
+		8899D6DB2534321D00E1D36F /* RCTLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTLog.swift; sourceTree = "<group>"; };
+		8899D6DC2534321D00E1D36F /* RCTSwiftLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTSwiftLog.h; sourceTree = "<group>"; };
+		8899D6DE2534321D00E1D36F /* RCTModalViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalViewModule.swift; sourceTree = "<group>"; };
+		8899D6DF2534321D00E1D36F /* RCTModalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalView.swift; sourceTree = "<group>"; };
+		8899D6E02534321D00E1D36F /* RCTModalViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalViewDelegate.swift; sourceTree = "<group>"; };
+		8899D6E12534321D00E1D36F /* RCTModalViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalViewManager.swift; sourceTree = "<group>"; };
+		8899D6E22534321D00E1D36F /* RCTModalViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTModalViewModule.m; sourceTree = "<group>"; };
+		8899D6E32534321D00E1D36F /* RCTModalViewError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalViewError.swift; sourceTree = "<group>"; };
+		8899D6E42534321D00E1D36F /* RCTModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTModalViewController.swift; sourceTree = "<group>"; };
+		8899D6E52534321D00E1D36F /* RCTModalViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTModalViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,20 +83,75 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				881736982532BBCA00563DE3 /* src */,
+				8899D6CD2534321D00E1D36F /* src_library */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		881736982532BBCA00563DE3 /* src */ = {
+		8899D6CD2534321D00E1D36F /* src_library */ = {
 			isa = PBXGroup;
 			children = (
-				881736C525339A2900563DE3 /* Extensions */,
-				881736C425339A2900563DE3 /* Helpers+Utilities */,
-				881736C625339A2900563DE3 /* React Native */,
-				F4FF95D5245B92E700C19C63 /* IosModal-Bridging-Header.h */,
+				8899D6CE2534321D00E1D36F /* Helpers+Utilities */,
+				8899D6D12534321D00E1D36F /* IosModal-Bridging-Header.h */,
+				8899D6D22534321D00E1D36F /* Extensions */,
+				8899D6D82534321D00E1D36F /* React Native */,
 			);
-			path = src;
+			path = src_library;
+			sourceTree = "<group>";
+		};
+		8899D6CE2534321D00E1D36F /* Helpers+Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8899D6CF2534321D00E1D36F /* WeakElement.swift */,
+				8899D6D02534321D00E1D36F /* MulticastDelegate.swift */,
+			);
+			path = "Helpers+Utilities";
+			sourceTree = "<group>";
+		};
+		8899D6D22534321D00E1D36F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8899D6D32534321D00E1D36F /* UIModalTransitionStyle+Helpers.swift */,
+				8899D6D42534321D00E1D36F /* UIBlurEffect+Helpers.swift */,
+				8899D6D52534321D00E1D36F /* UIView+Helpers.swift */,
+				8899D6D62534321D00E1D36F /* UIModalPresentationStyle+Helpers.swift */,
+				8899D6D72534321D00E1D36F /* KeyWindow+Helpers.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8899D6D82534321D00E1D36F /* React Native */ = {
+			isa = PBXGroup;
+			children = (
+				8899D6D92534321D00E1D36F /* RCTSwiftLog */,
+				8899D6DD2534321D00E1D36F /* RCTModalView */,
+			);
+			path = "React Native";
+			sourceTree = "<group>";
+		};
+		8899D6D92534321D00E1D36F /* RCTSwiftLog */ = {
+			isa = PBXGroup;
+			children = (
+				8899D6DA2534321D00E1D36F /* RCTSwiftLog.m */,
+				8899D6DB2534321D00E1D36F /* RCTLog.swift */,
+				8899D6DC2534321D00E1D36F /* RCTSwiftLog.h */,
+			);
+			path = RCTSwiftLog;
+			sourceTree = "<group>";
+		};
+		8899D6DD2534321D00E1D36F /* RCTModalView */ = {
+			isa = PBXGroup;
+			children = (
+				8899D6DE2534321D00E1D36F /* RCTModalViewModule.swift */,
+				8899D6DF2534321D00E1D36F /* RCTModalView.swift */,
+				8899D6E02534321D00E1D36F /* RCTModalViewDelegate.swift */,
+				8899D6E12534321D00E1D36F /* RCTModalViewManager.swift */,
+				8899D6E22534321D00E1D36F /* RCTModalViewModule.m */,
+				8899D6E32534321D00E1D36F /* RCTModalViewError.swift */,
+				8899D6E42534321D00E1D36F /* RCTModalViewController.swift */,
+				8899D6E52534321D00E1D36F /* RCTModalViewManager.m */,
+			);
+			path = RCTModalView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,6 +211,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8899D6ED2534321D00E1D36F /* RCTSwiftLog.m in Sources */,
+				8899D6F22534321D00E1D36F /* RCTModalViewManager.swift in Sources */,
+				8899D6EA2534321D00E1D36F /* UIView+Helpers.swift in Sources */,
+				8899D6F62534321D00E1D36F /* RCTModalViewManager.m in Sources */,
+				8899D6F02534321D00E1D36F /* RCTModalView.swift in Sources */,
+				8899D6EF2534321D00E1D36F /* RCTModalViewModule.swift in Sources */,
+				8899D6EB2534321D00E1D36F /* UIModalPresentationStyle+Helpers.swift in Sources */,
+				8899D6E82534321D00E1D36F /* UIModalTransitionStyle+Helpers.swift in Sources */,
+				8899D6EE2534321D00E1D36F /* RCTLog.swift in Sources */,
+				8899D6EC2534321D00E1D36F /* KeyWindow+Helpers.swift in Sources */,
+				8899D6E62534321D00E1D36F /* WeakElement.swift in Sources */,
+				8899D6F12534321D00E1D36F /* RCTModalViewDelegate.swift in Sources */,
+				8899D6E72534321D00E1D36F /* MulticastDelegate.swift in Sources */,
+				8899D6F52534321D00E1D36F /* RCTModalViewController.swift in Sources */,
+				8899D6F42534321D00E1D36F /* RCTModalViewError.swift in Sources */,
+				8899D6F32534321D00E1D36F /* RCTModalViewModule.m in Sources */,
+				8899D6E92534321D00E1D36F /* UIBlurEffect+Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +277,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -213,7 +320,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -233,7 +340,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = IosModal;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "src/IosModal-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "src_library/IosModal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -252,7 +359,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = IosModal;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "src/IosModal-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "src_library/IosModal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
