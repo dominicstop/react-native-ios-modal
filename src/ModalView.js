@@ -5,13 +5,33 @@ import { requireNativeComponent, UIManager, findNodeHandle, StyleSheet, View, Sc
 import * as Helpers from './functions/helpers';
 import { RequestFactory } from './functions/RequestFactory';
 
+// TODO: Use Context to pass ref to functions
+//
+// TODO: Impl. observable so other comps can subscribe/unsub to events 
+//  via context instead of using refs to call events and create HOC to
+//  wrap comp., consume modal context, handle subscribe/unsub to events 
+//  and then call "modal life cycle" funcs via ref to wrapped comp.
+//
+// TODO: Impl. hooks API ex: useOnModalShowCallback, useOnModalDismiss, etc.
+//  consume modal context, then sub/unsub to modal events and call callback
+//
+// TODO: refactor - move constants to seperate file
+// TODO: refactor - convert to typescript
+// TODO: jsconfig for absolute imports alias
+// TODO: update example to have multiple examples
+// TODO: render nothing on android
+
 
 const componentName   = "RCTModalView";
 const NativeCommands  = UIManager[componentName]?.Commands;
+const NativeConstants = UIManager[componentName]?.Constants;
 const NativeModalView = requireNativeComponent(componentName);
 
+export const AvailableBlurEffectStyles   = NativeConstants?.availableBlurEffectStyles;
+export const AvailablePresentationStyles = NativeConstants?.availablePresentationStyles;
 
-const PROP_KEYS = {
+
+const NATIVE_PROP_KEYS = {
   // Modal Native Props: Event Callbacks
   onRequestResult      : 'onRequestResult'      ,
   onModalBlur          : 'onModalBlur'          ,
@@ -304,21 +324,21 @@ export class ModalView extends React.PureComponent {
     const state = this.state;
 
     const nativeProps = {
-      [PROP_KEYS.onModalBlur          ]: this._handleOnModalBlur          ,
-      [PROP_KEYS.onModalFocus         ]: this._handleOnModalFocus         ,
-      [PROP_KEYS.onModalShow          ]: this._handleOnModalShow          ,
-      [PROP_KEYS.onModalDismiss       ]: this._handleOnModalDismiss       ,
-      [PROP_KEYS.onRequestResult      ]: this._handleOnRequestResult      ,
-      [PROP_KEYS.onModalDidDismiss    ]: this._handleOnModalDidDismiss    ,
-      [PROP_KEYS.onModalWillDismiss   ]: this._handleOnModalWillDismiss   ,
-      [PROP_KEYS.onModalAttemptDismiss]: this._handleOnModalAttemptDismiss,
+      [NATIVE_PROP_KEYS.onModalBlur          ]: this._handleOnModalBlur          ,
+      [NATIVE_PROP_KEYS.onModalFocus         ]: this._handleOnModalFocus         ,
+      [NATIVE_PROP_KEYS.onModalShow          ]: this._handleOnModalShow          ,
+      [NATIVE_PROP_KEYS.onModalDismiss       ]: this._handleOnModalDismiss       ,
+      [NATIVE_PROP_KEYS.onRequestResult      ]: this._handleOnRequestResult      ,
+      [NATIVE_PROP_KEYS.onModalDidDismiss    ]: this._handleOnModalDidDismiss    ,
+      [NATIVE_PROP_KEYS.onModalWillDismiss   ]: this._handleOnModalWillDismiss   ,
+      [NATIVE_PROP_KEYS.onModalAttemptDismiss]: this._handleOnModalAttemptDismiss,
       // pass down props
       ...props, ...nativeProps,
       ...(props.setModalInPresentationFromProps && {
-        [PROP_KEYS.isModalInPresentation]: state.isModalInPresentation
+        [NATIVE_PROP_KEYS.isModalInPresentation]: state.isModalInPresentation
       }),
       ...(props.setEnableSwipeGestureFromProps && {
-        [PROP_KEYS.enableSwipeGesture]: state.enableSwipeGesture
+        [NATIVE_PROP_KEYS.enableSwipeGesture]: state.enableSwipeGesture
       })
     };
 
@@ -344,7 +364,7 @@ export class ModalView extends React.PureComponent {
                   // pass down props received from setVisibility
                   ...(Helpers.isObject(state.childProps) && state.childProps),
                   // pass down modalID
-                  modalID: props[PROP_KEYS.modalID]
+                  modalID: props[NATIVE_PROP_KEYS.modalID]
                 })}
               </View>
             )}

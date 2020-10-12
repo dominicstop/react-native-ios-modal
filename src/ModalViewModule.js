@@ -31,7 +31,7 @@ export class ModalViewModule {
   static dismissAllModals(animated = true){
     const promise = new Promise((resolve, reject) => {
       try {
-        NativeModule[COMMAND_KEYS.dismissAllModals](true, success => {
+        NativeModule[COMMAND_KEYS.dismissAllModals](animated, success => {
           (success? resolve : reject)();
         });
 

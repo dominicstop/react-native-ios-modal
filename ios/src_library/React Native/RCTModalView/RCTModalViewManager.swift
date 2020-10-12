@@ -41,6 +41,16 @@ class RCTModalViewManager: RCTViewManager {
     RCTModalViewManager.sharedInstance = self;
   };
   
+  @objc override func constantsToExport() -> [AnyHashable : Any]! {
+    return [
+      "availableBlurEffectStyles": UIBlurEffect.Style
+        .availableStyles.map { $0.stringDescription() },
+      
+      "availablePresentationStyles": UIModalPresentationStyle
+        .availableStyles.map { $0.stringDescription() },
+    ];
+  };
+  
   @objc func requestModalPresentation(_ node: NSNumber, requestID: NSNumber, visibility: Bool){
     DispatchQueue.main.async {
       guard

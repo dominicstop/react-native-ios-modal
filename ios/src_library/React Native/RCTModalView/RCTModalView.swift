@@ -17,7 +17,7 @@ fileprivate struct DefaultValues {
   }();
   
   static let presentationStyleString =
-    String(describing: DefaultValues.presentationStyle) as NSString;
+    Self.presentationStyle.stringDescription() as NSString;
   
   static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
     guard #available(iOS 13.0, *) else { return .regular };
@@ -25,7 +25,7 @@ fileprivate struct DefaultValues {
   }();
   
   static let modalBGBlurEffectStyleString =
-    String(describing: DefaultValues.modalBGBlurEffectStyle) as NSString;
+    Self.modalBGBlurEffectStyle.stringDescription() as NSString;
 };
 
 class RCTModalView: UIView {
@@ -426,7 +426,7 @@ class RCTModalView: UIView {
       params["success"] = success;
       if let errorCode = error {
         params["errorCode"   ] = errorCode.rawValue;
-        params["errorMessage"] = RCTModalViewError.getErrorMessage(for: errorCode)
+        params["errorMessage"] = RCTModalViewError.getErrorMessage(for: errorCode);
       };
       
       completion?(success, error);

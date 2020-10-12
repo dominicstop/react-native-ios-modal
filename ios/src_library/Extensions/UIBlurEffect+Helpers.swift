@@ -8,7 +8,7 @@
 import Foundation
 
 extension UIBlurEffect.Style: CaseIterable {
-  public static var allCases: [UIBlurEffect.Style] {
+  public static var availableStyles: [UIBlurEffect.Style] {
     var styles: [UIBlurEffect.Style] = [
       .regular,
       .prominent,
@@ -38,6 +38,10 @@ extension UIBlurEffect.Style: CaseIterable {
     };
     
     return styles;
+  };
+  
+  public static var allCases: [UIBlurEffect.Style] {
+    return self.availableStyles;
   };
   
   func stringDescription() -> String {

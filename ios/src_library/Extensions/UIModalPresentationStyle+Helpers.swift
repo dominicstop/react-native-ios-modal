@@ -8,7 +8,7 @@
 import Foundation
 
 extension UIModalPresentationStyle: CaseIterable {
-  public static var allCases: [UIModalPresentationStyle] {
+  public static var availableStyles: [UIModalPresentationStyle] {
     var styles: [UIModalPresentationStyle] = [
       .fullScreen,
       .pageSheet,
@@ -20,7 +20,7 @@ extension UIModalPresentationStyle: CaseIterable {
       .popover,
     ];
     
-    if #available(iOS 13.0, *){
+    if #available(iOS 13.0, *) {
       styles.append(.automatic);
     };
     
@@ -29,6 +29,10 @@ extension UIModalPresentationStyle: CaseIterable {
     #endif
     
     return styles;
+  };
+  
+  public static var allCases: [UIModalPresentationStyle] {
+    return self.availableStyles;
   };
   
   func stringDescription() -> String {
