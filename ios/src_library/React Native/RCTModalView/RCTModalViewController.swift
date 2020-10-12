@@ -38,19 +38,18 @@ class RCTModalViewController: UIViewController {
   };
   
   var blurEffectView : UIView? = nil;
-  var blurEffectStyle: UIBlurEffect.Style? = .systemMaterialLight {
+  var blurEffectStyle: UIBlurEffect.Style? = {
+    guard #available(iOS 13, *) else { return .regular };
+    return .systemMaterialLight;
+    
+  }() {
     didSet {
       let didChange   = oldValue != blurEffectStyle;
       let isPresented = self.presentingViewController != nil;
     
-      guard didChange && isPresented,
-        let blurEffectStyle = self.blurEffectStyle
-      else {
-        #if DEBUG
-        print("RCTModalViewController, didSet blurEffectStyle: deffered");
-        #endif
-        return;
-      };
+      guard
+        didChange && isPresented,
+        let blurEffectStyle = self.blurEffectStyle else { return };
       
       #if DEBUG
       print("RCTModalViewController, didSet blurEffectStyle: \(blurEffectStyle.stringDescription())");
@@ -121,9 +120,15 @@ class RCTModalViewController: UIViewController {
   // -----------------------
   
   private func setBGTransparent(){
-    self.view.backgroundColor = self.isBGTransparent
-      ? .none
-      : .systemBackground;
+    self.view.backgroundColor = {
+      if self.isBGTransparent {
+        return .none;
+      };
+      
+      guard #available(iOS 13, *) else { return .white };
+      return .systemBackground;
+    }();
+
     
     // if isBGTransparent is no longer transparent and
     // the bg is still blurred, remove the blur effect

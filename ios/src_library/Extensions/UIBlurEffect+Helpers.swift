@@ -9,28 +9,35 @@ import Foundation
 
 extension UIBlurEffect.Style: CaseIterable {
   public static var allCases: [UIBlurEffect.Style] {
-    return [
-      .systemUltraThinMaterial,
-      .systemThinMaterial,
-      .systemMaterial,
-      .systemThickMaterial,
-      .systemChromeMaterial,
-      .systemMaterialLight,
-      .systemThinMaterialLight,
-      .systemUltraThinMaterialLight,
-      .systemThickMaterialLight,
-      .systemChromeMaterialLight,
-      .systemChromeMaterialDark,
-      .systemMaterialDark,
-      .systemThickMaterialDark,
-      .systemThinMaterialDark,
-      .systemUltraThinMaterialDark,
+    var styles: [UIBlurEffect.Style] = [
       .regular,
       .prominent,
       .light,
       .extraLight,
       .dark,
     ];
+    
+    if #available(iOS 13.0, *) {
+      styles.append(contentsOf: [
+        .systemUltraThinMaterial,
+        .systemThinMaterial,
+        .systemMaterial,
+        .systemThickMaterial,
+        .systemChromeMaterial,
+        .systemMaterialLight,
+        .systemThinMaterialLight,
+        .systemUltraThinMaterialLight,
+        .systemThickMaterialLight,
+        .systemChromeMaterialLight,
+        .systemChromeMaterialDark,
+        .systemMaterialDark,
+        .systemThickMaterialDark,
+        .systemThinMaterialDark,
+        .systemUltraThinMaterialDark,
+      ]);
+    };
+    
+    return styles;
   };
   
   func stringDescription() -> String {
@@ -69,5 +76,9 @@ extension UIBlurEffect.Style: CaseIterable {
   
   static func fromString(_ string: String) -> UIBlurEffect.Style? {
     return self.allCases.first{ $0.stringDescription() == string };
+  };
+  
+  static func fromString(_ string: NSString) -> UIBlurEffect.Style? {
+    return self.fromString(string as String);
   };
 };

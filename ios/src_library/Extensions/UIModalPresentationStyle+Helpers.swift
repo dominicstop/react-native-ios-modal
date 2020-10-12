@@ -10,7 +10,6 @@ import Foundation
 extension UIModalPresentationStyle: CaseIterable {
   public static var allCases: [UIModalPresentationStyle] {
     var styles: [UIModalPresentationStyle] = [
-      .automatic,
       .fullScreen,
       .pageSheet,
       .formSheet,
@@ -20,6 +19,10 @@ extension UIModalPresentationStyle: CaseIterable {
       .overCurrentContext,
       .popover,
     ];
+    
+    if #available(iOS 13.0, *){
+      styles.append(.automatic);
+    };
     
     #if !os(iOS)
     styles.append(.blurOverFullScreen);
@@ -51,5 +54,9 @@ extension UIModalPresentationStyle: CaseIterable {
   
   static func fromString(_ string: String) -> UIModalPresentationStyle? {
     return self.allCases.first{ $0.stringDescription() == string };
+  };
+  
+  static func fromString(_ string: NSString) -> UIModalPresentationStyle? {
+    return self.fromString(string as String);
   };
 };

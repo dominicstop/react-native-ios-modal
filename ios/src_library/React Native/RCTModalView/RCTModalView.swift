@@ -10,6 +10,24 @@ import Foundation
 
 typealias completionResult = ((_ isSuccess: Bool, _ error: RCTModalViewError?) -> ())?;
 
+fileprivate struct DefaultValues {
+  static let presentationStyle: UIModalPresentationStyle = {
+    guard #available(iOS 13.0, *) else { return .fullScreen };
+    return .automatic;
+  }();
+  
+  static let presentationStyleString =
+    String(describing: DefaultValues.presentationStyle) as NSString;
+  
+  static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
+    guard #available(iOS 13.0, *) else { return .regular };
+    return .systemThinMaterial;
+  }();
+  
+  static let modalBGBlurEffectStyleString =
+    String(describing: DefaultValues.modalBGBlurEffectStyle) as NSString;
+};
+
 class RCTModalView: UIView {
   
   // ----------------
@@ -81,12 +99,12 @@ class RCTModalView: UIView {
     }
   };
   
-  @objc var modalBGBlurEffectStyle: NSString = "systemThinMaterial" {
+  @objc var modalBGBlurEffectStyle: NSString = DefaultValues.modalBGBlurEffectStyleString {
     didSet {
       guard oldValue != self.modalBGBlurEffectStyle
       else { return };
       
-      guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle as String)
+      guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
       else {
         RCTLogWarn("RCTModalView, modalBGBlurEffectStyle: Invalid value");
         return;
@@ -96,13 +114,14 @@ class RCTModalView: UIView {
     }
   };
   
-  private var _modalPresentationStyle: UIModalPresentationStyle = .automatic;
-  @objc var modalPresentationStyle: NSString = "automatic" {
+  private var _modalPresentationStyle = DefaultValues.presentationStyle;
+  
+  @objc var modalPresentationStyle: NSString = DefaultValues.presentationStyleString {
     didSet {
       guard oldValue != self.modalPresentationStyle
       else { return };
       
-      guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle as String)
+      guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
       else {
         RCTLogWarn("RCTModalView, modalPresentationStyle: Invalid value");
         return;
