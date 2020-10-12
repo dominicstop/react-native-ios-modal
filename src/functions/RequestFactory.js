@@ -1,4 +1,4 @@
-import * as Helpers from 'app/src/functions/helpers';
+import * as Helpers from './helpers';
 
 export class RequestFactory {
   static initialize(that){
