@@ -1,20 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import IosModal from 'react-native-ios-modal';
+
+import { ModalViewTest1 } from './components/ModalViewTest1';
 
 export default function App() {
-  const [result, setResult] = React.useState();
-
-  React.useEffect(() => {
-    IosModal.multiply(3, 7).then(setResult);
-  }, []);
-
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <ModalViewTest1/>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
