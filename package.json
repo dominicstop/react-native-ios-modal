@@ -9,7 +9,6 @@
   "files": [
     "src",
     "lib",
-    "android",
     "ios",
     "cpp",
     "react-native-ios-modal.podspec",
@@ -29,8 +28,7 @@
   },
   "keywords": [
     "react-native",
-    "ios",
-    "android"
+    "ios"
   ],
   "repository": "https://github.com/dominicstop/react-native-ios-modal",
   "author": "Dominic Go <dominicstop@gmail.com> (https://github.com/dominicstop)",
