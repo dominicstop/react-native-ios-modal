@@ -35,7 +35,6 @@ export const UIModalPresentationStyles = {
   none              : 'none'              ,
   currentContext    : 'currentContext'    ,
   custom            : 'custom'            ,
-  overFullScreen    : 'overFullScreen'    ,
   overCurrentContext: 'overCurrentContext',
   popover           : 'popover'           ,
   blurOverFullScreen: 'blurOverFullScreen',

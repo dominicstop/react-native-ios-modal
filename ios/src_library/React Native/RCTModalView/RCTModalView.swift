@@ -315,7 +315,14 @@ class RCTModalView: UIView {
       return;
     };
     
-    modalNVC.presentationController?.delegate = self;
+    /// weird bug where you cant present fullscreen if `presentationController` delegate is set
+    /// so only set the delegate when we are using a page sheet
+    switch self._modalPresentationStyle {
+      case .automatic, .pageSheet, .formSheet:
+        modalNVC.presentationController?.delegate = self;
+      default: break;
+    };
+    
     modalNVC.modalTransitionStyle   = self._modalTransitionStyle;
     modalNVC.modalPresentationStyle = self._modalPresentationStyle;
     
@@ -349,10 +356,7 @@ class RCTModalView: UIView {
   };
   
   public func dismissModal(completion: completionResult = nil) {
-    let hasWindow: Bool = (self.window != nil);
-    
-    guard
-      hasWindow && self.isPresented,
+    guard self.isPresented,
       let modalVC = self.modalVC
     else {
       #if DEBUG
@@ -469,7 +473,6 @@ extension RCTModalView {
     self.modalNVC = {
       /// by this time, `modalVC` will already be init. so it's ok to force unwrap
       let nvc = UINavigationController(rootViewController: self.modalVC!);
-      nvc.presentationController?.delegate = self;
       nvc.setNavigationBarHidden(true, animated: false);
       
       return nvc;
