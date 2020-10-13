@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, SafeAreaView, View, Text } from 'react-native';
 
 import { ModalViewTest0 } from './components/ModalViewTest0';
 import { ModalViewTest1 } from './components/ModalViewTest1';
+import { ModalViewTest2 } from './components/ModalViewTest2';
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <ScrollView>
         <ModalViewTest0/>
         <ModalViewTest1/>
+        <ModalViewTest2/>
       </ScrollView>
     </SafeAreaView>
   );
