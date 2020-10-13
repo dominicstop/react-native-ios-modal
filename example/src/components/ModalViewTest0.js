@@ -27,6 +27,24 @@ export class ModalViewTest0 extends React.PureComponent {
 
     return (
       <View>
+        <View style={sharedStyles.buttonContainer}>
+          <Text style={sharedStyles.itemTitle}>
+            {'UIBlurEffectStyle Modal Test'}
+          </Text>
+          <Text style={sharedStyles.itemDescription}>
+            {'Cycle through blur styles'}
+          </Text>
+          <TouchableOpacity 
+            style={sharedStyles.button}
+            onPress={() => {
+              this.modalRef.setVisibility(true);
+            }}
+          >
+            <Text style={sharedStyles.buttonText}>
+              {'⭐️ Show Modal'}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <ModalView 
           containerStyle={sharedStyles.modalContainer}
           modalBGBlurEffectStyle={currentBlurEffectStyle}
@@ -85,24 +103,6 @@ export class ModalViewTest0 extends React.PureComponent {
           </TouchableOpacity>
           </React.Fragment>
         </ModalView>
-        <View style={sharedStyles.buttonContainer}>
-          <Text style={sharedStyles.itemTitle}>
-            {'UIBlurEffectStyle Modal Test'}
-          </Text>
-          <Text style={sharedStyles.itemDescription}>
-            {'Cycle through blur styles'}
-          </Text>
-          <TouchableOpacity 
-            style={sharedStyles.button}
-            onPress={() => {
-              this.modalRef.setVisibility(true);
-            }}
-          >
-            <Text style={sharedStyles.buttonText}>
-              {'⭐️ Show Modal'}
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   };

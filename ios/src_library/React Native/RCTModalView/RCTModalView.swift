@@ -264,7 +264,7 @@ class RCTModalView: UIView {
     subview.removeFromSuperview();
     subview.frame = CGRect(
       origin: CGPoint(x: 0, y: 0),
-      size  : subview.frame.size
+      size  : CGSize(width: 0, height: 0)
     );
     
     if let newBounds = modalVC?.view.bounds {

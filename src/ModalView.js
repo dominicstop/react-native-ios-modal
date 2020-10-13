@@ -310,11 +310,11 @@ export class ModalView extends React.PureComponent {
 const styles = StyleSheet.create({
   rootContainer: {
     position: 'absolute',
+    width: 0,
+    height: 0,
+    overflow: 'hidden',
   },
   modalContainer: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
   },
 });
