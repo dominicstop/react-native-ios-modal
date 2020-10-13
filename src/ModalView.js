@@ -5,23 +5,6 @@ import { requireNativeComponent, UIManager, findNodeHandle, StyleSheet, View, Sc
 import * as Helpers from './functions/helpers';
 import { RequestFactory } from './functions/RequestFactory';
 
-// TODO: Use Context to pass ref to functions
-//
-// TODO: Impl. observable so other comps can subscribe/unsub to events 
-//  via context instead of using refs to call events and create HOC to
-//  wrap comp., consume modal context, handle subscribe/unsub to events 
-//  and then call "modal life cycle" funcs via ref to wrapped comp.
-//
-// TODO: Impl. hooks API ex: useOnModalShowCallback, useOnModalDismiss, etc.
-//  consume modal context, then sub/unsub to modal events and call callback
-//
-// TODO: refactor - move constants to seperate file
-// TODO: refactor - convert to typescript
-// TODO: jsconfig for absolute imports alias
-// TODO: update example to have multiple examples
-// TODO: render nothing on android
-
-
 const componentName   = "RCTModalView";
 const NativeCommands  = UIManager[componentName]?.Commands;
 const NativeConstants = UIManager[componentName]?.Constants;
