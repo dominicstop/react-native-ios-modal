@@ -106,7 +106,10 @@ class RCTModalView: UIView {
       
       guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
       else {
-        RCTLogWarn("RCTModalView, modalBGBlurEffectStyle: Invalid value");
+        RCTLogWarn(
+            "RCTModalView, modalBGBlurEffectStyle: Invalid value - "
+          + "\(self.modalBGBlurEffectStyle) is not a valid blur style"
+        );
         return;
       };
       
@@ -123,7 +126,10 @@ class RCTModalView: UIView {
       
       guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
       else {
-        RCTLogWarn("RCTModalView, modalPresentationStyle: Invalid value");
+        RCTLogWarn(
+            "RCTModalView, modalPresentationStyle: Invalid value - "
+          + "\(self.modalPresentationStyle) is not a valid presentation style"
+        );
         return;
       };
       
@@ -131,6 +137,7 @@ class RCTModalView: UIView {
         case .automatic,
              .pageSheet,
              .formSheet,
+             .fullScreen,
              .overFullScreen:
           
           self._modalPresentationStyle = style;
@@ -139,7 +146,10 @@ class RCTModalView: UIView {
           #endif
 
         default:
-          RCTLogWarn("RCTModalView, modalPresentationStyle: Unsupported Presentation Style");
+          RCTLogWarn(
+              "RCTModalView, modalPresentationStyle: Unsupported Presentation Style - "
+            + "\(self.modalPresentationStyle) is not a supported presenatation style"
+          );
       };
     }
   };
@@ -326,15 +336,19 @@ class RCTModalView: UIView {
     modalNVC.modalTransitionStyle   = self._modalTransitionStyle;
     modalNVC.modalPresentationStyle = self._modalPresentationStyle;
     
-    #if DEBUG
-    print("RCTModalView, presentModal: Start - for reactTag: \(self.reactTag ?? -1)");
-    #endif
-    
     self.modalLevel  = index + 1;
     self.isInFocus   = true;
     self.isPresented = true;
     
-    print("modalLevel: \(modalLevel)");
+    #if DEBUG
+    print("RCTModalView, presentModal: Start"
+      + " - for reactTag: \(self.reactTag ?? -1)"
+      + " - modalLevel: \(self.modalLevel)"
+      + " - modalID: \(self.modalID ?? "N/A")"
+      + " - with presentationStyle: \(self._modalPresentationStyle.stringDescription())"
+      + " - with transitionStyle: \(self._modalTransitionStyle.stringDescription())"
+    );
+    #endif
     
     self.enableSwipeGesture(false);
     
@@ -360,7 +374,9 @@ class RCTModalView: UIView {
       let modalVC = self.modalVC
     else {
       #if DEBUG
-      print("RCTModalView, dismissModal failed: hasWindow: \(hasWindow) - isPresented \(self.isPresented)");
+      print("RCTModalView, dismissModal failed:"
+        + " - isPresented \(self.isPresented)"
+      );
       #endif
       completion?(false, .modalAlreadyDismissed);
       return;
@@ -457,9 +473,7 @@ extension RCTModalView {
       vc.isBGBlurred     = self.isModalBGBlurred;
       vc.isBGTransparent = self.isModalBGTransparent;
       
-      if let blurStyle = UIBlurEffect.Style
-        .fromString(self.modalBGBlurEffectStyle as String) {
-        
+      if let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle) {
         vc.blurEffectStyle = blurStyle;
       };
       
