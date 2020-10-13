@@ -9,6 +9,7 @@ export default function App() {
     <SafeAreaView style={styles.rootContainer}>
       <ScrollView>
         <ModalViewTest0/>
+        <ModalViewTest1/>
       </ScrollView>
     </SafeAreaView>
   );
