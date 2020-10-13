@@ -6,5 +6,6 @@
 
 - [x] Refactor - move constants to seperate file
 - [ ] Refactor - convert to typescript
+- [ ] Refactor - Use built in swift error type
 - [ ] Update example to have multiple examples
 - [ ] Render nothing on android
