@@ -5,6 +5,7 @@ import { ModalViewTest0 } from './components/ModalViewTest0';
 import { ModalViewTest1 } from './components/ModalViewTest1';
 import { ModalViewTest2 } from './components/ModalViewTest2';
 import { ModalViewTest3 } from './components/ModalViewTest3';
+import { ModalViewTest4 } from './components/ModalViewTest4';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <ModalViewTest1/>
         <ModalViewTest2/>
         <ModalViewTest3/>
+        <ModalViewTest4/>
       </ScrollView>
     </SafeAreaView>
   );
