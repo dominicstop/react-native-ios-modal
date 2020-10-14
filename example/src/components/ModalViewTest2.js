@@ -68,6 +68,7 @@ export class ModalViewTest2 extends React.PureComponent {
       await this[`modal${index}`]?.setVisibility(true);
     };
 
+    await this.cycleBlurStyles();
     for (let index = 9; index > 0; index--) {
       await this[`modal${index}`]?.setVisibility(false);
     };
@@ -81,6 +82,7 @@ export class ModalViewTest2 extends React.PureComponent {
       containerStyle: sharedStyles.modalContainer,
       modalBGBlurEffectStyle: AvailableBlurEffectStyles[currentIndex],
       isModalInPresentation: true,
+      enableSwipeGesture: false
     };
 
     return(

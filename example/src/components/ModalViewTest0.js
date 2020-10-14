@@ -16,17 +16,19 @@ export class ModalViewTest0 extends React.PureComponent {
 
     this.state = {
       counter: 0,
+      isModalBGTransparent: true,
+      isModalBGBlurred: true,
     };
   };
 
   render(){
-    const { counter } = this.state;
+    const { counter, isModalBGTransparent, isModalBGBlurred } = this.state;
 
     const currentIndex = (counter % availableBlurStylesCount);
     const currentBlurEffectStyle = AvailableBlurEffectStyles[currentIndex];
 
     return (
-      <View>
+      <React.Fragment>
         <View style={sharedStyles.buttonContainer}>
           <Text style={sharedStyles.itemTitle}>
             {'UIBlurEffectStyle Modal Test'}
@@ -46,9 +48,10 @@ export class ModalViewTest0 extends React.PureComponent {
           </TouchableOpacity>
         </View>
         <ModalView 
+          ref={r => this.modalRef = r}
           containerStyle={sharedStyles.modalContainer}
           modalBGBlurEffectStyle={currentBlurEffectStyle}
-          ref={r => this.modalRef = r}
+          {...{isModalBGTransparent, isModalBGBlurred}}
         >
           <React.Fragment>
             <View style={sharedStyles.titleContainer}>
@@ -92,6 +95,30 @@ export class ModalViewTest0 extends React.PureComponent {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity 
+              style={sharedStyles.button}
+              onPress={() => {
+                this.setState((prevState) => ({
+                  isModalBGTransparent: !prevState.isModalBGTransparent
+                }))
+              }}
+            >
+              <Text style={sharedStyles.buttonText}>
+                {`${isModalBGTransparent? '☀️' : '🌙'} Toggle isModalBGTransparent`}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={sharedStyles.button}
+              onPress={() => {
+                this.setState((prevState) => ({
+                  isModalBGBlurred: !prevState.isModalBGBlurred
+                }))
+              }}
+            >
+              <Text style={sharedStyles.buttonText}>
+                {`${isModalBGBlurred? '☀️' : '🌙'} Toggle isModalBGBlurred`}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
             style={sharedStyles.button}
             onPress={() => {
               this.modalRef.setVisibility(false);
@@ -103,7 +130,7 @@ export class ModalViewTest0 extends React.PureComponent {
           </TouchableOpacity>
           </React.Fragment>
         </ModalView>
-      </View>
+      </React.Fragment>
     );
   };
 };
