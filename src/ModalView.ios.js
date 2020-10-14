@@ -10,8 +10,8 @@ const NativeCommands  = UIManager[componentName]?.Commands;
 const NativeConstants = UIManager[componentName]?.Constants;
 const NativeModalView = requireNativeComponent(componentName);
 
-export const AvailableBlurEffectStyles   = NativeConstants?.availableBlurEffectStyles;
-export const AvailablePresentationStyles = NativeConstants?.availablePresentationStyles;
+export const AvailableBlurEffectStyles   = NativeConstants?.availableBlurEffectStyles   ?? [];
+export const AvailablePresentationStyles = NativeConstants?.availablePresentationStyles ?? [];
 
 
 const NATIVE_PROP_KEYS = {
@@ -256,6 +256,9 @@ export class ModalView extends React.PureComponent {
     const state = this.state;
 
     const nativeProps = {
+      // pass down props ------
+      ...props, ...nativeProps,
+      // set handlers for native props -------------------------------------------
       [NATIVE_PROP_KEYS.onModalBlur          ]: this._handleOnModalBlur          ,
       [NATIVE_PROP_KEYS.onModalFocus         ]: this._handleOnModalFocus         ,
       [NATIVE_PROP_KEYS.onModalShow          ]: this._handleOnModalShow          ,
@@ -264,8 +267,7 @@ export class ModalView extends React.PureComponent {
       [NATIVE_PROP_KEYS.onModalDidDismiss    ]: this._handleOnModalDidDismiss    ,
       [NATIVE_PROP_KEYS.onModalWillDismiss   ]: this._handleOnModalWillDismiss   ,
       [NATIVE_PROP_KEYS.onModalAttemptDismiss]: this._handleOnModalAttemptDismiss,
-      // pass down props
-      ...props, ...nativeProps,
+      // optional props ----------------------------
       ...(props.setModalInPresentationFromProps && {
         [NATIVE_PROP_KEYS.isModalInPresentation]: state.isModalInPresentation
       }),

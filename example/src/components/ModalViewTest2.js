@@ -11,16 +11,16 @@ const availableBlurStylesCount = AvailableBlurEffectStyles?.length ?? 0;
 const TestModal = React.forwardRef((props, ref) => (
   <ModalView ref={ref} {...props}>
     <React.Fragment>
-      <View style={styles.titleContainer}>
-        <Text style={styles.textEmoji}>
+      <View style={sharedStyles.titleContainer}>
+        <Text style={sharedStyles.textEmoji}>
           {props.emoji ?? "😊"}
         </Text>
-        <Text style={styles.textModal}>
+        <Text style={sharedStyles.textModal}>
           {props.title ?? 'Hello #1'}
         </Text>
       </View>
-      <View style={styles.textModalContainer}>
-        <Text style={styles.textModalSubtitle}>
+      <View style={sharedStyles.textModalContainer}>
+        <Text style={sharedStyles.textModalSubtitle}>
           {'UIBlurEffectStyle: '}
           <Text style={{fontWeight: 'bold'}}>
             {`${props.modalBGBlurEffectStyle}`}
@@ -78,7 +78,7 @@ export class ModalViewTest2 extends React.PureComponent {
     const currentIndex = (counter % availableBlurStylesCount);
 
     const sharedProps = {
-      containerStyle: styles.modalContainer,
+      containerStyle: sharedStyles.modalContainer,
       modalBGBlurEffectStyle: AvailableBlurEffectStyles[currentIndex],
       isModalInPresentation: true,
     };
@@ -170,48 +170,4 @@ export class ModalViewTest2 extends React.PureComponent {
 };
 
 const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    padding: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    flex: 1,
-    width: 315,
-    borderRadius: 20,
-  },
-  modalContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  titleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    padding: 25,
-    borderRadius: 15,
-  },
-  textEmoji: {
-    fontSize: 64,
-    marginBottom: 10,
-  },
-  textModal: {
-    fontSize: 28,
-    fontWeight: '800',
-  },
-  textModalContainer: {
-    marginTop: 25,
-    backgroundColor: 'white',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 10,
-  },
-  textModalSubtitle: {
-  },
-  stickyHeaderText: {
-    fontSize: 75,
-    backgroundColor: 'white'
-  },
 });
