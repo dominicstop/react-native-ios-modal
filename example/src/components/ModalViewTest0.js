@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import { ModalView, AvailableBlurEffectStyles, UIBlurEffectStyles } from 'react-native-ios-modal';
-
 import { sharedStyles } from '../constants/SharedStyles';
 
 

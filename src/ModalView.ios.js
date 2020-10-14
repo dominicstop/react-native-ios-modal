@@ -3,12 +3,17 @@ import Proptypes from 'prop-types';
 import { requireNativeComponent, UIManager, findNodeHandle, StyleSheet, View, ScrollView } from 'react-native';
 
 import * as Helpers from './functions/helpers';
+
+import { EventEmitter   } from './functions/EventEmitter';
 import { RequestFactory } from './functions/RequestFactory';
+import { ModalEventKeys } from './constants/Enums';
+
 
 const componentName   = "RCTModalView";
 const NativeCommands  = UIManager[componentName]?.Commands;
 const NativeConstants = UIManager[componentName]?.Constants;
 const NativeModalView = requireNativeComponent(componentName);
+
 
 export const AvailableBlurEffectStyles   = NativeConstants?.availableBlurEffectStyles   ?? [];
 export const AvailablePresentationStyles = NativeConstants?.availablePresentationStyles ?? [];
@@ -43,7 +48,6 @@ const NATIVE_PROP_KEYS = {
 const COMMAND_KEYS = {
   requestModalPresentation: 'requestModalPresentation'
 };
-
 
 
 const VirtualizedListContext = React.createContext(null);
@@ -84,6 +88,7 @@ export class ModalView extends React.PureComponent {
     super(props);
 
     RequestFactory.initialize(this);
+    this.emitter = new EventEmitter();
     this._childRef = null;
 
     this.state = {
@@ -92,6 +97,10 @@ export class ModalView extends React.PureComponent {
       enableSwipeGesture   : props.enableSwipeGesture   ,
       isModalInPresentation: props.isModalInPresentation,
     };
+  };
+
+  getEmitterRef = () => {
+    return this.emitter;
   };
 
   setVisibility = async (nextVisible, childProps = null) => {
@@ -202,28 +211,36 @@ export class ModalView extends React.PureComponent {
 
   _handleOnRequestResult = ({nativeEvent}) => {
     RequestFactory.resolveRequestFromObj(this, nativeEvent);
-    this.props     .onRequestResult?.(nativeEvent);
-    this._childRef?.onRequestResult?.(nativeEvent);
+    this.props     .onRequestResult?.({nativeEvent});
+    this._childRef?.onRequestResult?.({nativeEvent});
   };
 
-  _handleOnModalBlur = () => {
-    this.props     .onModalBlur?.();
-    this._childRef?.onModalBlur?.();
+  _handleOnModalBlur = (nativeEvent) => {
+    this.props     .onModalBlur?.(nativeEvent);
+    this._childRef?.onModalBlur?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalBlur, nativeEvent);
   };
 
-  _handleOnModalFocus = () => {
+  _handleOnModalFocus = (nativeEvent) => {
     this.props     .onModalFocus?.();
     this._childRef?.onModalFocus?.();
+
+    this.emitter.emit(ModalEventKeys.onModalFocus, nativeEvent);
   };
 
-  _handleOnModalShow = () => {
-    this.props     .onModalShow?.();
-    this._childRef?.onModalShow?.();
+  _handleOnModalShow = (nativeEvent) => {
+    this.props     .onModalShow?.(nativeEvent);
+    this._childRef?.onModalShow?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalShow, nativeEvent);
   };
 
-  _handleOnModalDismiss = () => {
-    this.props     .onModalDismiss?.();
-    this._childRef?.onModalDismiss?.();
+  _handleOnModalDismiss = (nativeEvent) => {
+    this.props     .onModalDismiss?.(nativeEvent);
+    this._childRef?.onModalDismiss?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalDismiss, nativeEvent);
 
     this.setState({ 
       visible   : false,
@@ -234,19 +251,25 @@ export class ModalView extends React.PureComponent {
     });
   };
 
-  _handleOnModalDidDismiss = () => {
-    this.props     .onModalDidDismiss?.();
-    this._childRef?.onModalDidDismiss?.();
+  _handleOnModalDidDismiss = (nativeEvent) => {
+    this.props     .onModalDidDismiss?.(nativeEvent);
+    this._childRef?.onModalDidDismiss?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalDidDismiss, nativeEvent);
   };
 
-  _handleOnModalWillDismiss = () => {
-    this.props     .onModalWillDismiss?.();
-    this._childRef?.onModalWillDismiss?.();
+  _handleOnModalWillDismiss = (nativeEvent) => {
+    this.props     .onModalWillDismiss?.(nativeEvent);
+    this._childRef?.onModalWillDismiss?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalWillDismiss, nativeEvent);
   };
 
-  _handleOnModalAttemptDismiss = () => {
-    this.props     .onModalAttemptDismiss?.();
-    this._childRef?.onModalAttemptDismiss?.();
+  _handleOnModalAttemptDismiss = (nativeEvent) => {
+    this.props     .onModalAttemptDismiss?.(nativeEvent);
+    this._childRef?.onModalAttemptDismiss?.(nativeEvent);
+
+    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, nativeEvent);
   };
 
   //#endregion
