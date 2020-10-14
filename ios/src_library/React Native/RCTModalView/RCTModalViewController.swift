@@ -16,33 +16,23 @@ class RCTModalViewController: UIViewController {
   var modalID: NSString? = nil;
   weak var modalViewRef: RCTModalView?;
   
-  var isBGTransparent: Bool = false {
+  var isBGTransparent: Bool = true {
     didSet {
       guard oldValue != self.isBGTransparent else { return };
+      self.setBGTransparent();
       self.setBGBlur();
     }
   };
   
-  var isBGBlurred: Bool = false {
+  var isBGBlurred: Bool = true {
     didSet {
       guard oldValue != self.isBGBlurred else { return };
-      
-      if self.isBGBlurred {
-        self.setBGBlur();
-        
-      } else {
-        self.blurEffectView?.removeFromSuperview();
-        self.blurEffectView = nil;
-      };
+      self.setBGBlur();
     }
   };
   
   var blurEffectView : UIView? = nil;
-  var blurEffectStyle: UIBlurEffect.Style? = {
-    guard #available(iOS 13, *) else { return .regular };
-    return .systemMaterialLight;
-    
-  }() {
+  var blurEffectStyle: UIBlurEffect.Style? {
     didSet {
       let didChange   = oldValue != blurEffectStyle;
       let isPresented = self.presentingViewController != nil;
@@ -128,14 +118,6 @@ class RCTModalViewController: UIViewController {
       guard #available(iOS 13, *) else { return .white };
       return .systemBackground;
     }();
-
-    
-    // if isBGTransparent is no longer transparent and
-    // the bg is still blurred, remove the blur effect
-    if !self.isBGTransparent && self.isBGBlurred {
-      self.blurEffectView?.removeFromSuperview();
-      self.blurEffectView = nil;
-    };
     
     #if DEBUG
     print(
@@ -146,35 +128,48 @@ class RCTModalViewController: UIViewController {
   };
   
   private func setBGBlur(){
-    guard self.isBGBlurred, self.isViewLoaded,
-      let blurEffectStyle = self.blurEffectStyle else { return };
-    
-    if let blurEffectView = self.blurEffectView as? UIVisualEffectView {
-      // since blurEffectView has already been init/set, we are just
-      // gonna update the existing UIBlurEffect
-      blurEffectView.effect = UIBlurEffect(style: blurEffectStyle);
+    guard self.isViewLoaded  else { return };
       
-      #if DEBUG
-      print("RCTModalViewController, setBGBlur: update blurEffectStyle");
-      #endif
+    if self.isBGBlurred && self.isBGTransparent {
+      // 1) either blur or update the bg
+      guard let blurEffectStyle = self.blurEffectStyle else { return };
+      
+      if let blurEffectView = self.blurEffectView as? UIVisualEffectView {
+        // 1A) since blurEffectView has already been init/set, we are just
+        // gonna update the existing UIBlurEffect
+        blurEffectView.effect = UIBlurEffect(style: blurEffectStyle);
+        
+        #if DEBUG
+        print("RCTModalViewController, setBGBlur: update blurEffectStyle");
+        #endif
+        
+      } else {
+        // 1B) we are gonna set the blurEffectStyle so init blurEffectView
+        // if it hasn't been set yet
+        self.blurEffectView = {
+          let blurEffect     = UIBlurEffect(style: blurEffectStyle);
+          let blurEffectView = UIVisualEffectView(effect: blurEffect);
+          
+          blurEffectView.frame = self.view.bounds
+          blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight];
+          
+          self.view.insertSubview(blurEffectView, at: 0);
+          return blurEffectView;
+        }();
+        
+        #if DEBUG
+        print("RCTModalViewController, setBGBlur: init. blurEffectView");
+        #endif
+      };
       
     } else {
-      // we are gonna set the blurEffectStyle so init blurEffectView
-      // if it hasn't been set yet
-      self.blurEffectView = {
-        let blurEffect     = UIBlurEffect(style: blurEffectStyle);
-        let blurEffectView = UIVisualEffectView(effect: blurEffect);
-        
-        blurEffectView.frame = self.view.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight];
-        
-        self.view.insertSubview(blurEffectView, at: 0);
-        return blurEffectView;
-      }();
-      
-      #if DEBUG
-      print("RCTModalViewController, setBGBlur: init. blurEffectView");
-      #endif
+      // 2) bg is not transparent or blurred so remove bg blur
+      self.removeBlur();
     };
+  };
+  
+  private func removeBlur(){
+    self.blurEffectView?.removeFromSuperview();
+    self.blurEffectView = nil;
   };
 };
