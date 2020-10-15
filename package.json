@@ -1,7 +1,7 @@
 {
   "name": "react-native-ios-modal",
   "version": "0.1.0",
-  "description": "placeholder",
+  "description": "A react-native component for displaying a modal on iOS by natively wrapping a react-native view inside a UIViewController and presenting it.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "react-native": "src/index",
@@ -28,7 +28,8 @@
   },
   "keywords": [
     "react-native",
-    "ios"
+    "ios",
+    "modal"
   ],
   "repository": "https://github.com/dominicstop/react-native-ios-modal",
   "author": "Dominic Go <dominicstop@gmail.com> (https://github.com/dominicstop)",
