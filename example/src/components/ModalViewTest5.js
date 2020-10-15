@@ -2,23 +2,21 @@ import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 import { ModalView, withModalLifecycle } from 'react-native-ios-modal';
+
+import { sharedStyles   } from '../constants/SharedStyles';
 import { ModalEventKeys } from '../../../src/constants/Enums';
 
-import { sharedStyles } from '../constants/SharedStyles';
 import * as Helpers from '../functions/helpers';
-
-
-const pad = (num, places = 2) => String(num).padStart(places, '0');
 
 function handleEvent(that, event){
   const date = new Date();
 
 
-  const h = pad(date.getHours  ());
-  const m = pad(date.getMinutes());
-  const s = pad(date.getSeconds());
+  const h = Helpers.pad(date.getHours  ());
+  const m = Helpers.pad(date.getMinutes());
+  const s = Helpers.pad(date.getSeconds());
 
-  const ms = pad(date.getMilliseconds(), 3);
+  const ms = Helpers.pad(date.getMilliseconds(), 3);
   
   that.setState((prevState) => ({
     events: [...prevState.events, {
@@ -73,7 +71,7 @@ class ModalContents extends React.PureComponent {
         key={`item-${index}`}
       >
         <Text>
-          {`${pad(index, 3)} - ${event.timestamp} - `}
+          {`${Helpers.pad(index, 3)} - ${event.timestamp} - `}
           <Text style={{fontWeight: 'bold'}}>
             {event.type}
           </Text>

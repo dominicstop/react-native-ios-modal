@@ -16,3 +16,7 @@ export function timeout(ms) {
     }, ms)
   });
 };
+
+export function pad(num, places = 2){
+  return String(num).padStart(places, '0');
+};
