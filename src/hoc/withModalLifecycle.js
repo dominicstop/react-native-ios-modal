@@ -36,15 +36,15 @@ export function withModalLifecycle(WrappedComponent){
 
     //#region - Event Handlers
     _handleChildRef = (node) => {
+      const { ref } = this.props;
+      
       // store a copy of the child comp ref
       this.childRef = node;
       
-      // pass down ref
-      const { ref } = this.props.children;
       if (typeof ref === 'function') {
         ref(node);
         
-      } else if (ref !== null) {
+      } else if (ref) {
         ref.current = node;
       };
     };
@@ -83,8 +83,8 @@ export function withModalLifecycle(WrappedComponent){
 
       return (
         <WrappedComponent
-          ref={r => this.childRef = r}
           {...props}
+          ref={this._handleChildRef}
         />
       );
     };
