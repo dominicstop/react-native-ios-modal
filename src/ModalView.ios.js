@@ -7,6 +7,7 @@ import * as Helpers from './functions/helpers';
 import { EventEmitter   } from './functions/EventEmitter';
 import { RequestFactory } from './functions/RequestFactory';
 import { ModalEventKeys } from './constants/Enums';
+import { ModalContext   } from './context/ModalContext';
 
 
 const componentName   = "RCTModalView";
@@ -186,61 +187,37 @@ export class ModalView extends React.PureComponent {
     const { didOnLayout } = this;
     didOnLayout && didOnLayout();
   };
-  
-  _handleChildRef = (node) => {
-    // store a copy of the child comp ref
-    this._childRef = node;
-    
-    // pass down ref
-    const { ref } = this.props.children;
-    if (typeof ref === 'function') {
-      ref(node);
-      
-    } else if (ref !== null) {
-      ref.current = node;
-    };
-  };
 
   // the child comp can call `props.getModalRef` to receive
   // a ref to this modal comp
-  _handleChildGetRef = () => {
+  _handleGetModalRef = () => {
     return this;
   };
 
   //#region - Native Event Handlers
-
   _handleOnRequestResult = ({nativeEvent}) => {
     RequestFactory.resolveRequestFromObj(this, nativeEvent);
-    this.props     .onRequestResult?.({nativeEvent});
-    this._childRef?.onRequestResult?.({nativeEvent});
+    this.props.onRequestResult?.({nativeEvent});
   };
 
-  _handleOnModalBlur = (nativeEvent) => {
-    this.props     .onModalBlur?.(nativeEvent);
-    this._childRef?.onModalBlur?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalBlur, nativeEvent);
+  _handleOnModalBlur = (event) => {
+    this.props.onModalBlur?.(event);
+    this.emitter.emit(ModalEventKeys.onModalBlur, event);
   };
 
-  _handleOnModalFocus = (nativeEvent) => {
-    this.props     .onModalFocus?.();
-    this._childRef?.onModalFocus?.();
-
-    this.emitter.emit(ModalEventKeys.onModalFocus, nativeEvent);
+  _handleOnModalFocus = (event) => {
+    this.props.onModalFocus?.();
+    this.emitter.emit(ModalEventKeys.onModalFocus, event);
   };
 
-  _handleOnModalShow = (nativeEvent) => {
-    this.props     .onModalShow?.(nativeEvent);
-    this._childRef?.onModalShow?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalShow, nativeEvent);
+  _handleOnModalShow = (event) => {
+    this.props.onModalShow?.(event);
+    this.emitter.emit(ModalEventKeys.onModalShow, event);
   };
 
-  _handleOnModalDismiss = (nativeEvent) => {
-    this.props     .onModalDismiss?.(nativeEvent);
-    this._childRef?.onModalDismiss?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalDismiss, nativeEvent);
+  _handleOnModalDismiss = (event) => {
+    this.props.onModalDismiss?.(event);
+    this.emitter.emit(ModalEventKeys.onModalDismiss, event);
 
     this.setState({ 
       visible   : false,
@@ -251,30 +228,24 @@ export class ModalView extends React.PureComponent {
     });
   };
 
-  _handleOnModalDidDismiss = (nativeEvent) => {
-    this.props     .onModalDidDismiss?.(nativeEvent);
-    this._childRef?.onModalDidDismiss?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalDidDismiss, nativeEvent);
+  _handleOnModalDidDismiss = (event) => {
+    this.props.onModalDidDismiss?.(event);
+    this.emitter.emit(ModalEventKeys.onModalDidDismiss, event);
   };
 
-  _handleOnModalWillDismiss = (nativeEvent) => {
-    this.props     .onModalWillDismiss?.(nativeEvent);
-    this._childRef?.onModalWillDismiss?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalWillDismiss, nativeEvent);
+  _handleOnModalWillDismiss = (event) => {
+    this.props.onModalWillDismiss?.(event);
+    this.emitter.emit(ModalEventKeys.onModalWillDismiss, event);
   };
 
-  _handleOnModalAttemptDismiss = (nativeEvent) => {
-    this.props     .onModalAttemptDismiss?.(nativeEvent);
-    this._childRef?.onModalAttemptDismiss?.(nativeEvent);
-
-    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, nativeEvent);
+  _handleOnModalAttemptDismiss = (event) => {
+    this.props.onModalAttemptDismiss?.(event);
+    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, event);
   };
 
   //#endregion
 
-  render(){
+  _renderModal(){
     const props = this.props;
     const state = this.state;
 
@@ -306,28 +277,43 @@ export class ModalView extends React.PureComponent {
         onStartShouldSetResponder={this._shouldSetResponder}
         {...nativeProps}
       >
+        {state.visible && (
+          <View 
+            ref={r => this.modalContainerRef = r}
+            style={[styles.modalContainer, props.containerStyle]}
+            collapsable={false}
+            onLayout={this._handleOnLayout}
+          >
+            {React.cloneElement(props.children, {
+              getModalRef: this._handleGetModalRef,
+              // pass down props received from setVisibility
+              ...(Helpers.isObject(state.childProps) && state.childProps),
+              // pass down modalID
+              modalID: props[NATIVE_PROP_KEYS.modalID]
+            })}
+          </View>
+        )}
+      </NativeModalView>
+    );
+  };
+
+  render(){
+    return (
+      <ModalContext.Provider value={{
+        // pass down function to get modal refs
+        getModalRef  : this._handleGetModalRef,
+        getEmitterRef: this.getEmitterRef     ,
+        // pass ref to modal functions -------------------------
+        setVisibility           : this.setVisibility           ,
+        setEnableSwipeGesture   : this.setEnableSwipeGesture   ,
+        setIsModalInPresentation: this.setIsModalInPresentation,
+      }}>
         <VirtualizedListContext.Provider value={null}>
           <ScrollView.Context.Provider value={null}>
-            {state.visible && (
-              <View 
-                ref={r => this.modalContainerRef = r}
-                style={[styles.modalContainer, props.containerStyle]}
-                collapsable={false}
-                onLayout={this._handleOnLayout}
-              >
-                {React.cloneElement(this.props.children, {
-                  ref        : this._handleChildRef   ,
-                  getModalRef: this._handleChildGetRef,
-                  // pass down props received from setVisibility
-                  ...(Helpers.isObject(state.childProps) && state.childProps),
-                  // pass down modalID
-                  modalID: props[NATIVE_PROP_KEYS.modalID]
-                })}
-              </View>
-            )}
+            {this._renderModal()}
           </ScrollView.Context.Provider>
         </VirtualizedListContext.Provider>
-      </NativeModalView>
+      </ModalContext.Provider>
     );
   };
 };
