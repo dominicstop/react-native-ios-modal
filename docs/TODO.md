@@ -9,3 +9,4 @@
 - [ ] Refactor - Use built in swift error type
 - [x] Update example to have multiple examples
 - [x] Render nothing on android
+- [ ] Add Modal OnFocus/onBlur events to ModalView
