@@ -1,6 +1,6 @@
 {
   "name": "react-native-ios-modal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A react-native component for displaying a modal on iOS by natively wrapping a react-native view inside a UIViewController and presenting it.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
