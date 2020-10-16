@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
-import { ModalView, withModalLifecycle } from 'react-native-ios-modal';
+import { ModalView, withModalLifecycle, ModalEventKeys } from 'react-native-ios-modal';
 
-import { sharedStyles   } from '../constants/SharedStyles';
-import { ModalEventKeys } from '../../../src/constants/Enums';
+import { TestListItem } from './TestListItem';
+import { sharedStyles } from '../constants/SharedStyles';
 
 import * as Helpers from '../functions/helpers';
 
 function handleEvent(that, event){
   const date = new Date();
-
 
   const h = Helpers.pad(date.getHours  ());
   const m = Helpers.pad(date.getMinutes());
@@ -67,9 +66,7 @@ class ModalContents extends React.PureComponent {
     const { events } = this.state;
 
     const items = events.map((event, index) => (
-      <View
-        key={`item-${index}`}
-      >
+      <View key={`item-${index}`}>
         <Text>
           {`${Helpers.pad(index, 3)} - ${event.timestamp} - `}
           <Text style={{fontWeight: 'bold'}}>
@@ -101,27 +98,17 @@ export class ModalViewTest5 extends React.PureComponent {
 
   render(){
     return(
-      <View style={sharedStyles.buttonContainer}>
+      <TestListItem
+        title={'withModalLifecycle HOC Tester'}
+        subtitle={'Test for listening to modal events via HOC'}
+        onPress={() => {
+          this.modalRef.setVisibility(true);
+        }}
+      >
         <ModalView ref={r => this.modalRef = r}>
           <ModalContentsWithModalLifecycle/>
         </ModalView>
-        <Text style={sharedStyles.itemTitle}>
-          {'withModalLifecycle HOC Tester'}
-        </Text>
-        <Text style={sharedStyles.itemDescription}>
-          {'Test for listening to modal events via HOC'}
-        </Text>
-        <TouchableOpacity 
-          style={sharedStyles.button}
-          onPress={() => {
-            this.modalRef.setVisibility(true);
-          }}
-        >
-          <Text style={sharedStyles.buttonText}>
-            {'⭐️ Show Modal'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </TestListItem>
     );
   };
 };

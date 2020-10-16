@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-import { sharedStyles } from '../constants/SharedStyles';
-
 import { ModalView, AvailableBlurEffectStyles } from 'react-native-ios-modal';
+
 import * as Helpers from '../functions/helpers';
+
+import { TestListItem } from './TestListItem';
+import { sharedStyles } from '../constants/SharedStyles';
 
 const availableBlurStylesCount = AvailableBlurEffectStyles?.length ?? 0;
 
@@ -147,26 +149,16 @@ export class ModalViewTest2 extends React.PureComponent {
   };
 
   render(){
-    return(
-      <View style={sharedStyles.buttonContainer}>
+    return (
+      <TestListItem
+        title={'Modal Open/Close Test'}
+        subtitle={'Programatically open/close modals'}
+        onPress={() => {
+          this.triggerModals();
+        }}
+      >
         {this._renderModals()}
-        <Text style={sharedStyles.itemTitle}>
-          {'Modal Open/Close Test'}
-        </Text>
-        <Text style={sharedStyles.itemDescription}>
-          {'Programatically open/close modals'}
-        </Text>
-        <TouchableOpacity 
-          style={sharedStyles.button}
-          onPress={() => {
-            this.triggerModals();
-          }}
-        >
-          <Text style={sharedStyles.buttonText}>
-            {'⭐️ Show Modal'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </TestListItem>
     );
   };
 };

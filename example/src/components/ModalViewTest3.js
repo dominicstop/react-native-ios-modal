@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { ModalView } from 'react-native-ios-modal';
 
 import { sharedStyles } from '../constants/SharedStyles';
+import { TestListItem } from './TestListItem';
+
 import * as Helpers from '../functions/helpers';
 
 
@@ -39,110 +41,106 @@ export class ModalViewTest3 extends React.PureComponent {
     };
   };
 
-  render(){
+  _renderModal(){
     const state = this.state;
 
     return(
-      <View style={sharedStyles.buttonContainer}>
-        <ModalView 
-          ref={r => this.modalRef = r}
-          containerStyle={sharedStyles.modalContainer}
-          isModalInPresentation={state.isModalInPresentation}
-          enableSwipeGesture={state.enableSwipeGesture}
-          onModalShow          ={() => delayedAlert(this, 'onModalShow'          )}
-          onModalDismiss       ={() => delayedAlert(this, 'onModalDismiss'       )}
-          onModalDidDismiss    ={() => delayedAlert(this, 'onModalDidDismiss'    )}
-          onModalWillDismiss   ={() => delayedAlert(this, 'onModalWillDismiss'   )}
-          onModalAttemptDismiss={() => delayedAlert(this, 'onModalAttemptDismiss')}
-        >
-          <React.Fragment>
-            <View style={sharedStyles.titleContainer}>
-              <Text style={sharedStyles.textEmoji}>
-                {"😊"}
+      <ModalView 
+        ref={r => this.modalRef = r}
+        containerStyle={sharedStyles.modalContainer}
+        isModalInPresentation={state.isModalInPresentation}
+        enableSwipeGesture={state.enableSwipeGesture}
+        onModalShow          ={() => delayedAlert(this, 'onModalShow'          )}
+        onModalDismiss       ={() => delayedAlert(this, 'onModalDismiss'       )}
+        onModalDidDismiss    ={() => delayedAlert(this, 'onModalDidDismiss'    )}
+        onModalWillDismiss   ={() => delayedAlert(this, 'onModalWillDismiss'   )}
+        onModalAttemptDismiss={() => delayedAlert(this, 'onModalAttemptDismiss')}
+      >
+        <React.Fragment>
+          <View style={sharedStyles.titleContainer}>
+            <Text style={sharedStyles.textEmoji}>
+              {"😊"}
+            </Text>
+            <Text style={sharedStyles.textModal}>
+              {'Toggle isModalInPresentation'}
+            </Text>
+          </View>
+          <View style={sharedStyles.textModalContainer}>
+            <Text style={sharedStyles.textModalSubtitle}>
+              {'isModalInPresentation: '}
+              <Text style={{fontWeight: 'bold'}}>
+                {state.isModalInPresentation? 'ON' : 'OFF'}
               </Text>
-              <Text style={sharedStyles.textModal}>
-                {'Toggle isModalInPresentation'}
+            </Text>
+            <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
+              {'enableSwipeGesture: '}
+              <Text style={{fontWeight: 'bold'}}>
+                {state.enableSwipeGesture? 'ON' : 'OFF'}
               </Text>
-            </View>
-            <View style={sharedStyles.textModalContainer}>
-              <Text style={sharedStyles.textModalSubtitle}>
-                {'isModalInPresentation: '}
-                <Text style={{fontWeight: 'bold'}}>
-                  {state.isModalInPresentation? 'ON' : 'OFF'}
-                </Text>
+            </Text>
+            <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
+              {'Current Event: '}
+              <Text style={{fontWeight: 'bold'}}>
+                {state.event ?? 'N/A'}
               </Text>
-              <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
-                {'enableSwipeGesture: '}
-                <Text style={{fontWeight: 'bold'}}>
-                  {state.enableSwipeGesture? 'ON' : 'OFF'}
-                </Text>
+            </Text>
+            <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
+              {'Event Count: '}
+              <Text style={{fontWeight: 'bold'}}>
+                {state.eventCount}
               </Text>
-              <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
-                {'Current Event: '}
-                <Text style={{fontWeight: 'bold'}}>
-                  {state.event ?? 'N/A'}
-                </Text>
-              </Text>
-              <Text style={[sharedStyles.textModalSubtitle, {marginTop: 10}]}>
-                {'Event Count: '}
-                <Text style={{fontWeight: 'bold'}}>
-                  {state.eventCount}
-                </Text>
-              </Text>
-            </View>
-            <TouchableOpacity 
-              style={sharedStyles.button}
-              onPress={() => {
-                this.setState((prevState) => ({
-                  isModalInPresentation: !prevState.isModalInPresentation
-                }))
-              }}
-            >
-              <Text style={sharedStyles.buttonText}>
-                {`${state.isModalInPresentation? '☀️' : '🌙'} Toggle isModalInPresentation`}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={sharedStyles.button}
-              onPress={() => {
-                this.setState((prevState) => ({
-                  enableSwipeGesture: !prevState.enableSwipeGesture
-                }))
-              }}
-            >
-              <Text style={sharedStyles.buttonText}>
-                {`${state.enableSwipeGesture? '☀️' : '🌙'} Toggle enableSwipeGesture`}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
+            </Text>
+          </View>
+          <TouchableOpacity 
             style={sharedStyles.button}
             onPress={() => {
-              this.modalRef.setVisibility(false);
+              this.setState((prevState) => ({
+                isModalInPresentation: !prevState.isModalInPresentation
+              }))
             }}
           >
             <Text style={sharedStyles.buttonText}>
-              {'🚫 Close Modal'}
+              {`${state.isModalInPresentation? '☀️' : '🌙'} Toggle isModalInPresentation`}
             </Text>
           </TouchableOpacity>
-          </React.Fragment>
-        </ModalView>
-        <Text style={sharedStyles.itemTitle}>
-          {'isModalInPresentation Test'}
-        </Text>
-        <Text style={sharedStyles.itemDescription}>
-          {'Programatically toggle swipe gesture'}
-        </Text>
-        <TouchableOpacity 
+          <TouchableOpacity 
+            style={sharedStyles.button}
+            onPress={() => {
+              this.setState((prevState) => ({
+                enableSwipeGesture: !prevState.enableSwipeGesture
+              }))
+            }}
+          >
+            <Text style={sharedStyles.buttonText}>
+              {`${state.enableSwipeGesture? '☀️' : '🌙'} Toggle enableSwipeGesture`}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
           style={sharedStyles.button}
           onPress={() => {
-            this.modalRef.setVisibility(true);
+            this.modalRef.setVisibility(false);
           }}
         >
           <Text style={sharedStyles.buttonText}>
-            {'⭐️ Show Modal'}
+            {'🚫 Close Modal'}
           </Text>
         </TouchableOpacity>
-      </View>
+        </React.Fragment>
+      </ModalView>
+    );
+  };
+
+  render(){
+    return (
+      <TestListItem
+        title={'isModalInPresentation Test'}
+        subtitle={'Programatically toggle swipe gesture'}
+        onPress={() => {
+          this.triggerModals();
+        }}
+      >
+        {this._renderModal()}
+      </TestListItem>
     );
   };
 };

@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 import { ModalView, ModalEventKeys } from 'react-native-ios-modal';
 
 import { sharedStyles } from '../constants/SharedStyles';
+import { TestListItem } from './TestListItem';
+
 import * as Helpers from '../functions/helpers';
 
 
@@ -99,25 +101,15 @@ export class ModalViewTest4 extends React.PureComponent {
 
   render(){
     return(
-      <View style={sharedStyles.buttonContainer}>
+      <TestListItem
+        title={'EventEmitter Tester'}
+        subtitle={'Test for subscibing to modal events'}
+        onPress={() => {
+          this.modalRef.setVisibility(true);
+        }}
+      >
         {this._renderModal()}
-        <Text style={sharedStyles.itemTitle}>
-          {'EventEmitter Tester'}
-        </Text>
-        <Text style={sharedStyles.itemDescription}>
-          {'Test for subscibing to modal events'}
-        </Text>
-        <TouchableOpacity 
-          style={sharedStyles.button}
-          onPress={() => {
-            this.modalRef.setVisibility(true);
-          }}
-        >
-          <Text style={sharedStyles.buttonText}>
-            {'⭐️ Show Modal'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </TestListItem>
     );
   };
 };
