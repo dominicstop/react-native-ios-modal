@@ -12,7 +12,7 @@ typealias completionResult = ((_ isSuccess: Bool, _ error: RCTModalViewError?) -
 
 fileprivate struct DefaultValues {
   static let presentationStyle: UIModalPresentationStyle = {
-    guard #available(iOS 13.0, *) else { return .fullScreen };
+    guard #available(iOS 13.0, *) else { return .overFullScreen };
     return .automatic;
   }();
   
