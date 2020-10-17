@@ -15,7 +15,8 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 ![Modal Example 6 & 7](./assets/ModalExample-06-07.gif)
 
 ### Motivation
-You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS automatically handles the modal dismiss gesture when using a scrollview. So this component exist to tap in to native behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
+* You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS also  automatically handles the modal dismiss gesture when using a scrollview. 
+* So this component exist to tap into native iOS modal behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
 - - -
 <br/><br/>
 
@@ -97,12 +98,16 @@ Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. 
 * And use the enum in the `ModalView` component `modalBGBlurEffectStyle` prop like this: `modalBGBlurEffectStyle={UIBlurEffectStyles.systemMaterial}`.
 * Or if you prefer, just pass in a string value directly like this: `modalBGBlurEffectStyle={'systemMaterial'}`.
 
+<br/>
+
 * **Adaptable Styles** — Requires iOS 13 and above. Changes based on the current system appearance)
 1. `systemUltraThinMaterial`
 2. `systemThinMaterial`
 3. `systemMaterial`
 4. `systemThickMaterial`
 5. `systemChromeMaterial`
+
+<br/>
 
 * **Light Styles** — Requires iOS 13. Blur styles that are tinted white/light. Meant to be used for system light appearance.
 1. `systemMaterialLight`
@@ -111,12 +116,16 @@ Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. 
 4. `systemThickMaterialLight`
 5. `systemChromeMaterialLight`
 
+<br/>
+
 * **Dark Styles** — Requires iOS 13. Blur styles that are tinted black/dark. Meant to be used for system dark appearance.
 1. `systemChromeMaterialDark`
 2. `systemMaterialDark`
 3. `systemThickMaterialDark`
 4. `systemThinMaterialDark`
 5. `systemUltraThinMaterialDark`
+
+<br/>
 
 * **Regular Styles** — Blur styles that were originally added in iOS 8.
 1. `regular`
@@ -132,12 +141,16 @@ Enum values that you can pass to the `ModalView` `modalPresentationStyle` prop. 
 * Import the enum like this: `import { UIModalPresentationStyles } from 'react-native-ios-modal'`.
 * And use the enum in the `ModalView` component `modalPresentationStyle` prop like this: `modalPresentationStyle={UIModalPresentationStyles.fullScreen}`.
 
+<br/>
+
 * **Supported Presentation Styles**
 1. `automatic` — Requires iOS 13 to work. The default presentation style for iOS 13 and above.
 2. `fullScreen` — Present fullscreen but with an opaque background. The default presentation style on iOS 12 and below.
 3. `overFullScreen` — Present fullscreen but with a transparent background.
 4. `pageSheet` — The presentation style used on iPhones running iOS 13. Present a modal that can be dismissed via a swipe gesture.    
 5. `formSheet` — The presentation style used on iPads. Same as `pageSheet` when on iPhone.
+
+<br/>
 
 * **Not Supported**
 1. `none`
