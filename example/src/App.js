@@ -8,6 +8,7 @@ import { ModalViewTest3 } from './components/ModalViewTest3';
 import { ModalViewTest4 } from './components/ModalViewTest4';
 import { ModalViewTest5 } from './components/ModalViewTest5';
 import { ModalViewTest6 } from './components/ModalViewTest6';
+import { ModalViewTest7 } from './components/ModalViewTest7';
 
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <ModalViewTest4/>
         <ModalViewTest5/>
         <ModalViewTest6/>
+        <ModalViewTest7/>
       </ScrollView>
     </SafeAreaView>
   );
