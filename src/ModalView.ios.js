@@ -57,6 +57,8 @@ export class ModalView extends React.PureComponent {
   static proptypes = {
     // Props: Events ---------------------
     onRequestResult      : Proptypes.func,
+    onModalBlur          : Proptypes.func,
+    onModalFocus         : Proptypes.func,
     onModalShow          : Proptypes.func,
     onModalDismiss       : Proptypes.func,
     onModalDidDismiss    : Proptypes.func,
