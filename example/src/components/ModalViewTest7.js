@@ -44,10 +44,10 @@ export class ModalViewTest7 extends React.PureComponent {
     super(props);
 
     this.state = {
-      isFocusedModal1: false,
-      isFocusedModal2: false,
-      isFocusedModal3: false,
-      isFocusedModal4: false,
+      isFocusedModal1: true,
+      isFocusedModal2: true,
+      isFocusedModal3: true,
+      isFocusedModal4: true,
     };
   };
 

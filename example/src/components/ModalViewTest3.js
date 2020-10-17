@@ -13,6 +13,8 @@ async function delayedAlert(that, msg){
   const title = `ModalView Event: ${msg}`;
   const subitle = (() => {
     switch (msg) {
+      case 'onModalBlur'          : return "The modal is in focus";
+      case 'onModalFocus'         : return "The modal is blurred";
       case 'onModalShow'          : return "The modal is visible";
       case 'onModalDismiss'       : return "The modal is dismissed";
       case 'onModalDidDismiss'    : return "The modal is dismissed via swipe";
@@ -50,6 +52,8 @@ export class ModalViewTest3 extends React.PureComponent {
         containerStyle={sharedStyles.modalContainer}
         isModalInPresentation={state.isModalInPresentation}
         enableSwipeGesture={state.enableSwipeGesture}
+        onModalBlur          ={() => delayedAlert(this, 'onModalBlur'          )}
+        onModalFocus         ={() => delayedAlert(this, 'onModalFocus'          )}
         onModalShow          ={() => delayedAlert(this, 'onModalShow'          )}
         onModalDismiss       ={() => delayedAlert(this, 'onModalDismiss'       )}
         onModalDidDismiss    ={() => delayedAlert(this, 'onModalDidDismiss'    )}
@@ -136,7 +140,7 @@ export class ModalViewTest3 extends React.PureComponent {
         title={'isModalInPresentation Test'}
         subtitle={'Programatically toggle swipe gesture'}
         onPress={() => {
-          this.triggerModals();
+          this.modalRef.setVisibility(true);
         }}
       >
         {this._renderModal()}
