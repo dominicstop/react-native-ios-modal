@@ -18,23 +18,41 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 * You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS also  automatically handles the modal dismiss gesture when using a scrollview. 
 * So this component exist to tap into native iOS modal behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
 - - -
-<br/><br/>
+<br/>
 
 ## 1. Installation
 
 ```sh
+# install via NPM
 npm install react-native-ios-modal
+
+# or install via yarn
+yarn add react-native-ios-modal
+
+# then run pod install (uses autolinking)
+cd ios && pod install
 ```
 - - -
-<br/><br/>
+<br/>
 
 ## 2. Usage
-Please check out the examples directory for more on how to use it.
+Please check out the [examples directory](https://github.com/dominicstop/react-native-ios-modal/tree/master/example/src/components) for more on how to use it.
 ```js
+// import the library
 import { ModalView } from 'react-native-ios-modal';
+
+// and use it like this
+<ModalView ref={r => this.modalRef = r}>
+	<Text> Hello World </Text>
+<ModalView/>
+<TouchableOpacity onPress={() => {
+	this.modalRef.setVisibility(true);
+}}>
+	<Text> Open Modal </Text>
+</TouchableOpacity>
 ```
 - - -
-<br/><br/>
+<br/>
 
 
 ## 3. Documentation
@@ -184,8 +202,11 @@ Enum values that you can pass to the `ModalView` `modalPresentationStyle` prop. 
 
 ### 3.7 Modal `NativeEvent` object
 
-<br/><br/>
+<br/>
 
+## 4. Examples
+
+<br/>
 
 ## License
 
