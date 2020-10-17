@@ -56,8 +56,8 @@ export class ModalViewTest7 extends React.PureComponent {
 
     return(
       <TestListItem
-        title={'Modal Scrollview Test'}
-        subtitle={'Test for scrollview in modal'}
+        title={'Modal Focus/Blur Test'}
+        subtitle={'Test for modal blur/focus events'}
         onPress={() => {
           this.modalRef1.setVisibility(true);
         }}
