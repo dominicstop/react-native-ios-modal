@@ -5,11 +5,13 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 * You can use `ModalView` anywhere in your app and present a view modally either programmatically via a ref or automatically when a `ModalView` is mounted/unmounted.
 * Support for several modal events, nested modals, and having a transparent background or a blurred background using `UIBlurEffect`.
 
-![Modal Example 1 & 2](./assets/ModalExample-01-02.gif)
+![Modal Example 0 & 1](./assets/ModalExample-00-01.gif)
 
-![Modal Example 3 & 4](./assets/ModalExample-03-04.gif)
+![Modal Example 2 & 3](./assets/ModalExample-02-03.gif)
 
-![Modal Example 5 & 6](./assets/ModalExample-05-06.gif)
+![Modal Example 4 & 5](./assets/ModalExample-04-05.gif)
+
+![Modal Example 6 & 7](./assets/ModalExample-06-07.gif)
 
 ### Motivation
 You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior + iOS automatically handles the modal dismiss gesture when using a scrollview.
