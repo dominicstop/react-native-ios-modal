@@ -3,7 +3,8 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 * Since this is just using a `UIViewController`, this component also supports setting the`UIModalPresentationStyle` and `UIModalTransitionStyle`.
 * Supports setting `isModalInPresentation` and separately disabling the native swipe down gesture when the modal is using `pageSheet` `modalPresentationStyle`.
 * You can use `ModalView` anywhere in your app and present a view modally either programmatically via a ref or automatically when a `ModalView` is mounted/unmounted.
-* Support for several modal events, nested modals, and having a transparent background or a blurred background using `UIBlurEffect`.
+* Support for several modal events, multiple modals, and having a transparent background or a blurred background using `UIBlurEffect`.
+* **Note**:  Documentation Under Construction 🚧
 
 ![Modal Example 0 & 1](./assets/ModalExample-00-01.gif)
 
@@ -14,7 +15,7 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 ![Modal Example 6 & 7](./assets/ModalExample-06-07.gif)
 
 ### Motivation
-You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior + iOS automatically handles the modal dismiss gesture when using a scrollview.
+You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS automatically handles the modal dismiss gesture when using a scrollview. So this component exist to tap in to native behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
 - - -
 <br/><br/>
 
@@ -64,6 +65,8 @@ import { ModalView } from 'react-native-ios-modal';
 #### 3.1.3 Props: Modal Events
 | Name                  | Description                                                  |
 |-----------------------|--------------------------------------------------------------|
+| onModalFocus          | Gets called when a modal is focused and is not currently the top most modal (to avoid duplicating the onModalShow event) |
+| onModalBlur           | Gets called when a modal loses focus and is not currently the top most modal (to avoid duplicating the onModalDismiss event) |
 | onModalShow           | Gets called after a modal is presented.                      |
 | onModalDismiss        | Gets called after a modal is dismissed.                      |
 | onModalDidDismiss     | Gets called after a modal is successfully dismissed via a swipe gesture. (Wrapper for `UIAdaptivePresentationControllerDelegate.presentationControllerDidDismiss`). |
@@ -82,12 +85,92 @@ import { ModalView } from 'react-native-ios-modal';
 <br/>
 
 ### 3.2 `ModalViewModule`
+* `async ModalViewModule.dismissModalByID(modalID: string)`
+* `async dismissAllModals(animated: bool)`
+
+<br/>
 
 ### 3.3 Enum Values
+#### 3.3.1 UIBlurEffectStyles 
+Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. More detailed description are available in the [Apple Developer Docs](https://developer.apple.com/documentation/uikit/uiblureffectstyle).
+* Import the enum like this: `import { UIBlurEffectStyles } from 'react-native-ios-modal'`.
+* And use the enum in the `ModalView` component `modalBGBlurEffectStyle` prop like this: `modalBGBlurEffectStyle={UIBlurEffectStyles.systemMaterial}`.
+* Or if you prefer, just pass in a string value directly like this: `modalBGBlurEffectStyle={'systemMaterial'}`.
+
+* **Adaptable Styles** — Requires iOS 13 and above. Changes based on the current system appearance)
+1. `systemUltraThinMaterial`
+2. `systemThinMaterial`
+3. `systemMaterial`
+4. `systemThickMaterial`
+5. `systemChromeMaterial`
+
+* **Light Styles** — Requires iOS 13. Blur styles that are tinted white/light. Meant to be used for system light appearance.
+1. `systemMaterialLight`
+2. `systemThinMaterialLight`
+3. `systemUltraThinMaterialLight`
+4. `systemThickMaterialLight`
+5. `systemChromeMaterialLight`
+
+* **Dark Styles** — Requires iOS 13. Blur styles that are tinted black/dark. Meant to be used for system dark appearance.
+1. `systemChromeMaterialDark`
+2. `systemMaterialDark`
+3. `systemThickMaterialDark`
+4. `systemThinMaterialDark`
+5. `systemUltraThinMaterialDark`
+
+* **Regular Styles** — Blur styles that were originally added in iOS 8.
+1. `regular`
+2. `prominent`
+3. `light`
+4. `extraLight`
+5. `dark`
+
+<br/>
+
+#### 3.3.2 UIModalPresentationStyles 
+Enum values that you can pass to the `ModalView` `modalPresentationStyle` prop. More detailed description are available in the [Apple Developer Docs](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle).
+* Import the enum like this: `import { UIModalPresentationStyles } from 'react-native-ios-modal'`.
+* And use the enum in the `ModalView` component `modalPresentationStyle` prop like this: `modalPresentationStyle={UIModalPresentationStyles.fullScreen}`.
+
+* **Supported Presentation Styles**
+1. `automatic` — Requires iOS 13 to work. The default presentation style for iOS 13 and above.
+2. `fullScreen` — Present fullscreen but with an opaque background. The default presentation style on iOS 12 and below.
+3. `overFullScreen` — Present fullscreen but with a transparent background.
+4. `pageSheet` — The presentation style used on iPhones running iOS 13. Present a modal that can be dismissed via a swipe gesture.    
+5. `formSheet` — The presentation style used on iPads. Same as `pageSheet` when on iPhone.
+
+* **Not Supported**
+1. `none`
+2. `currentContext`
+3. `custom`
+4. `overCurrentContext`
+5. `popover`
+6. `blurOverFullScreen`
+
+<br/>
+
+#### 3.3.3 UIModalTransitionStyles 
+
+<br/>
+
+#### 3.3.4 ModalEventKeys 
+
+<br/>
 
 ### 3.4 `ModalContext`
 
+<br/>
+
 ### 3.5 `withModalLifecycle`
+
+<br/>
+
+### 3.6 Modal `EventEmitter`
+
+<br/>
+
+### 3.7 Modal `NativeEvent` object
+
 <br/><br/>
 
 
