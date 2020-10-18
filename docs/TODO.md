@@ -20,3 +20,4 @@
 - [ ] Add comments to Example
 - [ ] Add test for react native versions 0.60 or older versions
 - [ ] Update supported `UIModalPresentationStyles`
+- [ ] Add example `UIModalTransitionStyles`

@@ -15,7 +15,8 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 ![Modal Example 6 & 7](./assets/ModalExample-06-07.gif)
 
 ### Motivation
-* You can use this, but it's iOS only (so you have to use a different modal component on android). I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS also  automatically handles the modal dismiss gesture when using a scrollview. 
+* You can use this, but it's iOS only (so you have to use a different modal component on android, like the built-in react-native [component](https://reactnative.dev/docs/modal)). 
+* I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS also  automatically handles the modal dismiss gesture when using a scrollview. 
 * So this component exist to tap into native iOS modal behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
 - - -
 <br/>
@@ -74,9 +75,9 @@ import { ModalView } from 'react-native-ios-modal';
 | Name/Type                                                    | Default                                                      | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------|
 | **modalID** -> `string`                                      | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `ModalViewModule` functions and programatically control it. |
-| **modalTransitionStyle** -> `UIModalTransitionStyles` value  | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. |
-| **modalPresentationStyle** -> `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. |
-| **modalBGBlurEffectStyle** -> `UIBlurEffectStyles` value     | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `regular` | The blur style to use for the `UIBlurEffect` modal background. |
+| **modalTransitionStyle** -> `UIModalTransitionStyles` value  | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalPresentationStyle** -> `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalBGBlurEffectStyle** -> `UIBlurEffectStyles` value     | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `regular` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 
 <br/>
 
@@ -109,8 +110,16 @@ import { ModalView } from 'react-native-ios-modal';
 <br/>
 
 ### 3.2 `ModalViewModule`
-* `async ModalViewModule.dismissModalByID(modalID: string)`
-* `async dismissAllModals(animated: bool)`
+A `NativeModule` that's a collection of functions to programmatically control a `ModalView`
+* Import the module: `import { ModalViewModule } from 'react-native-ios-modal'`
+* Example Usage: `ModalViewModule.dismissAllModals(true)`
+
+<br/>
+
+| Function                                      | Description                                                  |
+|-----------------------------------------------|--------------------------------------------------------------|
+| **async** `dismissModalByID(modalID: string)` | Close the `ModalView` with the corresponding `modalID`. Useful when you don't have a direct ref to the `ModalView` component. |
+| **async**  `dismissAllModals(animated: bool)` | Closes all visible modals.                                   |
 
 <br/>
 
@@ -120,6 +129,7 @@ Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. 
 * Import the enum like this: `import { UIBlurEffectStyles } from 'react-native-ios-modal'`
 * And use the enum in the `ModalView` `modalBGBlurEffectStyle` prop like this: `modalBGBlurEffectStyle={UIBlurEffectStyles.systemMaterial}`
 * Or if you prefer, just pass in a string value directly like this: `modalBGBlurEffectStyle={'systemMaterial'}`
+* Here's an [example](https://github.com/dominicstop/react-native-ios-modal/blob/master/example/src/components/ModalViewTest0.js) component that cycles through all the available blur effect styles.
 
 <br/>
 
@@ -164,6 +174,7 @@ Enum values that you can pass to the `ModalView` `modalPresentationStyle` prop. 
 * Import the enum like this: `import { UIModalPresentationStyles } from 'react-native-ios-modal'`
 * And use the enum in the `ModalView` `modalPresentationStyle` prop like this: `modalPresentationStyle={UIModalPresentationStyles.fullScreen}`
 * Or if you prefer, just pass in a string value directly like this: `modalPresentationStyle={'fullScreen'}`
+* Here's an [example](https://github.com/dominicstop/react-native-ios-modal/blob/master/example/src/components/ModalViewTest1.js) component that cycles through all the available blur effect styles.
 
 <br/>
 
@@ -198,6 +209,8 @@ Enum values that you can pass to the `ModalView` `modalTransitionStyle` prop. Mo
 1. `coverVertical`
 2. `crossDissolve`
 3. `flipHorizontal`
+
+<br/>
 
 * **Not Supported**
 1. `partialCurl`
@@ -240,7 +253,14 @@ A context you can use inside the `ModalView` component.
 <br/>
 
 ### 3.5 `withModalLifecycle` HOC
+A HOC function that wraps a component so you can listen to the modal events in that component. The wrapped component must be a child of `ModalView` i.e the component must be use inside the `ModalView` component. This is because the HOC uses the `ModalContext` to subscribe to the events of the `ModalView`. The HOC handles consuming the `ModalContext` and subscribing/unsubscribing to the modal's `EventEmitter` instance. Check out the [example](https://github.com/dominicstop/react-native-ios-modal/blob/master/example/src/components/ModalViewTest5.js) for more on how to use it.
+
+<br/>
+
 * Import the HOC function like this: `import { withModalLifecycle } from 'react-native-ios-modal'`
+* Wrap the component using the HOC function: `export default withModalLifecycle(ModalContents);`
+* In the wrapped component, declare a member function with the name of the event that you want to use: `onModalFocus({nativeEvent}){ ... }`
+* The name of the function must match any of the keys/strings defined in `ModalEventKeys`
 
 <br/>
 
@@ -249,7 +269,7 @@ A context you can use inside the `ModalView` component.
 <br/>
 
 ### 3.7 Modal `NativeEvent` object
-Example `{nativeEvent}` object that gets passed to modal events.
+Example `{nativeEvent}` object that gets passed to all the modal events.
 
 ```json
 {
@@ -262,9 +282,31 @@ Example `{nativeEvent}` object that gets passed to modal events.
 }
 ```
 
+* `isInFocus: bool` — whether or not the modal is in focus
+* `isPresented: bool` — whether or not the modal is visible or not
+* `modalLevel: int` — indicates the modal level (ex: 1 means it's the first modal that's currently visible, etc.) 
+* `modalLevelPrev: int` — indicates the modal level (-1 means it's not currently visible)
+* `modalUUID: string` — the modal's auto generated unique ID.
+
+<br/>
+
+### 3.8 Constants 
+##### 3.8.1 `AvailableBlurEffectStyles` Constant
+An array of `UIBlurEffectStyles` strings you can use on a `ModalView`'s  `modalBGBlurEffectStyle` prop. The available blur effect styles are based on the iOS version the app is running on.
+* Example: `import { AvailableBlurEffectStyles } from 'react-native-ios-modal';`
+* On android, `AvailableBlurEffectStyles` will be empty.
+
+<br/>
+
+##### 3.8.2 `AvailablePresentationStyles` Constant
+An array of `UIModalPresentationStyles` strings you can use on a `ModalView`'s  `modalTransitionStyle` prop. The available presentation styles are based on the iOS version the app is running on.
+* Example: `import { AvailablePresentationStyles } from 'react-native-ios-modal';`
+* On android, `AvailablePresentationStyles` will be empty.
+
 <br/>
 
 ## 4. Examples
+Check out the [examples](https://github.com/dominicstop/react-native-ios-modal/tree/master/example/src/components) directory for testing out the `ModalView`.
 
 <br/>
 
