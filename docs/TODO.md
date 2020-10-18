@@ -9,4 +9,14 @@
 - [ ] Refactor - Use built in swift error type
 - [x] Update example to have multiple examples
 - [x] Render nothing on android
-- [ ] Add Modal OnFocus/onBlur events to ModalView
+- [x] Add Modal OnFocus/onBlur events to ModalView
+- [ ] Add `waitFor` on modal `setVisibility` to fix modal flicker on mount
+- [x] Implement modal `nativeEvent`
+- [ ] Add global `ModalEvents` EventEmitter to listen to modal events
+- [ ] Add library to react native directory repo/site
+- [ ] Finish Initial Documentation
+- [ ] Add Example Test for present modal via mount/unmount
+- [ ] Add AutoDismiss when unmounted prop
+- [ ] Add comments to Example
+- [ ] Add test for react native versions 0.60 or older versions
+- [ ] Update supported `UIModalPresentationStyles`
