@@ -12,7 +12,7 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 
 ![Modal Example 4 & 5](./assets/ModalExample-04-05.gif)
 
-![Modal Example 6 & 7](./assets/ModalExample-06-07.gif)
+![Modal Example 6 & 7](./assets/ModalExample-06-07-2.gif)
 
 ### Motivation
 * You can use this, but it's iOS only (so you have to use a different modal component on android, like the built-in react-native [component](https://reactnative.dev/docs/modal)). 
