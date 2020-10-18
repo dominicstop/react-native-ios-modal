@@ -64,6 +64,7 @@ export class ModalViewTest7 extends React.PureComponent {
       >
         <ModalView 
           ref={r => this.modalRef1 = r}
+          hideNonVisibleModals={false}
           onModalFocus={() =>  this.setState(
             { isFocusedModal1: true }
           )}
@@ -82,6 +83,7 @@ export class ModalViewTest7 extends React.PureComponent {
         </ModalView>
         <ModalView 
           ref={r => this.modalRef2 = r}
+          hideNonVisibleModals={false}
           onModalFocus={() =>  this.setState(
             { isFocusedModal2: true }
           )}
@@ -100,6 +102,7 @@ export class ModalViewTest7 extends React.PureComponent {
         </ModalView>
         <ModalView 
           ref={r => this.modalRef3 = r}
+          hideNonVisibleModals={false}
           onModalFocus={() =>  this.setState(
             { isFocusedModal3: true }
           )}
@@ -118,6 +121,7 @@ export class ModalViewTest7 extends React.PureComponent {
         </ModalView>
         <ModalView 
           ref={r => this.modalRef4 = r}
+          hideNonVisibleModals={false}
           onModalFocus={() =>  this.setState(
             { isFocusedModal4: true }
           )}
