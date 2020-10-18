@@ -217,7 +217,6 @@ export class ModalView extends React.PureComponent {
   _handleOnModalShow = (event) => {
     this.props.onModalShow?.(event);
     this.emitter.emit(ModalEventKeys.onModalShow, event);
-    console.log(nativeEvent);
   };
 
   _handleOnModalDismiss = (event) => {
