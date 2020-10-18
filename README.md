@@ -63,7 +63,7 @@ import { ModalView } from 'react-native-ios-modal';
 | **presentViaMount**                 | false   | If this prop is set to true, the modal will be presented or dismissed when the `ModalView` is mounted/unmounted. |
 | **isModalBGBlurred**                | true    | Set whether or not the background is blurred. When true, `modalBGBlurEffectStyle` prop takes effect. |
 | **enableSwipeGesture**              | true    | When the modal is using `pageSheet` or similar `modalPresentationStyle`, this prop controls the whether or not the swipe gesture is enabled. |
-| **hideNonVisibleModals**            | false   | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance. |
+| **hideNonVisibleModals**            | true    | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance. |
 | **isModalBGTransparent**            | true    | Sets whether or not the modal background is transparent. When set to false, the background blur effect will be disabled automatically. |
 | **isModalInPresentation**           | false   | When set to true, it prevents the modal from being dismissed via a swipe gesture. |
 | **setEnableSwipeGestureFromProps**  | false   | When set to true, it allows you to set the `enableSwipeGesture` via the `setEnableSwipeGesture` function. |
@@ -74,10 +74,10 @@ import { ModalView } from 'react-native-ios-modal';
 #### 3.1.2 Props: Strings
 | Name/Type                                                    | Default                                                      | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------|
-| **modalID** -> `string`                                      | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `ModalViewModule` functions and programatically control it. |
-| **modalTransitionStyle** -> `UIModalTransitionStyles` value  | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
-| **modalPresentationStyle** -> `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
-| **modalBGBlurEffectStyle** -> `UIBlurEffectStyles` value     | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `regular` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalID**: `string`                                        | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `ModalViewModule` functions and programatically control it. |
+| **modalTransitionStyle**: `UIModalTransitionStyles` value    | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalPresentationStyle**: `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalBGBlurEffectStyle**: `UIBlurEffectStyles` value       | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `regular` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 
 <br/>
 
