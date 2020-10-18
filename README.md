@@ -63,7 +63,7 @@ import { ModalView } from 'react-native-ios-modal';
 | **presentViaMount**                 | false   | If this prop is set to true, the modal will be presented or dismissed when the `ModalView` is mounted/unmounted. |
 | **isModalBGBlurred**                | true    | Set whether or not the background is blurred. When true, `modalBGBlurEffectStyle` prop takes effect. |
 | **enableSwipeGesture**              | true    | When the modal is using `pageSheet` or similar `modalPresentationStyle`, this prop controls the whether or not the swipe gesture is enabled. |
-| **hideNonVisibleModals**            | true    | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance. |
+| **hideNonVisibleModals**            | false   | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance. |
 | **isModalBGTransparent**            | true    | Sets whether or not the modal background is transparent. When set to false, the background blur effect will be disabled automatically. |
 | **isModalInPresentation**           | false   | When set to true, it prevents the modal from being dismissed via a swipe gesture. |
 | **setEnableSwipeGestureFromProps**  | false   | When set to true, it allows you to set the `enableSwipeGesture` via the `setEnableSwipeGesture` function. |

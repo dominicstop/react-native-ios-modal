@@ -188,7 +188,7 @@ class RCTModalView: UIView {
     }
   };
   
-  @objc var hideNonVisibleModals: Bool = true;
+  @objc var hideNonVisibleModals: Bool = false;
   
   // control modal present/dismiss by mounting/unmounting the react subview
   // * true : the modal is presented/dismissed when the view is mounted/unmounted

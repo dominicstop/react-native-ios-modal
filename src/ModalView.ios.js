@@ -84,6 +84,7 @@ export class ModalView extends React.PureComponent {
 
   static defaultProps = {
     enableSwipeGesture   : true ,
+    hideNonVisibleModals : false,
     isModalInPresentation: false,
     setEnableSwipeGestureFromProps: false,
     setModalInPresentationFromProps: false,
