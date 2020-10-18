@@ -358,9 +358,11 @@ class RCTModalView: UIView {
       };
       
       self.enableSwipeGesture();
-      
-      self.onModalShow?([:]);
       self.delegate?.onPresentModalView(modalView: self);
+      self.onModalShow?(
+        self.createModalNativeEventDict()
+      );
+      
       completion?(true, nil);
       
       #if DEBUG
@@ -410,11 +412,13 @@ class RCTModalView: UIView {
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
-      self.onModalDismiss?([:]);
       self.delegate?.onDismissModalView(modalView: self);
-      completion?(true, nil);
+      self.onModalDismiss?(
+        self.createModalNativeEventDict()
+      );
       
       self.deinitControllers();
+      completion?(true, nil);
       
       #if DEBUG
       print("RCTModalView, dismissModal: Finished");
@@ -433,10 +437,14 @@ class RCTModalView: UIView {
     _ visibility: Bool    ,
       completion: completionResult = nil
   ){
-    var params: Dictionary<String, Any> = [
+    var params: Dictionary<AnyHashable, Any> = [
       "requestID" : requestID ,
       "visibility": visibility,
     ];
+    
+    self.createModalNativeEventDict().forEach { (key, value) in
+      params[key] = value
+    };
     
     let modalAction = visibility
       ? self.presentModal
@@ -579,6 +587,7 @@ extension RCTModalView {
         .isEnabled = flag ?? self.enableSwipeGesture;
   };
   
+  /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList = self.getPresentedVCList();
     
@@ -587,6 +596,27 @@ extension RCTModalView {
         vc.view.isHidden = isHidden;
       };
     };
+  };
+  
+  /// helper function to create a `NativeEvent` object
+  private func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
+    var dict: Dictionary<AnyHashable, Any> = [
+      "modalUUID"     : self.modalUUID     ,
+      "isInFocus"     : self.isInFocus     ,
+      "isPresented"   : self.isPresented   ,
+      "modalLevel"    : self.modalLevel    ,
+      "modalLevelPrev": self.modalLevelPrev,
+    ];
+    
+    if let reactTag = self.modalID {
+      dict["reactTag"] = reactTag;
+    };
+    
+    if let modalID = self.modalID {
+      dict["modalID"] = modalID;
+    };
+    
+    return dict;
   };
 };
 
@@ -601,7 +631,9 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
       self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
     };
     
-    self.onModalWillDismiss?([:]);
+    self.onModalWillDismiss?(
+      self.createModalNativeEventDict()
+    );
     
     #if DEBUG
     print("RCTModalView, presentationControllerWillDismiss"
@@ -615,9 +647,14 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     self.isInFocus   = false;
     self.isPresented = false;
     
-    self.onModalDismiss?([:]);
-    self.onModalDidDismiss?([:]);
     self.delegate?.onDismissModalView(modalView: self);
+    self.onModalDidDismiss?(
+      self.createModalNativeEventDict()
+    );
+    
+    self.onModalDismiss?(
+      self.createModalNativeEventDict()
+    );
     
     self.deinitControllers();
     
@@ -629,7 +666,9 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
   };
   
   func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-    self.onModalAttemptDismiss?([:]);
+    self.onModalAttemptDismiss?(
+      self.createModalNativeEventDict()
+    );
     
     #if DEBUG
     print("RCTModalView, presentationControllerDidAttemptToDismiss"
@@ -657,7 +696,9 @@ extension RCTModalView: RCTModalViewFocusDelegate {
       /// a new `RCTModalView` instance is in focus and this modal was prev. in focus so
       /// this modal shoud be now 'blurred'
       self.isInFocus = false;
-      self.onModalBlur?([:]);
+      self.onModalBlur?(
+        self.createModalNativeEventDict()
+      );
       
     } else if !isInFocus && !self.isInFocus {
       /// a  `RCTModalView` instance has lost focus, so the prev modal shoul be focused
@@ -665,7 +706,9 @@ extension RCTModalView: RCTModalViewFocusDelegate {
       guard self.modalLevel + 1 >= modalLevel else { return };
       
       self.isInFocus = true;
-      self.onModalFocus?([:]);
+      self.onModalFocus?(
+        self.createModalNativeEventDict()
+      );
     };
   };
 };

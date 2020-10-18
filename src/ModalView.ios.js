@@ -78,6 +78,8 @@ export class ModalView extends React.PureComponent {
     modalTransitionStyle  : Proptypes.string,
     modalPresentationStyle: Proptypes.string,
     modalBGBlurEffectStyle: Proptypes.string,
+    // Props: Style
+    containerStyle: Proptypes.object,
   };
 
   static defaultProps = {
@@ -202,24 +204,25 @@ export class ModalView extends React.PureComponent {
     this.props.onRequestResult?.({nativeEvent});
   };
 
-  _handleOnModalBlur = (event) => {
-    this.props.onModalBlur?.(event);
-    this.emitter.emit(ModalEventKeys.onModalBlur, event);
+  _handleOnModalBlur = ({nativeEvent}) => {
+    this.props.onModalBlur?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalBlur, {nativeEvent});
   };
 
-  _handleOnModalFocus = (event) => {
-    this.props.onModalFocus?.();
-    this.emitter.emit(ModalEventKeys.onModalFocus, event);
+  _handleOnModalFocus = ({nativeEvent}) => {
+    this.props.onModalFocus?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalFocus, {nativeEvent});
   };
 
-  _handleOnModalShow = (event) => {
-    this.props.onModalShow?.(event);
-    this.emitter.emit(ModalEventKeys.onModalShow, event);
+  _handleOnModalShow = ({nativeEvent}) => {
+    this.props.onModalShow?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalShow, {nativeEvent});
+    console.log(nativeEvent);
   };
 
-  _handleOnModalDismiss = (event) => {
-    this.props.onModalDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalDismiss, event);
+  _handleOnModalDismiss = ({nativeEvent}) => {
+    this.props.onModalDismiss?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalDismiss, {nativeEvent});
 
     this.setState({ 
       visible   : false,
@@ -230,19 +233,19 @@ export class ModalView extends React.PureComponent {
     });
   };
 
-  _handleOnModalDidDismiss = (event) => {
-    this.props.onModalDidDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalDidDismiss, event);
+  _handleOnModalDidDismiss = ({nativeEvent}) => {
+    this.props.onModalDidDismiss?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalDidDismiss, {nativeEvent});
   };
 
-  _handleOnModalWillDismiss = (event) => {
-    this.props.onModalWillDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalWillDismiss, event);
+  _handleOnModalWillDismiss = ({nativeEvent}) => {
+    this.props.onModalWillDismiss?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalWillDismiss, {nativeEvent});
   };
 
-  _handleOnModalAttemptDismiss = (event) => {
-    this.props.onModalAttemptDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, event);
+  _handleOnModalAttemptDismiss = ({nativeEvent}) => {
+    this.props.onModalAttemptDismiss?.({nativeEvent});
+    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, {nativeEvent});
   };
 
   //#endregion
