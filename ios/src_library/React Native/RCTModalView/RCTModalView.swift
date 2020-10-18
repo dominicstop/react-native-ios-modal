@@ -283,6 +283,8 @@ class RCTModalView: UIView {
     
     self.reactSubview = subview;
     self.touchHandler.attach(to: subview);
+    
+    self.modalVC?.reactView = reactSubview;
   };
   
   override func removeReactSubview(_ subview: UIView!) {
