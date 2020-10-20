@@ -72,10 +72,10 @@ import { ModalView } from 'react-native-ios-modal';
 |-------------------------------------|---------|--------------------------------------------------------------|
 | **presentViaMount**                 | false   | If this prop is set to true, the modal will be presented or dismissed when the `ModalView` is mounted/unmounted. |
 | **isModalBGBlurred**                | true    | Set whether or not the background is blurred. When true, `modalBGBlurEffectStyle` prop takes effect. |
-| **enableSwipeGesture**              | true    | When the modal is using `pageSheet` or similar `modalPresentationStyle`, this prop controls the whether or not the swipe gesture is enabled. |
-| **hideNonVisibleModals**            | true    | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance. |
+| **enableSwipeGesture**              | true    | When the modal is using `pageSheet` or similar `modalPresentationStyle`, this prop controls whether or not the swipe gesture is enabled. |
+| **hideNonVisibleModals**            | false   | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance when this prop is set to true. |
 | **isModalBGTransparent**            | true    | Sets whether or not the modal background is transparent. When set to false, the background blur effect will be disabled automatically. |
-| **isModalInPresentation**           | false   | When set to true, it prevents the modal from being dismissed via a swipe gesture. |
+| **isModalInPresentation**           | false   | When set to true, it prevents the modal from being dismissed via a swipe gesture. The modal will still be swipeable, but the modal will not close when its swiped down but instead, it will bounce back up. |
 | **setEnableSwipeGestureFromProps**  | false   | When set to true, it allows you to set the `enableSwipeGesture` via the `setEnableSwipeGesture` function. |
 | **setModalInPresentationFromProps** | false   | When set to true, it allows you to set the`isModalInPresentation` via the `setIsModalInPresentation`function. |
 
@@ -114,7 +114,8 @@ import { ModalView } from 'react-native-ios-modal';
 | Name                                                         | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|
 | `getEmitterRef()` -> `ModalVIewRef`                          | Gets a ref to the `EventEmitter` instance.                   |
-| **aysnc** `setVisibility(visibility: bool, childProps: object)` | Programatically present/dismiss the modal. Resolved after the modal is presented/dismissed. |
+| **aysnc** `setVisibility(visibility: bool, childProps: object)` -> `success: bool` | Programatically present/dismiss the modal. Resolved after the modal is presented/dismissed. |
+| **aysnc** `getModalInfo()` -> `object: NativeEvent`          | Get "native" info from the modal instance. Returns a `NativeEvent` object. |
 | **aysnc** `setEnableSwipeGesture(bool)`                      | When `setEnableSwipeGestureFromProps` prop is true, it allows you to programatically set `enableSwipeGesture` prop via a function. |
 | **async** `setIsModalInPresentation(bool)`                   | When `setModalInPresentationFromProps` prop is true, it allows you to programatically set  `isModalInPresentation` via function. |
 <br/>
@@ -173,6 +174,8 @@ Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. 
 * **Regular Styles** — Blur styles that were originally added in iOS 10.
 1. `regular`
 2. `prominent`
+
+<br/>
 
 * **Light/Dark Styles** — Blur styles that were originally added in iOS 8.
 3. `light`
