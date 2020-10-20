@@ -34,6 +34,15 @@ yarn add react-native-ios-modal
 # then run pod install (uses autolinking)
 cd ios && pod install
 ```
+
+<br/>
+
+* **Note**: This library is written in swift. If you are having trouble building your app after installing this library, try adding an empty swift file.
+	1.  Open up your `ios/project.xcworkspace` project
+	2. On the project navigator panel, right click on your project (or a folder/group) and select "New File..." option
+	3. In the popup/sheet, select swift click next 
+	4. In the "Save As" popup/sheet, rename the file if you want to and click create
+	5. If Xcode asks you to create a "Objective-C Bridging Header", choose yes
 - - -
 <br/>
 
@@ -78,7 +87,7 @@ import { ModalView } from 'react-native-ios-modal';
 | **modalID**: `string`                                        | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `ModalViewModule` functions and programatically control it. |
 | **modalTransitionStyle**: `UIModalTransitionStyles` value    | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 | **modalPresentationStyle**: `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
-| **modalBGBlurEffectStyle**: `UIBlurEffectStyles` value       | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `regular` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
+| **modalBGBlurEffectStyle**: `UIBlurEffectStyles` value       | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `light` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 
 <br/>
 
@@ -161,9 +170,11 @@ Enum values that you can pass to the `ModalView` `modalBGBlurEffectStyle` prop. 
 
 <br/>
 
-* **Regular Styles** — Blur styles that were originally added in iOS 8.
+* **Regular Styles** — Blur styles that were originally added in iOS 10.
 1. `regular`
 2. `prominent`
+
+* **Light/Dark Styles** — Blur styles that were originally added in iOS 8.
 3. `light`
 4. `extraLight`
 5. `dark`
