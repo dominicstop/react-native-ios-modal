@@ -12,15 +12,14 @@ import Foundation
 class RCTModalViewModule: RCTEventEmitter {
   
   enum Events: String, CaseIterable {
-    case onModalFocus;
-    case onModalDismiss;
+    case placeholderEvent;
   };
   
   @objc override static func requiresMainQueueSetup() -> Bool {
     return false;
   };
   
-  var hasListeners = false;
+  private var hasListeners = false;
   
   override func supportedEvents() -> [String]! {
     return Self.Events.allCases.map { $0.rawValue };
@@ -124,26 +123,13 @@ extension RCTModalViewModule {
   };
 };
 
-// --------------------------------------------
-// MARK: Extension: RCTModalViewPresentDelegate
-// --------------------------------------------
+// --------------------------
+// MARK: Extension: JS Events
+// --------------------------
 
-extension RCTModalViewModule: RCTModalViewPresentDelegate {
-  func onPresentModalView(modalView: RCTModalView) {
+extension RCTModalViewModule {
+  func sendModalEvent(event: Events, params: Dictionary<AnyHashable, Any>) {
     guard self.hasListeners else { return };
-    
-    self.sendEvent(
-      withName: Self.Events.onModalFocus.rawValue,
-      body: modalView.createModalNativeEventDict()
-    );
-  };
-  
-  func onDismissModalView(modalView: RCTModalView) {
-    guard self.hasListeners else { return };
-    
-    self.sendEvent(
-      withName: Self.Events.onModalDismiss.rawValue,
-      body: modalView.createModalNativeEventDict()
-    );
+    self.sendEvent(withName: event.rawValue, body: params);
   };
 };

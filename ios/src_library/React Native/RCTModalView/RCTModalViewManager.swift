@@ -30,9 +30,7 @@ class RCTModalViewManager: RCTViewManager {
  
   override func view() -> UIView! {
     let view = RCTModalView(bridge: self.bridge);
-    view.delegate.add(self);
-    view.delegate.add(self);
-    
+    view.delegate = self;
     self.delegatesFocus.add(view);
     
     return view;
@@ -76,6 +74,29 @@ class RCTModalViewManager: RCTViewManager {
       modalView.requestModalPresentation(requestID, visibility);
     };
   };
+  
+  @objc func requestModalInfo(_ node: NSNumber, requestID: NSNumber){
+    DispatchQueue.main.async {
+      guard
+        let component = self.bridge.uiManager.view(forReactTag: node),
+        let modalView = component as? RCTModalView
+      else {
+        #if DEBUG
+        print("RCTModalViewManager, requestModalInfo failed");
+        #endif
+        return;
+      };
+      
+      #if DEBUG
+      print(
+          "RCTModalViewManager, requestModalInfo Received - "
+        + "For node: \(node) and requestID: \(requestID)"
+      );
+      #endif
+      
+      modalView.requestModalInfo(requestID);
+    };
+  };
 };
 
 // ---------------------------------
@@ -108,6 +129,7 @@ extension RCTModalViewManager: RCTModalViewPresentDelegate {
     self.currentModalLevel = modalLevel;
     self.presentedModalRefs.removeObject(forKey: modalUUID as NSString);
     
+    // notify delegates that a new modal is lost focus
     self.delegatesFocus.invoke {
       $0.onModalChangeFocus(
         modalLevel: modalLevel,

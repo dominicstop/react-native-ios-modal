@@ -35,8 +35,8 @@ class RCTModalView: UIView {
   // MARK: Properties
   // ----------------
 
-  weak var bridge: RCTBridge?;
-  var delegate = MulticastDelegate<RCTModalViewPresentDelegate>();
+  weak var bridge  : RCTBridge?;
+  weak var delegate: RCTModalViewPresentDelegate?;
   
   var isInFocus  : Bool = false;
   var isPresented: Bool = false;
@@ -365,9 +365,7 @@ extension RCTModalView {
       };
       
       self.enableSwipeGesture();
-      self.delegate.invoke {
-        $0.onPresentModalView(modalView: self);
-      };
+      self.delegate?.onPresentModalView(modalView: self);
       
       self.onModalShow?(
         self.createModalNativeEventDict()
@@ -422,10 +420,7 @@ extension RCTModalView {
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
-      self.delegate.invoke {
-        $0.onDismissModalView(modalView: self);
-      };
-      
+      self.delegate?.onDismissModalView(modalView: self);
       self.onModalDismiss?(
         self.createModalNativeEventDict()
       );
@@ -473,6 +468,17 @@ extension RCTModalView {
       completion?(success, error);
       self.onRequestResult?(params);
     };
+  };
+  
+  public func requestModalInfo(
+    _ requestID : NSNumber,
+      completion: completionResult = nil
+  ){
+    var params = self.createModalNativeEventDict();
+    params[requestID] = requestID;
+    
+    completion?(true, nil);
+    self.onRequestResult?(params);
   };
 };
 
@@ -612,7 +618,7 @@ extension RCTModalView {
   };
   
   /// helper function to create a `NativeEvent` object
-  internal func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
+  private func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
     var dict: Dictionary<AnyHashable, Any> = [
       "modalUUID"     : self.modalUUID     ,
       "isInFocus"     : self.isInFocus     ,
@@ -660,9 +666,7 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     self.isInFocus   = false;
     self.isPresented = false;
     
-    self.delegate.invoke {
-      $0.onDismissModalView(modalView: self);
-    };
+    self.delegate?.onDismissModalView(modalView: self);
     
     self.onModalDidDismiss?(
       self.createModalNativeEventDict()

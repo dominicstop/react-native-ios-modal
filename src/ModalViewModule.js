@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 import * as Helpers from './functions/helpers';
 
 const moduleName   = "ModalViewModule";
@@ -9,6 +9,8 @@ const COMMAND_KEYS = {
   dismissAllModals: 'dismissAllModals'
 };
 
+// wip
+const ModalViewFocusEvents = new NativeEventEmitter(NativeModule);
 
 export class ModalViewModule {
   static dismissModalByID(modalID = ''){
@@ -21,7 +23,7 @@ export class ModalViewModule {
       } catch(error){
         console.log("ModalViewModule, dismissModalByID error:");
         console.log(error);
-        reject();
+        reject(error);
       };
     });
 
