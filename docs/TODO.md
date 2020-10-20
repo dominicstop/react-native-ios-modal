@@ -12,12 +12,14 @@
 - [x] Add Modal OnFocus/onBlur events to ModalView
 - [ ] Add `waitFor` on modal `setVisibility` to fix modal flicker on mount
 - [x] Implement modal `nativeEvent`
-- [ ] Add global `ModalEvents` EventEmitter to listen to modal events
+- [x] Add global `ModalEvents` EventEmitter to listen to modal events
 - [ ] Add library to react native directory repo/site
-- [ ] Finish Initial Documentation
+- [x] Finish Initial Documentation
 - [ ] Add Example Test for present modal via mount/unmount
 - [ ] Add AutoDismiss when unmounted prop
 - [ ] Add comments to Example
 - [ ] Add test for react native versions 0.60 or older versions
 - [ ] Update supported `UIModalPresentationStyles`
 - [ ] Add example `UIModalTransitionStyles`
+- [ ] Use `NativeModule` to programmatically open/close a modal instead of the current `requestID`/`onRequestResult`
+	* `NativeModule`'s has built in functionality to create and resolving promises.
