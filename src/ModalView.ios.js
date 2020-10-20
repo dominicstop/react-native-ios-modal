@@ -68,6 +68,7 @@ export class ModalView extends React.PureComponent {
     // Props: Bool/Flags --------------------------
     presentViaMount                : Proptypes.bool,
     isModalBGBlurred               : Proptypes.bool,
+    autoCloseOnUnmount             : Proptypes.bool,
     enableSwipeGesture             : Proptypes.bool,
     hideNonVisibleModals           : Proptypes.bool,
     isModalBGTransparent           : Proptypes.bool,
@@ -84,6 +85,7 @@ export class ModalView extends React.PureComponent {
   };
 
   static defaultProps = {
+    autoCloseOnUnmount   : true ,
     enableSwipeGesture   : true ,
     hideNonVisibleModals : false,
     isModalInPresentation: false,
@@ -103,6 +105,15 @@ export class ModalView extends React.PureComponent {
       childProps: null ,
       enableSwipeGesture   : props.enableSwipeGesture   ,
       isModalInPresentation: props.isModalInPresentation,
+    };
+  };
+
+  componentWillUnmount(){
+    const { autoCloseOnUnmount } = this.props;
+    const { visible } = this.state;
+
+    if(autoCloseOnUnmount && visible){
+      this.setVisibility(false);
     };
   };
 
