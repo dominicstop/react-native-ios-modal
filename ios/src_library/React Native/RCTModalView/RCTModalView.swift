@@ -23,7 +23,7 @@ class RCTModalView: UIView {
       Self.presentationStyle.stringDescription() as NSString;
     
     static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
-      guard #available(iOS 13.0, *) else { return .regular };
+      guard #available(iOS 13.0, *) else { return .light };
       return .systemThinMaterial;
     }();
     

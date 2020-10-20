@@ -10,12 +10,17 @@ import Foundation
 extension UIBlurEffect.Style: CaseIterable {
   public static var availableStyles: [UIBlurEffect.Style] {
     var styles: [UIBlurEffect.Style] = [
-      .regular,
-      .prominent,
       .light,
       .extraLight,
       .dark,
     ];
+    
+    if #available(iOS 10.0, *) {
+      styles.append(contentsOf: [
+        .regular,
+        .prominent,
+      ]);
+    };
     
     if #available(iOS 13.0, *) {
       styles.append(contentsOf: [
