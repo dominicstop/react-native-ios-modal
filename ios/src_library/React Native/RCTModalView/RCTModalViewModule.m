@@ -6,8 +6,10 @@
 //
 
 #import "React/RCTBridgeModule.h"
+#import "React/RCTEventEmitter.h"
 
-@interface RCT_EXTERN_MODULE(RCTModalViewModule, NSObject)
+
+@interface RCT_EXTERN_MODULE(RCTModalViewModule, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(dismissModalByID
           : (NSString)modalID

@@ -8,34 +8,35 @@
 
 import Foundation
 
-typealias completionResult = ((_ isSuccess: Bool, _ error: RCTModalViewError?) -> ())?;
-
-fileprivate struct DefaultValues {
-  static let presentationStyle: UIModalPresentationStyle = {
-    guard #available(iOS 13.0, *) else { return .overFullScreen };
-    return .automatic;
-  }();
-  
-  static let presentationStyleString =
-    Self.presentationStyle.stringDescription() as NSString;
-  
-  static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
-    guard #available(iOS 13.0, *) else { return .regular };
-    return .systemThinMaterial;
-  }();
-  
-  static let modalBGBlurEffectStyleString =
-    Self.modalBGBlurEffectStyle.stringDescription() as NSString;
-};
 
 class RCTModalView: UIView {
+  
+  typealias completionResult = ((_ isSuccess: Bool, _ error: RCTModalViewError?) -> ())?;
+  
+  struct DefaultValues {
+    static let presentationStyle: UIModalPresentationStyle = {
+      guard #available(iOS 13.0, *) else { return .overFullScreen };
+      return .automatic;
+    }();
+    
+    static let presentationStyleString =
+      Self.presentationStyle.stringDescription() as NSString;
+    
+    static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
+      guard #available(iOS 13.0, *) else { return .regular };
+      return .systemThinMaterial;
+    }();
+    
+    static let modalBGBlurEffectStyleString =
+      Self.modalBGBlurEffectStyle.stringDescription() as NSString;
+  };
   
   // ----------------
   // MARK: Properties
   // ----------------
 
-  weak var bridge  : RCTBridge?;
-  weak var delegate: RCTModalViewPresentDelegate?;
+  weak var bridge: RCTBridge?;
+  var delegate = MulticastDelegate<RCTModalViewPresentDelegate>();
   
   var isInFocus  : Bool = false;
   var isPresented: Bool = false;
@@ -304,9 +305,13 @@ class RCTModalView: UIView {
     self.touchHandler.detach(from: subview);
   };
   
-  // ----------------------
-  // MARK: Public Functions
-  // ----------------------
+};
+
+// ----------------------
+// MARK: Public Functions
+// ----------------------
+
+extension RCTModalView {
   
   public func presentModal(completion: completionResult = nil) {
     let hasWindow: Bool = (self.window != nil);
@@ -360,7 +365,10 @@ class RCTModalView: UIView {
       };
       
       self.enableSwipeGesture();
-      self.delegate?.onPresentModalView(modalView: self);
+      self.delegate.invoke {
+        $0.onPresentModalView(modalView: self);
+      };
+      
       self.onModalShow?(
         self.createModalNativeEventDict()
       );
@@ -414,7 +422,10 @@ class RCTModalView: UIView {
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
-      self.delegate?.onDismissModalView(modalView: self);
+      self.delegate.invoke {
+        $0.onDismissModalView(modalView: self);
+      };
+      
       self.onModalDismiss?(
         self.createModalNativeEventDict()
       );
@@ -601,7 +612,7 @@ extension RCTModalView {
   };
   
   /// helper function to create a `NativeEvent` object
-  private func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
+  internal func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
     var dict: Dictionary<AnyHashable, Any> = [
       "modalUUID"     : self.modalUUID     ,
       "isInFocus"     : self.isInFocus     ,
@@ -649,7 +660,10 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     self.isInFocus   = false;
     self.isPresented = false;
     
-    self.delegate?.onDismissModalView(modalView: self);
+    self.delegate.invoke {
+      $0.onDismissModalView(modalView: self);
+    };
+    
     self.onModalDidDismiss?(
       self.createModalNativeEventDict()
     );

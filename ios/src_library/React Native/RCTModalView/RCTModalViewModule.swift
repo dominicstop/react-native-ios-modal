@@ -9,12 +9,39 @@ import Foundation
 
 
 @objc(RCTModalViewModule)
-class RCTModalViewModule: NSObject {
+class RCTModalViewModule: RCTEventEmitter {
   
-  @objc static func requiresMainQueueSetup() -> Bool {
+  enum Events: String, CaseIterable {
+    case onModalFocus;
+    case onModalDismiss;
+  };
+  
+  @objc override static func requiresMainQueueSetup() -> Bool {
     return false;
   };
   
+  var hasListeners = false;
+  
+  override func supportedEvents() -> [String]! {
+    return Self.Events.allCases.map { $0.rawValue };
+  };
+  
+  // called when first listener is added
+  override func startObserving() {
+    self.hasListeners = true;
+  };
+  
+  // called when this module's last listener is removed, or dealloc
+  override func stopObserving() {
+    self.hasListeners = false;
+  };
+};
+
+// -----------------------------
+// MARK: Extension: JS Functions
+// -----------------------------
+
+extension RCTModalViewModule {
   @objc func dismissModalByID(_ modalID: NSString, callback: @escaping RCTResponseSenderBlock) {
     DispatchQueue.main.async {
       guard let rootVC = UIWindow.key?.rootViewController else {
@@ -94,5 +121,29 @@ class RCTModalViewModule: NSObject {
       
       callback([success != nil]);
     };
+  };
+};
+
+// --------------------------------------------
+// MARK: Extension: RCTModalViewPresentDelegate
+// --------------------------------------------
+
+extension RCTModalViewModule: RCTModalViewPresentDelegate {
+  func onPresentModalView(modalView: RCTModalView) {
+    guard self.hasListeners else { return };
+    
+    self.sendEvent(
+      withName: Self.Events.onModalFocus.rawValue,
+      body: modalView.createModalNativeEventDict()
+    );
+  };
+  
+  func onDismissModalView(modalView: RCTModalView) {
+    guard self.hasListeners else { return };
+    
+    self.sendEvent(
+      withName: Self.Events.onModalDismiss.rawValue,
+      body: modalView.createModalNativeEventDict()
+    );
   };
 };

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RCTModalViewPresentDelegate: AnyObject {
+@objc protocol RCTModalViewPresentDelegate: AnyObject {
   
   func onPresentModalView(modalView: RCTModalView);
   

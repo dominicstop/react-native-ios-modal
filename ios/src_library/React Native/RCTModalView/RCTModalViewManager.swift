@@ -9,7 +9,6 @@
 import Foundation
 
 
-
 @objc (RCTModalViewManager)
 class RCTModalViewManager: RCTViewManager {
   static var sharedInstance: RCTModalViewManager!;
@@ -18,6 +17,8 @@ class RCTModalViewManager: RCTViewManager {
     return true;
   };
   
+  // a weak ref to the currently presented modals
+  // currently unused, remove later
   var presentedModalRefs = NSMapTable<NSString, RCTModalView>.init(
     keyOptions  : .copyIn,
     valueOptions: .weakMemory
@@ -29,9 +30,10 @@ class RCTModalViewManager: RCTViewManager {
  
   override func view() -> UIView! {
     let view = RCTModalView(bridge: self.bridge);
-    // set delegates
+    view.delegate.add(self);
+    view.delegate.add(self);
+    
     self.delegatesFocus.add(view);
-    view.delegate = self;
     
     return view;
   };
