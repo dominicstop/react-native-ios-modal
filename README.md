@@ -4,7 +4,8 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 * Supports setting `isModalInPresentation` and separately disabling the native swipe down gesture when the modal is using `pageSheet` `modalPresentationStyle`.
 * You can use `ModalView` anywhere in your app and present a view modally either programmatically via a ref or automatically when a `ModalView` is mounted/unmounted.
 * Support for several modal events, multiple modals, and having a transparent background or a blurred background using `UIBlurEffect`.
-* **Note**:  documentation under construction 🚧✨
+
+<br/>
 
 ![Modal Example 0 & 1](./assets/ModalExample-00-01.gif)
 
@@ -265,6 +266,15 @@ A HOC function that wraps a component so you can listen to the modal events in t
 <br/>
 
 ### 3.6 Modal `EventEmitter`
+* Each `ModalView` has an `EventEmitter` instance, so the first step to use it is to get a ref to the emitter.
+	* If you have a reference to the `ModalView`, you can call `modalRef.getEmitterRef()` to get a ref to the emitter instance.
+	* Or you can get a ref to the emitter instance via context: `this.context.getEmitterRef()` or  `const { getEmitterRef } = useContext(ModalContext)`
+
+<br/>
+
+* To subscribe to a modal event: `modalEmitter.addListener('onModalBlur', this._handleOnModalBlur)`
+* To unsubscribe to a modal event: `modalEmitter.removeListener('onModalBlur', this._handleOnModalBlur)`
+* The string of available events to subscribe to are in `ModalEventKeys`
 
 <br/>
 
@@ -313,3 +323,6 @@ Check out the [examples](https://github.com/dominicstop/react-native-ios-modal/t
 ## License
 
 MIT
+
+## Contact 
+I'm [@DominicGo](https://twitter.com/GoDominic) on twitter if you have any questions ✨
