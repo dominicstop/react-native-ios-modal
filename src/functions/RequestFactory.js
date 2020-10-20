@@ -41,7 +41,7 @@ export class RequestFactory {
       (success? promise.resolve : promise.reject)(other);
   
     } catch(error){
-      console.log("RequestFactory, resolveRequest: failed");
+      console.log("RequestFactory, resolveRequestFromObj: failed");
       console.log(error);
     };
   };

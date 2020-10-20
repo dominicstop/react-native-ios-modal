@@ -475,7 +475,8 @@ extension RCTModalView {
       completion: completionResult = nil
   ){
     var params = self.createModalNativeEventDict();
-    params[requestID] = requestID;
+    params["success"  ] = true;
+    params["requestID"] = requestID;
     
     completion?(true, nil);
     self.onRequestResult?(params);

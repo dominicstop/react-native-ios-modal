@@ -47,7 +47,8 @@ const NATIVE_PROP_KEYS = {
 };
 
 const COMMAND_KEYS = {
-  requestModalPresentation: 'requestModalPresentation'
+  requestModalInfo        : 'requestModalInfo'        ,
+  requestModalPresentation: 'requestModalPresentation',
 };
 
 
@@ -165,6 +166,29 @@ export class ModalView extends React.PureComponent {
     };
   };
 
+  getModalInfo = async () => {
+    const { promise, requestID } = 
+      RequestFactory.newRequest(this, { timeout: 2000 });
+
+    try {
+      // request modal to send modal info
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(this.nativeModalViewRef),
+        NativeCommands[COMMAND_KEYS.requestModalInfo],
+        [requestID]
+      );
+
+      return await promise;
+
+    } catch(error){
+      RequestFactory.rejectRequest(this, {requestID});
+      console.log("ModalView, requestModalInfo failed:");
+      console.log(error);
+
+      return false;
+    };
+  };
+
   setEnableSwipeGesture = async (enableSwipeGesture) => {
     const { enableSwipeGesture: prevVal } = this.state;
     if(prevVal != enableSwipeGesture){
@@ -247,7 +271,6 @@ export class ModalView extends React.PureComponent {
     this.props.onModalAttemptDismiss?.(event);
     this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, event);
   };
-
   //#endregion
 
   _renderModal(){

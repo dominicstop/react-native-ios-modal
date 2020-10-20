@@ -46,5 +46,10 @@ RCT_EXTERN_METHOD(requestModalPresentation
   visibility: (nonnull BOOL     *)visibility
 );
 
+RCT_EXTERN_METHOD(requestModalInfo
+            : (nonnull NSNumber *)node
+  requestID : (nonnull NSNumber *)requestID
+);
+
 @end
 
