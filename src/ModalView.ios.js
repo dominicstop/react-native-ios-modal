@@ -289,8 +289,8 @@ export class ModalView extends React.PureComponent {
     const state = this.state;
 
     const nativeProps = {
-      // pass down props ------
-      ...props, ...nativeProps,
+      // pass down props
+      ...props,
       // set handlers for native props -------------------------------------------
       [NATIVE_PROP_KEYS.onModalBlur          ]: this._handleOnModalBlur          ,
       [NATIVE_PROP_KEYS.onModalFocus         ]: this._handleOnModalFocus         ,
