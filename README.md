@@ -37,7 +37,12 @@ cd ios && pod install
 
 <br/>
 
-* **Note**: This library is written in swift. If you are having trouble building your app after installing this library, try adding an empty swift file.
+### 1.1 Installation Notes
+* This library uses autolinking: tested and runs on RN version 0.60+ (Specific versions tested includes: 0.60, 0.62.2, and 0.63.3.)
+
+<br/>
+
+* This library is written in swift. If you are having trouble building your app after installing this library, try adding an empty swift file.
 1.  Open up your `ios/project.xcworkspace` project
 2. On the project navigator panel, right click on your project (or a folder/group) and select "New File..." option
 3. In the popup/sheet, select swift click next 
@@ -114,7 +119,7 @@ import { ModalView } from 'react-native-ios-modal';
 | Name                                                         | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|
 | `getEmitterRef()` -> `ModalVIewRef`                          | Gets a ref to the `EventEmitter` instance.                   |
-| **aysnc** `setVisibility(visibility: bool, childProps: object)` -> `success: bool` | Programatically present/dismiss the modal. Resolved after the modal is presented/dismissed. |
+| **aysnc** `setVisibility(visibility: bool, childProps: object)` -> `success: bool` | Programatically present/dismiss the modal. Resolved after the modal is presented/dismissed. **Note**: when a  modal is hidden, the modal contents/children are unmounted and vice versa when modal is visible. |
 | **aysnc** `getModalInfo()` -> `object: NativeEvent`          | Get "native" info from the modal instance. Returns a `NativeEvent` object. |
 | **aysnc** `setEnableSwipeGesture(bool)`                      | When `setEnableSwipeGestureFromProps` prop is true, it allows you to programatically set `enableSwipeGesture` prop via a function. |
 | **async** `setIsModalInPresentation(bool)`                   | When `setModalInPresentationFromProps` prop is true, it allows you to programatically set  `isModalInPresentation` via function. |
