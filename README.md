@@ -38,11 +38,11 @@ cd ios && pod install
 <br/>
 
 * **Note**: This library is written in swift. If you are having trouble building your app after installing this library, try adding an empty swift file.
-	1.  Open up your `ios/project.xcworkspace` project
-	2. On the project navigator panel, right click on your project (or a folder/group) and select "New File..." option
-	3. In the popup/sheet, select swift click next 
-	4. In the "Save As" popup/sheet, rename the file if you want to and click create
-	5. If Xcode asks you to create a "Objective-C Bridging Header", choose yes
+1.  Open up your `ios/project.xcworkspace` project
+2. On the project navigator panel, right click on your project (or a folder/group) and select "New File..." option
+3. In the popup/sheet, select swift click next 
+4. In the "Save As" popup/sheet, rename the file if you want to and click create
+5. If Xcode asks you to create a "Objective-C Bridging Header", choose yes
 - - -
 <br/>
 
@@ -70,7 +70,7 @@ import { ModalView } from 'react-native-ios-modal';
 #### 3.1.1 Props: Flags
 | Name                                | Default | Description                                                  |
 |-------------------------------------|---------|--------------------------------------------------------------|
-| **presentViaMount**                 | false   | If this prop is set to true, the modal will be presented or dismissed when the `ModalView` is mounted/unmounted. |
+| **presentViaMount**                 | false   | If this prop is set to true, the modal will be presented or dismissed when the `ModalView` is mounted/unmounted. **Note**: Currently buggy/wip. |
 | **isModalBGBlurred**                | true    | Set whether or not the background is blurred. When true, `modalBGBlurEffectStyle` prop takes effect. |
 | **enableSwipeGesture**              | true    | When the modal is using `pageSheet` or similar `modalPresentationStyle`, this prop controls whether or not the swipe gesture is enabled. |
 | **hideNonVisibleModals**            | false   | When multiple modals are visible at the same time, the first few modals will be temporarily hidden (they will still be mounted) to improve performance when this prop is set to true. |
