@@ -51,8 +51,9 @@ const COMMAND_KEYS = {
   requestModalPresentation: 'requestModalPresentation',
 };
 
-
 const VirtualizedListContext = React.createContext(null);
+// fix for react-native 0.60
+const hasScrollViewContext = (ScrollView.Context?.Provider != null);
 
 export class ModalView extends React.PureComponent {
   static proptypes = {
@@ -348,9 +349,13 @@ export class ModalView extends React.PureComponent {
         setIsModalInPresentation: this.setIsModalInPresentation,
       }}>
         <VirtualizedListContext.Provider value={null}>
-          <ScrollView.Context.Provider value={null}>
-            {this._renderModal()}
-          </ScrollView.Context.Provider>
+          {hasScrollViewContext? (
+            <ScrollView.Context.Provider value={null}>
+              {this._renderModal()}
+            </ScrollView.Context.Provider>
+          ):(
+            this._renderModal()
+          )}
         </VirtualizedListContext.Provider>
       </ModalContext.Provider>
     );
