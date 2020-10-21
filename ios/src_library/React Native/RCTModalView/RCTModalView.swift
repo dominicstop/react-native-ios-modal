@@ -285,7 +285,9 @@ class RCTModalView: UIView {
     self.reactSubview = subview;
     self.touchHandler.attach(to: subview);
     
-    self.modalVC?.reactView = reactSubview;
+    // modal contents has been mounted, and is about to be presented so
+    // prepare for modal presentation and init the vc's
+    self.initControllers();
   };
   
   override func removeReactSubview(_ subview: UIView!) {
@@ -300,9 +302,11 @@ class RCTModalView: UIView {
     print("RCTModalView, removeReactSubview - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
+    // modal contents has been unmounted so reset react subview
     self.reactSubview = nil;
     self.modalVC?.reactView = nil;
     self.touchHandler.detach(from: subview);
+    self.deinitControllers();
   };
   
 };
@@ -315,11 +319,6 @@ extension RCTModalView {
   
   public func presentModal(completion: completionResult = nil) {
     let hasWindow: Bool = (self.window != nil);
-    
-    /// this view is going to be rendered, so we should init the controllers
-    if self.modalVC == nil || self.modalNVC == nil {
-      self.initControllers();
-    };
     
     guard (hasWindow && !self.isPresented),
       let modalNVC = self.modalNVC,
