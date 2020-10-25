@@ -343,5 +343,6 @@ Check out the [examples](https://github.com/dominicstop/react-native-ios-modal/t
 
 MIT
 
-## Contact 
-I'm [@DominicGo](https://twitter.com/GoDominic) on twitter if you have any questions ✨
+## Links
+* I'm [@DominicGo](https://twitter.com/GoDominic) on twitter if you have any questions ✨
+* Other libraries: [￼`react-native-ios-context-menu`￼](https://github.com/dominicstop/react-native-ios-context-menu)
