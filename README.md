@@ -18,7 +18,7 @@ A react-native component for displaying a modal on iOS by natively wrapping a re
 ### Motivation
 * You can use this, but it's iOS only (so you have to use a different modal component on android, like the built-in react-native [component](https://reactnative.dev/docs/modal)). 
 * I just really liked the native iOS 13 `pageSheet` modal behavior, and iOS also  automatically handles the modal dismiss gesture when using a scrollview. 
-* So this component exist to tap into native iOS modal behaviour. Ideally, another library will use this component (like a navigation library) to show modals and handle using a different component for android.
+* So this component exist to tap into native iOS modal behaviour.
 - - -
 <br/>
 
