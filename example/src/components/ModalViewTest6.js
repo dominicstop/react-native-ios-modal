@@ -6,7 +6,6 @@ import { ModalView } from 'react-native-ios-modal';
 import { TestListItem } from './TestListItem';
 
 import * as Colors  from '../constants/Colors';
-import * as Helpers from '../functions/helpers';
 
 
 export class ModalViewTest6 extends React.PureComponent {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 
 import * as Colors from "../constants/Colors";
 

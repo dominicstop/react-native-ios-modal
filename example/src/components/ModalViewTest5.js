@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 import { ModalView, withModalLifecycle, ModalEventKeys } from 'react-native-ios-modal';
 
@@ -34,31 +34,31 @@ class ModalContents extends React.PureComponent {
     };
   };
 
-  onModalBlur = (event) => {
+  onModalBlur = () => {
     handleEvent(this, ModalEventKeys.onModalBlur);
   };
 
-  onModalFocus = (event) => {
+  onModalFocus = () => {
     handleEvent(this, ModalEventKeys.onModalFocus);
   };
 
-  onModalShow = (event) => {
+  onModalShow = () => {
     handleEvent(this, ModalEventKeys.onModalShow);
   };
 
-  onModalDismiss = (event) => {
+  onModalDismiss = () => {
     handleEvent(this, ModalEventKeys.onModalDismiss);
   };
 
-  onModalDidDismiss = (event) => {
+  onModalDidDismiss = () => {
     handleEvent(this, ModalEventKeys.onModalDidDismiss);
   };
 
-  onModalWillDismiss = (event) => {
+  onModalWillDismiss = () => {
     handleEvent(this, ModalEventKeys.onModalWillDismiss);
   };
 
-  onModalAttemptDismiss = (event) => {
+  onModalAttemptDismiss = () => {
     handleEvent(this, ModalEventKeys.onModalAttemptDismiss);
   };
 
@@ -112,8 +112,3 @@ export class ModalViewTest5 extends React.PureComponent {
     );
   };
 };
-
-
-const styles = StyleSheet.create({
-
-});

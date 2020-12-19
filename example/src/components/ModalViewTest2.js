@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { ModalView, AvailableBlurEffectStyles } from 'react-native-ios-modal';
 
@@ -162,6 +162,3 @@ export class ModalViewTest2 extends React.PureComponent {
     );
   };
 };
-
-const styles = StyleSheet.create({
-});
