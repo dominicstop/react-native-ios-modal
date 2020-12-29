@@ -60,12 +60,33 @@ import { ModalView } from 'react-native-ios-modal';
 // and use it like this
 <ModalView ref={r => this.modalRef = r}>
   <Text> Hello World </Text>
-<ModalView/>
+</ModalView>
 <TouchableOpacity onPress={() => {
   this.modalRef.setVisibility(true);
 }}>
   <Text> Open Modal </Text>
 </TouchableOpacity>
+```
+
+Note:
+The JSX inside `<ModalView/>` needs a [React.Fragment](https://reactjs.org/docs/fragments.html#short-syntax) when there are multiple children on the root level.
+
+Wrong usage:
+```js
+<ModalView>
+  <Text>Hello</Text>
+  <Text>World</Text>
+</ModalView>
+```
+
+Right usage:
+```js
+<ModalView>
+  <>
+    <Text>Hello</Text>
+    <Text>World</Text>
+  </>
+</ModalView>
 ```
 - - -
 <br/>
