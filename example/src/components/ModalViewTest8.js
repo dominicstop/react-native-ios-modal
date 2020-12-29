@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
-import { ModalView, ModalEventKeys } from 'react-native-ios-modal';
+import { ModalView } from 'react-native-ios-modal';
 
 import { sharedStyles } from '../constants/SharedStyles';
 import { TestListItem } from './TestListItem';
@@ -78,6 +78,3 @@ export class ModalViewTest8 extends React.PureComponent {
   };
 };
 
-const styles = StyleSheet.create({
-
-});

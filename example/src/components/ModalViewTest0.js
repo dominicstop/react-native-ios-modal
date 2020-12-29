@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {  View, Text, TouchableOpacity } from 'react-native';
 
 import { ModalView, AvailableBlurEffectStyles, UIBlurEffectStyles } from 'react-native-ios-modal';
 
@@ -116,8 +116,6 @@ export class ModalViewTest0 extends React.PureComponent {
   };
 
   render(){
-    const { counter } = this.state;
-
     return (
       <React.Fragment>
         <TestListItem

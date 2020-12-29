@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 import { ModalView, UIModalPresentationStyles } from 'react-native-ios-modal';
 
@@ -94,11 +94,3 @@ export class ModalViewTest1 extends React.PureComponent {
   };
 };
 
-const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    padding: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

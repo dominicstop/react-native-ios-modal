@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { ModalView } from 'react-native-ios-modal';
 
 import { sharedStyles } from '../constants/SharedStyles';
 import { TestListItem } from './TestListItem';
-
-import * as Helpers from '../functions/helpers';
 
 
 async function delayedAlert(that, msg){
@@ -149,6 +147,3 @@ export class ModalViewTest3 extends React.PureComponent {
   };
 };
 
-const styles = StyleSheet.create({
-
-});
