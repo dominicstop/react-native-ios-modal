@@ -141,7 +141,19 @@ class RCTModalView: UIView {
              .fullScreen,
              .overFullScreen:
           
+          // https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller
+          // Provides better support for the popular Bottom Sheet modal UX.
+          if (style is .pagesheet) {
+            if #available(iOS 15.0, *) {
+              if let sheet = nav.sheetPresentationController {
+                  nav.title = "Some Custom Title"
+                  sheet.detents = [.medium(), .large()]
+              }
+            }
+          }
+        
           self._modalPresentationStyle = style;
+        
           #if DEBUG
           print("RCTModalView, modalPresentationStyle didSet: \(style.stringDescription())");
           #endif
