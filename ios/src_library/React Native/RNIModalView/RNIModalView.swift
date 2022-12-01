@@ -1,5 +1,5 @@
 //
-//  RCTModalView.swift
+//  RNIModalView.swift
 //  nativeUIModulesTest
 //
 //  Created by Dominic Go on 6/9/20.
@@ -9,9 +9,9 @@
 import Foundation
 
 
-class RCTModalView: UIView {
+class RNIModalView: UIView {
   
-  typealias completionResult = ((_ isSuccess: Bool, _ error: RCTModalViewError?) -> ())?;
+  typealias completionResult = ((_ isSuccess: Bool, _ error: RNIModalViewError?) -> ())?;
   
   struct DefaultValues {
     static let presentationStyle: UIModalPresentationStyle = {
@@ -36,12 +36,12 @@ class RCTModalView: UIView {
   // ----------------
 
   weak var bridge  : RCTBridge?;
-  weak var delegate: RCTModalViewPresentDelegate?;
+  weak var delegate: RNIModalViewPresentDelegate?;
   
   var isInFocus  : Bool = false;
   var isPresented: Bool = false;
   
-  private var modalVC     : RCTModalViewController?;
+  private var modalVC     : RNIModalViewController?;
   private var modalNVC    : UINavigationController?;
   private var touchHandler: RCTTouchHandler!;
   private var reactSubview: UIView?;
@@ -59,7 +59,7 @@ class RCTModalView: UIView {
   // MARK: Properties: React Props - Events/Callbacks
   // ------------------------------------------------
   
-  // RN event callback for when a RCTModalViewManager "command"
+  // RN event callback for when a RNIModalViewManager "command"
   // has been completed via dispatchViewManagerCommand from js.
   // Used in js/rn-side for wrapping UIManager commands inside
   // promises so they can be resolved/rejected.
@@ -108,7 +108,7 @@ class RCTModalView: UIView {
       guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
       else {
         RCTLogWarn(
-            "RCTModalView, modalBGBlurEffectStyle: Invalid value - "
+            "RNIModalView, modalBGBlurEffectStyle: Invalid value - "
           + "\(self.modalBGBlurEffectStyle) is not a valid blur style"
         );
         return;
@@ -128,7 +128,7 @@ class RCTModalView: UIView {
       guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
       else {
         RCTLogWarn(
-            "RCTModalView, modalPresentationStyle: Invalid value - "
+            "RNIModalView, modalPresentationStyle: Invalid value - "
           + "\(self.modalPresentationStyle) is not a valid presentation style"
         );
         return;
@@ -143,12 +143,12 @@ class RCTModalView: UIView {
           
           self._modalPresentationStyle = style;
           #if DEBUG
-          print("RCTModalView, modalPresentationStyle didSet: \(style.stringDescription())");
+          print("RNIModalView, modalPresentationStyle didSet: \(style.stringDescription())");
           #endif
 
         default:
           RCTLogWarn(
-              "RCTModalView, modalPresentationStyle: Unsupported Presentation Style - "
+              "RNIModalView, modalPresentationStyle: Unsupported Presentation Style - "
             + "\(self.modalPresentationStyle) is not a supported presenatation style"
           );
       };
@@ -163,13 +163,13 @@ class RCTModalView: UIView {
       
       guard let style = UIModalTransitionStyle.fromString(self.modalTransitionStyle as String)
       else {
-        RCTLogWarn("RCTModalView, modalTransitionStyle: Invalid value");
+        RCTLogWarn("RNIModalView, modalTransitionStyle: Invalid value");
         return;
       };
       
       self._modalTransitionStyle = style;
       #if DEBUG
-      print("RCTModalView, modalTransitionStyle didSet: \(style.stringDescription())");
+      print("RNIModalView, modalTransitionStyle didSet: \(style.stringDescription())");
       #endif
     }
   };
@@ -234,7 +234,7 @@ class RCTModalView: UIView {
       let reactSubview = self.reactSubview else { return };
     
     #if DEBUG
-    print("RCTModalView, layoutSubviews - for reactTag: \(self.reactTag ?? -1)");
+    print("RNIModalView, layoutSubviews - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
     if !reactSubview.isDescendant(of: modalVC.view) {
@@ -264,12 +264,12 @@ class RCTModalView: UIView {
     super.insertReactSubview(subview, at: atIndex);
     
     guard (self.reactSubview == nil) else {
-      RCTLogWarn("RCTModalView, insertReactSubview: Modal view can only have one subview");
+      RCTLogWarn("RNIModalView, insertReactSubview: Modal view can only have one subview");
       return;
     };
     
     #if DEBUG
-    print("RCTModalView, insertReactSubview - for reactTag: \(self.reactTag ?? -1)");
+    print("RNIModalView, insertReactSubview - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
     subview.removeFromSuperview();
@@ -294,12 +294,12 @@ class RCTModalView: UIView {
     super.removeReactSubview(subview);
     
     guard self.reactSubview == subview else {
-      RCTLogWarn("RCTModalView, removeReactSubview: Cannot remove view other than modal view");
+      RCTLogWarn("RNIModalView, removeReactSubview: Cannot remove view other than modal view");
       return;
     };
     
     #if DEBUG
-    print("RCTModalView, removeReactSubview - for reactTag: \(self.reactTag ?? -1)");
+    print("RNIModalView, removeReactSubview - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
     // modal contents has been unmounted so reset react subview
@@ -315,7 +315,7 @@ class RCTModalView: UIView {
 // MARK: Public Functions
 // ----------------------
 
-extension RCTModalView {
+extension RNIModalView {
   
   public func presentModal(completion: completionResult = nil) {
     let hasWindow: Bool = (self.window != nil);
@@ -325,7 +325,7 @@ extension RCTModalView {
       let (index, topMostPresentedVC) = self.getTopMostPresentedVC()
     else {
       #if DEBUG
-      print("RCTModalView, presentModal: guard check failed");
+      print("RNIModalView, presentModal: guard check failed");
       #endif
       completion?(false, .modalAlreadyPresented);
       return;
@@ -347,7 +347,7 @@ extension RCTModalView {
     self.isPresented = true;
     
     #if DEBUG
-    print("RCTModalView, presentModal: Start"
+    print("RNIModalView, presentModal: Start"
       + " - for reactTag: \(self.reactTag ?? -1)"
       + " - modalLevel: \(self.modalLevel)"
       + " - modalID: \(self.modalID ?? "N/A")"
@@ -373,7 +373,7 @@ extension RCTModalView {
       completion?(true, nil);
       
       #if DEBUG
-      print("RCTModalView, presentModal: Finished");
+      print("RNIModalView, presentModal: Finished");
       #endif
     };
   };
@@ -383,7 +383,7 @@ extension RCTModalView {
       let modalVC = self.modalVC
     else {
       #if DEBUG
-      print("RCTModalView, dismissModal failed:"
+      print("RNIModalView, dismissModal failed:"
         + " - isPresented \(self.isPresented)"
       );
       #endif
@@ -394,7 +394,7 @@ extension RCTModalView {
     let isModalInFocus = self.isModalInFocus();
     guard isModalInFocus, self.allowModalForceDismiss else {
       #if DEBUG
-      print("RCTModalView, dismissModal failed: Modal not in focus");
+      print("RNIModalView, dismissModal failed: Modal not in focus");
       #endif
       completion?(false, .modalDismissFailedNotInFocus);
       return;
@@ -405,7 +405,7 @@ extension RCTModalView {
       : modalVC.presentingViewController!
     
     #if DEBUG
-    print("RCTModalView, dismissModal: Start - for reactTag: \(self.reactTag ?? -1)");
+    print("RNIModalView, dismissModal: Start - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
     /// begin temp. hiding modals that are no longer visibile
@@ -428,7 +428,7 @@ extension RCTModalView {
       completion?(true, nil);
       
       #if DEBUG
-      print("RCTModalView, dismissModal: Finished");
+      print("RNIModalView, dismissModal: Finished");
       #endif
     };
   };
@@ -437,7 +437,7 @@ extension RCTModalView {
   // MARK: Public Functions for ViewManager
   // --------------------------------------
   
-  // called by RCTModalViewManager
+  // called by RNIModalViewManager
   // set isModalInPresentation for this modal from RN
   public func requestModalPresentation(
     _ requestID : NSNumber,
@@ -461,7 +461,7 @@ extension RCTModalView {
       params["success"] = success;
       if let errorCode = error {
         params["errorCode"   ] = errorCode.rawValue;
-        params["errorMessage"] = RCTModalViewError.getErrorMessage(for: errorCode);
+        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
       };
       
       completion?(success, error);
@@ -486,15 +486,15 @@ extension RCTModalView {
 // MARK: Extension: Private Functions
 // ----------------------------------
 
-extension RCTModalView {
+extension RNIModalView {
   
   private func initControllers(){
     #if DEBUG
-    print("RCTModalView init - initControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
+    print("RNIModalView init - initControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
     #endif
     
     self.modalVC = {
-      let vc = RCTModalViewController();
+      let vc = RNIModalViewController();
       vc.modalViewRef = self;
       
       vc.isBGBlurred     = self.isModalBGBlurred;
@@ -522,7 +522,7 @@ extension RCTModalView {
   
   private func deinitControllers(){
     #if DEBUG
-    print("RCTModalView init - deinitControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
+    print("RNIModalView init - deinitControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
     #endif
     
     self.modalVC?.reactView = nil;
@@ -538,13 +538,13 @@ extension RCTModalView {
       let reactSubview = self.reactSubview
     else {
       #if DEBUG
-      print("RCTModalView, notifyForBoundsChange: guard check failed");
+      print("RNIModalView, notifyForBoundsChange: guard check failed");
       #endif
       return;
     };
     
     #if DEBUG
-    print("RCTModalView, notifyForBoundsChange - for reactTag: \(self.reactTag ?? -1)");
+    print("RNIModalView, notifyForBoundsChange - for reactTag: \(self.reactTag ?? -1)");
     #endif
     
     bridge.uiManager.setSize(newBounds.size, for: reactSubview);
@@ -553,7 +553,7 @@ extension RCTModalView {
   private func getTopMostPresentedVC() -> (topLevel: Int, topVC: UIViewController)? {
     guard let rootVC = UIWindow.key?.rootViewController else {
       #if DEBUG
-      print("RCTModalView, getTopMostVC Error: could not get root VC. ");
+      print("RNIModalView, getTopMostVC Error: could not get root VC. ");
       #endif
       return nil;
     };
@@ -575,7 +575,7 @@ extension RCTModalView {
   private func getPresentedVCList() -> [UIViewController] {
     guard let rootVC = UIWindow.key?.rootViewController else {
       #if DEBUG
-      print("RCTModalView, getTopMostVC Error: could not get root VC. ");
+      print("RNIModalView, getTopMostVC Error: could not get root VC. ");
       #endif
       return [];
     };
@@ -643,7 +643,7 @@ extension RCTModalView {
 // MARK: Extension: UIAdaptivePresentationControllerDelegate
 // ---------------------------------------------------------
 
-extension RCTModalView: UIAdaptivePresentationControllerDelegate {
+extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     if self.hideNonVisibleModals {
@@ -655,7 +655,7 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     );
     
     #if DEBUG
-    print("RCTModalView, presentationControllerWillDismiss"
+    print("RNIModalView, presentationControllerWillDismiss"
       + " - for reactTag: \(self.reactTag ?? -1)"
     );
     #endif
@@ -679,7 +679,7 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     self.deinitControllers();
     
     #if DEBUG
-    print("RCTModalView, presentationControllerDidDismiss"
+    print("RNIModalView, presentationControllerDidDismiss"
       + " - for reactTag: \(self.reactTag ?? -1)"
     );
     #endif
@@ -691,7 +691,7 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
     );
     
     #if DEBUG
-    print("RCTModalView, presentationControllerDidAttemptToDismiss"
+    print("RNIModalView, presentationControllerDidAttemptToDismiss"
       + " - for reactTag: \(self.reactTag ?? -1)"
     );
     #endif
@@ -699,21 +699,21 @@ extension RCTModalView: UIAdaptivePresentationControllerDelegate {
 };
 
 // ------------------------------------------
-// MARK: Extension: RCTModalViewFocusDelegate
+// MARK: Extension: RNIModalViewFocusDelegate
 // ------------------------------------------
 
-extension RCTModalView: RCTModalViewFocusDelegate {
+extension RNIModalView: RNIModalViewFocusDelegate {
   
   func onModalChangeFocus(modalLevel: Int, modalUUID: String, isInFocus: Bool) {
     guard
       /// defer if the receiver of the event is the same as the sender
-      /// i.e defer  if this instance of `RCTModalView` was the one who broadcasted the event
+      /// i.e defer  if this instance of `RNIModalView` was the one who broadcasted the event
       self.modalUUID != modalUUID,
       /// defer if the modal is not currently presented or if the modalLevel is -1
       self.isPresented && self.modalLevel > 0 else { return };
     
     if isInFocus && self.isInFocus {
-      /// a new `RCTModalView` instance is in focus and this modal was prev. in focus so
+      /// a new `RNIModalView` instance is in focus and this modal was prev. in focus so
       /// this modal shoud be now 'blurred'
       self.isInFocus = false;
       self.onModalBlur?(
@@ -721,7 +721,7 @@ extension RCTModalView: RCTModalViewFocusDelegate {
       );
       
     } else if !isInFocus && !self.isInFocus {
-      /// a  `RCTModalView` instance has lost focus, so the prev modal shoul be focused
+      /// a  `RNIModalView` instance has lost focus, so the prev modal shoul be focused
       /// defer if the receiver's modalLevel isn't 1 value below the sender's modalLevel
       guard self.modalLevel + 1 >= modalLevel else { return };
       

@@ -1,5 +1,5 @@
 //
-//  RCTModalViewModule.m
+//  RNIModalViewModule.m
 //  RNSwiftReviewer
 //
 //  Created by Dominic Go on 7/11/20.
@@ -9,7 +9,7 @@
 #import "React/RCTEventEmitter.h"
 
 
-@interface RCT_EXTERN_MODULE(RCTModalViewModule, RCTEventEmitter)
+@interface RCT_EXTERN_MODULE(RNIModalViewModule, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(dismissModalByID
           : (NSString)modalID

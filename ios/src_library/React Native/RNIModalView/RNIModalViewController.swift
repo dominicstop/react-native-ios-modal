@@ -1,5 +1,5 @@
 //
-//  RCTModalViewController.swift
+//  RNIModalViewController.swift
 //  nativeUIModulesTest
 //
 //  Created by Dominic Go on 6/9/20.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-class RCTModalViewController: UIViewController {
+class RNIModalViewController: UIViewController {
   
   var lastViewFrame: CGRect?;
   var boundsDidChangeBlock: ((CGRect) -> Void)?;
   
   var modalID: NSString? = nil;
-  weak var modalViewRef: RCTModalView?;
+  weak var modalViewRef: RNIModalView?;
   
   var isBGTransparent: Bool = true {
     didSet {
@@ -42,7 +42,7 @@ class RCTModalViewController: UIViewController {
         let blurEffectStyle = self.blurEffectStyle else { return };
       
       #if DEBUG
-      print("RCTModalViewController, didSet blurEffectStyle: \(blurEffectStyle.stringDescription())");
+      print("RNIModalViewController, didSet blurEffectStyle: \(blurEffectStyle.stringDescription())");
       #endif
       
       self.setBGBlur();
@@ -63,7 +63,7 @@ class RCTModalViewController: UIViewController {
     super.viewDidLoad();
     
     #if DEBUG
-    print("RCTModalViewController, viewDidLoad");
+    print("RNIModalViewController, viewDidLoad");
     #endif
     
     // setup vc's view
@@ -86,13 +86,13 @@ class RCTModalViewController: UIViewController {
     
     guard let boundsDidChangeBlock = self.boundsDidChangeBlock else {
       #if DEBUG
-      print("RCTModalViewController, viewDidLayoutSubviews: guard check failed");
+      print("RNIModalViewController, viewDidLayoutSubviews: guard check failed");
       #endif
       return;
     };
     
     #if DEBUG
-    print("RCTModalViewController, viewDidLayoutSubviews");
+    print("RNIModalViewController, viewDidLayoutSubviews");
     #endif
     
     let didChangeViewFrame: Bool = !(
@@ -121,7 +121,7 @@ class RCTModalViewController: UIViewController {
     
     #if DEBUG
     print(
-        "RCTModalViewController, setBGTransparent"
+        "RNIModalViewController, setBGTransparent"
       + " - set backgroundColor: \(self.isBGTransparent)"
     );
     #endif
@@ -140,7 +140,7 @@ class RCTModalViewController: UIViewController {
         blurEffectView.effect = UIBlurEffect(style: blurEffectStyle);
         
         #if DEBUG
-        print("RCTModalViewController, setBGBlur: update blurEffectStyle");
+        print("RNIModalViewController, setBGBlur: update blurEffectStyle");
         #endif
         
       } else {
@@ -158,7 +158,7 @@ class RCTModalViewController: UIViewController {
         }();
         
         #if DEBUG
-        print("RCTModalViewController, setBGBlur: init. blurEffectView");
+        print("RNIModalViewController, setBGBlur: init. blurEffectView");
         #endif
       };
       
