@@ -10,7 +10,7 @@ import { ModalEventKeys } from './constants/Enums';
 import { ModalContext   } from './context/ModalContext';
 
 
-const componentName   = "RCTModalView";
+const componentName   = "RNIModalView";
 const NativeCommands  = UIManager[componentName]?.Commands;
 const NativeConstants = UIManager[componentName]?.Constants;
 const NativeModalView = requireNativeComponent(componentName);

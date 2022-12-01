@@ -1,5 +1,5 @@
 //
-//  RCTModalViewModule.swift
+//  RNIModalViewModule.swift
 //  RNSwiftReviewer
 //
 //  Created by Dominic Go on 7/11/20.
@@ -8,8 +8,8 @@
 import Foundation
 
 
-@objc(RCTModalViewModule)
-class RCTModalViewModule: RCTEventEmitter {
+@objc(RNIModalViewModule)
+class RNIModalViewModule: RCTEventEmitter {
   
   enum Events: String, CaseIterable {
     case placeholderEvent;
@@ -40,12 +40,12 @@ class RCTModalViewModule: RCTEventEmitter {
 // MARK: Extension: JS Functions
 // -----------------------------
 
-extension RCTModalViewModule {
+extension RNIModalViewModule {
   @objc func dismissModalByID(_ modalID: NSString, callback: @escaping RCTResponseSenderBlock) {
     DispatchQueue.main.async {
       guard let rootVC = UIWindow.key?.rootViewController else {
         #if DEBUG
-        print("RCTModalViewModule, dismissModalByID Error: could not get root VC. ");
+        print("RNIModalViewModule, dismissModalByID Error: could not get root VC. ");
         #endif
         callback([false]);
         return;
@@ -58,7 +58,7 @@ extension RCTModalViewModule {
 
         if let navVC   = presentedVC as? UINavigationController,
            let rootVC  = navVC.viewControllers.first,
-           let modalVC = rootVC as? RCTModalViewController,
+           let modalVC = rootVC as? RNIModalViewController,
            // check if this is the modal we want to dismiss
            modalVC.modalID == modalID {
           
@@ -67,7 +67,7 @@ extension RCTModalViewModule {
             callback([true]);
             
             #if DEBUG
-            print("RCTModalViewModule, dismissModalByID: dismissing \(modalVC.modalID ?? "N/A")");
+            print("RNIModalViewModule, dismissModalByID: dismissing \(modalVC.modalID ?? "N/A")");
             #endif
           };
           
@@ -77,7 +77,7 @@ extension RCTModalViewModule {
               guard isSuccess else {
                 #if DEBUG
                 print(
-                    "RCTModalViewModule, dismissModalByID Fail: modalID \(modalRef.modalID ?? "N/A")"
+                    "RNIModalViewModule, dismissModalByID Fail: modalID \(modalRef.modalID ?? "N/A")"
                   + " - error code: \(error?.rawValue ?? "N/A")"
                   + " - error message: \(error?.errorMessage ?? "N/A")"
                 );
@@ -89,7 +89,7 @@ extension RCTModalViewModule {
               // modal dismissed
               completion();
               
-              let manager = RCTModalViewManager.sharedInstance;
+              let manager = RNIModalViewManager.sharedInstance;
               manager?.presentedModalRefs.removeObject(forKey: modalRef.modalUUID as NSString);
             };
             
@@ -127,7 +127,7 @@ extension RCTModalViewModule {
 // MARK: Extension: JS Events
 // --------------------------
 
-extension RCTModalViewModule {
+extension RNIModalViewModule {
   func sendModalEvent(event: Events, params: Dictionary<AnyHashable, Any>) {
     guard self.hasListeners else { return };
     self.sendEvent(withName: event.rawValue, body: params);

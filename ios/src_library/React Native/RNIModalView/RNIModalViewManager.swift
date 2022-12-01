@@ -1,5 +1,5 @@
 //
-//  RCTModalViewManager.swift
+//  RNIModalViewManager.swift
 //  nativeUIModulesTest
 //
 //  Created by Dominic Go on 6/9/20.
@@ -9,9 +9,9 @@
 import Foundation
 
 
-@objc (RCTModalViewManager)
-class RCTModalViewManager: RCTViewManager {
-  static var sharedInstance: RCTModalViewManager!;
+@objc (RNIModalViewManager)
+class RNIModalViewManager: RCTViewManager {
+  static var sharedInstance: RNIModalViewManager!;
   
   override static func requiresMainQueueSetup() -> Bool {
     return true;
@@ -19,17 +19,17 @@ class RCTModalViewManager: RCTViewManager {
   
   // a weak ref to the currently presented modals
   // currently unused, remove later
-  var presentedModalRefs = NSMapTable<NSString, RCTModalView>.init(
+  var presentedModalRefs = NSMapTable<NSString, RNIModalView>.init(
     keyOptions  : .copyIn,
     valueOptions: .weakMemory
   );
   
-  var delegatesFocus = MulticastDelegate<RCTModalViewFocusDelegate>();
+  var delegatesFocus = MulticastDelegate<RNIModalViewFocusDelegate>();
   
   private var currentModalLevel = -1;
  
   override func view() -> UIView! {
-    let view = RCTModalView(bridge: self.bridge);
+    let view = RNIModalView(bridge: self.bridge);
     view.delegate = self;
     self.delegatesFocus.add(view);
     
@@ -38,7 +38,7 @@ class RCTModalViewManager: RCTViewManager {
   
   override init() {
     super.init();
-    RCTModalViewManager.sharedInstance = self;
+    RNIModalViewManager.sharedInstance = self;
   };
   
   @objc override func constantsToExport() -> [AnyHashable : Any]! {
@@ -55,17 +55,17 @@ class RCTModalViewManager: RCTViewManager {
     DispatchQueue.main.async {
       guard
         let component = self.bridge.uiManager.view(forReactTag: node),
-        let modalView = component as? RCTModalView
+        let modalView = component as? RNIModalView
       else {
         #if DEBUG
-        print("RCTModalViewManager, requestModalOpen failed");
+        print("RNIModalViewManager, requestModalOpen failed");
         #endif
         return;
       };
       
       #if DEBUG
       print(
-          "RCTModalViewManager, requestModalOpen Received - "
+          "RNIModalViewManager, requestModalOpen Received - "
         + "prevVisibility: \(modalView.isPresented) and nextVisibility: \(visibility) - "
         + "For node: \(node) and requestID: \(requestID)"
       );
@@ -79,17 +79,17 @@ class RCTModalViewManager: RCTViewManager {
     DispatchQueue.main.async {
       guard
         let component = self.bridge.uiManager.view(forReactTag: node),
-        let modalView = component as? RCTModalView
+        let modalView = component as? RNIModalView
       else {
         #if DEBUG
-        print("RCTModalViewManager, requestModalInfo failed");
+        print("RNIModalViewManager, requestModalInfo failed");
         #endif
         return;
       };
       
       #if DEBUG
       print(
-          "RCTModalViewManager, requestModalInfo Received - "
+          "RNIModalViewManager, requestModalInfo Received - "
         + "For node: \(node) and requestID: \(requestID)"
       );
       #endif
@@ -100,12 +100,12 @@ class RCTModalViewManager: RCTViewManager {
 };
 
 // ---------------------------------
-// MARK: RCTModalViewPresentDelegate
+// MARK: RNIModalViewPresentDelegate
 // ---------------------------------
 
-extension RCTModalViewManager: RCTModalViewPresentDelegate {
+extension RNIModalViewManager: RNIModalViewPresentDelegate {
   
-  func onPresentModalView(modalView: RCTModalView) {
+  func onPresentModalView(modalView: RNIModalView) {
     let modalLevel = modalView.modalLevel;
     let modalUUID  = modalView.modalUUID;
     
@@ -122,7 +122,7 @@ extension RCTModalViewManager: RCTModalViewPresentDelegate {
     };
   };
   
-  func onDismissModalView(modalView: RCTModalView) {
+  func onDismissModalView(modalView: RNIModalView) {
     let modalLevel = modalView.modalLevelPrev;
     let modalUUID  = modalView.modalUUID;
     

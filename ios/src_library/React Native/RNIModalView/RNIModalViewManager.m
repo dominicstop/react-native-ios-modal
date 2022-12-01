@@ -1,7 +1,7 @@
 
 #import <React/RCTViewManager.h>
  
-@interface RCT_EXTERN_MODULE(RCTModalViewManager, RCTViewManager)
+@interface RCT_EXTERN_MODULE(RNIModalViewManager, RCTViewManager)
 
 // ------------------------------
 // MARK: Props - Callbacks/Events
