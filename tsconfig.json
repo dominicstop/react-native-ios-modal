@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "react-native-ios-modal": ["./src/index"]
     },
@@ -41,5 +41,8 @@
 
     // temporary until migration is finished
     "allowJs": true,
-  }
+
+    // need while "allowJs" option is set to true
+    "outDir": "./lib/typescript",
+  },
 }
