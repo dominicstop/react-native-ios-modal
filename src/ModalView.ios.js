@@ -8,17 +8,7 @@ import { EventEmitter   } from './functions/EventEmitter';
 import { RequestFactory } from './functions/RequestFactory';
 import { ModalEventKeys } from './constants/Enums';
 import { ModalContext   } from './context/ModalContext';
-
-
-const componentName   = "RNIModalView";
-const NativeCommands  = UIManager[componentName]?.Commands;
-const NativeConstants = UIManager[componentName]?.Constants;
-const NativeModalView = requireNativeComponent(componentName);
-
-
-export const AvailableBlurEffectStyles   = NativeConstants?.availableBlurEffectStyles   ?? [];
-export const AvailablePresentationStyles = NativeConstants?.availablePresentationStyles ?? [];
-
+import { RNIModalView, RNIModalViewCommands } from './native_components/RNIModalView';
 
 const NATIVE_PROP_KEYS = {
   // Modal Native Props: Event Callbacks
@@ -44,11 +34,6 @@ const NATIVE_PROP_KEYS = {
   modalTransitionStyle  : 'modalTransitionStyle'  ,
   modalPresentationStyle: 'modalPresentationStyle',
   modalBGBlurEffectStyle: 'modalBGBlurEffectStyle',
-};
-
-const COMMAND_KEYS = {
-  requestModalInfo        : 'requestModalInfo'        ,
-  requestModalPresentation: 'requestModalPresentation',
 };
 
 const VirtualizedListContext = React.createContext(null);
@@ -155,7 +140,7 @@ export class ModalView extends React.PureComponent {
       // request modal to open/close
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(this.nativeModalViewRef),
-        NativeCommands[COMMAND_KEYS.requestModalPresentation],
+        RNIModalViewCommands.requestModalPresentation,
         [requestID, nextVisible]
       );
 
@@ -186,7 +171,7 @@ export class ModalView extends React.PureComponent {
       // request modal to send modal info
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(this.nativeModalViewRef),
-        NativeCommands[COMMAND_KEYS.requestModalInfo],
+        RNIModalViewCommands.requestModalInfo,
         [requestID]
       );
 
@@ -311,7 +296,7 @@ export class ModalView extends React.PureComponent {
     };
 
     return(
-      <NativeModalView
+      <RNIModalView
         ref={r => this.nativeModalViewRef = r}
         style={styles.rootContainer}
         onStartShouldSetResponder={this._shouldSetResponder}
@@ -333,7 +318,7 @@ export class ModalView extends React.PureComponent {
             })}
           </View>
         )}
-      </NativeModalView>
+      </RNIModalView>
     );
   };
 
