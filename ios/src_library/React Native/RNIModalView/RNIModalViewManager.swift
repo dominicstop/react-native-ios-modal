@@ -24,8 +24,10 @@ class RNIModalViewManager: RCTViewManager {
     valueOptions: .weakMemory
   );
   
+  // TODO: Relocate
   var delegatesFocus = MulticastDelegate<RNIModalViewFocusDelegate>();
   
+  // TODO: Relocate
   private var currentModalLevel = -1;
  
   override func view() -> UIView! {
