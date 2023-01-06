@@ -19,6 +19,9 @@ class RNIModalViewModule: RCTEventEmitter {
     return false;
   };
   
+  // MARK: - Event-Related
+  // ----------------------
+  
   private var hasListeners = false;
   
   override func supportedEvents() -> [String]! {
@@ -33,6 +36,11 @@ class RNIModalViewModule: RCTEventEmitter {
   // called when this module's last listener is removed, or dealloc
   override func stopObserving() {
     self.hasListeners = false;
+  };
+  
+  func sendModalEvent(event: Events, params: Dictionary<AnyHashable, Any>) {
+    guard self.hasListeners else { return };
+    self.sendEvent(withName: event.rawValue, body: params);
   };
 };
 
@@ -127,16 +135,5 @@ extension RNIModalViewModule {
       
       callback([success != nil]);
     };
-  };
-};
-
-
-// MARK: Extension - JS Events
-// ---------------------------
-
-extension RNIModalViewModule {
-  func sendModalEvent(event: Events, params: Dictionary<AnyHashable, Any>) {
-    guard self.hasListeners else { return };
-    self.sendEvent(withName: event.rawValue, body: params);
   };
 };
