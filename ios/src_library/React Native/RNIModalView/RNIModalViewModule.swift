@@ -18,6 +18,14 @@ class RNIModalViewModule: RCTEventEmitter {
   @objc override static func requiresMainQueueSetup() -> Bool {
     return false;
   };
+
+  func getModalViewInstance(for node: NSNumber) -> RNIModalView? {
+    return RNIUtilities.getView(
+      forNode: node,
+      type   : RNIModalView.self,
+      bridge : self.bridge
+    );
+  };
   
   // MARK: - Event-Related
   // ----------------------
@@ -134,6 +142,36 @@ extension RNIModalViewModule {
         .dismiss(animated: animated, completion: nil);
       
       callback([success != nil]);
+    };
+  };
+};
+
+// MARK: - View-Related Functions
+// ------------------------------
+
+extension RNIModalViewModule {
+  
+  @objc func setModalVisibility(
+    _ node: NSNumber,
+    visibility: Bool,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    DispatchQueue.main.async {
+      guard let modalView = self.getModalViewInstance(for: node) else {
+        reject(nil, "Unable to get the corresponding 'RNIModalView' instance for node: \(node)", nil);
+        return;
+      };
+      
+      modalView.setModalVisibility(visibility: visibility) { isSuccess, error in
+        if isSuccess {
+          resolve(modalView.createModalNativeEventDict());
+          
+        } else {
+          reject(nil, error?.errorMessage, nil);
+        };
+      };
     };
   };
 };

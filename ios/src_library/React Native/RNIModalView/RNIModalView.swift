@@ -433,6 +433,36 @@ extension RNIModalView {
     };
   };
   
+  // MARK: Module Functions
+  // ----------------------
+  
+  public func setModalVisibility(
+    visibility: Bool,
+    completion: CompletionHandler? = nil
+  ){
+    var params: Dictionary<AnyHashable, Any> = [
+      "visibility": visibility,
+    ];
+    
+    self.createModalNativeEventDict().forEach { (key, value) in
+      params[key] = value
+    };
+    
+    let modalAction = visibility
+      ? self.presentModal
+      : self.dismissModal;
+    
+    modalAction() { (success, error) in
+      params["success"] = success;
+      
+      if let errorCode = error {
+        params["errorCode"] = errorCode.rawValue;
+        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
+      };
+      
+      completion?(success, error);
+    };
+  };
   // --------------------------------------
   // MARK: Public Functions for ViewManager
   // --------------------------------------
