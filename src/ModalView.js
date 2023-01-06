@@ -2,7 +2,6 @@ import React from 'react';
 import Proptypes from 'prop-types';
 
 import {
-  UIManager,
   findNodeHandle,
   StyleSheet,
   View,
@@ -19,7 +18,6 @@ import { ModalContext } from './context/ModalContext';
 
 import {
   RNIModalView,
-  RNIModalViewCommands,
 } from './native_components/RNIModalView';
 
 import { RNIModalViewModule } from './native_modules/RNIModalViewModule';

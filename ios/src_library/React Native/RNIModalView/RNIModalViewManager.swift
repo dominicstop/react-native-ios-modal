@@ -52,53 +52,6 @@ class RNIModalViewManager: RCTViewManager {
         .availableStyles.map { $0.stringDescription() },
     ];
   };
-  
-  @objc func requestModalPresentation(_ node: NSNumber, requestID: NSNumber, visibility: Bool){
-    DispatchQueue.main.async {
-      guard
-        let component = self.bridge.uiManager.view(forReactTag: node),
-        let modalView = component as? RNIModalView
-      else {
-        #if DEBUG
-        print("RNIModalViewManager, requestModalOpen failed");
-        #endif
-        return;
-      };
-      
-      #if DEBUG
-      print(
-          "RNIModalViewManager, requestModalOpen Received - "
-        + "prevVisibility: \(modalView.isPresented) and nextVisibility: \(visibility) - "
-        + "For node: \(node) and requestID: \(requestID)"
-      );
-      #endif
-      
-      modalView.requestModalPresentation(requestID, visibility);
-    };
-  };
-  
-  @objc func requestModalInfo(_ node: NSNumber, requestID: NSNumber){
-    DispatchQueue.main.async {
-      guard
-        let component = self.bridge.uiManager.view(forReactTag: node),
-        let modalView = component as? RNIModalView
-      else {
-        #if DEBUG
-        print("RNIModalViewManager, requestModalInfo failed");
-        #endif
-        return;
-      };
-      
-      #if DEBUG
-      print(
-          "RNIModalViewManager, requestModalInfo Received - "
-        + "For node: \(node) and requestID: \(requestID)"
-      );
-      #endif
-      
-      modalView.requestModalInfo(requestID);
-    };
-  };
 };
 
 // ---------------------------------

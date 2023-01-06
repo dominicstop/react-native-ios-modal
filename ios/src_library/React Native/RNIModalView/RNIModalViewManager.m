@@ -36,20 +36,5 @@ RCT_EXPORT_VIEW_PROPERTY(modalTransitionStyle  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(modalBGBlurEffectStyle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(modalPresentationStyle, NSString);
 
-// ---------------------------
-// MARK: View Manager Commands
-// ---------------------------
-
-RCT_EXTERN_METHOD(requestModalPresentation
-            : (nonnull NSNumber *)node
-  requestID : (nonnull NSNumber *)requestID
-  visibility: (nonnull BOOL     *)visibility
-);
-
-RCT_EXTERN_METHOD(requestModalInfo
-            : (nonnull NSNumber *)node
-  requestID : (nonnull NSNumber *)requestID
-);
-
 @end
 
