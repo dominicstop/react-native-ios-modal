@@ -36,12 +36,16 @@ class RNIModalViewModule: RCTEventEmitter {
   };
 };
 
-// -----------------------------
-// MARK: Extension: JS Functions
-// -----------------------------
+// MARK: - Standalone Functions
+// ----------------------------
 
 extension RNIModalViewModule {
-  @objc func dismissModalByID(_ modalID: NSString, callback: @escaping RCTResponseSenderBlock) {
+  
+  // TODO: Re-write + Cleanup
+  @objc func dismissModalByID(
+    _ modalID: NSString,
+    callback: @escaping RCTResponseSenderBlock
+  ) {
     DispatchQueue.main.async {
       guard let rootVC = UIWindow.key?.rootViewController else {
         #if DEBUG
@@ -112,7 +116,10 @@ extension RNIModalViewModule {
     };
   };
   
-  @objc func dismissAllModals(_ animated: Bool, callback: @escaping RCTResponseSenderBlock){
+  @objc func dismissAllModals(
+    _ animated: Bool,
+    callback: @escaping RCTResponseSenderBlock
+  ) {
     DispatchQueue.main.async {
       let success: Void? = UIWindow.key?
         .rootViewController?
@@ -123,9 +130,9 @@ extension RNIModalViewModule {
   };
 };
 
-// --------------------------
-// MARK: Extension: JS Events
-// --------------------------
+
+// MARK: Extension - JS Events
+// ---------------------------
 
 extension RNIModalViewModule {
   func sendModalEvent(event: Events, params: Dictionary<AnyHashable, Any>) {
