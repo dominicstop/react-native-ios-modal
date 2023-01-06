@@ -5,7 +5,7 @@ import type { NativeSyntheticEvent } from 'react-native';
 // Event Object Types
 // ------------------
 
-export type RNIModalViewNativeEventBase = {
+export type RNIModalViewInfo = {
   modalUUID: string;
   isInFocus: boolean;
   isPresented: boolean;
@@ -15,42 +15,42 @@ export type RNIModalViewNativeEventBase = {
 
 // TODO
 export type OnModalShowEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalDismissEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnRequestResultEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalBlurEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalFocusEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalDidDismissEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalWillDismissEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // TODO
 export type OnModalAttemptDismissEventObject = NativeSyntheticEvent<
-  RNIModalViewNativeEventBase & {}
+  RNIModalViewInfo & {}
 >;
 
 // Event Handler Types
