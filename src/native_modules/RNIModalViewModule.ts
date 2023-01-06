@@ -3,6 +3,9 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 const MODULE_NAME = 'RNIModalViewModule';
 
 interface RNIModalViewModule {
+  // Standalone Functions
+  // --------------------
+
   // prettier-ignore
   dismissModalByID(
     modalID: string,
