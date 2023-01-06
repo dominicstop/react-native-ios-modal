@@ -22,4 +22,13 @@ RCT_EXTERN_METHOD(dismissAllModals: (BOOL)animated
                   callback: (RCTResponseSenderBlock)callback
 );
 
+// MARK: - View-Related Functions
+// ------------------------------
+
+RCT_EXTERN_METHOD(setModalVisibility: (nonnull NSNumber)node
+                  visibility: (BOOL)visibility
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock *)resolve
+                  reject : (RCTPromiseRejectBlock *)reject);
+
 @end
