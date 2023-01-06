@@ -58,8 +58,10 @@ export type RNIModalViewProps = ViewProps & {
   onModalAttemptDismiss: OnModalAttemptDismissEvent;
 };
 
+// prettier-ignore
 export type RNIModalViewCommandMap = ViewManagerCommandMap<
-  'requestModalInfo' | 'requestModalPresentation'
+  | 'requestModalInfo'
+  | 'requestModalPresentation'
 >;
 
 export type RNIModalViewConstantMap = ViewManagerConstantMap<{
