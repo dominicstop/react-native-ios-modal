@@ -1,5 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import * as Helpers from './functions/helpers';
+import * as Helpers from '../functions/helpers';
 
 const moduleName   = "RNIModalViewModule";
 const NativeModule = NativeModules[moduleName];
