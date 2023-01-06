@@ -12,7 +12,7 @@ const COMMAND_KEYS = {
 // wip
 const ModalViewFocusEvents = new NativeEventEmitter(NativeModule);
 
-export class ModalViewModule {
+export class RNIModalViewModule {
   static dismissModalByID(modalID = ''){
     const promise = new Promise((resolve, reject) => {
       try {
@@ -21,7 +21,7 @@ export class ModalViewModule {
         });
 
       } catch(error){
-        console.log("ModalViewModule, dismissModalByID error:");
+        console.log("RNIModalViewModule, dismissModalByID error:");
         console.log(error);
         reject(error);
       };
@@ -38,7 +38,7 @@ export class ModalViewModule {
         });
 
       } catch(error){
-        console.log("ModalViewModule, dismissAllModals error:");
+        console.log("RNIModalViewModule, dismissAllModals error:");
         console.log(error);
         reject();
       };
