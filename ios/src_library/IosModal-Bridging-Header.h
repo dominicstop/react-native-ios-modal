@@ -6,9 +6,12 @@
 
 #import "React Native/RCTSwiftLog/RCTSwiftLog.h"
 
-#import <React/RCTUIManager.h>
-#import <React/RCTTouchHandler.h>
-#import <React/RCTLog.h>
-#import "React/RCTBridgeModule.h"
+#import <React/RCTBridge.h>
 #import "React/RCTEventEmitter.h"
+
+#import <React/RCTView.h>
+#import <React/RCTTouchHandler.h>
+
+#import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
 
