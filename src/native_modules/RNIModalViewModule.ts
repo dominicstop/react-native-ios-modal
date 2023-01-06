@@ -27,6 +27,11 @@ interface RNIModalViewModule {
     node: number,
     visibility: boolean
   ): Promise<RNIModalViewInfo>;
+
+  // prettier-ignore
+  requestModalInfo(
+    node: number,
+  ): Promise<RNIModalViewInfo>;
 }
 
 export const RNIModalViewModule: RNIModalViewModule =
