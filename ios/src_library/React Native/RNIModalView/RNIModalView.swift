@@ -463,6 +463,16 @@ extension RNIModalView {
       completion?(success, error);
     };
   };
+  
+  public func requestModalInfo(
+    completion: CompletionHandler? = nil
+  ){
+    let params = self.createModalNativeEventDict();
+    
+    completion?(true, nil);
+    self.onRequestResult?(params);
+  };
+  
   // --------------------------------------
   // MARK: Public Functions for ViewManager
   // --------------------------------------

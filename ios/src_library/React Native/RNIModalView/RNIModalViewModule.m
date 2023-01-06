@@ -31,4 +31,9 @@ RCT_EXTERN_METHOD(setModalVisibility: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock *)reject);
 
+RCT_EXTERN_METHOD(requestModalInfo: (nonnull NSNumber) node
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock *)resolve
+                  reject : (RCTPromiseRejectBlock *)reject);
+
 @end

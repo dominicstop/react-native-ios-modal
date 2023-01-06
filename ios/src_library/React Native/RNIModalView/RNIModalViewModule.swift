@@ -174,4 +174,20 @@ extension RNIModalViewModule {
       };
     };
   };
+  
+  @objc func requestModalInfo(
+    _ node: NSNumber,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    DispatchQueue.main.async {
+      guard let modalView = self.getModalViewInstance(for: node) else {
+        reject(nil, "Unable to get the corresponding 'RNIModalView' instance for node: \(node)", nil);
+        return;
+      };
+      
+      resolve(modalView.createModalNativeEventDict());
+    };
+  };
 };
