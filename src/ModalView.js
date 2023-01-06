@@ -12,7 +12,6 @@ import {
 import * as Helpers from './functions/helpers';
 
 import { EventEmitter } from './functions/EventEmitter';
-import { RequestFactory } from './functions/RequestFactory';
 import { ModalEventKeys } from './constants/Enums';
 import { ModalContext } from './context/ModalContext';
 
@@ -98,7 +97,6 @@ export class ModalView extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    RequestFactory.initialize(this);
     this.emitter = new EventEmitter();
     this._childRef = null;
 
@@ -215,7 +213,6 @@ export class ModalView extends React.PureComponent {
 
   //#region - Native Event Handlers
   _handleOnRequestResult = ({ nativeEvent }) => {
-    RequestFactory.resolveRequestFromObj(this, nativeEvent);
     this.props.onRequestResult?.({ nativeEvent });
   };
 
