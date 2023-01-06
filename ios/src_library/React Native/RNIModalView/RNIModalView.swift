@@ -11,7 +11,7 @@ import Foundation
 
 class RNIModalView: UIView {
   
-  typealias completionResult = ((_ isSuccess: Bool, _ error: RNIModalViewError?) -> ())?;
+  typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void
   
   struct DefaultValues {
     static let presentationStyle: UIModalPresentationStyle = {
@@ -317,7 +317,7 @@ class RNIModalView: UIView {
 
 extension RNIModalView {
   
-  public func presentModal(completion: completionResult = nil) {
+  public func presentModal(completion: CompletionHandler? = nil) {
     let hasWindow: Bool = (self.window != nil);
     
     guard (hasWindow && !self.isPresented),
@@ -378,7 +378,7 @@ extension RNIModalView {
     };
   };
   
-  public func dismissModal(completion: completionResult = nil) {
+  public func dismissModal(completion: CompletionHandler? = nil) {
     guard self.isPresented,
       let modalVC = self.modalVC
     else {
@@ -442,7 +442,7 @@ extension RNIModalView {
   public func requestModalPresentation(
     _ requestID : NSNumber,
     _ visibility: Bool    ,
-      completion: completionResult = nil
+      completion: CompletionHandler? = nil
   ){
     var params: Dictionary<AnyHashable, Any> = [
       "requestID" : requestID ,
@@ -471,7 +471,7 @@ extension RNIModalView {
   
   public func requestModalInfo(
     _ requestID : NSNumber,
-      completion: completionResult = nil
+    completion: CompletionHandler? = nil
   ){
     var params = self.createModalNativeEventDict();
     params["success"  ] = true;
