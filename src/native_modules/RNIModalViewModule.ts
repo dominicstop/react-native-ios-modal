@@ -1,22 +1,31 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import * as Helpers from '../functions/helpers';
 
-const moduleName   = "RNIModalViewModule";
-const NativeModule = NativeModules[moduleName];
+const MODULE_NAME = 'RNIModalViewModule';
 
-const COMMAND_KEYS = {
-  dismissModalByID: 'dismissModalByID',
-  dismissAllModals: 'dismissAllModals'
-};
+interface RNIModalViewModule {
+  dismissModalByID( //
+    modalID: string,
+    callback: (success: boolean) => void
+  ): void;
 
-// wip
-const ModalViewFocusEvents = new NativeEventEmitter(NativeModule);
+  dismissAllModals( //
+    animated: boolean,
+    callback: (success: boolean) => void
+  ): void;
+}
 
-export class RNIModalViewModule {
+export const RNIModalViewModule: RNIModalViewModule =
+  NativeModules[MODULE_NAME];
+
+export const RNIModalViewFocusEvents = //
+  new NativeEventEmitter(RNIModalViewModule as any);
+
+export class ModalViewModule {
   static dismissModalByID(modalID = ''){
     const promise = new Promise((resolve, reject) => {
       try {
-        NativeModule[COMMAND_KEYS.dismissModalByID](modalID, success => {
+        RNIModalViewModule.dismissModalByID(modalID, success => {
           (success? resolve : reject)();
         });
 
@@ -33,7 +42,7 @@ export class RNIModalViewModule {
   static dismissAllModals(animated = true){
     const promise = new Promise((resolve, reject) => {
       try {
-        NativeModule[COMMAND_KEYS.dismissAllModals](animated, success => {
+        RNIModalViewModule.dismissAllModals(animated, success => {
           (success? resolve : reject)();
         });
 
