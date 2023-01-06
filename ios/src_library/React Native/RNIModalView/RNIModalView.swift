@@ -482,6 +482,33 @@ extension RNIModalView {
   };
 };
 
+// MARK: - Internal Functions
+// --------------------------
+
+extension RNIModalView {
+  
+  /// helper function to create a `NativeEvent` object
+  func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
+    var dict: Dictionary<AnyHashable, Any> = [
+      "modalUUID"     : self.modalUUID     ,
+      "isInFocus"     : self.isInFocus     ,
+      "isPresented"   : self.isPresented   ,
+      "modalLevel"    : self.modalLevel    ,
+      "modalLevelPrev": self.modalLevelPrev,
+    ];
+    
+    if let reactTag = self.modalID {
+      dict["reactTag"] = reactTag;
+    };
+    
+    if let modalID = self.modalID {
+      dict["modalID"] = modalID;
+    };
+    
+    return dict;
+  };
+};
+
 // ----------------------------------
 // MARK: Extension: Private Functions
 // ----------------------------------
@@ -615,27 +642,6 @@ extension RNIModalView {
         vc.view.isHidden = isHidden;
       };
     };
-  };
-  
-  /// helper function to create a `NativeEvent` object
-  private func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
-    var dict: Dictionary<AnyHashable, Any> = [
-      "modalUUID"     : self.modalUUID     ,
-      "isInFocus"     : self.isInFocus     ,
-      "isPresented"   : self.isPresented   ,
-      "modalLevel"    : self.modalLevel    ,
-      "modalLevelPrev": self.modalLevelPrev,
-    ];
-    
-    if let reactTag = self.modalID {
-      dict["reactTag"] = reactTag;
-    };
-    
-    if let modalID = self.modalID {
-      dict["modalID"] = modalID;
-    };
-    
-    return dict;
   };
 };
 
