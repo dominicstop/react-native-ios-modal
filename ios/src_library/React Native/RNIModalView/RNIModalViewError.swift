@@ -23,7 +23,7 @@ public enum RNIModalViewError: String, CaseIterable {
   static func getErrorMessage(for errorCase: RNIModalViewError) -> String {
     switch errorCase {
       case .modalAlreadyDismissed:
-        return "Cannot dismiss modal because it's currently not presenetd";
+        return "Cannot dismiss modal because it's currently not presented";
       
       case .modalAlreadyPresented:
         return "Cannot present modal because it's already presented";
