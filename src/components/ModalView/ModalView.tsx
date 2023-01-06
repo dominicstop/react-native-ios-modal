@@ -49,8 +49,10 @@ const NATIVE_PROP_KEYS = {
 };
 
 const VirtualizedListContext = React.createContext(null);
+
 // fix for react-native 0.60
-const hasScrollViewContext = ScrollView.Context?.Provider != null;
+const hasScrollViewContext: boolean =
+  (ScrollView as any).Context?.Provider != null;
 
 //
 //
@@ -334,8 +336,11 @@ export class ModalView extends React.PureComponent {
       >
         <VirtualizedListContext.Provider value={null}>
           {hasScrollViewContext ? (
+            // @ts-ignore
             <ScrollView.Context.Provider value={null}>
               {this._renderModal()}
+              {/*
+               // @ts-ignore */}
             </ScrollView.Context.Provider>
           ) : (
             this._renderModal()
