@@ -1,4 +1,4 @@
-export * from './ModalView';
+export * from './components/ModalView';
 
 export * from './module/ModalViewModule';
 
