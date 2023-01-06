@@ -22,6 +22,8 @@ import {
   RNIModalViewCommands,
 } from './native_components/RNIModalView';
 
+import { RNIModalViewModule } from './native_modules/RNIModalViewModule';
+
 //
 //
 
@@ -129,40 +131,36 @@ export class ModalView extends React.PureComponent {
     const { visible: prevVisible } = this.state;
 
     const didChange = prevVisible != nextVisible;
+
     if (!didChange) {
       return false;
     }
 
-    const { promise, requestID } = RequestFactory.newRequest(this, {
-      timeout: 2000,
-    });
+    if (nextVisible) {
+      // when showing modal, mount children first,
+      await Helpers.setStateAsync(this, {
+        visible: nextVisible,
+        // pass down received props to childProps via state
+        childProps: Helpers.isObject(childProps) ? childProps : null,
+      });
+
+      // TODO: Use `Promise.all`
+      // wait for view to mount
+      await new Promise((resolve) => {
+        this.didOnLayout = resolve;
+      });
+
+      // TODO: Use await event emitter
+      // reset didOnLayout
+      this.didOnLayout = null;
+    }
 
     try {
-      if (nextVisible) {
-        // when showing modal, mount children first,
-        await Helpers.setStateAsync(this, {
-          visible: nextVisible,
-          // pass down received props to childProps via state
-          childProps: Helpers.isObject(childProps) ? childProps : null,
-        });
-
-        // wait for view to mount
-        await new Promise((resolve) => {
-          this.didOnLayout = resolve;
-        });
-
-        // reset didOnLayout
-        this.didOnLayout = null;
-      }
-
       // request modal to open/close
-      UIManager.dispatchViewManagerCommand(
+      await RNIModalViewModule.setModalVisibility(
         findNodeHandle(this.nativeModalViewRef),
-        RNIModalViewCommands.requestModalPresentation,
-        [requestID, nextVisible]
+        nextVisible
       );
-
-      const result = await promise;
 
       // when finish hiding modal, unmount children
       if (!nextVisible) {
@@ -171,37 +169,21 @@ export class ModalView extends React.PureComponent {
           childProps: null,
         });
       }
-
-      return result.success;
     } catch (error) {
-      RequestFactory.rejectRequest(this, { requestID });
       console.log('ModalView, setVisibility failed:');
       console.log(error);
-
-      return false;
     }
   };
 
   getModalInfo = async () => {
-    const { promise, requestID } = RequestFactory.newRequest(this, {
-      timeout: 2000,
-    });
-
     try {
       // request modal to send modal info
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(this.nativeModalViewRef),
-        RNIModalViewCommands.requestModalInfo,
-        [requestID]
+      return await RNIModalViewModule.requestModalInfo(
+        findNodeHandle(this.nativeModalViewRef)
       );
-
-      return await promise;
     } catch (error) {
-      RequestFactory.rejectRequest(this, { requestID });
       console.log('ModalView, requestModalInfo failed:');
       console.log(error);
-
-      return false;
     }
   };
 
@@ -313,7 +295,9 @@ export class ModalView extends React.PureComponent {
 
     return (
       <RNIModalView
-        ref={(r) => (this.nativeModalViewRef = r)}
+        ref={(r) => {
+          this.nativeModalViewRef = r;
+        }}
         style={styles.rootContainer}
         onStartShouldSetResponder={this._shouldSetResponder}
         {...nativeProps}
