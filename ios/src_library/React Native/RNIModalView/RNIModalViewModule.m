@@ -18,7 +18,7 @@ RCT_EXTERN_METHOD(dismissModalByID: (NSString)modalID
                   callback: (RCTResponseSenderBlock)callback
 );
 
-RCT_EXTERN_METHOD(dismissAllModals: (bool)animated
+RCT_EXTERN_METHOD(dismissAllModals: (BOOL)animated
                   callback: (RCTResponseSenderBlock)callback
 );
 
