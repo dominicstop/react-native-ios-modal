@@ -1,5 +1,7 @@
 export * from './ModalView';
 
+export * from './module/ModalViewModule';
+
 export * from './constants/Enums';
 export * from './context/ModalContext';
 export * from './hoc/withModalLifecycle';
