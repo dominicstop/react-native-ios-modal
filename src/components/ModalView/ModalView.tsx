@@ -9,15 +9,15 @@ import {
   Platform,
 } from 'react-native';
 
-import * as Helpers from './functions/helpers';
+import * as Helpers from '../../functions/helpers';
 
-import { EventEmitter } from './functions/EventEmitter';
-import { ModalEventKeys } from './constants/Enums';
-import { ModalContext } from './context/ModalContext';
+import { EventEmitter } from '../../functions/EventEmitter';
+import { ModalEventKeys } from '../../constants/Enums';
+import { ModalContext } from '../../context/ModalContext';
 
-import { RNIModalView } from './native_components/RNIModalView';
+import { RNIModalView } from '../../native_components/RNIModalView';
 
-import { RNIModalViewModule } from './native_modules/RNIModalViewModule';
+import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
 
 //
 //
