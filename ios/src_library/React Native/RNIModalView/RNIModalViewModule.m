@@ -11,14 +11,15 @@
 
 @interface RCT_EXTERN_MODULE(RNIModalViewModule, RCTEventEmitter)
 
-RCT_EXTERN_METHOD(dismissModalByID
-          : (NSString)modalID
-  callback: (RCTResponseSenderBlock)callback
+// MARK: - Standalone Functions
+// ----------------------------
+
+RCT_EXTERN_METHOD(dismissModalByID: (NSString)modalID
+                  callback: (RCTResponseSenderBlock)callback
 );
 
-RCT_EXTERN_METHOD(dismissAllModals
-          : (bool)animated
-  callback: (RCTResponseSenderBlock)callback
+RCT_EXTERN_METHOD(dismissAllModals: (bool)animated
+                  callback: (RCTResponseSenderBlock)callback
 );
 
 @end
