@@ -16,9 +16,7 @@ import { RequestFactory } from './functions/RequestFactory';
 import { ModalEventKeys } from './constants/Enums';
 import { ModalContext } from './context/ModalContext';
 
-import {
-  RNIModalView,
-} from './native_components/RNIModalView';
+import { RNIModalView } from './native_components/RNIModalView';
 
 import { RNIModalViewModule } from './native_modules/RNIModalViewModule';
 
