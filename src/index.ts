@@ -5,6 +5,6 @@ export * from './context/ModalContext';
 export * from './hoc/withModalLifecycle';
 
 export * from './native_components/RNIModalView';
-export * from './native_modules/ModalViewModule';
+export * from './native_modules/RNIModalViewModule';
 
 export * from './types/UIModalTypes';

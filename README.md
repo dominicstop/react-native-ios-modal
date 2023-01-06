@@ -110,7 +110,7 @@ Right usage:
 #### 3.1.2 Props: Strings
 | Name/Type                                                    | Default                                                      | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------|
-| **modalID**: `string`                                        | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `ModalViewModule` functions and programatically control it. |
+| **modalID**: `string`                                        | **Default**: `null`                                          | Assign a unique ID to the modal. You can use the ID to refer to this modal when using the `RNIModalViewModule` functions and programatically control it. |
 | **modalTransitionStyle**: `UIModalTransitionStyles` value    | **Default**: `coverVertical`                                 | The transition style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 | **modalPresentationStyle**: `UIModalPresentationStyles` value | **Default**: `automatic` when on iOS 13+, otherwise  `overFullScreen` | The presentation style to use when presenting/dismissing a modal. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
 | **modalBGBlurEffectStyle**: `UIBlurEffectStyles` value       | **Default**: `systemThinMaterial` when on iOS 13+, otherwise  `light` | The blur style to use for the `UIBlurEffect` modal background. If an invalid/unsupported value is passed, the default or the last supported value will be used. |
@@ -146,10 +146,10 @@ Right usage:
 | **async** `setIsModalInPresentation(bool)`                   | When `setModalInPresentationFromProps` prop is true, it allows you to programatically set  `isModalInPresentation` via function. |
 <br/>
 
-### 3.2 `ModalViewModule`
+### 3.2 `RNIModalViewModule`
 A `NativeModule` that's a collection of functions to programmatically control a `ModalView`
-* Import the module: `import { ModalViewModule } from 'react-native-ios-modal'`
-* Example Usage: `ModalViewModule.dismissAllModals(true)`
+* Import the module: `import { RNIModalViewModule } from 'react-native-ios-modal'`
+* Example Usage: `RNIModalViewModule.dismissAllModals(true)`
 
 <br/>
 
