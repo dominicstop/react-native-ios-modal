@@ -179,7 +179,8 @@ export class ModalView extends
     }
 
     if (nextVisible) {
-      // when showing modal, mount children first,
+      // Show modal...
+      // When showing modal, mount children first,
       await Helpers.setStateAsync(this, {
         visible: nextVisible,
         // pass down received props to childProps via state
@@ -201,7 +202,8 @@ export class ModalView extends
         nextVisible
       );
 
-      // when finish hiding modal, unmount children
+      // Hide modal...
+      // When finish hiding modal, unmount children
       if (!nextVisible) {
         await Helpers.setStateAsync(this, {
           visible: nextVisible,
