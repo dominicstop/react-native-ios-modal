@@ -76,7 +76,7 @@ export class ModalView extends
     }
   }
 
-  getProps = () => {
+  private getProps = () => {
     const {
       // native props - flags
       presentViaMount,
