@@ -324,25 +324,13 @@ export class ModalView extends
     const props = this.getProps();
     const state = this.state;
 
-    const nativeProps = {
-      // pass down props
-      ...props,
-      // set handlers for native props -------------------------------------------
-      [NATIVE_PROP_KEYS.onModalBlur]: this._handleOnModalBlur,
-      [NATIVE_PROP_KEYS.onModalFocus]: this._handleOnModalFocus,
-      [NATIVE_PROP_KEYS.onModalShow]: this._handleOnModalShow,
-      [NATIVE_PROP_KEYS.onModalDismiss]: this._handleOnModalDismiss,
-      [NATIVE_PROP_KEYS.onRequestResult]: this._handleOnRequestResult,
-      [NATIVE_PROP_KEYS.onModalDidDismiss]: this._handleOnModalDidDismiss,
-      [NATIVE_PROP_KEYS.onModalWillDismiss]: this._handleOnModalWillDismiss,
-      [NATIVE_PROP_KEYS.onModalAttemptDismiss]:
-        this._handleOnModalAttemptDismiss,
-      // optional props ----------------------------
+    const overrideProps = {
       ...(props.setModalInPresentationFromProps && {
-        [NATIVE_PROP_KEYS.isModalInPresentation]: state.isModalInPresentation,
+        isModalInPresentation: state.isModalInPresentation,
       }),
+
       ...(props.setEnableSwipeGestureFromProps && {
-        [NATIVE_PROP_KEYS.enableSwipeGesture]: state.enableSwipeGesture,
+        enableSwipeGesture: state.enableSwipeGesture,
       }),
     };
 
@@ -353,7 +341,17 @@ export class ModalView extends
         }}
         style={styles.rootContainer}
         onStartShouldSetResponder={this._shouldSetResponder}
-        {...nativeProps}
+        onModalBlur={this._handleOnModalBlur}
+        onModalFocus={this._handleOnModalFocus}
+        onModalShow={this._handleOnModalShow}
+        onModalDismiss={this._handleOnModalDismiss}
+        onRequestResult={this._handleOnRequestResult}
+        onModalDidDismiss={this._handleOnModalDidDismiss}
+        onModalWillDismiss={this._handleOnModalWillDismiss}
+        onModalAttemptDismiss={this._handleOnModalAttemptDismiss}
+        {...props}
+        {...overrideProps}
+        {...props.viewProps}
       >
         {state.visible && (
           <View
@@ -367,7 +365,7 @@ export class ModalView extends
               // pass down props received from setVisibility
               ...(Helpers.isObject(state.childProps) && state.childProps),
               // pass down modalID
-              modalID: props[NATIVE_PROP_KEYS.modalID],
+              modalID: props.modalID,
             })}
           </View>
         )}
