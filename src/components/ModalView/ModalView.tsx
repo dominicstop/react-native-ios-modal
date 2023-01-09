@@ -169,6 +169,19 @@ export class ModalView extends
     return this.emitter;
   };
 
+  setStateIsModalVisible = (nextModalVisibility: boolean) => {
+    const { isModalVisible: prevModalVisibility } = this.state;
+
+    const didModalVisibilityChange =
+      prevModalVisibility !== nextModalVisibility;
+
+    if(!didModalVisibilityChange) return;
+
+    this.setState({
+      isModalVisible: nextModalVisibility,
+    });
+  };
+
   setVisibility = async (
     nextVisible: boolean,
     childProps: object | null = null
@@ -305,6 +318,8 @@ export class ModalView extends
       ModalViewEmitterEvents.onModalShow,
       event.nativeEvent
     );
+
+    this.setStateIsModalVisible(true);
   };
 
   _handleOnModalDismiss: OnModalDismissEvent = (event) => {
@@ -335,6 +350,8 @@ export class ModalView extends
       ModalViewEmitterEvents.onModalDidDismiss,
       event.nativeEvent
     );
+
+    this.setStateIsModalVisible(false);
   };
 
   _handleOnModalWillDismiss: OnModalDidDismissEvent = (event) => {
