@@ -209,7 +209,7 @@ export class ModalView extends
     try {
       // request modal to open/close
       await RNIModalViewModule.setModalVisibility(
-        findNodeHandle(this.nativeModalViewRef),
+        findNodeHandle(this.nativeRefModalView),
         nextVisible
       );
 
@@ -230,7 +230,7 @@ export class ModalView extends
     try {
       // request modal to send modal info
       return await RNIModalViewModule.requestModalInfo(
-        findNodeHandle(this.nativeModalViewRef)
+        findNodeHandle(this.nativeRefModalView)
       );
     } catch (error) {
       console.log('ModalView, requestModalInfo failed:');
@@ -336,7 +336,7 @@ export class ModalView extends
     return (
       <RNIModalView
         ref={(r) => {
-          this.nativeModalViewRef = r;
+          this.nativeRefModalView = r;
         }}
         style={styles.rootContainer}
         onStartShouldSetResponder={this._shouldSetResponder}
@@ -355,10 +355,10 @@ export class ModalView extends
         {state.visible && (
           <View
             style={[styles.modalContainer, props.containerStyle]}
-            collapsable={false}
+            collapsible={false}
             onLayout={this._handleOnLayout}
           >
-            {React.cloneElement(props.children, {
+            {React.cloneElement(props.children as any, {
               getModalRef: this._handleGetModalRef,
               // pass down props received from setVisibility
               ...(Helpers.isObject(state.childProps) && state.childProps),
