@@ -60,7 +60,7 @@ export class ModalView extends
     this.emitter = new TSEventEmitter();
 
     this.state = {
-      shouldMountModalContent: false,
+      isModalVisible: false,
       childProps: null,
       enableSwipeGesture: props.enableSwipeGesture,
       isModalInPresentation: props.isModalInPresentation,
@@ -69,7 +69,7 @@ export class ModalView extends
 
   componentWillUnmount() {
     const { autoCloseOnUnmount } = this.getProps();
-    const { shouldMountModalContent: visible } = this.state;
+    const { isModalVisible: visible } = this.state;
 
     if (autoCloseOnUnmount && visible) {
       this.setVisibility(false);
@@ -173,7 +173,7 @@ export class ModalView extends
     nextVisible: boolean,
     childProps: object | null = null
   ) => {
-    const { shouldMountModalContent: prevVisible } = this.state;
+    const { isModalVisible: prevVisible } = this.state;
 
     const didChange = (prevVisible !== nextVisible);
 
@@ -185,7 +185,7 @@ export class ModalView extends
       // Show modal...
       // When showing modal, mount children first,
       await Helpers.setStateAsync(this, {
-        visible: nextVisible,
+        isModalVisible: nextVisible,
         // pass down received props to childProps via state
         childProps: Helpers.isObject(childProps) ? childProps : null,
       });
@@ -209,7 +209,7 @@ export class ModalView extends
       // When finish hiding modal, unmount children
       if (!nextVisible) {
         await Helpers.setStateAsync(this, {
-          visible: nextVisible,
+          isModalVisible: nextVisible,
           childProps: null,
         });
       }
@@ -319,7 +319,7 @@ export class ModalView extends
     );
 
     this.setState({
-      shouldMountModalContent: false,
+      isModalVisible: false,
       childProps: null,
       // reset state values from props
       enableSwipeGesture: props.enableSwipeGesture,
@@ -371,6 +371,8 @@ export class ModalView extends
       }),
     };
 
+    const shouldMountModalContent = state.isModalVisible;
+
     return (
       <RNIModalView
         ref={(r) => {
@@ -389,7 +391,7 @@ export class ModalView extends
         {...overrideProps}
         {...props.viewProps}
       >
-        {state.shouldMountModalContent && (
+        {shouldMountModalContent && (
           <View
             style={[styles.modalContentContainer, props.containerStyle]}
             collapsable={false}

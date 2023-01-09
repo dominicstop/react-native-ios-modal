@@ -43,7 +43,7 @@ export type ModalViewProps =
   ViewProps & ModalViewBaseProps;
 
 export type ModalViewState = {
-  shouldMountModalContent: boolean;
+  isModalVisible: boolean;
   childProps: unknown;
   enableSwipeGesture: boolean;
   isModalInPresentation: boolean;
