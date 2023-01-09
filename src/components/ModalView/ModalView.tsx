@@ -253,7 +253,7 @@ export class ModalView extends
     return true;
   }
 
-  _handleOnLayout: ViewProps['onLayout'] = () => {
+  _handleOnLayoutModalContentContainer: ViewProps['onLayout'] = () => {
     const { didOnLayout } = this;
     didOnLayout && didOnLayout();
   };
@@ -377,9 +377,9 @@ export class ModalView extends
       >
         {state.visible && (
           <View
-            style={[styles.modalContainer, props.containerStyle]}
+            style={[styles.modalContentContainer, props.containerStyle]}
             collapsable={false}
-            onLayout={this._handleOnLayout}
+            onLayout={this._handleOnLayoutModalContentContainer}
           >
             {React.cloneElement(props.children as any, {
               getModalRef: this._handleGetModalRef,
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     height: 0,
     overflow: 'hidden',
   },
-  modalContainer: {
+  modalContentContainer: {
     position: 'absolute',
   },
 });
