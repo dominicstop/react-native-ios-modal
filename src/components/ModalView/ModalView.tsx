@@ -264,6 +264,8 @@ export class ModalView extends
       ModalViewEmitterEvents.onLayoutModalContentContainer,
       event.nativeEvent
     );
+
+    event.stopPropagation();
   };
 
   // the child comp can call `props.getModalRef` to receive
@@ -277,6 +279,7 @@ export class ModalView extends
 
   _handleOnModalBlur: OnModalBlurEvent = (event) => {
     this.props.onModalBlur?.(event);
+    event.stopPropagation();
 
     this.emitter.emit(
       ModalViewEmitterEvents.onModalBlur,
@@ -286,6 +289,7 @@ export class ModalView extends
 
   _handleOnModalFocus: OnModalFocusEvent = (event) => {
     this.props.onModalFocus?.(event);
+    event.stopPropagation();
 
     this.emitter.emit(
       ModalViewEmitterEvents.onModalFocus,
@@ -295,6 +299,8 @@ export class ModalView extends
 
   _handleOnModalShow: OnModalShowEvent = (event) => {
     this.props.onModalShow?.(event);
+    event.stopPropagation();
+
     this.emitter.emit(
       ModalViewEmitterEvents.onModalShow,
       event.nativeEvent
@@ -305,6 +311,8 @@ export class ModalView extends
     const props = this.getProps();
 
     this.props.onModalDismiss?.(event);
+    event.stopPropagation();
+
     this.emitter.emit(
       ModalViewEmitterEvents.onModalDismiss,
       event.nativeEvent
@@ -321,6 +329,7 @@ export class ModalView extends
 
   _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
     this.props.onModalDidDismiss?.(event);
+    event.stopPropagation();
 
     this.emitter.emit(
       ModalViewEmitterEvents.onModalDidDismiss,
@@ -330,6 +339,7 @@ export class ModalView extends
 
   _handleOnModalWillDismiss: OnModalDidDismissEvent = (event) => {
     this.props.onModalWillDismiss?.(event);
+    event.stopPropagation();
 
     this.emitter.emit(
       ModalViewEmitterEvents.onModalWillDismiss,
@@ -339,6 +349,7 @@ export class ModalView extends
 
   _handleOnModalAttemptDismiss: OnModalAttemptDismissEvent = (event) => {
     this.props.onModalAttemptDismiss?.(event);
+    event.stopPropagation();
 
     this.emitter.emit(
       ModalViewEmitterEvents.onModalAttemptDismiss,
