@@ -118,7 +118,7 @@ export class ModalView extends
         presentViaMount ?? false
       ),
       isModalBGBlurred: (
-        isModalBGBlurred ?? false
+        isModalBGBlurred ?? true
       ),
       enableSwipeGesture: (
         enableSwipeGesture ?? true
@@ -127,7 +127,7 @@ export class ModalView extends
         hideNonVisibleModals ?? false
       ),
       isModalBGTransparent: (
-        isModalBGTransparent ?? false
+        isModalBGTransparent ?? true
       ),
       modalTransitionStyle: (
         modalTransitionStyle ?? 'coverVertical'
