@@ -189,15 +189,12 @@ export class ModalView extends
         childProps: Helpers.isObject(childProps) ? childProps : null,
       });
 
-      // TODO: Use `Promise.all`
       // wait for view to mount
-      await new Promise((resolve) => {
-        this.didOnLayout = resolve;
-      });
-
-      // TODO: Use await event emitter
-      // reset didOnLayout
-      this.didOnLayout = null;
+      await Helpers.promiseWithTimeout(500, new Promise<void>((resolve) => {
+        this.emitter.once(ModalViewEmitterEvents.onLayoutModalContentContainer, () => {
+          resolve();
+        });
+      }));
     }
 
     try {
@@ -253,9 +250,11 @@ export class ModalView extends
     return true;
   }
 
-  _handleOnLayoutModalContentContainer: ViewProps['onLayout'] = () => {
-    const { didOnLayout } = this;
-    didOnLayout && didOnLayout();
+  _handleOnLayoutModalContentContainer: ViewProps['onLayout'] = (event) => {
+    this.emitter.emit(
+      ModalViewEmitterEvents.onLayoutModalContentContainer,
+      event.nativeEvent
+    );
   };
 
   // the child comp can call `props.getModalRef` to receive

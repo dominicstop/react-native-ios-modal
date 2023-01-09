@@ -1,3 +1,4 @@
+import type { LayoutChangeEvent } from 'react-native';
 import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
 import type {
@@ -13,6 +14,7 @@ import type {
 import type { KeyMapType } from '../../types/UtilityTypes';
 
 export enum ModalViewEmitterEvents {
+  // `RNIModalView` Events
   onModalBlur = 'onModalBlur',
   onModalFocus = 'onModalFocus',
   onModalShow = 'onModalShow',
@@ -20,11 +22,15 @@ export enum ModalViewEmitterEvents {
   onModalDidDismiss = 'onModalDidDismiss',
   onModalWillDismiss = 'onModalWillDismiss',
   onModalAttemptDismiss = 'onModalAttemptDismiss',
+
+  onLayoutModalContentContainer = 'onLayoutModalContentContainer',
 }
 
+// TODO: Remove `KeyMapType` usage
 export type ModalViewEmitterEventMap =
   // prettier-ignore
   KeyMapType<ModalViewEmitterEvents, {
+    // `RNIModalView` Events
     onModalBlur: OnModalBlurEventObject['nativeEvent'];
     onModalFocus: OnModalFocusEventObject['nativeEvent'];
     onModalShow: OnModalShowEventObject['nativeEvent'];
@@ -32,6 +38,8 @@ export type ModalViewEmitterEventMap =
     onModalDidDismiss: OnModalDidDismissEventObject['nativeEvent'];
     onModalWillDismiss: OnModalWillDismissEventObject['nativeEvent'];
     onModalAttemptDismiss: OnModalAttemptDismissEventObject['nativeEvent'];
+
+    onLayoutModalContentContainer: LayoutChangeEvent['nativeEvent'];
   }
 >;
 
