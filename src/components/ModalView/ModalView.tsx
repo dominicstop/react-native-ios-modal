@@ -8,16 +8,21 @@ import {
   Platform,
 } from 'react-native';
 
+import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
+
 import * as Helpers from '../../functions/helpers';
 
-import { EventEmitter } from '../../functions/EventEmitter';
-import { ModalEventKeys } from '../../constants/Enums';
 import { ModalContext } from '../../context/ModalContext';
 
 import { RNIModalView } from '../../native_components/RNIModalView';
-
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
+
 import type { ModalViewProps, ModalViewState } from './ModalViewTypes';
+
+import {
+  ModalViewEmitterEvents,
+  ModalViewEventEmitter,
+} from './ModalViewEmitter';
 
 //
 //
@@ -59,14 +64,16 @@ const hasScrollViewContext: boolean =
 
 // prettier-ignore
 export class ModalView extends
-  React.PureComponent<ModalViewProps, ModalViewState>  {
+  React.PureComponent<ModalViewProps, ModalViewState> {
 
   private nativeRefModalView!: React.Component;
+  private emitter: ModalViewEventEmitter;
+
 
   constructor(props) {
     super(props);
 
-    this.emitter = new EventEmitter();
+    this.emitter = new TSEventEmitter();
 
     this.state = {
       visible: false,
@@ -277,24 +284,24 @@ export class ModalView extends
 
   _handleOnModalBlur = (event) => {
     this.props.onModalBlur?.(event);
-    this.emitter.emit(ModalEventKeys.onModalBlur, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalBlur, event);
   };
 
   _handleOnModalFocus = (event) => {
     this.props.onModalFocus?.(event);
-    this.emitter.emit(ModalEventKeys.onModalFocus, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalFocus, event);
   };
 
   _handleOnModalShow = (event) => {
     this.props.onModalShow?.(event);
-    this.emitter.emit(ModalEventKeys.onModalShow, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalShow, event);
   };
 
   _handleOnModalDismiss = (event) => {
     const props = this.getProps();
 
     this.props.onModalDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalDismiss, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalDismiss, event);
 
     this.setState({
       visible: false,
@@ -307,17 +314,17 @@ export class ModalView extends
 
   _handleOnModalDidDismiss = (event) => {
     this.props.onModalDidDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalDidDismiss, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalDidDismiss, event);
   };
 
   _handleOnModalWillDismiss = (event) => {
     this.props.onModalWillDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalWillDismiss, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalWillDismiss, event);
   };
 
   _handleOnModalAttemptDismiss = (event) => {
     this.props.onModalAttemptDismiss?.(event);
-    this.emitter.emit(ModalEventKeys.onModalAttemptDismiss, event);
+    this.emitter.emit(ModalViewEmitterEvents.onModalAttemptDismiss, event);
   };
   //#endregion
 
