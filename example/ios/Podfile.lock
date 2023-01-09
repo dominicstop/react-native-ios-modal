@@ -239,7 +239,7 @@ PODS:
   - React-jsinspector (0.70.4)
   - React-logger (0.70.4):
     - glog
-  - react-native-ios-modal (0.1.8):
+  - react-native-ios-modal (1.0.0-1):
     - React-Core
   - React-perflogger (0.70.4)
   - React-RCTActionSheet (0.70.4):
@@ -449,7 +449,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a893fc8f683b91befcaf56c44ad8be4506b6828
   React-jsinspector: 1d5a9e84e419a57cabc23249aec3d837d1b03a80
   React-logger: f8071ad48248781d5afdb8a07f778758529d3019
-  react-native-ios-modal: ce8e8356849cd7fa98d9557139f4c8248e4b7518
+  react-native-ios-modal: 0e73b3bcd167e4c2ca39b9c9aa714dc415cb75d3
   React-perflogger: 5e41b01b35d97cc1b0ea177181eb33b5c77623b6
   React-RCTActionSheet: 48949f30b24200c82f3dd27847513be34e06a3ae
   React-RCTAnimation: 96af42c97966fcd53ed9c31bee6f969c770312b6
