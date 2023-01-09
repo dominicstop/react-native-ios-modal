@@ -169,7 +169,10 @@ export class ModalView extends
     return this.emitter;
   };
 
-  setVisibility = async (nextVisible, childProps = null) => {
+  setVisibility = async (
+    nextVisible: boolean,
+    childProps: object | null = null
+  ) => {
     const { shouldMountModalContent: prevVisible } = this.state;
 
     const didChange = (prevVisible !== nextVisible);
@@ -230,19 +233,26 @@ export class ModalView extends
     }
   };
 
-  setEnableSwipeGesture = async (enableSwipeGesture) => {
+  setEnableSwipeGesture = async (
+    enableSwipeGesture: boolean
+  ) => {
     const { enableSwipeGesture: prevVal } = this.state;
     if (prevVal !== enableSwipeGesture) {
       await Helpers.setStateAsync(this, { enableSwipeGesture });
     }
   };
 
-  setIsModalInPresentation = async (isModalInPresentation) => {
+  setIsModalInPresentation = async (
+    isModalInPresentation: boolean
+  ) => {
     const { isModalInPresentation: prevVal } = this.state;
     if (prevVal !== isModalInPresentation) {
       await Helpers.setStateAsync(this, { isModalInPresentation });
     }
   };
+
+  // Event Handlers
+  // --------------
 
   // We don't want any responder events bubbling out of the modal.
   _shouldSetResponder() {
