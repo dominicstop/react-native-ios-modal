@@ -1,5 +1,5 @@
 
-
+// TODO: Remove - use ts event emitter
 export class EventEmitter {
   constructor() {
     this._events = {};
