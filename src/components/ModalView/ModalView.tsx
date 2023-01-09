@@ -38,32 +38,6 @@ import {
 //
 //
 
-const NATIVE_PROP_KEYS = {
-  // Modal Native Props: Event Callbacks
-  onRequestResult: 'onRequestResult',
-  onModalBlur: 'onModalBlur',
-  onModalFocus: 'onModalFocus',
-  onModalShow: 'onModalShow',
-  onModalDismiss: 'onModalDismiss',
-  onModalDidDismiss: 'onModalDidDismiss',
-  onModalWillDismiss: 'onModalWillDismiss',
-  onModalAttemptDismiss: 'onModalAttemptDismiss',
-
-  // Modal Native Props: Flags/Booleans
-  presentViaMount: 'presentViaMount',
-  isModalBGBlurred: 'isModalBGBlurred',
-  enableSwipeGesture: 'enableSwipeGesture',
-  hideNonVisibleModals: 'hideNonVisibleModals',
-  isModalBGTransparent: 'isModalBGTransparent',
-  isModalInPresentation: 'isModalInPresentation',
-
-  // Modal Native Props: Strings
-  modalID: 'modalID',
-  modalTransitionStyle: 'modalTransitionStyle',
-  modalPresentationStyle: 'modalPresentationStyle',
-  modalBGBlurEffectStyle: 'modalBGBlurEffectStyle',
-};
-
 const VirtualizedListContext = React.createContext(null);
 
 // fix for react-native 0.60
