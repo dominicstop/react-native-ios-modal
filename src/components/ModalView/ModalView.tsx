@@ -175,10 +175,10 @@ export class ModalView extends
   setVisibility = async (nextVisible, childProps = null) => {
     const { visible: prevVisible } = this.state;
 
-    const didChange = prevVisible != nextVisible;
+    const didChange = (prevVisible !== nextVisible);
 
     if (!didChange) {
-      return false;
+      return;
     }
 
     if (nextVisible) {
@@ -217,6 +217,7 @@ export class ModalView extends
     } catch (error) {
       console.log('ModalView, setVisibility failed:');
       console.log(error);
+      throw error;
     }
   };
 
@@ -229,19 +230,20 @@ export class ModalView extends
     } catch (error) {
       console.log('ModalView, requestModalInfo failed:');
       console.log(error);
+      throw error;
     }
   };
 
   setEnableSwipeGesture = async (enableSwipeGesture) => {
     const { enableSwipeGesture: prevVal } = this.state;
-    if (prevVal != enableSwipeGesture) {
+    if (prevVal !== enableSwipeGesture) {
       await Helpers.setStateAsync(this, { enableSwipeGesture });
     }
   };
 
   setIsModalInPresentation = async (isModalInPresentation) => {
     const { isModalInPresentation: prevVal } = this.state;
-    if (prevVal != isModalInPresentation) {
+    if (prevVal !== isModalInPresentation) {
       await Helpers.setStateAsync(this, { isModalInPresentation });
     }
   };
