@@ -175,7 +175,9 @@ export class ModalView extends
     const didModalVisibilityChange =
       prevModalVisibility !== nextModalVisibility;
 
-    if(!didModalVisibilityChange) return;
+    if (!didModalVisibilityChange) {
+      return;
+    }
 
     this.setState({
       isModalVisible: nextModalVisibility,
