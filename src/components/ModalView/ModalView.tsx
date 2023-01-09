@@ -54,7 +54,7 @@ export class ModalView extends
   private emitter: ModalViewEventEmitter;
 
 
-  constructor(props) {
+  constructor(props: ModalViewProps) {
     super(props);
 
     this.emitter = new TSEventEmitter();
