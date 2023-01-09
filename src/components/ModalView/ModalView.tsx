@@ -61,6 +61,8 @@ const hasScrollViewContext: boolean =
 export class ModalView extends
   React.PureComponent<ModalViewProps, ModalViewState>  {
 
+  private nativeRefModalView!: React.Component;
+
   constructor(props) {
     super(props);
 
