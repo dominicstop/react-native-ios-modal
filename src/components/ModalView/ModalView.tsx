@@ -364,7 +364,7 @@ export class ModalView extends
         {state.visible && (
           <View
             style={[styles.modalContainer, props.containerStyle]}
-            collapsible={false}
+            collapsable={false}
             onLayout={this._handleOnLayout}
           >
             {React.cloneElement(props.children as any, {
