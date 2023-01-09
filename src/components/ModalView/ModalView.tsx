@@ -394,6 +394,7 @@ export class ModalView extends
 
     return (
       <RNIModalView
+        {...props}
         ref={(r) => {
           this.nativeRefModalView = r;
         }}
@@ -406,7 +407,6 @@ export class ModalView extends
         onModalDidDismiss={this._handleOnModalDidDismiss}
         onModalWillDismiss={this._handleOnModalWillDismiss}
         onModalAttemptDismiss={this._handleOnModalAttemptDismiss}
-        {...props}
         {...overrideProps}
         {...props.viewProps}
       >
