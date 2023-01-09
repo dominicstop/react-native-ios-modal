@@ -65,7 +65,6 @@ export class ModalView extends
     super(props);
 
     this.emitter = new EventEmitter();
-    this._childRef = null;
 
     this.state = {
       visible: false,
@@ -355,7 +354,6 @@ export class ModalView extends
       >
         {state.visible && (
           <View
-            ref={(r) => (this.modalContainerRef = r)}
             style={[styles.modalContainer, props.containerStyle]}
             collapsable={false}
             onLayout={this._handleOnLayout}
