@@ -22,7 +22,6 @@ export type ModalViewBaseProps = Partial<
     // props - events
     | 'onModalShow'
     | 'onModalDismiss'
-    | 'onRequestResult'
     | 'onModalBlur'
     | 'onModalFocus'
     | 'onModalDidDismiss'

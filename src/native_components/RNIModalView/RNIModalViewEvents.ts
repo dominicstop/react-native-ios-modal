@@ -24,11 +24,6 @@ export type OnModalDismissEventObject = NativeSyntheticEvent<
 >;
 
 // TODO
-export type OnRequestResultEventObject = NativeSyntheticEvent<
-  RNIModalViewInfo & {}
->;
-
-// TODO
 export type OnModalBlurEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
@@ -64,11 +59,6 @@ export type OnModalShowEvent = (
 // eslint-disable-next-line prettier/prettier
 export type OnModalDismissEvent = (
   event: OnModalDismissEventObject
-) => void;
-
-// eslint-disable-next-line prettier/prettier
-export type OnRequestResultEvent = (
-  event: OnRequestResultEventObject
 ) => void;
 
 // eslint-disable-next-line prettier/prettier

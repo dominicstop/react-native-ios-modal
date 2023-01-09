@@ -12,7 +12,6 @@ import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
 import type {
   OnModalShowEvent,
   OnModalDismissEvent,
-  OnRequestResultEvent,
   OnModalBlurEvent,
   OnModalFocusEvent,
   OnModalDidDismissEvent,
@@ -46,7 +45,6 @@ export type RNIModalViewProps = ViewProps & {
   // TODO: Rename - Add `will/did` prefix and deprecate prev. props
   onModalShow: OnModalShowEvent;
   onModalDismiss: OnModalDismissEvent;
-  onRequestResult: OnRequestResultEvent;
 
   onModalBlur: OnModalBlurEvent;
   onModalFocus: OnModalFocusEvent;

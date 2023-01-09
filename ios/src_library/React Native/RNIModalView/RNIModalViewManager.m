@@ -9,7 +9,6 @@
 
 RCT_EXPORT_VIEW_PROPERTY(onModalShow    , RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onModalDismiss , RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onRequestResult, RCTDirectEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(onModalBlur , RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onModalFocus, RCTDirectEventBlock);
