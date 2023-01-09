@@ -60,7 +60,7 @@ export class ModalView extends
     this.emitter = new TSEventEmitter();
 
     this.state = {
-      visible: false,
+      shouldMountModalContent: false,
       childProps: null,
       enableSwipeGesture: props.enableSwipeGesture,
       isModalInPresentation: props.isModalInPresentation,
@@ -69,7 +69,7 @@ export class ModalView extends
 
   componentWillUnmount() {
     const { autoCloseOnUnmount } = this.getProps();
-    const { visible } = this.state;
+    const { shouldMountModalContent: visible } = this.state;
 
     if (autoCloseOnUnmount && visible) {
       this.setVisibility(false);
@@ -170,7 +170,7 @@ export class ModalView extends
   };
 
   setVisibility = async (nextVisible, childProps = null) => {
-    const { visible: prevVisible } = this.state;
+    const { shouldMountModalContent: prevVisible } = this.state;
 
     const didChange = (prevVisible !== nextVisible);
 
@@ -299,7 +299,7 @@ export class ModalView extends
     );
 
     this.setState({
-      visible: false,
+      shouldMountModalContent: false,
       childProps: null,
       // reset state values from props
       enableSwipeGesture: props.enableSwipeGesture,
@@ -366,7 +366,7 @@ export class ModalView extends
         {...overrideProps}
         {...props.viewProps}
       >
-        {state.visible && (
+        {state.shouldMountModalContent && (
           <View
             style={[styles.modalContentContainer, props.containerStyle]}
             collapsable={false}
