@@ -22,7 +22,6 @@ import {
   OnModalDismissEvent,
   OnModalFocusEvent,
   OnModalShowEvent,
-  OnRequestResultEvent,
   RNIModalView,
 } from '../../native_components/RNIModalView';
 
@@ -97,7 +96,6 @@ export class ModalView extends
       // native props - events
       onModalShow,
       onModalDismiss,
-      onRequestResult,
       onModalBlur,
       onModalFocus,
       onModalDidDismiss,
@@ -154,7 +152,6 @@ export class ModalView extends
       modalBGBlurEffectStyle,
       onModalShow,
       onModalDismiss,
-      onRequestResult,
       onModalBlur,
       onModalFocus,
       onModalDidDismiss,
@@ -266,10 +263,6 @@ export class ModalView extends
   // Native Event Handlers
   // ---------------------
 
-  _handleOnRequestResult: OnRequestResultEvent = ({ nativeEvent }) => {
-    this.props.onRequestResult?.({ nativeEvent });
-  };
-
   _handleOnModalBlur: OnModalBlurEvent = (event) => {
     this.props.onModalBlur?.(event);
 
@@ -366,7 +359,6 @@ export class ModalView extends
         onModalFocus={this._handleOnModalFocus}
         onModalShow={this._handleOnModalShow}
         onModalDismiss={this._handleOnModalDismiss}
-        onRequestResult={this._handleOnRequestResult}
         onModalDidDismiss={this._handleOnModalDidDismiss}
         onModalWillDismiss={this._handleOnModalWillDismiss}
         onModalAttemptDismiss={this._handleOnModalAttemptDismiss}

@@ -59,12 +59,6 @@ class RNIModalView: UIView {
   // MARK: Properties: React Props - Events/Callbacks
   // ------------------------------------------------
   
-  // RN event callback for when a RNIModalViewManager "command"
-  // has been completed via dispatchViewManagerCommand from js.
-  // Used in js/rn-side for wrapping UIManager commands inside
-  // promises so they can be resolved/rejected.
-  @objc var onRequestResult: RCTDirectEventBlock?;
-  
   // RN event callbacks for whenever a modal is presented/dismissed
   // via functions or from swipe to dismiss gestures
   @objc var onModalShow   : RCTDirectEventBlock?;
@@ -462,15 +456,6 @@ extension RNIModalView {
       
       completion?(success, error);
     };
-  };
-  
-  public func requestModalInfo(
-    completion: CompletionHandler? = nil
-  ){
-    let params = self.createModalNativeEventDict();
-    
-    completion?(true, nil);
-    self.onRequestResult?(params);
   };
 };
 
