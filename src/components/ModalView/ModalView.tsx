@@ -1,5 +1,4 @@
 import React from 'react';
-import Proptypes from 'prop-types';
 
 import {
   findNodeHandle,
@@ -61,46 +60,6 @@ const hasScrollViewContext: boolean =
 // prettier-ignore
 export class ModalView extends
   React.PureComponent<ModalViewProps, ModalViewState>  {
-  // eslint-disable-next-line no-trailing-spaces
-  
-  // prettier-ignore
-  static proptypes = {
-    // Props: Events ---------------------
-    onRequestResult: Proptypes.func,
-    onModalBlur: Proptypes.func,
-    onModalFocus: Proptypes.func,
-    onModalShow: Proptypes.func,
-    onModalDismiss: Proptypes.func,
-    onModalDidDismiss: Proptypes.func,
-    onModalWillDismiss: Proptypes.func,
-    onModalAttemptDismiss: Proptypes.func,
-    // Props: Bool/Flags --------------------------
-    presentViaMount: Proptypes.bool,
-    isModalBGBlurred: Proptypes.bool,
-    autoCloseOnUnmount: Proptypes.bool,
-    enableSwipeGesture: Proptypes.bool,
-    hideNonVisibleModals: Proptypes.bool,
-    isModalBGTransparent: Proptypes.bool,
-    isModalInPresentation: Proptypes.bool,
-    setEnableSwipeGestureFromProps: Proptypes.bool,
-    setModalInPresentationFromProps: Proptypes.bool,
-    // Props: String ------------------------
-    modalID: Proptypes.string,
-    modalTransitionStyle: Proptypes.string,
-    modalPresentationStyle: Proptypes.string,
-    modalBGBlurEffectStyle: Proptypes.string,
-    // Props: Style
-    containerStyle: Proptypes.object,
-  };
-
-  static defaultProps = {
-    autoCloseOnUnmount: true,
-    enableSwipeGesture: true,
-    hideNonVisibleModals: false,
-    isModalInPresentation: false,
-    setEnableSwipeGestureFromProps: false,
-    setModalInPresentationFromProps: false,
-  };
 
   constructor(props) {
     super(props);
