@@ -489,7 +489,7 @@ extension RNIModalView {
       "modalLevelPrev": self.modalLevelPrev,
     ];
     
-    if let reactTag = self.modalID {
+    if let reactTag = self.reactTag {
       dict["reactTag"] = reactTag;
     };
     
