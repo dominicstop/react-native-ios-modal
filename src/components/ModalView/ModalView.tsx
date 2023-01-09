@@ -76,13 +76,104 @@ export class ModalView extends
   }
 
   componentWillUnmount() {
-    const { autoCloseOnUnmount } = this.props;
+    const { autoCloseOnUnmount } = this.getProps();
     const { visible } = this.state;
 
     if (autoCloseOnUnmount && visible) {
       this.setVisibility(false);
     }
   }
+
+  getProps = () => {
+    const {
+      // native props - flags
+      presentViaMount,
+      isModalBGBlurred,
+      enableSwipeGesture,
+      hideNonVisibleModals,
+      isModalBGTransparent,
+      isModalInPresentation,
+      allowModalForceDismiss,
+
+      // native props - string
+      modalID,
+      modalTransitionStyle,
+      modalBGBlurEffectStyle,
+      modalPresentationStyle,
+
+      // native props - events
+      onModalShow,
+      onModalDismiss,
+      onRequestResult,
+      onModalBlur,
+      onModalFocus,
+      onModalDidDismiss,
+      onModalWillDismiss,
+      onModalAttemptDismiss,
+
+      // component props
+      autoCloseOnUnmount,
+      setEnableSwipeGestureFromProps,
+      setModalInPresentationFromProps,
+      containerStyle,
+
+      children,
+      ...viewProps
+    } = this.props;
+
+    return ({
+      // A - Add Default Values
+      presentViaMount: (
+        presentViaMount ?? false
+      ),
+      isModalBGBlurred: (
+        isModalBGBlurred ?? false
+      ),
+      enableSwipeGesture: (
+        enableSwipeGesture ?? true
+      ),
+      hideNonVisibleModals: (
+        hideNonVisibleModals ?? false
+      ),
+      isModalBGTransparent: (
+        isModalBGTransparent ?? false
+      ),
+      modalTransitionStyle: (
+        modalTransitionStyle ?? 'coverVertical'
+      ),
+      modalPresentationStyle: (
+        modalPresentationStyle ?? 'automatic'
+      ),
+      autoCloseOnUnmount: (
+        autoCloseOnUnmount ?? true
+      ),
+      setEnableSwipeGestureFromProps: (
+        setEnableSwipeGestureFromProps ?? false
+      ),
+      setModalInPresentationFromProps: (
+        setModalInPresentationFromProps ?? false
+      ),
+
+      // B - Pass down...
+      modalID,
+      isModalInPresentation,
+      allowModalForceDismiss,
+      modalBGBlurEffectStyle,
+      onModalShow,
+      onModalDismiss,
+      onRequestResult,
+      onModalBlur,
+      onModalFocus,
+      onModalDidDismiss,
+      onModalWillDismiss,
+      onModalAttemptDismiss,
+      containerStyle,
+
+      // C - View-Related Props
+      children,
+      viewProps,
+    });
+  };
 
   getEmitterRef = () => {
     return this.emitter;
@@ -199,6 +290,8 @@ export class ModalView extends
   };
 
   _handleOnModalDismiss = (event) => {
+    const props = this.getProps();
+
     this.props.onModalDismiss?.(event);
     this.emitter.emit(ModalEventKeys.onModalDismiss, event);
 
@@ -206,8 +299,8 @@ export class ModalView extends
       visible: false,
       childProps: null,
       // reset state values from props
-      enableSwipeGesture: this.props.enableSwipeGesture,
-      isModalInPresentation: this.props.isModalInPresentation,
+      enableSwipeGesture: props.enableSwipeGesture,
+      isModalInPresentation: props.isModalInPresentation,
     });
   };
 
@@ -228,7 +321,7 @@ export class ModalView extends
   //#endregion
 
   _renderModal() {
-    const props = this.props;
+    const props = this.getProps();
     const state = this.state;
 
     const nativeProps = {
