@@ -43,6 +43,7 @@ export type RNIModalViewProps = ViewProps & {
   // Props - Events
   // --------------
 
+  // TODO: Rename - Add `will/did` prefix and deprecate prev. props
   onModalShow: OnModalShowEvent;
   onModalDismiss: OnModalDismissEvent;
   onRequestResult: OnRequestResultEvent;
