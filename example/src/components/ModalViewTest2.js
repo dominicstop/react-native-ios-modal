@@ -11,7 +11,10 @@ import { sharedStyles } from '../constants/SharedStyles';
 const availableBlurStylesCount = AvailableBlurEffectStyles?.length ?? 0;
 
 const TestModal = React.forwardRef((props, ref) => (
-  <ModalView ref={ref} {...props}>
+  <ModalView
+    ref={ref}
+    {...props}
+  >
     <React.Fragment>
       <View style={sharedStyles.titleContainer}>
         <Text style={sharedStyles.textEmoji}>
