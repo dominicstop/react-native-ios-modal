@@ -18,6 +18,7 @@ import { ModalContext } from '../../context/ModalContext';
 import { RNIModalView } from '../../native_components/RNIModalView';
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
+import type { ModalViewProps, ModalViewState } from './ModalViewTypes';
 
 //
 //
@@ -57,7 +58,12 @@ const hasScrollViewContext: boolean =
 //
 //
 
-export class ModalView extends React.PureComponent {
+// prettier-ignore
+export class ModalView extends
+  React.PureComponent<ModalViewProps, ModalViewState>  {
+  // eslint-disable-next-line no-trailing-spaces
+  
+  // prettier-ignore
   static proptypes = {
     // Props: Events ---------------------
     onRequestResult: Proptypes.func,
