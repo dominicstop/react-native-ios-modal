@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-import { ModalView, ModalEventKeys } from 'react-native-ios-modal';
+import { ModalView } from 'react-native-ios-modal';
 
 import { sharedStyles } from '../constants/SharedStyles';
 import { TestListItem } from './TestListItem';
@@ -40,31 +40,31 @@ export class ModalViewTest4 extends React.PureComponent {
   componentDidMount(){
     this.modalEmitter = this.modalRef.getEmitterRef();
 
-    this._handleOnModalBlur           = () => handleEvent(this, ModalEventKeys.onModalBlur          );
-    this._handleOnModalFocus          = () => handleEvent(this, ModalEventKeys.onModalFocus         );
-    this._handleOnModalShow           = () => handleEvent(this, ModalEventKeys.onModalShow          );
-    this._handleOnModalDismiss        = () => handleEvent(this, ModalEventKeys.onModalDismiss       );
-    this._handleOnModalDidDismiss     = () => handleEvent(this, ModalEventKeys.onModalDidDismiss    );
-    this._handleOnModalWillDismiss    = () => handleEvent(this, ModalEventKeys.onModalWillDismiss   );
-    this._handleOnModalAttemptDismiss = () => handleEvent(this, ModalEventKeys.onModalAttemptDismiss);
+    this._handleOnModalBlur           = () => handleEvent(this, 'onModalBlur'          );
+    this._handleOnModalFocus          = () => handleEvent(this, 'onModalFocus'         );
+    this._handleOnModalShow           = () => handleEvent(this, 'onModalShow'          );
+    this._handleOnModalDismiss        = () => handleEvent(this, 'onModalDismiss'       );
+    this._handleOnModalDidDismiss     = () => handleEvent(this, 'onModalDidDismiss'    );
+    this._handleOnModalWillDismiss    = () => handleEvent(this, 'onModalWillDismiss'   );
+    this._handleOnModalAttemptDismiss = () => handleEvent(this, 'onModalAttemptDismiss');
 
-    this.modalEmitter.addListener(ModalEventKeys.onModalBlur          , this._handleOnModalBlur          );
-    this.modalEmitter.addListener(ModalEventKeys.onModalFocus         , this._handleOnModalFocus         );
-    this.modalEmitter.addListener(ModalEventKeys.onModalShow          , this._handleOnModalShow          );
-    this.modalEmitter.addListener(ModalEventKeys.onModalDismiss       , this._handleOnModalDismiss       );
-    this.modalEmitter.addListener(ModalEventKeys.onModalDidDismiss    , this._handleOnModalDidDismiss    );
-    this.modalEmitter.addListener(ModalEventKeys.onModalWillDismiss   , this._handleOnModalWillDismiss   );
-    this.modalEmitter.addListener(ModalEventKeys.onModalAttemptDismiss, this._handleOnModalAttemptDismiss);
+    this.modalEmitter.addListener('onModalBlur'          , this._handleOnModalBlur          );
+    this.modalEmitter.addListener('onModalFocus'         , this._handleOnModalFocus         );
+    this.modalEmitter.addListener('onModalShow'          , this._handleOnModalShow          );
+    this.modalEmitter.addListener('onModalDismiss'       , this._handleOnModalDismiss       );
+    this.modalEmitter.addListener('onModalDidDismiss'    , this._handleOnModalDidDismiss    );
+    this.modalEmitter.addListener('onModalWillDismiss'   , this._handleOnModalWillDismiss   );
+    this.modalEmitter.addListener('onModalAttemptDismiss', this._handleOnModalAttemptDismiss);
   };
 
   componentWillUnmount(){
-    this.modalEmitter.removeListener(ModalEventKeys.onModalBlur          , this._handleOnModalBlur          );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalFocus         , this._handleOnModalFocus         );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalShow          , this._handleOnModalShow          );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalDismiss       , this._handleOnModalDismiss       );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalDidDismiss    , this._handleOnModalDidDismiss    );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalWillDismiss   , this._handleOnModalWillDismiss   );
-    this.modalEmitter.removeListener(ModalEventKeys.onModalAttemptDismiss, this._handleOnModalAttemptDismiss);
+    this.modalEmitter.removeListener('onModalBlur'          , this._handleOnModalBlur          );
+    this.modalEmitter.removeListener('onModalFocus'         , this._handleOnModalFocus         );
+    this.modalEmitter.removeListener('onModalShow'          , this._handleOnModalShow          );
+    this.modalEmitter.removeListener('onModalDismiss'       , this._handleOnModalDismiss       );
+    this.modalEmitter.removeListener('onModalDidDismiss'    , this._handleOnModalDidDismiss    );
+    this.modalEmitter.removeListener('onModalWillDismiss'   , this._handleOnModalWillDismiss   );
+    this.modalEmitter.removeListener('onModalAttemptDismiss', this._handleOnModalAttemptDismiss);
 
     this.modalEmitter = null;
   };
