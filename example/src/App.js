@@ -6,7 +6,6 @@ import { ModalViewTest1 } from './components/ModalViewTest1';
 import { ModalViewTest2 } from './components/ModalViewTest2';
 import { ModalViewTest3 } from './components/ModalViewTest3';
 import { ModalViewTest4 } from './components/ModalViewTest4';
-import { ModalViewTest5 } from './components/ModalViewTest5';
 import { ModalViewTest6 } from './components/ModalViewTest6';
 import { ModalViewTest7 } from './components/ModalViewTest7';
 import { ModalViewTest8 } from './components/ModalViewTest8';
@@ -21,7 +20,6 @@ export default function App() {
         <ModalViewTest2/>
         <ModalViewTest3/>
         <ModalViewTest4/>
-        <ModalViewTest5/>
         <ModalViewTest6/>
         <ModalViewTest7/>
         <ModalViewTest8/>
