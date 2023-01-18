@@ -1,4 +1,13 @@
-export const UIBlurEffectStyles = {
+import type { UIBlurEffectStyles as TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
+
+import type {
+  UIModalPresentationStyle as TUIModalPresentationStyle,
+  UIModalTransitionStyle as TUIModalTransitionStyle,
+} from 'src/types/UIModalTypes';
+
+export const UIBlurEffectStyles: {
+  [T in TUIBlurEffectStyles]: T;
+} = {
   // Adaptable Styles
   systemUltraThinMaterial: 'systemUltraThinMaterial',
   systemThinMaterial: 'systemThinMaterial',
@@ -26,31 +35,38 @@ export const UIBlurEffectStyles = {
   light: 'light',
   extraLight: 'extraLight',
   dark: 'dark',
+  extraDark: 'extraDark',
 };
 
-export const UIModalPresentationStyles = {
+export const UIModalPresentationStyles: {
+  [T in TUIModalPresentationStyle]: T;
+} = {
   automatic: 'automatic',
   fullScreen: 'fullScreen',
   pageSheet: 'pageSheet',
   formSheet: 'formSheet',
   overFullScreen: 'overFullScreen',
 
-  /* NOT SUPPORTED
+  // NOT SUPPORTED
+  // -------------
+
   none: 'none',
   currentContext: 'currentContext',
   custom: 'custom',
   overCurrentContext: 'overCurrentContext',
   popover: 'popover',
   blurOverFullScreen: 'blurOverFullScreen',
-  */
 };
 
-export const UIModalTransitionStyles = {
+export const UIModalTransitionStyles: {
+  [T in TUIModalTransitionStyle]: T;
+} = {
   coverVertical: 'coverVertical',
   crossDissolve: 'crossDissolve',
   flipHorizontal: 'flipHorizontal',
 
-  /* NOT SUPPORTED
+  // NOT SUPPORTED
+  // -------------
+
   partialCurl: 'partialCurl',
-  */
 };
