@@ -29,16 +29,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
 
-    // temporarily disable strict
-    "strict": false,
-    "alwaysStrict": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "strictPropertyInitialization": false,
-    "noImplicitUseStrict": false,
+    "strict": true,
 
+    // temporarily disable strict
     // temporary until migration is finished
     "allowJs": true,
 
