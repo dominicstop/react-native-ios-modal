@@ -21,8 +21,8 @@ export const RNIModalView: HostComponent<RNIModalViewProps> = Platform.select({
   default: () => View,
 })();
 
-export const RNIModalViewConstants = UIManager[nativeViewName]
-  ?.Constants as RNIModalViewConstantMap;
+export const RNIModalViewConstants: Partial<RNIModalViewConstantMap> =
+  (UIManager as Record<string, any>)[nativeViewName]?.Constants ?? {};
 
 export const AvailableBlurEffectStyles =
   RNIModalViewConstants?.availableBlurEffectStyles ?? [];
