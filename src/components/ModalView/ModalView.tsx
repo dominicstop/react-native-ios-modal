@@ -444,7 +444,8 @@ export class ModalView extends
           // pass down function to get modal refs
           getModalRef: this._handleGetModalRef,
           getEmitterRef: this.getEmitterRef,
-          // pass ref to modal functions -------------------------
+
+          // pass ref to modal functions
           setVisibility: this.setVisibility,
           setEnableSwipeGesture: this.setEnableSwipeGesture,
           setIsModalInPresentation: this.setIsModalInPresentation,
