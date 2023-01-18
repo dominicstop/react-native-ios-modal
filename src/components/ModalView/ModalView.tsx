@@ -57,13 +57,15 @@ export class ModalView extends
   constructor(props: ModalViewProps) {
     super(props);
 
+    const defaultProps = this.getProps(props);
+
     this.emitter = new TSEventEmitter();
 
     this.state = {
       isModalVisible: false,
       childProps: null,
-      enableSwipeGesture: props.enableSwipeGesture,
-      isModalInPresentation: props.isModalInPresentation,
+      enableSwipeGesture: defaultProps.enableSwipeGesture,
+      isModalInPresentation: defaultProps.isModalInPresentation,
     };
   }
 
@@ -76,7 +78,7 @@ export class ModalView extends
     }
   }
 
-  private getProps = () => {
+  private getProps = (propOverride: ModalViewProps | null = null) => {
     const {
       // native props - flags
       presentViaMount,
@@ -110,7 +112,7 @@ export class ModalView extends
 
       children,
       ...viewProps
-    } = this.props;
+    } = propOverride ?? this.props;
 
     return ({
       // A - Add Default Values
@@ -144,10 +146,12 @@ export class ModalView extends
       setModalInPresentationFromProps: (
         setModalInPresentationFromProps ?? false
       ),
+      isModalInPresentation: (
+        isModalInPresentation ?? false
+      ),
 
       // B - Pass down...
       modalID,
-      isModalInPresentation,
       allowModalForceDismiss,
       modalBGBlurEffectStyle,
       onModalShow,
@@ -216,7 +220,7 @@ export class ModalView extends
     try {
       // request modal to open/close
       await RNIModalViewModule.setModalVisibility(
-        findNodeHandle(this.nativeRefModalView),
+        findNodeHandle(this.nativeRefModalView)!,
         nextVisible
       );
 
@@ -239,7 +243,7 @@ export class ModalView extends
     try {
       // request modal to send modal info
       return await RNIModalViewModule.requestModalInfo(
-        findNodeHandle(this.nativeRefModalView)
+        findNodeHandle(this.nativeRefModalView)!
       );
     } catch (error) {
       console.log('ModalView, requestModalInfo failed:');
@@ -377,7 +381,7 @@ export class ModalView extends
   };
 
   _renderModal() {
-    const props = this.getProps();
+    const { viewProps, ...props } = this.getProps();
     const state = this.state;
 
     const overrideProps = {
@@ -396,7 +400,7 @@ export class ModalView extends
       <RNIModalView
         {...props}
         ref={(r) => {
-          this.nativeRefModalView = r;
+          this.nativeRefModalView = r!;
         }}
         style={styles.rootContainer}
         onStartShouldSetResponder={this._shouldSetResponder}
@@ -408,7 +412,7 @@ export class ModalView extends
         onModalWillDismiss={this._handleOnModalWillDismiss}
         onModalAttemptDismiss={this._handleOnModalAttemptDismiss}
         {...overrideProps}
-        {...props.viewProps}
+        {...viewProps}
       >
         {shouldMountModalContent && (
           <View

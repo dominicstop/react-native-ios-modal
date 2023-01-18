@@ -19,25 +19,25 @@ import type {
   OnModalAttemptDismissEvent,
 } from './RNIModalViewEvents';
 
-export type RNIModalViewProps = ViewProps & {
+export type RNIModalViewBaseProps = {
   // Props - Flags
   // --------------
 
-  presentViaMount: boolean;
-  isModalBGBlurred: boolean;
-  enableSwipeGesture: boolean;
-  hideNonVisibleModals: boolean;
-  isModalBGTransparent: boolean;
-  isModalInPresentation: boolean;
-  allowModalForceDismiss: boolean;
+  presentViaMount?: boolean;
+  isModalBGBlurred?: boolean;
+  enableSwipeGesture?: boolean;
+  hideNonVisibleModals?: boolean;
+  isModalBGTransparent?: boolean;
+  isModalInPresentation?: boolean;
+  allowModalForceDismiss?: boolean;
 
   // Props - Strings
   // --------------
 
-  modalID: string;
-  modalTransitionStyle: UIModalTransitionStyle;
-  modalBGBlurEffectStyle: UIBlurEffectStyles;
-  modalPresentationStyle: UIModalPresentationStyle;
+  modalID?: string;
+  modalTransitionStyle?: UIModalTransitionStyle;
+  modalBGBlurEffectStyle?: UIBlurEffectStyles;
+  modalPresentationStyle?: UIModalPresentationStyle;
 
   // Props - Events
   // --------------
@@ -53,6 +53,8 @@ export type RNIModalViewProps = ViewProps & {
   onModalWillDismiss: OnModalWillDismissEvent;
   onModalAttemptDismiss: OnModalAttemptDismissEvent;
 };
+
+export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;
 
 export type RNIModalViewConstantMap = ViewManagerConstantMap<{
   availableBlurEffectStyles: UIBlurEffectStyles[];
