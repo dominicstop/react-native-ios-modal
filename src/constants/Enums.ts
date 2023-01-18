@@ -54,13 +54,3 @@ export const UIModalTransitionStyles = {
   partialCurl: 'partialCurl',
   */
 };
-
-export const ModalEventKeys = {
-  onModalBlur: 'onModalBlur',
-  onModalFocus: 'onModalFocus',
-  onModalShow: 'onModalShow',
-  onModalDismiss: 'onModalDismiss',
-  onModalDidDismiss: 'onModalDidDismiss',
-  onModalWillDismiss: 'onModalWillDismiss',
-  onModalAttemptDismiss: 'onModalAttemptDismiss',
-};
