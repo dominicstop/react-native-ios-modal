@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import type { ExampleProps } from './SharedExampleTypes';
 
-import { ExampleButtonCard } from '../components/ExampleButtonCard';
+import { ExampleCard } from '../components/ExampleCard';
 
 
 export function Example01(props: ExampleProps) {
   return (
-    <ExampleButtonCard
+    <ExampleCard
       style={props.style}
       index={props.index}
       title={'Example01'}
@@ -18,6 +18,6 @@ export function Example01(props: ExampleProps) {
       ]}
     >
       {/** TBA */}
-    </ExampleButtonCard>
+    </ExampleCard>
   );
 };
