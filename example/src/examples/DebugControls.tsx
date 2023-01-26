@@ -3,14 +3,14 @@ import * as React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import type { ContextMenuExampleProps } from './SharedExampleTypes';
+import type { ExampleProps } from './SharedExampleTypes';
 
 import { ExampleCard } from '../components/ExampleCard';
 import { CardButton } from '../components/Card/CardButton';
 import { SHARED_ENV } from '../constants/SharedEnv';
 
 
-export function DebugControls(props: ContextMenuExampleProps) {
+export function DebugControls(props: ExampleProps) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const navigation = SHARED_ENV.enableReactNavigation && useNavigation();
 

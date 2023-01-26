@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 
-import type { ContextMenuExampleProps } from './SharedExampleTypes';
+import type { ExampleProps } from './SharedExampleTypes';
 
 import { ExampleButtonCard } from '../components/ExampleButtonCard';
 import { ContextMenuCardButton } from '../components/ContextMenuCardButton';

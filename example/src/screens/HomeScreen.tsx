@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, FlatList, ListRenderItem } from 'react-native';
 
-import type { ContextMenuExampleProps } from '../examples/SharedExampleTypes';
 
+import type { ExampleProps } from '../examples/SharedExampleTypes';
 
 
 import { DebugControls } from '../examples/DebugControls';
@@ -11,7 +11,7 @@ import { SHARED_ENV } from '../constants/SharedEnv';
 
 type ExampleListItem = {
   id: number;
-  component: React.FC<ContextMenuExampleProps>;
+  component: React.FC<ExampleProps>;
 };
 
 const EXAMPLE_COMPONENTS = [
