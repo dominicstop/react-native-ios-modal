@@ -9,7 +9,7 @@ import { ContextMenuButtonCard } from '../components/ContextMenuButtonCard';
 import { ContextMenuCardButton } from '../components/ContextMenuCardButton';
 
 
-export function ContextMenuButtonExample01(props: ContextMenuExampleProps) {
+export function Example01(props: ContextMenuExampleProps) {
   return (
     <ContextMenuButtonCard
       style={props.style}
