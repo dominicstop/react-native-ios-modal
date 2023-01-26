@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { ExampleProps } from './SharedExampleTypes';
 
 import { ExampleCard } from '../components/ExampleCard';
-
+import { CardButton } from '../components/Card';
 
 export function Example01(props: ExampleProps) {
   return (
@@ -12,12 +12,14 @@ export function Example01(props: ExampleProps) {
       index={props.index}
       title={'Example01'}
       subtitle={'TBA'}
-      description={[
-        `TBA`,
-        `TBA`
-      ]}
+      description={['TBA', 'TBA']}
     >
-      {/** TBA */}
+      <CardButton
+        title={'Show Modal'}
+        onPress={() => {
+          // TBA
+        }}
+      />
     </ExampleCard>
   );
-};
+}

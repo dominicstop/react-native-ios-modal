@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, GestureResponderEvent, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  GestureResponderEvent,
+  ViewStyle,
+} from 'react-native';
 
 import * as Colors from '../../constants/Colors';
-
 
 /**
  * ```
@@ -11,13 +16,12 @@ import * as Colors from '../../constants/Colors';
  * │ Subtitle                    │
  * └─────────────────────────────┘
  * ```
- */         
+ */
 export function CardButton(props: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   onPress: (event: GestureResponderEvent) => void;
 }) {
-
   // prettier-ignore
   const hasSubtitle = (
     props.subtitle != null ||
@@ -45,7 +49,7 @@ export function CardButton(props: {
       </React.Fragment>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   cardButtonContainer: {
@@ -58,10 +62,10 @@ const styles = StyleSheet.create({
   cardButtonTitleText: {
     color: 'white',
     fontSize: 15,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   cardButtonSubtitleText: {
     color: 'white',
-    fontWeight: '400'
+    fontWeight: '400',
   },
 });

@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
-import * as Colors  from '../../constants/Colors';
-
+import * as Colors from '../../constants/Colors';
 
 export class CardRowTextInput extends React.PureComponent<{
-  placeholder?: string
+  placeholder?: string;
 }> {
-  
   state = {
     textInput: '',
   };
@@ -17,13 +15,13 @@ export class CardRowTextInput extends React.PureComponent<{
   };
 
   _handleOnChangeText = (text: string) => {
-    this.setState({textInput: text});
+    this.setState({ textInput: text });
   };
 
-  render(){
+  render() {
     const props = this.props;
 
-    return(
+    return (
       <TextInput
         style={styles.cardRowTextInput}
         onChangeText={this._handleOnChangeText}
@@ -31,8 +29,8 @@ export class CardRowTextInput extends React.PureComponent<{
         placeholderTextColor={Colors.INDIGO[300]}
       />
     );
-  };
-};
+  }
+}
 
 const styles = StyleSheet.create({
   cardRowTextInput: {

@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 export const BLACK = {
   100: '#F5F5F5',
   200: '#EEEEEE',

@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
-import * as Colors  from '../../constants/Colors';
-
+import * as Colors from '../../constants/Colors';
 
 export function CardRowStepper(props: {
   title: string;
@@ -10,7 +14,7 @@ export function CardRowStepper(props: {
   value: number;
   stepperAmount: number;
   onValueChange: (value: number) => void;
-}){
+}) {
   return (
     <View style={styles.cardRowStepperContainer}>
       <View style={styles.cardRowStepperLabelContainer}>
@@ -18,15 +22,19 @@ export function CardRowStepper(props: {
           {props.title ?? 'Title'}
         </Text>
         <Text style={styles.cardRowStepperSubtitleText}>
-          {props.subtitle ?? `Current value: ${props.value ?? 0}`}
+          {props.subtitle ??
+            `Current value: ${props.value ?? 0}`}
         </Text>
       </View>
       <View style={styles.cardRowStepperButtonsContainer}>
-        <TouchableOpacity 
-          style={[styles.cardRowStepperButton, styles.cardRowStepperButtonLeft]}
+        <TouchableOpacity
+          style={[
+            styles.cardRowStepperButton,
+            styles.cardRowStepperButtonLeft,
+          ]}
           onPress={() => {
             props.onValueChange(
-              (props.value - props.stepperAmount)
+              props.value - props.stepperAmount
             );
           }}
         >
@@ -34,11 +42,14 @@ export function CardRowStepper(props: {
             {'–'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.cardRowStepperButton, styles.cardRowStepperButtonRight]}
+        <TouchableOpacity
+          style={[
+            styles.cardRowStepperButton,
+            styles.cardRowStepperButtonRight,
+          ]}
           onPress={() => {
             props.onValueChange(
-              (props.value + props.stepperAmount)
+              props.value + props.stepperAmount
             );
           }}
         >
@@ -49,7 +60,7 @@ export function CardRowStepper(props: {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   cardRowStepperContainer: {

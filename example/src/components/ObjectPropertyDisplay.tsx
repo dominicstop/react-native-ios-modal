@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ViewStyle,
+} from 'react-native';
 
 import * as Colors from '../constants/Colors';
 
@@ -12,34 +17,37 @@ import * as Colors from '../constants/Colors';
  * │  Property           'Value' │
  * └─────────────────────────────┘
  * ```
- */                               
-export function ObjectPropertyDisplay<T extends Object>(props: {
-  object?: T,
-  style?: ViewStyle,
-}){
-
+ */
+export function ObjectPropertyDisplay<
+  T extends Object
+>(props: { object?: T; style?: ViewStyle }) {
   const hasObject = props.object != null;
 
-  const objectKeys = (hasObject
-    ? Object.keys(props.object)
-    : []
+  const objectKeys = (
+    hasObject ? Object.keys(props.object) : []
   ) as Array<keyof object>;
 
-  return hasObject? (
-    <View style={[
-      styles.rootContainerBase, 
-      styles.rootContainerWhenHasObject,
-      props.style
-    ]}>
+  return hasObject ? (
+    <View
+      style={[
+        styles.rootContainerBase,
+        styles.rootContainerWhenHasObject,
+        props.style,
+      ]}
+    >
       {objectKeys.map((objKey, index) => {
         const value = props.object[objKey];
-        const isValueObj = (typeof value === 'object' && value !== null);
+        const isValueObj =
+          typeof value === 'object' && value !== null;
 
-        return isValueObj?(
+        return isValueObj ? (
           <View key={`container-${objKey}-${index}`}>
-            <Text 
+            <Text
               key={`label-${objKey}-${index}`}
-              style={[styles.propertyLabelText, styles.propertyLabelObjectText]}
+              style={[
+                styles.propertyLabelText,
+                styles.propertyLabelObjectText,
+              ]}
             >
               {`${objKey}: `}
             </Text>
@@ -49,39 +57,43 @@ export function ObjectPropertyDisplay<T extends Object>(props: {
               style={styles.objectPropertyDisplay}
             />
           </View>
-        ):(
-          <View 
+        ) : (
+          <View
             key={`container-${objKey}-${index}`}
             style={styles.rowContainer}
           >
-            <Text 
+            <Text
               key={`label-${objKey}-${index}`}
               style={styles.propertyLabelText}
             >
               {`${objKey}: `}
             </Text>
-            <Text 
+            <Text
               key={`value-${objKey}-${index}`}
               style={styles.propertyValueText}
             >
-              {isValueObj? `...`: `'${props.object[objKey]}'`}
+              {isValueObj
+                ? '...'
+                : `'${props.object[objKey]}'`}
             </Text>
           </View>
         );
       })}
     </View>
-  ):(
-    <View style={[
-      styles.rootContainerBase, 
-      styles.rootContainerWhenEmptyObject, 
-      props.style
-    ]}>
+  ) : (
+    <View
+      style={[
+        styles.rootContainerBase,
+        styles.rootContainerWhenEmptyObject,
+        props.style,
+      ]}
+    >
       <Text style={styles.emptyObjectText}>
         {'Nothing to show'}
       </Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   rootContainerBase: {
@@ -125,6 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emptyObjectText: {
-    opacity: 0.75
+    opacity: 0.75,
   },
 });

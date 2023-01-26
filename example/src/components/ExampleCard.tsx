@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ViewStyle,
+} from 'react-native';
 
 import * as Colors from '../constants/Colors';
 
 export type ColorConfig = {
-  headerBGColorActive  : string;
+  headerBGColorActive: string;
   headerBGColorInactive: string;
 
-  bodyBGColorActive  : string;
+  bodyBGColorActive: string;
   bodyBGColorInactive: string;
 
   bodyDescriptionLabelColor: string;
@@ -26,18 +31,18 @@ export type ExampleCardProps = {
 };
 
 const defaultColorConfig: ColorConfig = {
-  headerBGColorActive  : Colors.PURPLE.A700,
-  headerBGColorInactive: Colors.BLUE  .A700,
+  headerBGColorActive: Colors.PURPLE.A700,
+  headerBGColorInactive: Colors.BLUE.A700,
 
-  bodyBGColorActive  : Colors.PURPLE[100],
-  bodyBGColorInactive: Colors.BLUE  [100],
+  bodyBGColorActive: Colors.PURPLE[100],
+  bodyBGColorInactive: Colors.BLUE[100],
 
   bodyDescriptionLabelColor: Colors.BLUE[1100],
 };
 
 export function ExampleCard(props: ExampleCardProps) {
-
-  const colorConfig = props.colorConfig ?? defaultColorConfig;
+  const colorConfig =
+    props.colorConfig ?? defaultColorConfig;
 
   const titleContainerStyle = {
     backgroundColor: colorConfig.headerBGColorInactive,
@@ -52,14 +57,19 @@ export function ExampleCard(props: ExampleCardProps) {
   };
 
   const descriptionMain = props.description?.[0];
-  const descriptionSub  = props.description?.slice(1);
+  const descriptionSub = props.description?.slice(1);
 
   return (
     <View style={[styles.rootContainer, props.style]}>
-      <View style={[styles.headerContainer, titleContainerStyle]}>
+      <View
+        style={[
+          styles.headerContainer,
+          titleContainerStyle,
+        ]}
+      >
         <Text style={styles.headerTitleIndexText}>
-            {`${props.index ?? 0}. `}
-          </Text>
+          {`${props.index ?? 0}. `}
+        </Text>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitleText}>
             {props.title ?? 'N/A'}
@@ -71,24 +81,34 @@ export function ExampleCard(props: ExampleCardProps) {
           )}
         </View>
       </View>
-      <View style={[styles.bodyContainer, bodyContainerStyle]}>
+      <View
+        style={[styles.bodyContainer, bodyContainerStyle]}
+      >
         {descriptionMain && (
           <Text style={styles.bodyDescriptionText}>
-            <Text style={[styles.bodyDescriptionLabelText, bodyDescriptionLabelTextStyle]}>
+            <Text
+              style={[
+                styles.bodyDescriptionLabelText,
+                bodyDescriptionLabelTextStyle,
+              ]}
+            >
               {'Description: '}
             </Text>
             {descriptionMain}
           </Text>
         )}
         {descriptionSub?.map((description, index) => (
-          <Text 
+          <Text
             key={`desc-${index}`}
-            style={[styles.bodyDescriptionText, styles.bodyDescriptionSubText]}
+            style={[
+              styles.bodyDescriptionText,
+              styles.bodyDescriptionSubText,
+            ]}
           >
             {description}
           </Text>
         ))}
-        {(React.Children.count(props.children) > 0) && (
+        {React.Children.count(props.children) > 0 && (
           <View style={props.extraContentContainerStyle}>
             {props.children}
           </View>
@@ -96,7 +116,7 @@ export function ExampleCard(props: ExampleCardProps) {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -135,7 +155,7 @@ const styles = StyleSheet.create({
   },
   bodyDescriptionText: {
     fontWeight: '300',
-    color: 'rgba(0,0,0,0.75)'
+    color: 'rgba(0,0,0,0.75)',
   },
   bodyDescriptionLabelText: {
     fontWeight: 'bold',

@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import * as Colors  from '../../constants/Colors';
-
+import * as Colors from '../../constants/Colors';
 
 /**
  * ```
- * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+ * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
  *   Label              Value │
- * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+ * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
  * ```
- */                            
+ */
 export function CardRowLabelDisplay(props: {
   label?: string;
   value?: string | number;
-}){
+}) {
   return (
     <View style={styles.cardRowLabelDisplayContainer}>
       <Text style={styles.cardRowLabelDisplayLabelText}>
@@ -25,7 +24,7 @@ export function CardRowLabelDisplay(props: {
       </Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   cardRowLabelDisplayContainer: {

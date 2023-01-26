@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, FlatList, ListRenderItem } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  ListRenderItem,
+} from 'react-native';
 
 import type { ExampleProps } from '../examples/SharedExampleTypes';
 
@@ -8,47 +13,51 @@ import { Example01 } from '../examples/Example01';
 import { DebugControls } from '../examples/DebugControls';
 import { SHARED_ENV } from '../constants/SharedEnv';
 
-
 type ExampleListItem = {
   id: number;
   component: React.FC<ExampleProps>;
 };
 
-type ExampleComponentItem = 
-  (props: ExampleProps) => JSX.Element;
+type ExampleComponentItem = (
+  props: ExampleProps
+) => JSX.Element;
 
-const EXAMPLE_COMPONENTS: Array<ExampleComponentItem | false> = [
+const EXAMPLE_COMPONENTS: Array<
+  ExampleComponentItem | false
+> = [
   Example01,
   SHARED_ENV.enableReactNavigation && DebugControls,
 ];
 
-const EXAMPLE_ITEMS = (EXAMPLE_COMPONENTS
-  .filter((item): item is ExampleComponentItem => item != null)
-  .map((item, index) => ({
-    id: index + 1,
-    component: item
-  }))
-);
+const EXAMPLE_ITEMS = EXAMPLE_COMPONENTS.filter(
+  (item): item is ExampleComponentItem => item != null
+).map((item, index) => ({
+  id: index + 1,
+  component: item,
+}));
 
 export function HomeScreen() {
-  const renderItem: ListRenderItem<ExampleListItem>  = ({ item })  => (
+  const renderItem: ListRenderItem<ExampleListItem> = ({
+    item,
+  }) =>
     React.createElement(item.component, {
       index: item.id,
-      style: styles.exampleListItem
-    })
-  );
+      style: styles.exampleListItem,
+    });
 
   return (
     <SafeAreaView>
       <FlatList
-        contentContainerStyle={styles.scrollContentContainer}
+        contentContainerStyle={
+          styles.scrollContentContainer
+        }
         data={EXAMPLE_ITEMS}
         renderItem={renderItem}
         keyExtractor={(item) => `item-${item.id}`}
       />
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   scrollContentContainer: {

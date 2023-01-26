@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import * as Colors  from '../../constants/Colors';
+import * as Colors from '../../constants/Colors';
 
+// prettier-ignore
 /**
  * ```
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
- *              .─────────────.   
+ * │            .─────────────.  │
  * │ Title     (  Pill  Title  ) │
- *              `─────────────'   
+ * │            `─────────────'  │
  * │ Subtitle...                 │
- *  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+ * └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
  * ```
- */                           
+ */
 export function CardTitle(props: {
   extraMarginTop?: number;
   //
@@ -24,7 +25,7 @@ export function CardTitle(props: {
   const hasTitle = (props.title != null);
 
   const cardPillWrapper = {
-    marginLeft: (hasTitle? 10 : 0)
+    marginLeft: (hasTitle ? 10 : 0),
   };
 
   return (
@@ -36,7 +37,7 @@ export function CardTitle(props: {
         {props.pillTitle && (
           <View style={[styles.cardPillWrapper, cardPillWrapper]}>
             <View style={styles.cardPillContainer}>
-              <Text 
+              <Text
                 style={styles.cardPillTitleText}
                 numberOfLines={1}
               >
@@ -53,7 +54,7 @@ export function CardTitle(props: {
       )}
     </React.Fragment>
   );
-};
+}
 
 const styles = StyleSheet.create({
   cardTitleContainer: {
@@ -83,6 +84,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
     fontWeight: '300',
     fontSize: 14,
-    color: 'rgba(0,0,0,0.5)'
+    color: 'rgba(0,0,0,0.5)',
   },
 });

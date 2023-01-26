@@ -1,9 +1,14 @@
-
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList, ListRenderItem } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  ListRenderItem,
+} from 'react-native';
 
 import * as Colors from '../../constants/Colors';
-
 
 type CardRowColorPickerState = {
   selectedItem?: string;
@@ -31,72 +36,85 @@ const PALLETES = [
   Colors.GREY,
 ];
 
-const BASE_COLORS = PALLETES.reduce((acc: string[][], curr) => {
-  if('A700' in curr) acc[0].push(curr.A700);
+const BASE_COLORS = PALLETES.reduce(
+  (acc: string[][], curr) => {
+    if ('A700' in curr) {
+      acc[0].push(curr.A700);
+    }
 
-  acc[1].push(curr['900']);
-  acc[2].push(curr['600']);
-  acc[3].push(curr['300']);
+    acc[1].push(curr['900']);
+    acc[2].push(curr['600']);
+    acc[3].push(curr['300']);
 
-  return acc;
-}, [[], [], [], []]);
+    return acc;
+  },
+  [[], [], [], []]
+);
 
 const DEFAULT_COLORS = [
-  'black', 'white', ...BASE_COLORS.flat(),
+  'black',
+  'white',
+  ...BASE_COLORS.flat(),
 ];
 
-export class CardRowColorPicker extends React.Component<CardRowColorPickerProps, CardRowColorPickerState> {
-
-  constructor(props){
+export class CardRowColorPicker extends React.Component<
+  CardRowColorPickerProps,
+  CardRowColorPickerState
+> {
+  constructor(props) {
     super(props);
 
     this.state = {
       selectedItem: undefined,
     };
-  };
-  
-  _listRenderItem: ListRenderItem<string> = ({item}) => {
+  }
+
+  _listRenderItem: ListRenderItem<string> = ({ item }) => {
     const props = this.props;
     const state = this.state;
 
-    const isSelected = (item === state.selectedItem);
+    const isSelected = item === state.selectedItem;
 
-    return(
-      <TouchableOpacity 
+    return (
+      <TouchableOpacity
         style={[
-          styles.listItem, 
+          styles.listItem,
           isSelected && styles.listItemSelected,
-          { backgroundColor: item }
+          { backgroundColor: item },
         ]}
         onPress={() => {
           // clear if already selected
-          const selectedItem = isSelected? undefined : item;
+          const selectedItem = isSelected
+            ? undefined
+            : item;
 
-          this.setState({selectedItem});
+          this.setState({ selectedItem });
           props.onSelectItem?.(selectedItem);
         }}
       />
     );
   };
 
-  render(){
+  render() {
     const state = this.state;
 
     const hasSelection = state.selectedItem != null;
 
-    return(
+    return (
       <View style={styles.rootContainer}>
         <View style={styles.selectedColorContainer}>
           <Text style={styles.selectedColorLabel}>
             {'Selected Color:'}
           </Text>
-          {hasSelection? (
-            <View style={[
-              styles.listItem,
-              styles.selectedColorValueContainer,
-              { backgroundColor: state.selectedItem }
-            ]}/>
-          ):(
+          {hasSelection ? (
+            <View
+              style={[
+                styles.listItem,
+                styles.selectedColorValueContainer,
+                { backgroundColor: state.selectedItem },
+              ]}
+            />
+          ) : (
             <Text style={styles.selectedColorValue}>
               {'N/A'}
             </Text>
@@ -106,14 +124,14 @@ export class CardRowColorPicker extends React.Component<CardRowColorPickerProps,
           style={styles.list}
           data={DEFAULT_COLORS}
           renderItem={this._listRenderItem}
-          scrollIndicatorInsets={{left: 10, right: 10}}
+          scrollIndicatorInsets={{ left: 10, right: 10 }}
           keyExtractor={(item) => item}
           horizontal={true}
         />
       </View>
     );
-  };
-};
+  }
+}
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -130,7 +148,7 @@ const styles = StyleSheet.create({
   },
   selectedColorValue: {
     fontSize: 16,
-    color: 'rgba(0,0,0,0.3)'
+    color: 'rgba(0,0,0,0.3)',
   },
   list: {
     marginTop: 10,
@@ -143,7 +161,7 @@ const styles = StyleSheet.create({
     height: 25,
     minWidth: 25,
     backgroundColor: 'white',
-    borderRadius: 25/2,
+    borderRadius: 25 / 2,
     marginRight: 10,
   },
   listItemSelected: {
@@ -151,6 +169,6 @@ const styles = StyleSheet.create({
   },
   selectedColorValueContainer: {
     borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.75)'
+    borderColor: 'rgba(255,255,255,0.75)',
   },
 });

@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -9,10 +8,10 @@ import { ExampleCard } from '../components/ExampleCard';
 import { CardButton } from '../components/Card/CardButton';
 import { SHARED_ENV } from '../constants/SharedEnv';
 
-
 export function DebugControls(props: ExampleProps) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const navigation = SHARED_ENV.enableReactNavigation && useNavigation();
+  const navigation =
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    SHARED_ENV.enableReactNavigation && useNavigation();
 
   return (
     <ExampleCard
@@ -55,4 +54,4 @@ export function DebugControls(props: ExampleProps) {
       />
     </ExampleCard>
   );
-};
+}

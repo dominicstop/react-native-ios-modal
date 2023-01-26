@@ -1,24 +1,28 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Switch } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Switch,
+} from 'react-native';
 
-import * as Colors  from '../../constants/Colors';
-
+import * as Colors from '../../constants/Colors';
 
 /**
  * ```
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
- *   Title               ┌──┬─┐   
+ *   Title               ┌──┬─┐
  * │ Subtitle            └──┴─┘  │
- *  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+ *  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
  * ```
- */                               
+ */
 export function CardRowSwitch(props: {
   title: string;
   subtitle?: string;
   value: boolean;
   onValueChange: (value: boolean) => void;
-}){
-  return(
+}) {
+  return (
     <View style={styles.cardRowSwitchContainer}>
       <View style={styles.cardRowSwitchLabelContainer}>
         <Text style={styles.cardRowSwitchLabelText}>
@@ -33,12 +37,12 @@ export function CardRowSwitch(props: {
         onValueChange={props.onValueChange}
         trackColor={{
           true: Colors.PURPLE.A700,
-          false: Colors.PURPLE.A100
+          false: Colors.PURPLE.A100,
         }}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   cardRowSwitchContainer: {

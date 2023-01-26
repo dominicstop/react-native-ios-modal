@@ -3,7 +3,6 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import * as Colors from '../../constants/Colors';
 
-
 export const CardBody: React.FC<{
   style?: ViewStyle;
 }> = (props) => {
