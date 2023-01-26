@@ -6,9 +6,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { HomeScreen } from './screens/HomeScreen';
 
-import { TestScreen } from './screens/Test01Screen';
 import { Test02Screen } from './screens/Test02Screen';
 import { Test03Screen } from './screens/Test03Screen';
+import { Test01Screen } from './screens/Test01Screen';
 
 import { SHARED_ENV } from './constants/SharedEnv';
 
@@ -24,7 +24,7 @@ function Tab1StackScreen() {
     return (
     <Tab1Stack.Navigator initialRouteName="Home">
       <Tab1Stack.Screen name="Home" component={HomeScreen} />
-      <Tab1Stack.Screen name="Test" component={TestScreen} />
+      <Tab1Stack.Screen name="Test01" component={Test01Screen} />
     </Tab1Stack.Navigator>
   );
 
@@ -55,6 +55,7 @@ export default function App() {
           <Stack.Screen name="Test" component={TestScreen} />
           <Stack.Screen name="Test02" component={Test02Screen} />
           <Stack.Screen name="Test03" component={Test03Screen} />
+          <Stack.Screen name="Test01" component={Test01Screen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
