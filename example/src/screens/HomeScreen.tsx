@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, FlatList, ListRenderItem } from 'react-native';
 
-
 import type { ExampleProps } from '../examples/SharedExampleTypes';
 
+import { Example01 } from '../examples/Example01';
 
 import { DebugControls } from '../examples/DebugControls';
 import { SHARED_ENV } from '../constants/SharedEnv';
@@ -14,14 +14,21 @@ type ExampleListItem = {
   component: React.FC<ExampleProps>;
 };
 
-const EXAMPLE_COMPONENTS = [
+type ExampleComponentItem = 
+  (props: ExampleProps) => JSX.Element;
+
+const EXAMPLE_COMPONENTS: Array<ExampleComponentItem | false> = [
+  Example01,
   SHARED_ENV.enableReactNavigation && DebugControls,
 ];
 
-const EXAMPLE_ITEMS: ExampleListItem[] = EXAMPLE_COMPONENTS.map((item, index) => ({
-  id: index + 1,
-  component: item
-}));
+const EXAMPLE_ITEMS = (EXAMPLE_COMPONENTS
+  .filter((item): item is ExampleComponentItem => item != null)
+  .map((item, index) => ({
+    id: index + 1,
+    component: item
+  }))
+);
 
 export function HomeScreen() {
   const renderItem: ListRenderItem<ExampleListItem>  = ({ item })  => (
