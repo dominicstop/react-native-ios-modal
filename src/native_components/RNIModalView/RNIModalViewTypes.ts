@@ -1,10 +1,10 @@
 import type { ViewProps } from 'react-native';
 
-import type { UIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
+import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
 
 import type {
-  UIModalPresentationStyle,
-  UIModalTransitionStyle,
+  TUIModalPresentationStyle,
+  TUIModalTransitionStyle,
 } from 'src/types/UIModalTypes';
 
 import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
@@ -35,9 +35,9 @@ export type RNIModalViewBaseProps = {
   // --------------
 
   modalID?: string;
-  modalTransitionStyle?: UIModalTransitionStyle;
-  modalBGBlurEffectStyle?: UIBlurEffectStyles;
-  modalPresentationStyle?: UIModalPresentationStyle;
+  modalTransitionStyle?: TUIModalTransitionStyle;
+  modalBGBlurEffectStyle?: TUIBlurEffectStyles;
+  modalPresentationStyle?: TUIModalPresentationStyle;
 
   // Props - Events
   // --------------
@@ -57,6 +57,6 @@ export type RNIModalViewBaseProps = {
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;
 
 export type RNIModalViewConstantMap = ViewManagerConstantMap<{
-  availableBlurEffectStyles: UIBlurEffectStyles[];
-  availablePresentationStyles: UIModalPresentationStyle[];
+  availableBlurEffectStyles: TUIBlurEffectStyles[];
+  availablePresentationStyles: TUIModalPresentationStyle[];
 }>;

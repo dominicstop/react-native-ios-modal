@@ -1,5 +1,5 @@
 /** Maps to `UIBlurEffect.Style` */
-export type UIBlurEffectStyles =
+export type TUIBlurEffectStyles =
   | 'systemUltraThinMaterial'
   | 'systemThinMaterial'
   | 'systemMaterial'

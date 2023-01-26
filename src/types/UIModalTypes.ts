@@ -1,10 +1,10 @@
-export type UIModalTransitionStyle =
+export type TUIModalTransitionStyle =
   | 'coverVertical'
   | 'flipHorizontal'
   | 'crossDissolve'
   | 'partialCurl';
 
-export type UIModalPresentationStyle =
+export type TUIModalPresentationStyle =
   | 'automatic'
   | 'none'
   | 'fullScreen'

@@ -1,8 +1,8 @@
-import type { UIBlurEffectStyles as TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
+import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
 
 import type {
-  UIModalPresentationStyle as TUIModalPresentationStyle,
-  UIModalTransitionStyle as TUIModalTransitionStyle,
+  TUIModalPresentationStyle,
+  TUIModalTransitionStyle,
 } from 'src/types/UIModalTypes';
 
 export const UIBlurEffectStyles: {
