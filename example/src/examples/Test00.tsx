@@ -52,7 +52,7 @@ export function Test00(props: ExampleProps) {
       style={props.style}
       index={props.index}
       title={'Test00'}
-      subtitle={'Modal Test 00 - blur effects'}
+      subtitle={'test - UIBlurEffectStyles'}
       description={['Test for modal background + blur effects']}
     >
       <ModalView
