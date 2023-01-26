@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, GestureResponderEvent } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, GestureResponderEvent, ViewStyle } from 'react-native';
 
 import * as Colors from '../../constants/Colors';
 
@@ -16,19 +16,32 @@ export function CardButton(props: {
   title: string;
   subtitle: string;
   onPress: (event: GestureResponderEvent) => void;
-}){
-  return(
-    <TouchableOpacity 
-      style={styles.cardButtonContainer}
+}) {
+
+  // prettier-ignore
+  const hasSubtitle = (
+    props.subtitle != null ||
+    props.subtitle === ''
+  );
+
+  const buttonContainer: ViewStyle = {
+    alignItems: hasSubtitle ? 'flex-start' : 'center',
+  };
+
+  return (
+    <TouchableOpacity
+      style={[styles.cardButtonContainer, buttonContainer]}
       onPress={props.onPress}
     >
       <React.Fragment>
         <Text style={styles.cardButtonTitleText}>
           {props.title}
         </Text>
-        <Text style={styles.cardButtonSubtitleText}>
-          {props.subtitle}
-        </Text>
+        {hasSubtitle && (
+          <Text style={styles.cardButtonSubtitleText}>
+            {props.subtitle}
+          </Text>
+        )}
       </React.Fragment>
     </TouchableOpacity>
   );
