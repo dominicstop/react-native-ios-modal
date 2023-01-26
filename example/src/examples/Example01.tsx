@@ -3,13 +3,13 @@ import { Alert } from 'react-native';
 
 import type { ContextMenuExampleProps } from './SharedExampleTypes';
 
-import { ContextMenuButtonCard } from '../components/ContextMenuButtonCard';
+import { ExampleButtonCard } from '../components/ExampleButtonCard';
 import { ContextMenuCardButton } from '../components/ContextMenuCardButton';
 
 
 export function Example01(props: ContextMenuExampleProps) {
   return (
-    <ContextMenuButtonCard
+    <ExampleButtonCard
       style={props.style}
       index={props.index}
       title={'ContextMenuButtonExample01'}
@@ -44,6 +44,6 @@ export function Example01(props: ContextMenuExampleProps) {
           buttonTitle={'⭐️ Context Menu Button'}
         />
       </ContextMenuButton>
-    </ContextMenuButtonCard>
+    </ExampleButtonCard>
   );
 };

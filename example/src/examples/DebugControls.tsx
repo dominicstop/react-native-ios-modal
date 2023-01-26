@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import type { ContextMenuExampleProps } from './SharedExampleTypes';
 
-import { ContextMenuCard } from '../components/ExampleCard';
+import { ExampleCard } from '../components/ExampleCard';
 import { CardButton } from '../components/Card/CardButton';
 import { SHARED_ENV } from '../constants/SharedEnv';
 
@@ -15,7 +15,7 @@ export function DebugControls(props: ContextMenuExampleProps) {
   const navigation = SHARED_ENV.enableReactNavigation && useNavigation();
 
   return (
-    <ContextMenuCard
+    <ExampleCard
       style={props.style}
       index={props.index}
       title={'Debug Controls'}
@@ -53,6 +53,6 @@ export function DebugControls(props: ContextMenuExampleProps) {
           navigation.push('Test03');
         }}
       />
-    </ContextMenuCard>
+    </ExampleCard>
   );
 };

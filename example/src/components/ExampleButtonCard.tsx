@@ -16,7 +16,7 @@ const colorConfig: ColorConfig = {
   bodyDescriptionLabelColor: Colors.ORANGE[900],
 };
 
-export function ContextMenuButtonCard(props: ExampleCardProps){
+export function ExampleButtonCard(props: ExampleCardProps){
   return (
     <ExampleCard
       {...props}
