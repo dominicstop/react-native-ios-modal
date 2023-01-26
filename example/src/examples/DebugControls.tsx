@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import type { ContextMenuExampleProps } from './SharedExampleTypes';
 
-import { ContextMenuCard } from '../components/ContextMenuCard';
+import { ContextMenuCard } from '../components/ExampleCard';
 import { CardButton } from '../components/Card/CardButton';
 import { SHARED_ENV } from '../constants/SharedEnv';
 

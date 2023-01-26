@@ -1,7 +1,6 @@
-
 import * as React from 'react';
 
-import { ContextMenuCard, ContextMenuCardProps, ColorConfig } from './ContextMenuCard';
+import { ExampleCard, ExampleCardProps, ColorConfig } from './ExampleCard';
 
 import * as Colors from '../constants/Colors';
 import { StyleSheet } from 'react-native';
@@ -17,9 +16,9 @@ const colorConfig: ColorConfig = {
   bodyDescriptionLabelColor: Colors.ORANGE[900],
 };
 
-export function ContextMenuButtonCard(props: ContextMenuCardProps){
+export function ContextMenuButtonCard(props: ExampleCardProps){
   return (
-    <ContextMenuCard
+    <ExampleCard
       {...props}
       extraContentContainerStyle={styles.extraContentContainer}
       colorConfig={colorConfig}
