@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 
-import { useMenuContext } from 'react-native-ios-context-menu';
-
 import * as Colors from '../constants/Colors';
-
 
 export type ColorConfig = {
   headerBGColorActive  : string;
@@ -16,12 +13,12 @@ export type ColorConfig = {
   bodyDescriptionLabelColor: string;
 };
 
-export type ContextMenuCardProps = {
+export type ExampleCardProps = {
   index?: number;
   title?: string;
   subtitle?: string;
   description?: string[];
-  colorConfig?: ColorConfig,
+  colorConfig?: ColorConfig;
 
   style?: ViewStyle;
   extraContentContainerStyle?: ViewStyle;
@@ -38,23 +35,16 @@ const defaultColorConfig: ColorConfig = {
   bodyDescriptionLabelColor: Colors.BLUE[1100],
 };
 
-export function ContextMenuCard(props: ContextMenuCardProps) {
-  const menuContext = useMenuContext();
+export function ExampleCard(props: ExampleCardProps) {
 
   const colorConfig = props.colorConfig ?? defaultColorConfig;
 
   const titleContainerStyle = {
-    backgroundColor: (menuContext.isMenuVisible
-      ? colorConfig.headerBGColorActive
-      : colorConfig.headerBGColorInactive
-    )
+    backgroundColor: colorConfig.headerBGColorInactive,
   };
 
   const bodyContainerStyle = {
-    backgroundColor: (menuContext.isMenuVisible
-      ? colorConfig.bodyBGColorActive
-      : colorConfig.bodyBGColorInactive
-    )
+    backgroundColor: colorConfig.bodyBGColorInactive,
   };
 
   const bodyDescriptionLabelTextStyle = {
