@@ -35,7 +35,7 @@ export type ModalViewBaseProps = Partial<
   setModalInPresentationFromProps?: boolean;
 
   containerStyle: ViewStyle;
-  children: React.ReactChildren;
+  children?: React.ReactNode;
 };
 
 // prettier-ignore
