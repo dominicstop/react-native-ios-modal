@@ -33,23 +33,7 @@ export function DebugControls(props: ExampleProps) {
         subtitle={'Navigate to "Test" screen...'}
         onPress={() => {
           // @ts-ignore
-          navigation.push('Test');
-        }}
-      />
-      <CardButton
-        title={'Push: Test 02'}
-        subtitle={'Navigate to "Test02" screen...'}
-        onPress={() => {
-          // @ts-ignore
-          navigation.push('Test02');
-        }}
-      />
-      <CardButton
-        title={'Push: Test 03'}
-        subtitle={'Navigate to "Test03" screen...'}
-        onPress={() => {
-          // @ts-ignore
-          navigation.push('Test03');
+          navigation.push('Test01');
         }}
       />
     </ExampleCard>
