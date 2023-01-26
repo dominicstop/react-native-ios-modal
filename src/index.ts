@@ -9,3 +9,4 @@ export * from './native_components/RNIModalView';
 export * from './native_modules/RNIModalViewModule';
 
 export * from './types/UIModalTypes';
+export * from './types/UIBlurEffectStyles';
