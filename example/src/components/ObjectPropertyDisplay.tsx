@@ -23,7 +23,7 @@ export function ObjectPropertyDisplay<T extends Object>(props: {
   const objectKeys = (hasObject
     ? Object.keys(props.object)
     : []
-  ) as Array<keyof T>;
+  ) as Array<keyof object>;
 
   return hasObject? (
     <View style={[
