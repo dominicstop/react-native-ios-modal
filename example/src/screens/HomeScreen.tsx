@@ -8,6 +8,7 @@ import {
 
 import type { ExampleProps } from '../examples/SharedExampleTypes';
 
+import { Test00 } from '../examples/Test00';
 import { Example01 } from '../examples/Example01';
 
 import { DebugControls } from '../examples/DebugControls';
@@ -25,6 +26,7 @@ type ExampleComponentItem = (
 const EXAMPLE_COMPONENTS: Array<
   ExampleComponentItem | false
 > = [
+  Test00,
   Example01,
   SHARED_ENV.enableReactNavigation && DebugControls,
 ];
