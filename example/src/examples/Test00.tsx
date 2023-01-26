@@ -1,19 +1,23 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import type { ExampleProps } from './SharedExampleTypes';
 
 import { ExampleCard } from '../components/ExampleCard';
-import { CardButton } from '../components/Card';
 
-import * as Colors from '../constants/Colors';
+import {
+  CardBody,
+  CardButton,
+  CardTitle,
+  CardToggleButton,
+} from '../components/Card';
 
 import {
   ModalView,
   UIBlurEffectStyles,
   AvailableBlurEffectStyles,
 } from 'react-native-ios-modal';
+
 import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
 const totalBlurStylesCount = Object.keys(UIBlurEffectStyles).length ?? 0;
@@ -48,12 +52,8 @@ export function Test00(props: ExampleProps) {
       style={props.style}
       index={props.index}
       title={'Test00'}
-      subtitle={'Modal Test 00'}
-      description={[
-        'Test for modal blur effects',
-        `total blur styles - totalBlurStylesCount: ${totalBlurStylesCount}`,
-        `total available blur styles - availableBlurStylesCount: ${availableBlurStylesCount}`,
-      ]}
+      subtitle={'Modal Test 00 - blur effects'}
+      description={['Test for modal background + blur effects']}
     >
       <ModalView
         ref={modalRef}
@@ -63,50 +63,36 @@ export function Test00(props: ExampleProps) {
         isModalBGBlurred={isModalBGBlurred}
       >
         <React.Fragment>
-          <View style={styles.titleContainer}>
-            <Text style={styles.textModal}>
-              {'Test for modal blur effects'}
-            </Text>
+          <CardBody style={styles.modalCard}>
+            <CardTitle title={'Test for modal blur effects'} />
             <ObjectPropertyDisplay object={debugObject} />
-          </View>
-          <TouchableOpacity
-            style={styles.button}
+          </CardBody>
+          <CardButton
+            title={'🌼 Next Blur Style'}
             onPress={() => {
               setCounter((prevCount) => prevCount + 1);
             }}
-          >
-            <Text style={styles.buttonText}>{'🌼 Next Blur Style'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setIsModalBGTransparent((prev) => !prev);
+          />
+          <CardToggleButton
+            title={'Toggle isModalBGTransparent'}
+            value={isModalBGTransparent}
+            onPress={(value) => {
+              setIsModalBGTransparent(value);
             }}
-          >
-            <Text style={styles.buttonText}>
-              {`${
-                isModalBGTransparent ? '☀️' : '🌙'
-              } Toggle isModalBGTransparent`}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setIsModalBGBlurred((prev) => !prev);
+          />
+          <CardToggleButton
+            title={'Toggle isModalBGBlurred'}
+            value={isModalBGTransparent}
+            onPress={(value) => {
+              setIsModalBGBlurred(value);
             }}
-          >
-            <Text style={styles.buttonText}>
-              {`${isModalBGBlurred ? '☀️' : '🌙'} Toggle isModalBGBlurred`}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
+          />
+          <CardButton
+            title={'🚫 Close Modal'}
             onPress={() => {
               modalRef.current.setVisibility(false);
             }}
-          >
-            <Text style={styles.buttonText}>{'🚫 Close Modal'}</Text>
-          </TouchableOpacity>
+          />
         </React.Fragment>
       </ModalView>
       <CardButton
@@ -120,35 +106,13 @@ export function Test00(props: ExampleProps) {
 }
 
 export const styles = StyleSheet.create({
-  button: {
-    marginTop: 10,
-    backgroundColor: Colors.BLUE.A700,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '500',
-  },
   modalContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  titleContainer: {
+  modalCard: {
+    alignSelf: 'stretch',
     backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 15,
-    marginBottom: 10,
-  },
-  textEmoji: {
-    fontSize: 64,
-    marginBottom: 10,
-  },
-  textModal: {
-    fontSize: 24,
-    fontWeight: '800',
   },
 });
