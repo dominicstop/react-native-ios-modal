@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 
 import * as Colors from '../constants/Colors';
 
@@ -41,8 +36,7 @@ const defaultColorConfig: ColorConfig = {
 };
 
 export function ExampleCard(props: ExampleCardProps) {
-  const colorConfig =
-    props.colorConfig ?? defaultColorConfig;
+  const colorConfig = props.colorConfig ?? defaultColorConfig;
 
   const titleContainerStyle = {
     backgroundColor: colorConfig.headerBGColorInactive,
@@ -61,29 +55,18 @@ export function ExampleCard(props: ExampleCardProps) {
 
   return (
     <View style={[styles.rootContainer, props.style]}>
-      <View
-        style={[
-          styles.headerContainer,
-          titleContainerStyle,
-        ]}
-      >
+      <View style={[styles.headerContainer, titleContainerStyle]}>
         <Text style={styles.headerTitleIndexText}>
           {`${props.index ?? 0}. `}
         </Text>
         <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitleText}>
-            {props.title ?? 'N/A'}
-          </Text>
+          <Text style={styles.headerTitleText}>{props.title ?? 'N/A'}</Text>
           {props.subtitle && (
-            <Text style={styles.headerSubtitleText}>
-              {props.subtitle}
-            </Text>
+            <Text style={styles.headerSubtitleText}>{props.subtitle}</Text>
           )}
         </View>
       </View>
-      <View
-        style={[styles.bodyContainer, bodyContainerStyle]}
-      >
+      <View style={[styles.bodyContainer, bodyContainerStyle]}>
         {descriptionMain && (
           <Text style={styles.bodyDescriptionText}>
             <Text
@@ -100,18 +83,13 @@ export function ExampleCard(props: ExampleCardProps) {
         {descriptionSub?.map((description, index) => (
           <Text
             key={`desc-${index}`}
-            style={[
-              styles.bodyDescriptionText,
-              styles.bodyDescriptionSubText,
-            ]}
+            style={[styles.bodyDescriptionText, styles.bodyDescriptionSubText]}
           >
             {description}
           </Text>
         ))}
         {React.Children.count(props.children) > 0 && (
-          <View style={props.extraContentContainerStyle}>
-            {props.children}
-          </View>
+          <View style={props.extraContentContainerStyle}>{props.children}</View>
         )}
       </View>
     </View>
