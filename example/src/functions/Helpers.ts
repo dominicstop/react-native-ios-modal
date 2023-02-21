@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 /** wrapper func for setState that returns a promise */
 // eslint-disable-next-line consistent-this
 export function setStateAsync<T extends {}>(
@@ -9,6 +11,56 @@ export function setStateAsync<T extends {}>(
       resolve();
     });
   });
+}
+
+export function useStateCallback<T>(
+  initialState: T
+): [T, (state: T, callback?: (nextState: T) => void) => void] {
+  const [state, setState] = React.useState(initialState);
+
+  // init mutable ref container for callbacks
+  const cbRef = React.useRef<((state: T) => void) | undefined>(undefined);
+
+  const setStateCallback = React.useCallback(
+    (nextState: T, cb?: (state: T) => void) => {
+      // store current, passed callback in ref
+      cbRef.current = cb;
+
+      // keep object reference stable, exactly like `useState`
+      setState(nextState);
+    },
+    []
+  );
+
+  React.useEffect(() => {
+    // cb.current is `undefined` on initial render,
+    // so we only invoke callback on state *updates*
+    if (cbRef.current) {
+      cbRef.current(state);
+
+      // reset callback after execution
+      cbRef.current = undefined;
+    }
+  }, [state]);
+
+  return [state, setStateCallback];
+}
+
+export function useStateAsync<T>(
+  initialState: T
+): [T, (nextState: T) => Promise<void>] {
+  const [state, setState] = useStateCallback(initialState);
+
+  return [
+    state,
+    (nextState) => {
+      return new Promise<void>((resolve) => {
+        setState(nextState, () => {
+          resolve();
+        });
+      });
+    },
+  ];
 }
 
 /** wrapper for timeout that returns a promise */
