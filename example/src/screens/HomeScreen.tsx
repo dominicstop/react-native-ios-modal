@@ -10,6 +10,8 @@ import type { ExampleProps } from '../examples/SharedExampleTypes';
 
 import { Test00 } from '../examples/Test00';
 import { Test01 } from '../examples/Test01';
+import { Test02 } from '../examples/Test02';
+
 import { Example01 } from '../examples/Example01';
 
 import { DebugControls } from '../examples/DebugControls';
@@ -29,6 +31,7 @@ const EXAMPLE_COMPONENTS: Array<
 > = [
   Test00,
   Test01,
+  Test02,
   Example01,
   SHARED_ENV.enableReactNavigation && DebugControls,
 ];
