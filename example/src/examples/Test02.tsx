@@ -4,7 +4,7 @@ import { StyleSheet, Text } from 'react-native';
 import type { ExampleProps } from './SharedExampleTypes';
 
 import { ExampleCard } from '../components/ExampleCard';
-import { CardBody, CardButton, CardTitle } from '../components/Card';
+import { CardBody, CardButton } from '../components/Card';
 
 import * as Helpers from '../functions/Helpers';
 
@@ -13,13 +13,20 @@ import {
   ModalViewProps,
   AvailableBlurEffectStyles,
 } from 'react-native-ios-modal';
+import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
 //
 const availableBlurStylesCount = AvailableBlurEffectStyles?.length ?? 0;
 
+function deriveBlurEffectStyleStringFromCounter(counter: number){
+  const currentIndex = counter % availableBlurStylesCount;
+  return AvailableBlurEffectStyles[currentIndex];
+}
+
 const TestModal = React.forwardRef<
   ModalView,
   {
+    counter: number;
     modalProps: ModalViewProps;
     emoji?: string;
     title?: string;
@@ -30,152 +37,217 @@ const TestModal = React.forwardRef<
       <CardBody style={styles.testModalCard}>
         <Text style={styles.testLabelEmoji}>{props.emoji ?? '😊'}</Text>
         <Text style={styles.testLabelTitle}>{props.title ?? 'Hello'}</Text>
+        <ObjectPropertyDisplay
+          object={{
+            counter: props.counter,
+            blurEffectStyle: {
+              [`${props.counter % availableBlurStylesCount}`]:
+                deriveBlurEffectStyleStringFromCounter(props.counter),
+            },
+          }}
+        />
       </CardBody>
     </React.Fragment>
   </ModalView>
 ));
 
-export function Test02(props: ExampleProps) {
-  const modalRef01 = React.useRef<ModalView>(null);
-  const modalRef02 = React.useRef<ModalView>(null);
-  const modalRef03 = React.useRef<ModalView>(null);
-  const modalRef04 = React.useRef<ModalView>(null);
-  const modalRef05 = React.useRef<ModalView>(null);
-  const modalRef06 = React.useRef<ModalView>(null);
-  const modalRef07 = React.useRef<ModalView>(null);
-  const modalRef08 = React.useRef<ModalView>(null);
-  const modalRef09 = React.useRef<ModalView>(null);
+type Test02State = {
+  counter: number;
+};
 
+export class Test02 extends React.PureComponent<ExampleProps, Test02State> {
+  // Properties
+  // ----------
 
-  const [counter, setCounter] = React.useState(0);
+  modalRef01: ModalView;
+  modalRef02: ModalView;
+  modalRef03: ModalView;
+  modalRef04: ModalView;
+  modalRef05: ModalView;
+  modalRef06: ModalView;
+  modalRef07: ModalView;
+  modalRef08: ModalView;
+  modalRef09: ModalView;
 
-  const currentIndex = counter % availableBlurStylesCount;
-  const currentBlurEffectStyle = AvailableBlurEffectStyles[currentIndex];
+  // Lifecycle
+  // ---------
 
-  const beginCyclingBlurEffectStyles = async () => {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      counter: 0,
+    };
+  }
+
+  // Methods
+  // -------
+
+  getModalRefForIndex = (index: number): ModalView | undefined => {
+    const modalRefsMap = {
+      modalRef01: this.modalRef01,
+      modalRef02: this.modalRef02,
+      modalRef03: this.modalRef03,
+      modalRef04: this.modalRef04,
+      modalRef05: this.modalRef05,
+      modalRef06: this.modalRef06,
+      modalRef07: this.modalRef07,
+      modalRef08: this.modalRef08,
+      modalRef09: this.modalRef09,
+    };
+
+    const indexPrefix = index < 10 ? '0' : '';
+    return modalRefsMap[`modalRef${indexPrefix + index}`];
+  };
+
+  beginCyclingBlurEffectStyles = async () => {
     for (let index = 0; index < availableBlurStylesCount; index++) {
-      setCounter(counter + 1);
-      await Helpers.timeout(250);
-      console.log('beginCyclingBlurEffectStyles - index:', index);
-      console.log('currentBlurEffectStyle:', currentBlurEffectStyle);
+      await Promise.all([
+        Helpers.setStateAsync(this, (prevState: Test02State) => ({
+          counter: prevState.counter + 1,
+        })),
+        Helpers.timeout(250),
+      ]);
     }
   };
 
-  const beginShowingModals = async () => {
-    await modalRef01.current.setVisibility(true);
-    await beginCyclingBlurEffectStyles();
-
-    const modalRefsMap = {
-      modalRef01,
-      modalRef02,
-      modalRef03,
-      modalRef04,
-      modalRef05,
-      modalRef06,
-      modalRef07,
-      modalRef08,
-      modalRef09,
-    };
-
-    const getModalRefForIndex = (
-      index: number
-    ): React.MutableRefObject<ModalView> | undefined => {
-      return modalRefsMap[`modalRef${index}`];
-    };
+  beginShowingModals = async () => {
+    await this.modalRef01.setVisibility(true);
+    await this.beginCyclingBlurEffectStyles();
 
     for (let index = 2; index < 10; index++) {
-      const modalRef = getModalRefForIndex(index);
-      await modalRef?.current.setVisibility(true);
+      const modalRef = this.getModalRefForIndex(index);
+      await modalRef?.setVisibility(true);
     }
 
-    await beginCyclingBlurEffectStyles();
+    await this.beginCyclingBlurEffectStyles();
 
     for (let index = 9; index > 0; index--) {
-      const modalRef = getModalRefForIndex(index);
-      await modalRef?.current.setVisibility(false);
+      const modalRef = this.getModalRefForIndex(index);
+      await modalRef?.setVisibility(false);
     }
   };
 
+  // Render
+  // -----
 
-  const sharedProps = {
-    containerStyle: styles.modalContainer,
-    modalBGBlurEffectStyle: currentBlurEffectStyle,
-    isModalInPresentation: true,
-    enableSwipeGesture: false,
-  };
+  render() {
+    const props = this.props;
+    const state = this.state;
 
-  return (
-    <ExampleCard
-      style={props.style}
-      index={props.index}
-      title={'Test02'}
-      subtitle={'TBA'}
-      description={['TBA']}
-    >
-      <React.Fragment>
-        <TestModal
-          ref={modalRef01}
-          emoji={'😊'}
-          title={'Hello #1'}
-          modalProps={sharedProps}
+    const currentBlurEffectStyle = deriveBlurEffectStyleStringFromCounter(
+      state.counter
+    );
+
+    const sharedModalProps = {
+      containerStyle: styles.modalContainer,
+      modalBGBlurEffectStyle: currentBlurEffectStyle,
+      isModalInPresentation: true,
+      enableSwipeGesture: false,
+    };
+
+    let modalCount = 0;
+
+    return (
+      <ExampleCard
+        style={props.style}
+        index={props.index}
+        title={'Test02'}
+        subtitle={'TBA'}
+        description={['TBA']}
+      >
+        <React.Fragment>
+          <TestModal
+            ref={(ref) => {
+              this.modalRef01 = ref;
+            }}
+            emoji={'😊'}
+            title={'Hello #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef02 = ref;
+            }}
+            emoji={'😄'}
+            title={'Hello There #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef03 = ref;
+            }}
+            emoji={'💖'}
+            title={'ModalView Test #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef04 = ref;
+            }}
+            emoji={'🥺'}
+            title={'PageSheet Modal #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef05 = ref;
+            }}
+            emoji={'🥰'}
+            title={'Hello World Modal #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef06 = ref;
+            }}
+            emoji={'😙'}
+            title={'Hello World #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef07 = ref;
+            }}
+            emoji={'🤩'}
+            title={'Heyyy There #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef08 = ref;
+            }}
+            emoji={'😃'}
+            title={'Another Modal #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+          <TestModal
+            ref={(ref) => {
+              this.modalRef09 = ref;
+            }}
+            emoji={'🏳️‍🌈'}
+            title={'And Another Modal #' + ++modalCount}
+            counter={state.counter}
+            modalProps={sharedModalProps}
+          />
+        </React.Fragment>
+        <CardButton
+          title={'Show Modal'}
+          onPress={() => {
+            this.beginShowingModals();
+          }}
         />
-        <TestModal
-          ref={modalRef02}
-          emoji={'😄'}
-          title={'Hello There #2'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef03}
-          emoji={'💖'}
-          title={'ModalView Test #3'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef04}
-          emoji={'🥺'}
-          title={'PageSheet Modal #4'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef05}
-          emoji={'🥰'}
-          title={'Hello World Modal #5'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef06}
-          emoji={'😙'}
-          title={'Hello World #6'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef07}
-          emoji={'🤩'}
-          title={'Heyyy There #7'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef08}
-          emoji={'😃'}
-          title={'Another Modal #8'}
-          modalProps={sharedProps}
-        />
-        <TestModal
-          ref={modalRef09}
-          emoji={'🏳️‍🌈'}
-          title={'And Another Modal #9'}
-          modalProps={sharedProps}
-        />
-      </React.Fragment>
-      <CardButton
-        title={'Show Modal'}
-        onPress={() => {
-          beginShowingModals();
-        }}
-      />
-    </ExampleCard>
-  );
+      </ExampleCard>
+    );
+  }
 }
 
 export const styles = StyleSheet.create({
@@ -189,9 +261,13 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   testLabelEmoji: {
-
+    fontSize: 36,
+    alignSelf: 'center',
   },
   testLabelTitle: {
-    
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 3,
+    alignSelf: 'center',
   },
 });
