@@ -22,9 +22,18 @@ type ExampleListItem = {
   component: React.FC<ExampleProps>;
 };
 
-type ExampleComponentItem = (props: ExampleProps) => JSX.Element;
+type ExampleFunctionalComponentItem = (props: ExampleProps) => JSX.Element;
 
-const EXAMPLE_COMPONENTS: Array<ExampleComponentItem | false> = [
+type ExampleClassComponentItem =
+  | typeof React.PureComponent<ExampleProps, any>
+  | typeof React.Component<ExampleProps, any>;
+
+type ExampleComponentItem =
+  | ExampleFunctionalComponentItem
+  | ExampleClassComponentItem
+  | false;
+
+const EXAMPLE_COMPONENTS: Array<ExampleComponentItem> = [
   Test00,
   Test01,
   Test02,
@@ -33,7 +42,7 @@ const EXAMPLE_COMPONENTS: Array<ExampleComponentItem | false> = [
 ];
 
 const EXAMPLE_ITEMS = EXAMPLE_COMPONENTS.filter(
-  (item): item is ExampleComponentItem => item != null
+  (item): item is ExampleFunctionalComponentItem => item != null
 ).map((item, index) => ({
   id: index + 1,
   component: item,
