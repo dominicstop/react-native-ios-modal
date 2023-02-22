@@ -22,13 +22,9 @@ type ExampleListItem = {
   component: React.FC<ExampleProps>;
 };
 
-type ExampleComponentItem = (
-  props: ExampleProps
-) => JSX.Element;
+type ExampleComponentItem = (props: ExampleProps) => JSX.Element;
 
-const EXAMPLE_COMPONENTS: Array<
-  ExampleComponentItem | false
-> = [
+const EXAMPLE_COMPONENTS: Array<ExampleComponentItem | false> = [
   Test00,
   Test01,
   Test02,
@@ -44,9 +40,7 @@ const EXAMPLE_ITEMS = EXAMPLE_COMPONENTS.filter(
 }));
 
 export function HomeScreen() {
-  const renderItem: ListRenderItem<ExampleListItem> = ({
-    item,
-  }) =>
+  const renderItem: ListRenderItem<ExampleListItem> = ({ item }) =>
     React.createElement(item.component, {
       index: item.id,
       style: styles.exampleListItem,
@@ -55,9 +49,7 @@ export function HomeScreen() {
   return (
     <SafeAreaView>
       <FlatList
-        contentContainerStyle={
-          styles.scrollContentContainer
-        }
+        contentContainerStyle={styles.scrollContentContainer}
         data={EXAMPLE_ITEMS}
         renderItem={renderItem}
         keyExtractor={(item) => `item-${item.id}`}

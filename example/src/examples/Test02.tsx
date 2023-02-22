@@ -18,7 +18,7 @@ import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 //
 const availableBlurStylesCount = AvailableBlurEffectStyles?.length ?? 0;
 
-function deriveBlurEffectStyleStringFromCounter(counter: number){
+function deriveBlurEffectStyleStringFromCounter(counter: number) {
   const currentIndex = counter % availableBlurStylesCount;
   return AvailableBlurEffectStyles[currentIndex];
 }
@@ -72,7 +72,7 @@ export class Test02 extends React.PureComponent<ExampleProps, Test02State> {
   // Lifecycle
   // ---------
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
