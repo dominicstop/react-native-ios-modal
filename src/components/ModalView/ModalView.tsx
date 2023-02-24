@@ -274,11 +274,11 @@ export class ModalView extends
   // --------------
 
   // We don't want any responder events bubbling out of the modal.
-  _shouldSetResponder() {
+  private _shouldSetResponder() {
     return true;
   }
 
-  _handleOnLayoutModalContentContainer: ViewProps['onLayout'] = (event) => {
+  private _handleOnLayoutModalContentContainer: ViewProps['onLayout'] = (event) => {
     this.emitter.emit(
       ModalViewEmitterEvents.onLayoutModalContentContainer,
       event.nativeEvent
@@ -289,14 +289,14 @@ export class ModalView extends
 
   // the child comp can call `props.getModalRef` to receive
   // a ref to this modal comp
-  _handleGetModalRef = () => {
+  private _handleGetModalRef = () => {
     return this;
   };
 
   // Native Event Handlers
   // ---------------------
 
-  _handleOnModalBlur: OnModalBlurEvent = (event) => {
+  private _handleOnModalBlur: OnModalBlurEvent = (event) => {
     this.props.onModalBlur?.(event);
     event.stopPropagation();
 
@@ -306,7 +306,7 @@ export class ModalView extends
     );
   };
 
-  _handleOnModalFocus: OnModalFocusEvent = (event) => {
+  private _handleOnModalFocus: OnModalFocusEvent = (event) => {
     this.props.onModalFocus?.(event);
     event.stopPropagation();
 
@@ -316,7 +316,7 @@ export class ModalView extends
     );
   };
 
-  _handleOnModalShow: OnModalShowEvent = (event) => {
+  private _handleOnModalShow: OnModalShowEvent = (event) => {
     this.props.onModalShow?.(event);
     event.stopPropagation();
 
@@ -328,7 +328,7 @@ export class ModalView extends
     this.setStateIsModalVisible(true);
   };
 
-  _handleOnModalDismiss: OnModalDismissEvent = (event) => {
+  private _handleOnModalDismiss: OnModalDismissEvent = (event) => {
     const props = this.getProps();
 
     this.props.onModalDismiss?.(event);
@@ -348,7 +348,7 @@ export class ModalView extends
     });
   };
 
-  _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
+  private _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
     this.props.onModalDidDismiss?.(event);
     event.stopPropagation();
 
@@ -360,7 +360,7 @@ export class ModalView extends
     this.setStateIsModalVisible(false);
   };
 
-  _handleOnModalWillDismiss: OnModalDidDismissEvent = (event) => {
+  private _handleOnModalWillDismiss: OnModalDidDismissEvent = (event) => {
     this.props.onModalWillDismiss?.(event);
     event.stopPropagation();
 
@@ -370,7 +370,7 @@ export class ModalView extends
     );
   };
 
-  _handleOnModalAttemptDismiss: OnModalAttemptDismissEvent = (event) => {
+  private _handleOnModalAttemptDismiss: OnModalAttemptDismissEvent = (event) => {
     this.props.onModalAttemptDismiss?.(event);
     event.stopPropagation();
 
@@ -380,7 +380,7 @@ export class ModalView extends
     );
   };
 
-  _renderModal() {
+ private _renderModal() {
     const { viewProps, ...props } = this.getProps();
     const state = this.state;
 
