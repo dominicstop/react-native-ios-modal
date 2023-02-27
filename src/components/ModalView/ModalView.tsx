@@ -109,6 +109,7 @@ export class ModalView extends
       setEnableSwipeGestureFromProps,
       setModalInPresentationFromProps,
       containerStyle,
+      isModalContentLazy,
 
       children,
       ...viewProps
@@ -148,6 +149,9 @@ export class ModalView extends
       ),
       isModalInPresentation: (
         isModalInPresentation ?? false
+      ),
+      isModalContentLazy: (
+        isModalContentLazy ?? true
       ),
 
       // B - Pass down...
@@ -192,6 +196,7 @@ export class ModalView extends
     nextVisible: boolean,
     childProps: object | null = null
   ) => {
+    const props = this.getProps();
     const { isModalVisible: prevVisible } = this.state;
 
     const didChange = (prevVisible !== nextVisible);
@@ -210,11 +215,13 @@ export class ModalView extends
       });
 
       // wait for view to mount
-      await Helpers.promiseWithTimeout(500, new Promise<void>((resolve) => {
-        this.emitter.once(ModalViewEmitterEvents.onLayoutModalContentContainer, () => {
-          resolve();
-        });
-      }));
+      if (props.isModalContentLazy){
+        await Helpers.promiseWithTimeout(500, new Promise<void>((resolve) => {
+          this.emitter.once(ModalViewEmitterEvents.onLayoutModalContentContainer, () => {
+            resolve();
+          });
+        }));
+      }
     }
 
     try {
@@ -394,7 +401,10 @@ export class ModalView extends
       }),
     };
 
-    const shouldMountModalContent = state.isModalVisible;
+    // TODO: Fix `isModalContentLazy` props
+    // * Error when opening modal once it's been closed
+    const shouldMountModalContent =
+      !props.isModalContentLazy || state.isModalVisible;
 
     return (
       <RNIModalView

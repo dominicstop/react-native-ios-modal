@@ -33,6 +33,7 @@ export type ModalViewBaseProps = Partial<
   autoCloseOnUnmount?: boolean;
   setEnableSwipeGestureFromProps?: boolean;
   setModalInPresentationFromProps?: boolean;
+  isModalContentLazy?: boolean;
 
   containerStyle: ViewStyle;
   children?: React.ReactNode;
