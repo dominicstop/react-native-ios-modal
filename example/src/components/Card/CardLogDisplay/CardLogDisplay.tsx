@@ -83,6 +83,7 @@ export const CardLogDisplay = React.forwardRef<
             <CardLogDisplayListRow
               key={`event-${item.timestamp}-${item.title}`}
               item={item}
+              shouldShowTimestamp={props.shouldShowTimestamp ?? true}
             />
           ))}
         </View>
@@ -117,6 +118,7 @@ export const CardLogDisplay = React.forwardRef<
             <CardLogDisplayListRow
               key={`event-${item.timestamp}-${item.title}`}
               item={item}
+              shouldShowTimestamp={props.shouldShowTimestamp ?? true}
             />
           ))}
         </ScrollView>

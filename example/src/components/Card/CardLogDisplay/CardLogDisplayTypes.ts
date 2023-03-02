@@ -24,6 +24,7 @@ export type CardLogDisplayBaseProps = {
   style?: ViewStyle;
   initialLogItems?: Array<CardLogDisplayItem>;
   listEmptyMessage?: string;
+  shouldShowTimestamp?: boolean;
 };
 
 export type CardLogDisplayProps = CardLogDisplayBaseProps & DisplayListModeProp;

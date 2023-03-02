@@ -5,7 +5,10 @@ import type { CardLogDisplayItem } from './CardLogDisplayTypes';
 
 import * as Helpers from '../../../functions/Helpers';
 
-export function CardLogDisplayListRow(props: { item: CardLogDisplayItem }) {
+export function CardLogDisplayListRow(props: { 
+  item: CardLogDisplayItem;
+  shouldShowTimestamp: boolean;
+}) {
   const { item } = props;
   const date = new Date(item.timestamp);
 
@@ -19,10 +22,19 @@ export function CardLogDisplayListRow(props: { item: CardLogDisplayItem }) {
   return (
     <View style={styles.logListItemContainer}>
       <Text style={styles.logItemIndexText}>
+        {/* Col - Index */}
         {`${Helpers.pad(item.index, 3)}`}
       </Text>
-      <Text style={styles.logItemTimestampText}>{timeString}</Text>
-      <Text style={styles.logItemTypeText}>{item.title}</Text>
+      {props.shouldShowTimestamp && (
+        <Text style={styles.logItemTimestampText}>
+          {/* Col - Timestamp */}
+          {timeString}
+        </Text>
+      )}
+      <Text style={styles.logItemTypeText}>
+        {/* Col - Title */}
+        {item.title}
+      </Text>
     </View>
   );
 }
