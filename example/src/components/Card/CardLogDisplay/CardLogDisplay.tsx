@@ -58,7 +58,7 @@ export const CardLogDisplay = React.forwardRef<
 
   switch (listMode) {
     case 'EMPTY':
-      const listEmptyMessage = props.listEmptyMessage ?? 'No Items To Show...'
+      const listEmptyMessage = props.listEmptyMessage ?? 'No Items To Show...';
       return (
         <View
           style={[
