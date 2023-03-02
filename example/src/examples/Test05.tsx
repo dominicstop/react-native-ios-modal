@@ -1,3 +1,5 @@
+// Note: Created based on `example/src_old/ModalViewTest6.js`
+
 import * as React from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
