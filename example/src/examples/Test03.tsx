@@ -13,6 +13,7 @@ import {
 } from '../components/Card';
 
 import { ModalView, ModalViewEmitterEvents } from 'react-native-ios-modal';
+
 import {
   CardLogDisplay,
   CardLogDisplayHandle,
@@ -65,8 +66,9 @@ export function Test03(props: ExampleProps) {
         ref={modalRef}
         containerStyle={styles.modalContainer}
         isModalInPresentation={isModalInPresentation}
+        // TODO - Bug: enableSwipeGesture does not apply when state changes...
         enableSwipeGesture={isSwipeGestureEnabled}
-        // TODO: Currently broken...
+        // TODO - Bug: Currently broken...
         isModalContentLazy={true}
         onModalBlur={() => {
           logEvent('onModalBlur');
