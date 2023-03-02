@@ -21,6 +21,7 @@ export function CardButton(props: {
   title: string;
   subtitle?: string;
   onPress: (event: GestureResponderEvent) => void;
+  style?: ViewStyle;
 }) {
   // prettier-ignore
   const hasSubtitle = (
@@ -34,16 +35,16 @@ export function CardButton(props: {
 
   return (
     <TouchableOpacity
-      style={[styles.cardButtonContainer, buttonContainer]}
+      style={[styles.cardButtonContainer, buttonContainer, props.style]}
       onPress={props.onPress}
     >
       <React.Fragment>
         <Text style={styles.cardButtonTitleText}>
-          {props.title}
+          {/* Button Title */ props.title}
         </Text>
         {hasSubtitle && (
           <Text style={styles.cardButtonSubtitleText}>
-            {props.subtitle}
+            {/* Button Subtitle */ props.subtitle}
           </Text>
         )}
       </React.Fragment>
