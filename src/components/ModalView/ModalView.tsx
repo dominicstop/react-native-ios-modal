@@ -53,7 +53,6 @@ export class ModalView extends
   private nativeRefModalView!: React.Component;
   private emitter: ModalViewEventEmitter;
 
-
   constructor(props: ModalViewProps) {
     super(props);
 
