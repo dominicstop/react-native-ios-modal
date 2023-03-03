@@ -472,54 +472,6 @@ extension RNIModalView {
     completion?(true, nil);
     self.onRequestResult?(params);
   };
-  
-  // --------------------------------------
-  // MARK: Public Functions for ViewManager
-  // --------------------------------------
-  
-  // called by RNIModalViewManager
-  // set isModalInPresentation for this modal from RN
-  public func requestModalPresentation(
-    _ requestID : NSNumber,
-    _ visibility: Bool    ,
-      completion: CompletionHandler? = nil
-  ){
-    var params: Dictionary<AnyHashable, Any> = [
-      "requestID" : requestID ,
-      "visibility": visibility,
-    ];
-    
-    self.createModalNativeEventDict().forEach { (key, value) in
-      params[key] = value
-    };
-    
-    let modalAction = visibility
-      ? self.presentModal
-      : self.dismissModal
-    
-    modalAction(){ (success, error) in
-      params["success"] = success;
-      if let errorCode = error {
-        params["errorCode"   ] = errorCode.rawValue;
-        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
-      };
-      
-      completion?(success, error);
-      self.onRequestResult?(params);
-    };
-  };
-  
-  public func requestModalInfo(
-    _ requestID : NSNumber,
-    completion: CompletionHandler? = nil
-  ){
-    var params = self.createModalNativeEventDict();
-    params["success"  ] = true;
-    params["requestID"] = requestID;
-    
-    completion?(true, nil);
-    self.onRequestResult?(params);
-  };
 };
 
 // MARK: - Internal Functions

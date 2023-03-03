@@ -7,10 +7,7 @@ import type {
   UIModalTransitionStyle,
 } from 'src/types/UIModalTypes';
 
-import type {
-  ViewManagerCommandMap,
-  ViewManagerConstantMap,
-} from 'src/types/ViewModuleRelatedTypes';
+import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
 
 import type {
   OnModalShowEvent,
@@ -57,12 +54,6 @@ export type RNIModalViewProps = ViewProps & {
   onModalWillDismiss: OnModalWillDismissEvent;
   onModalAttemptDismiss: OnModalAttemptDismissEvent;
 };
-
-// prettier-ignore
-export type RNIModalViewCommandMap = ViewManagerCommandMap<
-  | 'requestModalInfo'
-  | 'requestModalPresentation'
->;
 
 export type RNIModalViewConstantMap = ViewManagerConstantMap<{
   availableBlurEffectStyles: UIBlurEffectStyles[];
