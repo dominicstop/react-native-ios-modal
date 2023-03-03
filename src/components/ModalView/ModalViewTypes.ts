@@ -48,4 +48,5 @@ export type ModalViewState = {
   childProps: unknown;
   enableSwipeGesture: boolean;
   isModalInPresentation: boolean;
+  isModalInFocus: boolean;
 };

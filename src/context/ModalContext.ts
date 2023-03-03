@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ModalView } from 'src/components/ModalView';
+import type { ModalView, ModalViewState } from 'src/components/ModalView';
 
 // prettier-ignore
 export type ModalContextType = Partial<
@@ -10,6 +10,11 @@ export type ModalContextType = Partial<
       | 'setVisibility'
       | 'setEnableSwipeGesture'
       | 'setIsModalInPresentation'
+    >
+  // `ModalView` State
+  & Pick<
+      ModalViewState,
+      | 'isModalInFocus'
     >
   // `ModalView` Methods #2
   & {
