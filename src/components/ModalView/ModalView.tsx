@@ -491,6 +491,7 @@ export class ModalView extends
       <ModalContext.Provider
         value={{
           isModalInFocus: state.isModalInFocus,
+          isModalVisible: state.isModalVisible,
 
           // pass down function to get modal refs
           getModalRef: this._handleGetModalRef,
