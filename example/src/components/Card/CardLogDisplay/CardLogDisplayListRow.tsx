@@ -5,7 +5,7 @@ import type { CardLogDisplayItem } from './CardLogDisplayTypes';
 
 import * as Helpers from '../../../functions/Helpers';
 
-export function CardLogDisplayListRow(props: { 
+export function CardLogDisplayListRow(props: {
   item: CardLogDisplayItem;
   shouldShowTimestamp: boolean;
 }) {
