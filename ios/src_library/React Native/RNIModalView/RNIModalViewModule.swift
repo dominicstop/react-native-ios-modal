@@ -115,8 +115,7 @@ extension RNIModalViewModule {
             };
             
           } else {
-            /// `modalRef` no longer eixists, so we have dismiss manually
-            /// TODO: Add code to manually propogate modal blur/focus events
+            /// `modalRef` no longer exists, so we have dismiss manually
 
             /// TODO: See TODO:2023-03-05-00-32-43 - Fix: Edge 
             // Case - Modal Focus/Blur Bug
