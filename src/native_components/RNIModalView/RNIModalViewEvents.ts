@@ -56,25 +56,25 @@ export type OnModalAttemptDismissEventObject = NativeSyntheticEvent<
 // Event Handler Types
 // -------------------
 
-// eslint-disable-next-line prettier/prettier
+// prettier-ignore
 export type OnModalShowEvent = (
   event: OnModalShowEventObject
 ) => void;
 
-// eslint-disable-next-line prettier/prettier
+// prettier-ignore
 export type OnModalDismissEvent = (
   event: OnModalDismissEventObject
 ) => void;
 
-// eslint-disable-next-line prettier/prettier
+// prettier-ignore
 export type OnModalBlurEvent = (
   event: OnModalBlurEventObject
 ) => void;
 
-// eslint-disable-next-line prettier/prettier
+// prettier-ignore
 export type OnModalFocusEvent = (
   event: OnModalFocusEventObject
-) => void; 
+) => void;
 
 export type OnModalDidDismissEvent = (
   event: OnModalDidDismissEventObject
