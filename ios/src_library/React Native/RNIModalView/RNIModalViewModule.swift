@@ -57,7 +57,8 @@ class RNIModalViewModule: RCTEventEmitter {
 
 extension RNIModalViewModule {
   
-  // TODO: Re-write + Cleanup
+  // TODO: See TODO:2023-03-05-00-33-15  - Refactor: Re-write 
+  // `dismissModalByID``
   @objc func dismissModalByID(
     _ modalID: NSString,
     callback: @escaping RCTResponseSenderBlock
@@ -116,6 +117,16 @@ extension RNIModalViewModule {
           } else {
             /// `modalRef` no longer eixists, so we have dismiss manually
             /// TODO: Add code to manually propogate modal blur/focus events
+
+            /// TODO: See TODO:2023-03-05-00-32-43 - Fix: Edge 
+            // Case - Modal Focus/Blur Bug
+            //
+            // * Add code to manually propagate modal blur/focus 
+            //   events
+            //
+            // * The modal is being dismissed via calling the 
+            //   modal view controller's dismiss method. As such, 
+            //   the focus/blur event is not being propagated.
             modalVC.dismiss(animated: true){
               // modal dismissed
               completion();

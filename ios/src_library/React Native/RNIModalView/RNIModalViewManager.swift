@@ -17,17 +17,22 @@ class RNIModalViewManager: RCTViewManager {
     return true;
   };
   
-  // a weak ref to the currently presented modals
-  // currently unused, remove later
+  // TODO: See TODO:2023-03-04-15-49-02 - Refactor:  Relocate 
+  //`presentedModalRefs`
+  //
+  // * a weak ref to the currently presented modals.
+  // * currently unused, remove later.
   var presentedModalRefs = NSMapTable<NSString, RNIModalView>.init(
     keyOptions  : .copyIn,
     valueOptions: .weakMemory
   );
   
-  // TODO: Relocate
+  // TODO: See `TODO:2023-03-04-15-33-15` - Refactor: Relocate 
+  // `delegatesFocus`
   var delegatesFocus = MulticastDelegate<RNIModalViewFocusDelegate>();
   
-  // TODO: Relocate
+  // TODO: See TODO:2023-03-04-15-38-02 - Refactor: Relocate 
+  // `currentModalLevel`
   private var currentModalLevel = -1;
  
   override func view() -> UIView! {
