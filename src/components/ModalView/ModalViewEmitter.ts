@@ -26,7 +26,9 @@ export enum ModalViewEmitterEvents {
   onLayoutModalContentContainer = 'onLayoutModalContentContainer',
 }
 
-// TODO: Remove `KeyMapType` usage
+// TODO: See TODO:20230-03-04-12-58-40 - Refactor: Types -
+// Remove KeyMapType Usage
+//
 export type ModalViewEmitterEventMap =
   // prettier-ignore
   KeyMapType<ModalViewEmitterEvents, {

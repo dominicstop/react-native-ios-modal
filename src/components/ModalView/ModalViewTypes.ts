@@ -29,7 +29,8 @@ export type ModalViewBaseProps = Partial<
     | 'onModalAttemptDismiss'
   >
 > & {
-  // TODO: Rename to `shouldAutoCloseOnUnmount`
+  // TODO: See TODO:2023-03-04-13-02-45 - Refactor: Rename to
+  // shouldAutoCloseOnUnmount
   autoCloseOnUnmount?: boolean;
   setEnableSwipeGestureFromProps?: boolean;
   setModalInPresentationFromProps?: boolean;

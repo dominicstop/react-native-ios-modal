@@ -437,7 +437,9 @@ export class ModalView extends
       }),
     };
 
-    // TODO: Fix `isModalContentLazy` props
+    // TODO: See TODO:2023-03-04-12-50-04 - Fix:
+    // isModalContentLazy Prop
+    //
     // * Error when opening modal once it's been closed
     const shouldMountModalContent =
       !props.isModalContentLazy || state.isModalVisible;

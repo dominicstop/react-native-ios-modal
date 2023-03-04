@@ -1,5 +1,3 @@
-/* eslint-disable no-trailing-spaces */
-
 import type { NativeSyntheticEvent } from 'react-native';
 
 // Event Object Types
@@ -13,37 +11,44 @@ export type RNIModalViewInfo = {
   modalLevelPrev: number;
 };
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalShowEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalDismissEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalBlurEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+/// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalFocusEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalDidDismissEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalWillDismissEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;
 
-// TODO
+// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
+// `RNIModalView` Native Events
 export type OnModalAttemptDismissEventObject = NativeSyntheticEvent<
   RNIModalViewInfo & {}
 >;

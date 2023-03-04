@@ -66,9 +66,19 @@ export function Test03(props: ExampleProps) {
         ref={modalRef}
         containerStyle={styles.modalContainer}
         isModalInPresentation={isModalInPresentation}
-        // TODO - Bug: enableSwipeGesture does not apply when state changes...
+        // TODO - See TODO:2023-03-04-12-45-32 - Fix:
+        // `enableSwipeGesture` Not Updating
+        //
+        // * Bug: enableSwipeGesture does not apply when state
+        //   changes...
+        //
         enableSwipeGesture={isSwipeGestureEnabled}
-        // TODO - Bug: Currently broken...
+        //
+        // TODO - See TODO:2023-03-04-12-50-04 - Fix:
+        // `isModalContentLazy` Prop
+        //
+        // * Bug: Currently broken...
+        //
         isModalContentLazy={true}
         onModalBlur={() => {
           logEvent('onModalBlur');

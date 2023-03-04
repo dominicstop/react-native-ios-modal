@@ -42,7 +42,11 @@ export type RNIModalViewBaseProps = {
   // Props - Events
   // --------------
 
-  // TODO: Rename - Add `will/did` prefix and deprecate prev. props
+  // TODO: TODO:2023-03-04-13-15-11 - Refactor: Use Will/Did
+  // Prefix for RNIModalView Events
+  //
+  // * Rename - Add `will/did` prefix and deprecate prev. props
+  //
   onModalShow: OnModalShowEvent;
   onModalDismiss: OnModalDismissEvent;
 

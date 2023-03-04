@@ -1,4 +1,8 @@
-// TODO: Move to react-native-utilities
+// TODO: TODO:2023-03-04-13-22-34 - Refactor: Remove 
+// `ViewModuleRelatedTypes`
+//
+// * Move this file (i.e. `ViewModuleRelatedTypes`) to
+// `react-native-utilities`
 
 export type ViewManagerCommandID = string | number;
 
