@@ -1,5 +1,19 @@
 # TODO
 
+- [ ] `TODO:2023-03-08-03-51-37` - **Impl**: `ModalEventListener` Component
+  * **Desc**: Implement `ModalEventListener` dummy component.
+  	* A dummy component that render nothing.
+  	* Used to listen to modal events via the modal context + modal event emitter ref.
+  	* Complete this after refactor + rename of modal events.
+  * <u>Related</u>: `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+
+<br>
+
+- [ ] `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06`
+  * **Desc**: Enable `ModalView.isModalContentLazy` prop for example `Test06`.
+
+<br>
+
 - [ ] `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
 
   * **Desc**: Cleanup + Re-write `RNIModalViewModule.dismissModalByID`.
