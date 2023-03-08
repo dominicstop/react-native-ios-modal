@@ -166,7 +166,6 @@ export const ModalGroup = React.forwardRef<ModalGroupHandle, ModalGroupProps>(
           key={`ModalView-${index}`}
           containerStyle={styles.modalGroupModal}
           ref={(_ref) => {
-            console.log(`ModalView-${index} - ref: `, _ref);
             modalRefs.current[`${index}`] = _ref;
           }}
         >
@@ -176,12 +175,6 @@ export const ModalGroup = React.forwardRef<ModalGroupHandle, ModalGroupProps>(
               const nextModalIndex = modalIndex + 1;
 
               const modalRef = modalRefs.current[`${nextModalIndex}`];
-
-              console.log('modalIndex: ', modalIndex);
-              console.log('nextModalIndex: ', nextModalIndex);
-              console.log('modalRefs - keys: ', Object.keys(modalRefs.current));
-              console.log('modalRefs: ', modalRefs.current);
-              console.log('modalRef: ', modalRef);
 
               // guard
               if (modalRef == null) {
