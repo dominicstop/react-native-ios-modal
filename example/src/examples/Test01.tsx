@@ -1,3 +1,5 @@
+// Note: Created based on `example/src_old/ModalViewTest1.js`
+
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
