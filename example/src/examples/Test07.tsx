@@ -10,33 +10,41 @@ import { ExampleCard } from '../components/ExampleCard';
 import { CardBody, CardButton, CardTitle } from '../components/Card';
 
 import { ModalView } from 'react-native-ios-modal';
+import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
 export function Test07(props: ExampleProps) {
   const modalRef = React.useRef<ModalView>(null);
 
-  const [counter, setCounter] = React.useState(0);
+  const [modalInfo, setModalInfo] = React.useState(null);
 
   return (
     <ExampleCard
       style={props.style}
       index={props.index}
       title={'Test07'}
-      subtitle={'test - TBA'}
-      description={['desc - TBA']}
+      subtitle={'getModalInfo'}
+      description={['Test for `ModalView.getModalInfo` method.']}
     >
       <ModalView
-        // TBA
         ref={modalRef}
         containerStyle={styles.modalContainer}
+        onModalDidDismiss={() => {
+          setModalInfo(null);
+        }}
       >
         <React.Fragment>
           <CardBody style={styles.modalCard}>
-            <CardTitle title={'Title - TBA'} />
+            <CardTitle
+              title={'Modal Info'}
+              subtitle={'Show return value of `getModalInfo` method'}
+            />
+            <ObjectPropertyDisplay object={modalInfo} />
           </CardBody>
           <CardButton
-            title={'🌼 TBA'}
-            onPress={() => {
-              // TBA
+            title={'🌼 Get Modal Info'}
+            onPress={async () => {
+              const results = await modalRef.current.getModalInfo();
+              setModalInfo(results);
             }}
           />
         </React.Fragment>
