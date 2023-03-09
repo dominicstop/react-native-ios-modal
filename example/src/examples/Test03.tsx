@@ -61,7 +61,10 @@ export function Test03(props: ExampleProps) {
       index={props.index}
       title={'Test03'}
       subtitle={'test - modal events'}
-      description={['desc - TBA']}
+      description={[
+        'Logs all modal-related events.',
+        'Test for checking if the modal events trigger correctly.',
+      ]}
     >
       <ModalView
         // TBA

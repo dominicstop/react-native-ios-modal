@@ -24,8 +24,11 @@ export function Test06(props: ExampleProps) {
       style={props.style}
       index={props.index}
       title={'Test06'}
-      subtitle={'test - TBA'}
-      description={['desc - TBA']}
+      subtitle={'Modal Focus/Blur Event Test'}
+      description={[
+        'Test for checking whether the modal focus/blur events ' +
+          'are firing when a new modal is shown (and steals focus).',
+      ]}
     >
       <ModalGroup ref={modalGroupRef} />
       <CardButton

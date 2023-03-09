@@ -155,8 +155,18 @@ export class Test02 extends React.PureComponent<ExampleProps, Test02State> {
         style={props.style}
         index={props.index}
         title={'Test02'}
-        subtitle={'TBA'}
-        description={['TBA']}
+        subtitle={''}
+        description={[
+          // prettier-ignore
+          // eslint-disable-next-line prettier/prettier
+            'Cycle through `modalBGBlurEffectStyle` styles, and show/hide '
+          + 'multiple modals one after the other',
+
+          // prettier-ignore
+          // eslint-disable-next-line prettier/prettier
+            'Test for checking if async `setVisibility` resolves properly after a'
+          + 'modal is shown or hidden',
+        ]}
       >
         <React.Fragment>
           <TestModal
