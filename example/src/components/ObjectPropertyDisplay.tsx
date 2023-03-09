@@ -60,7 +60,7 @@ export function ObjectPropertyDisplay<
         ) : (
           <View
             key={`container-${objKey}-${index}`}
-            style={styles.rowContainer}
+            style={styles.propertyRowContainer}
           >
             <Text
               key={`label-${objKey}-${index}`}
@@ -71,6 +71,7 @@ export function ObjectPropertyDisplay<
             <Text
               key={`value-${objKey}-${index}`}
               style={styles.propertyValueText}
+              numberOfLines={3}
             >
               {isValueObj
                 ? '...'
@@ -117,11 +118,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: Colors.PURPLE[1100],
     opacity: 0.75,
+    marginRight: 10,
   },
   propertyLabelObjectText: {
     flex: 0,
   },
   propertyValueText: {
+    flex: 1,
+    textAlign: 'right',
     fontSize: 16,
     fontWeight: '500',
     color: Colors.PURPLE[1100],
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 5,
   },
-  rowContainer: {
+  propertyRowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
