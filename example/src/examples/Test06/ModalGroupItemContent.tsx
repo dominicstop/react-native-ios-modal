@@ -15,6 +15,7 @@ import { ModalFocusIndicatorPill } from './ModalFocusIndicatorPill';
 export function ModalGroupItemContent(props: {
   modalIndex: number;
   onPressOpenNextModal: (modalIndex: number) => void;
+  onPressClosePrevModal: (modalIndex: number) => void;
 }) {
   const logDisplayRef = React.useRef<CardLogDisplayHandle>(null);
 
@@ -84,6 +85,14 @@ export function ModalGroupItemContent(props: {
             modalContext.setVisibility(false);
           }}
         />
+        {props.modalIndex > 0 && (
+          <CardButton
+            title={'🚫 Close Prev. Modal'}
+            onPress={() => {
+              props.onPressClosePrevModal(props.modalIndex);
+            }}
+          />
+        )}
       </CardBody>
     </React.Fragment>
   );
