@@ -15,46 +15,46 @@ public class RNIWeakRef<T> {
     self.rawRef as? T;
   };
   
-  init(with ref: AnyObject) {
+  public init(with ref: AnyObject) {
     self.rawRef = ref;
   };
 };
 
 public class RNIWeakDictionary<K: Hashable, T> {
   
-  fileprivate var _dict: [K: RNIWeakRef<T>] = [:];
+  public var rawDict: [K: RNIWeakRef<T>] = [:];
   
-  var purgedDict: [K: RNIWeakRef<T>] {
+  public var purgedDict: [K: RNIWeakRef<T>] {
     get {
-      self._dict.compactMapValues {
+      self.rawDict.compactMapValues {
         $0.rawRef != nil ? $0 : nil;
       }
     }
   };
   
-  var dict: [K: RNIWeakRef<T>] {
+  public var dict: [K: RNIWeakRef<T>] {
     get {
       let purgedDict = self.purgedDict;
-      self._dict = purgedDict;
+      self.rawDict = purgedDict;
       
       return purgedDict;
     }
   }
   
-  func set(for key: K, with value: T){
-    self._dict[key] = RNIWeakRef(with: value as AnyObject);
+  public func set(for key: K, with value: T){
+    self.rawDict[key] = RNIWeakRef(with: value as AnyObject);
   };
   
-  func get(for key: K) -> T? {
-    guard let ref = self._dict[key]?.synthesizedRef else {
-      self._dict.removeValue(forKey: key);
+  public func get(for key: K) -> T? {
+    guard let ref = self.rawDict[key]?.synthesizedRef else {
+      self.rawDict.removeValue(forKey: key);
       return nil;
     };
     
     return ref;
   };
   
-  subscript(key: K) -> T? {
+  public subscript(key: K) -> T? {
     get {
       self.get(for: key);
     }
