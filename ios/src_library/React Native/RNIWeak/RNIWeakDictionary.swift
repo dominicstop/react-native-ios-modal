@@ -30,7 +30,7 @@ public class RNIWeakDictionary<K: Hashable, T> {
   }
   
   public func set(for key: K, with value: T){
-    self.rawDict[key] = RNIWeakRef(with: value as AnyObject);
+    self.rawDict[key] = RNIWeakRef(with: value);
   };
   
   public func get(for key: K) -> T? {

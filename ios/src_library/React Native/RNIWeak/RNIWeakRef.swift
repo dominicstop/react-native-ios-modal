@@ -15,7 +15,12 @@ public class RNIWeakRef<T> {
     self.rawRef as? T;
   };
   
-  public init(with ref: AnyObject) {
-    self.rawRef = ref;
+  public init(with ref: T) {
+    self.rawRef = ref as AnyObject;
+  };
+  
+  public init?(with ref: T?) {
+    guard let unwrappedRef = ref else { return nil };
+    self.rawRef = unwrappedRef as AnyObject;
   };
 };
