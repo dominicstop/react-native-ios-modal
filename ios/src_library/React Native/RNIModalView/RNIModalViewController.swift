@@ -10,6 +10,9 @@ import Foundation
 
 class RNIModalViewController: UIViewController {
   
+  // MARK: - Properties
+  // ------------------
+  
   var lastViewFrame: CGRect?;
   var boundsDidChangeBlock: ((CGRect) -> Void)?;
   
@@ -32,14 +35,14 @@ class RNIModalViewController: UIViewController {
   };
   
   var blurEffectView : UIView? = nil;
+
   var blurEffectStyle: UIBlurEffect.Style? {
     didSet {
-      let didChange   = oldValue != blurEffectStyle;
+      let didChange = oldValue != blurEffectStyle;
       let isPresented = self.presentingViewController != nil;
     
-      guard
-        didChange && isPresented,
-        let blurEffectStyle = self.blurEffectStyle else { return };
+      guard didChange && isPresented,
+            let blurEffectStyle = self.blurEffectStyle else { return };
       
       #if DEBUG
       print("RNIModalViewController, didSet blurEffectStyle: \(blurEffectStyle.stringDescription())");
@@ -58,6 +61,9 @@ class RNIModalViewController: UIViewController {
       };
     }
   };
+  
+  // MARK: - View Controller Lifecycle
+  // ---------------------------------
   
   override func viewDidLoad() {
     super.viewDidLoad();
@@ -105,9 +111,8 @@ class RNIModalViewController: UIViewController {
     };
   };
   
-  // -----------------------
-  // MARK: Private Functions
-  // -----------------------
+  // MARK: - Private Functions
+  // -------------------------
   
   private func setBGTransparent(){
     self.view.backgroundColor = {
