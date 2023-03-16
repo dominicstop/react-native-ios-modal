@@ -327,194 +327,8 @@ class RNIModalView: UIView {
     self.deinitControllers();
   };
   
-};
-
-// ----------------------
-// MARK: Public Functions
-// ----------------------
-
-extension RNIModalView {
-  
-  public func presentModal(completion: CompletionHandler? = nil) {
-    let hasWindow: Bool = (self.window != nil);
-    
-    guard (hasWindow && !self.isPresented),
-      let modalNVC = self.modalNVC,
-      let (index, topMostPresentedVC) = self.getTopMostPresentedVC()
-    else {
-      #if DEBUG
-      print("RNIModalView, presentModal: guard check failed");
-      #endif
-      completion?(false, .modalAlreadyPresented);
-      return;
-    };
-    
-    /// weird bug where you cant present fullscreen if `presentationController`
-    /// delegate is set so only set the delegate when we are using a page sheet
-    switch self._modalPresentationStyle {
-      case .automatic, .pageSheet, .formSheet:
-        modalNVC.presentationController?.delegate = self;
-      default: break;
-    };
-    
-    modalNVC.modalTransitionStyle   = self._modalTransitionStyle;
-    modalNVC.modalPresentationStyle = self._modalPresentationStyle;
-    
-    self.modalLevel  = index + 1;
-    self.isInFocus   = true;
-    self.isPresented = true;
-    
-    #if DEBUG
-    print("RNIModalView, presentModal: Start"
-      + " - for reactTag: \(self.reactTag ?? -1)"
-      + " - modalLevel: \(self.modalLevel)"
-      + " - modalID: \(self.modalID ?? "N/A")"
-      + " - with presentationStyle: \(self._modalPresentationStyle.stringDescription())"
-      + " - with transitionStyle: \(self._modalTransitionStyle.stringDescription())"
-    );
-    #endif
-    
-    self.enableSwipeGesture(false);
-    
-    topMostPresentedVC.present(modalNVC, animated: true) {
-      if self.hideNonVisibleModals {
-        self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
-      };
-      
-      self.enableSwipeGesture();
-      self.delegate?.onPresentModalView(modalView: self);
-      
-      self.onModalShow?(
-        self.createModalNativeEventDict()
-      );
-      
-      completion?(true, nil);
-      
-      #if DEBUG
-      print("RNIModalView, presentModal: Finished");
-      #endif
-    };
-  };
-  
-  public func dismissModal(completion: CompletionHandler? = nil) {
-    guard self.isPresented,
-      let modalVC = self.modalVC
-    else {
-      #if DEBUG
-      print("RNIModalView, dismissModal failed:"
-        + " - isPresented \(self.isPresented)"
-      );
-      #endif
-      completion?(false, .modalAlreadyDismissed);
-      return;
-    };
-    
-    let isModalInFocus = self.isModalInFocus();
-    guard isModalInFocus, self.allowModalForceDismiss else {
-      #if DEBUG
-      print("RNIModalView, dismissModal failed: Modal not in focus");
-      #endif
-      completion?(false, .modalDismissFailedNotInFocus);
-      return;
-    };
-    
-    let presentedVC: UIViewController = isModalInFocus
-      ? modalVC
-      : modalVC.presentingViewController!
-    
-    #if DEBUG
-    print("RNIModalView, dismissModal: Start - for reactTag: \(self.reactTag ?? -1)");
-    #endif
-    
-    /// begin temp. hiding modals that are no longer visibile
-    if self.hideNonVisibleModals {
-      self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
-    };
-    
-    self.modalLevel = -1;
-    self.isInFocus = false;
-    self.isPresented = false;
-    self.enableSwipeGesture(false);
-    
-    presentedVC.dismiss(animated: true){
-      self.delegate?.onDismissModalView(modalView: self);
-      self.onModalDismiss?(
-        self.createModalNativeEventDict()
-      );
-      
-      self.deinitControllers();
-      completion?(true, nil);
-      
-      #if DEBUG
-      print("RNIModalView, dismissModal: Finished");
-      #endif
-    };
-  };
-  
-  // MARK: Module Functions
-  // ----------------------
-  
-  public func setModalVisibility(
-    visibility: Bool,
-    completion: CompletionHandler? = nil
-  ){
-    var params: Dictionary<AnyHashable, Any> = [
-      "visibility": visibility,
-    ];
-    
-    self.createModalNativeEventDict().forEach { (key, value) in
-      params[key] = value
-    };
-    
-    let modalAction = visibility
-      ? self.presentModal
-      : self.dismissModal;
-    
-    modalAction() { (success, error) in
-      params["success"] = success;
-      
-      if let errorCode = error {
-        params["errorCode"] = errorCode.rawValue;
-        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
-      };
-      
-      completion?(success, error);
-    };
-  };
-};
-
-// MARK: - Internal Functions
-// --------------------------
-
-extension RNIModalView {
-  
-  /// helper function to create a `NativeEvent` object
-  func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
-    var dict: Dictionary<AnyHashable, Any> = [
-      "modalUUID"     : self.modalUUID     ,
-      "isInFocus"     : self.isInFocus     ,
-      "isPresented"   : self.isPresented   ,
-      "modalLevel"    : self.modalLevel    ,
-      "modalLevelPrev": self.modalLevelPrev,
-    ];
-    
-    if let reactTag = self.reactTag {
-      dict["reactTag"] = reactTag;
-    };
-    
-    if let modalID = self.modalID {
-      dict["modalID"] = modalID;
-    };
-    
-    return dict;
-  };
-};
-
-// ----------------------------------
-// MARK: Extension: Private Functions
-// ----------------------------------
-
-extension RNIModalView {
+  // MARK: - Functions - Private
+  // ----------------------------
   
   private func initControllers(){
     #if DEBUG
@@ -646,10 +460,184 @@ extension RNIModalView {
       };
     };
   };
+  
+  // MARK: - Functions - Internal
+  // ----------------------------
+  
+  /// helper function to create a `NativeEvent` object
+  func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
+    var dict: Dictionary<AnyHashable, Any> = [
+      "modalUUID"     : self.modalUUID     ,
+      "isInFocus"     : self.isInFocus     ,
+      "isPresented"   : self.isPresented   ,
+      "modalLevel"    : self.modalLevel    ,
+      "modalLevelPrev": self.modalLevelPrev,
+    ];
+    
+    if let reactTag = self.reactTag {
+      dict["reactTag"] = reactTag;
+    };
+    
+    if let modalID = self.modalID {
+      dict["modalID"] = modalID;
+    };
+    
+    return dict;
+  };
+  
+  // MARK: - Functions - Public
+  // --------------------------
+  
+  public func presentModal(completion: CompletionHandler? = nil) {
+    let hasWindow: Bool = (self.window != nil);
+    
+    guard (hasWindow && !self.isPresented),
+      let modalNVC = self.modalNVC,
+      let (index, topMostPresentedVC) = self.getTopMostPresentedVC()
+    else {
+      #if DEBUG
+      print("RNIModalView, presentModal: guard check failed");
+      #endif
+      completion?(false, .modalAlreadyPresented);
+      return;
+    };
+    
+    // weird bug where you cant present fullscreen if `presentationController`
+    // delegate is set so only set the delegate when we are using a page sheet
+    switch self._modalPresentationStyle {
+      case .automatic, .pageSheet, .formSheet:
+        modalNVC.presentationController?.delegate = self;
+      default: break;
+    };
+    
+    modalNVC.modalTransitionStyle   = self._modalTransitionStyle;
+    modalNVC.modalPresentationStyle = self._modalPresentationStyle;
+    
+    self.modalLevel  = index + 1;
+    self.isInFocus   = true;
+    self.isPresented = true;
+    
+    #if DEBUG
+    print("RNIModalView, presentModal: Start"
+      + " - for reactTag: \(self.reactTag ?? -1)"
+      + " - modalLevel: \(self.modalLevel)"
+      + " - modalID: \(self.modalID ?? "N/A")"
+      + " - with presentationStyle: \(self._modalPresentationStyle.stringDescription())"
+      + " - with transitionStyle: \(self._modalTransitionStyle.stringDescription())"
+    );
+    #endif
+    
+    self.enableSwipeGesture(false);
+    
+    topMostPresentedVC.present(modalNVC, animated: true) {
+      if self.hideNonVisibleModals {
+        self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
+      };
+      
+      self.enableSwipeGesture();
+      self.delegate?.onPresentModalView(modalView: self);
+      
+      self.onModalShow?(
+        self.createModalNativeEventDict()
+      );
+      
+      completion?(true, nil);
+      
+      #if DEBUG
+      print("RNIModalView, presentModal: Finished");
+      #endif
+    };
+  };
+  
+  public func dismissModal(completion: CompletionHandler? = nil) {
+    guard self.isPresented,
+      let modalVC = self.modalVC
+    else {
+      #if DEBUG
+      print("RNIModalView, dismissModal failed:"
+        + " - isPresented \(self.isPresented)"
+      );
+      #endif
+      completion?(false, .modalAlreadyDismissed);
+      return;
+    };
+    
+    let isModalInFocus = self.isModalInFocus();
+    guard isModalInFocus, self.allowModalForceDismiss else {
+      #if DEBUG
+      print("RNIModalView, dismissModal failed: Modal not in focus");
+      #endif
+      completion?(false, .modalDismissFailedNotInFocus);
+      return;
+    };
+    
+    let presentedVC: UIViewController = isModalInFocus
+      ? modalVC
+      : modalVC.presentingViewController!
+    
+    #if DEBUG
+    print("RNIModalView, dismissModal: Start - for reactTag: \(self.reactTag ?? -1)");
+    #endif
+    
+    /// begin temp. hiding modals that are no longer visibile
+    if self.hideNonVisibleModals {
+      self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
+    };
+    
+    self.modalLevel = -1;
+    self.isInFocus = false;
+    self.isPresented = false;
+    self.enableSwipeGesture(false);
+    
+    presentedVC.dismiss(animated: true){
+      self.delegate?.onDismissModalView(modalView: self);
+      self.onModalDismiss?(
+        self.createModalNativeEventDict()
+      );
+      
+      self.deinitControllers();
+      completion?(true, nil);
+      
+      #if DEBUG
+      print("RNIModalView, dismissModal: Finished");
+      #endif
+    };
+  };
+  
+  // MARK: - Functions - Module-Related
+  // ----------------------------------
+  
+  public func setModalVisibility(
+    visibility: Bool,
+    completion: CompletionHandler? = nil
+  ){
+    var params: Dictionary<AnyHashable, Any> = [
+      "visibility": visibility,
+    ];
+    
+    self.createModalNativeEventDict().forEach { (key, value) in
+      params[key] = value
+    };
+    
+    let modalAction = visibility
+      ? self.presentModal
+      : self.dismissModal;
+    
+    modalAction() { (success, error) in
+      params["success"] = success;
+      
+      if let errorCode = error {
+        params["errorCode"] = errorCode.rawValue;
+        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
+      };
+      
+      completion?(success, error);
+    };
+  };
 };
 
-// MARK: Extension: UIAdaptivePresentationControllerDelegate
-// ---------------------------------------------------------
+// MARK: - UIAdaptivePresentationControllerDelegate
+// ------------------------------------------------
 
 extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
