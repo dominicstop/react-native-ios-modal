@@ -13,24 +13,6 @@ class RNIModalView: UIView {
   
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void
   
-  struct DefaultValues {
-    static let presentationStyle: UIModalPresentationStyle = {
-      guard #available(iOS 13.0, *) else { return .overFullScreen };
-      return .automatic;
-    }();
-    
-    static let presentationStyleString =
-      Self.presentationStyle.stringDescription() as NSString;
-    
-    static let modalBGBlurEffectStyle: UIBlurEffect.Style = {
-      guard #available(iOS 13.0, *) else { return .light };
-      return .systemThinMaterial;
-    }();
-    
-    static let modalBGBlurEffectStyleString =
-      Self.modalBGBlurEffectStyle.stringDescription() as NSString;
-  };
-  
   // ----------------
   // MARK: Properties
   // ----------------
@@ -94,7 +76,14 @@ class RNIModalView: UIView {
     }
   };
   
-  @objc var modalBGBlurEffectStyle: NSString = DefaultValues.modalBGBlurEffectStyleString {
+  @objc var modalBGBlurEffectStyle: NSString = {
+    let defaultBlurEffectStyle: UIBlurEffect.Style = {
+      guard #available(iOS 13.0, *) else { return .light };
+      return .systemThinMaterial;
+    }();
+    
+    return defaultBlurEffectStyle.stringDescription() as NSString;
+  }() {
     didSet {
       guard oldValue != self.modalBGBlurEffectStyle
       else { return };
@@ -112,9 +101,19 @@ class RNIModalView: UIView {
     }
   };
   
-  private var _modalPresentationStyle = DefaultValues.presentationStyle;
+  private var _modalPresentationStyle: UIModalPresentationStyle = {
+    guard #available(iOS 13.0, *) else { return .overFullScreen };
+    return .automatic;
+  }();
   
-  @objc var modalPresentationStyle: NSString = DefaultValues.presentationStyleString {
+  @objc var modalPresentationStyle: NSString = {
+    let defaultModalPresentationStyle: UIModalPresentationStyle = {
+      guard #available(iOS 13.0, *) else { return .overFullScreen };
+      return .automatic;
+    }();
+    
+    return defaultModalPresentationStyle.stringDescription() as NSString;
+  }() {
     didSet {
       guard oldValue != self.modalPresentationStyle
       else { return };
