@@ -13,18 +13,18 @@ class RNIModalView: UIView {
   
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void
   
-  // ----------------
   // MARK: Properties
   // ----------------
 
-  weak var bridge  : RCTBridge?;
+  weak var bridge: RCTBridge?;
   weak var delegate: RNIModalViewPresentDelegate?;
   
-  var isInFocus  : Bool = false;
+  var isInFocus: Bool = false;
   var isPresented: Bool = false;
   
-  private var modalVC     : RNIModalViewController?;
-  private var modalNVC    : UINavigationController?;
+  private var modalVC: RNIModalViewController?;
+  private var modalNVC: UINavigationController?;
+  
   private var touchHandler: RCTTouchHandler!;
   private var reactSubview: UIView?;
   
@@ -37,30 +37,29 @@ class RNIModalView: UIView {
   
   let modalUUID = UUID().uuidString;
   
-  // ------------------------------------------------
-  // MARK: Properties: React Props - Events/Callbacks
-  // ------------------------------------------------
+  // MARK: - Properties: React Props - Events
+  // ----------------------------------------
   
-  // RN event callbacks for whenever a modal is presented/dismissed
-  // via functions or from swipe to dismiss gestures
-  @objc var onModalShow   : RCTDirectEventBlock?;
+  /// RN event callbacks for whenever a modal is presented/dismissed
+  /// via functions or from swipe to dismiss gestures
+  @objc var onModalShow: RCTDirectEventBlock?;
   @objc var onModalDismiss: RCTDirectEventBlock?;
   
-  // RN event callbacks for: UIAdaptivePresentationControllerDelegate
-  // Note: that these are only invoked in response to dismiss gestures
-  @objc var onModalDidDismiss    : RCTDirectEventBlock?;
-  @objc var onModalWillDismiss   : RCTDirectEventBlock?;
+  /// RN event callbacks for: UIAdaptivePresentationControllerDelegate
+  /// Note: that these are only invoked in response to dismiss gestures
+  @objc var onModalDidDismiss: RCTDirectEventBlock?;
+  @objc var onModalWillDismiss: RCTDirectEventBlock?;
   @objc var onModalAttemptDismiss: RCTDirectEventBlock?;
   
-  // RN event callbacks whenever a modal is focused/blurred
-  // note: is not called when the modal is topmost to prevent duplication
-  // of the onModalShow/onModalDismiss events
-  @objc var onModalBlur : RCTDirectEventBlock?;
+  /// RN event callbacks whenever a modal is focused/blurred
+  /// note: is not called when the modal is topmost to prevent duplication
+  /// of the onModalShow/onModalDismiss events
+  @objc var onModalBlur: RCTDirectEventBlock?;
   @objc var onModalFocus: RCTDirectEventBlock?;
   
-  // ---------------------------------------------
-  // MARK: Properties: React Props - "Value" Props
-  // ---------------------------------------------
+
+  // MARK: - Properties: React Props - Value
+  // ---------------------------------------
   
   @objc var isModalBGBlurred: Bool = true {
     didSet {
@@ -77,6 +76,7 @@ class RNIModalView: UIView {
   };
   
   @objc var modalBGBlurEffectStyle: NSString = {
+    // Provide default value
     let defaultBlurEffectStyle: UIBlurEffect.Style = {
       guard #available(iOS 13.0, *) else { return .light };
       return .systemThinMaterial;
@@ -104,11 +104,13 @@ class RNIModalView: UIView {
   };
   
   private var _modalPresentationStyle: UIModalPresentationStyle = {
+    // Provide default value
     guard #available(iOS 13.0, *) else { return .overFullScreen };
     return .automatic;
   }();
   
   @objc var modalPresentationStyle: NSString = {
+    // Provide default value
     let defaultModalPresentationStyle: UIModalPresentationStyle = {
       guard #available(iOS 13.0, *) else { return .overFullScreen };
       return .automatic;
@@ -175,14 +177,14 @@ class RNIModalView: UIView {
     }
   };
   
-  // unique identifier for this modal
+  /// unique identifier for this modal
   @objc var modalID: NSString? = nil {
     willSet {
       self.modalVC?.modalID = newValue;
     }
   };
   
-  // disable swipe gesture recognizer for this modal
+  /// disable swipe gesture recognizer for this modal
   @objc var enableSwipeGesture: Bool = true {
     didSet {
       guard self.enableSwipeGesture != oldValue else { return };
@@ -192,14 +194,22 @@ class RNIModalView: UIView {
   
   @objc var hideNonVisibleModals: Bool = false;
   
-  // control modal present/dismiss by mounting/unmounting the react subview
-  // * true : the modal is presented/dismissed when the view is mounted/unmounted
-  // * false: the modal is presented/dismissed by calling the functions from js
+  /// control modal present/dismiss by mounting/unmounting the react subview
+  /// * `true`: the modal is presented/dismissed when the view is mounted
+  ///   or unmounted
+  ///
+  /// * `false`: the modal is presented/dismissed by calling the functions from
+  ///    js/react
+  ///
   @objc var presentViaMount: Bool = false;
   
-  // allow modal to be programatically closed even when not current focused
-  // * true : the modal can be dismissed even when it's not the topmost presented modal
-  // * false: the modal can only be dismissed if it's in focus, otherwise error
+  /// allow modal to be programatically closed even when not current focused
+  /// * `true`: the modal can be dismissed even when it's not the topmost
+  ///    presented modal.
+  ///
+  /// * `false`: the modal can only be dismissed if it's in focus, otherwise
+  ///    error.
+  ///
   @objc var allowModalForceDismiss: Bool = true;
   
   @objc var isModalInPresentation: Bool = false {
@@ -211,9 +221,8 @@ class RNIModalView: UIView {
     }
   };
   
-  // -------------------------------
-  // MARK: Swift/UIKit Related Logic
-  // -------------------------------
+  // MARK: - Init
+  // ------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
@@ -226,6 +235,9 @@ class RNIModalView: UIView {
     super.init(coder: aDecoder);
     fatalError("Not implemented");
   };
+  
+  // MARK: - UIKit Lifecycle
+  // -----------------------
   
   override func layoutSubviews() {
     super.layoutSubviews();
@@ -257,9 +269,8 @@ class RNIModalView: UIView {
     };
   };
   
-  // ----------------------
-  // MARK: RN Related Logic
-  // ----------------------
+  // MARK: - React-Native Lifecycle
+  // ------------------------------
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertReactSubview(subview, at: atIndex);
@@ -310,6 +321,8 @@ class RNIModalView: UIView {
     // modal contents has been unmounted so reset react subview
     self.reactSubview = nil;
     self.modalVC?.reactView = nil;
+    
+    // cleanup
     self.touchHandler.detach(from: subview);
     self.deinitControllers();
   };
@@ -336,8 +349,8 @@ extension RNIModalView {
       return;
     };
     
-    /// weird bug where you cant present fullscreen if `presentationController` delegate is set
-    /// so only set the delegate when we are using a page sheet
+    /// weird bug where you cant present fullscreen if `presentationController`
+    /// delegate is set so only set the delegate when we are using a page sheet
     switch self._modalPresentationStyle {
       case .automatic, .pageSheet, .formSheet:
         modalNVC.presentationController?.delegate = self;
@@ -418,8 +431,8 @@ extension RNIModalView {
       self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
     };
     
-    self.modalLevel  = -1;
-    self.isInFocus   = false;
+    self.modalLevel = -1;
+    self.isInFocus = false;
     self.isPresented = false;
     self.enableSwipeGesture(false);
     
@@ -505,7 +518,9 @@ extension RNIModalView {
   
   private func initControllers(){
     #if DEBUG
-    print("RNIModalView init - initControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
+    print(
+        "RNIModalView init - initControllers for modal: "
+      + "\(self.modalID ?? self.modalUUID as NSString)");
     #endif
     
     self.modalVC = {
@@ -633,7 +648,6 @@ extension RNIModalView {
   };
 };
 
-// ---------------------------------------------------------
 // MARK: Extension: UIAdaptivePresentationControllerDelegate
 // ---------------------------------------------------------
 
