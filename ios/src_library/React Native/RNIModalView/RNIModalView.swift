@@ -90,10 +90,12 @@ class RNIModalView: UIView {
       
       guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
       else {
-        RCTLogWarn(
+        #if DEBUG
+        print(
             "RNIModalView, modalBGBlurEffectStyle: Invalid value - "
           + "\(self.modalBGBlurEffectStyle) is not a valid blur style"
         );
+        #endif
         return;
       };
       
@@ -120,10 +122,12 @@ class RNIModalView: UIView {
       
       guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
       else {
-        RCTLogWarn(
+        #if DEBUG
+        print(
             "RNIModalView, modalPresentationStyle: Invalid value - "
           + "\(self.modalPresentationStyle) is not a valid presentation style"
         );
+        #endif
         return;
       };
       
@@ -140,10 +144,12 @@ class RNIModalView: UIView {
           #endif
 
         default:
-          RCTLogWarn(
+          #if DEBUG
+          print(
               "RNIModalView, modalPresentationStyle: Unsupported Presentation Style - "
             + "\(self.modalPresentationStyle) is not a supported presenatation style"
           );
+          #endif
       };
     }
   };
@@ -156,7 +162,9 @@ class RNIModalView: UIView {
       
       guard let style = UIModalTransitionStyle.fromString(self.modalTransitionStyle as String)
       else {
-        RCTLogWarn("RNIModalView, modalTransitionStyle: Invalid value");
+        #if DEBUG
+        print("RNIModalView, modalTransitionStyle: Invalid value");
+        #endif
         return;
       };
       
@@ -257,7 +265,9 @@ class RNIModalView: UIView {
     super.insertReactSubview(subview, at: atIndex);
     
     guard (self.reactSubview == nil) else {
-      RCTLogWarn("RNIModalView, insertReactSubview: Modal view can only have one subview");
+      #if DEBUG
+      print("RNIModalView, insertReactSubview: Modal view can only have one subview");
+      #endif
       return;
     };
     
@@ -287,7 +297,9 @@ class RNIModalView: UIView {
     super.removeReactSubview(subview);
     
     guard self.reactSubview == subview else {
-      RCTLogWarn("RNIModalView, removeReactSubview: Cannot remove view other than modal view");
+      #if DEBUG
+      print("RNIModalView, removeReactSubview: Cannot remove view other than modal view");
+      #endif
       return;
     };
     

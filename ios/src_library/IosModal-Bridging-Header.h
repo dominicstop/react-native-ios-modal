@@ -4,8 +4,6 @@
 #import <React/RCTDevLoadingView.h>
 #endif
 
-#import "React Native/RCTSwiftLog/RCTSwiftLog.h"
-
 #import <React/RCTBridge.h>
 #import "React/RCTEventEmitter.h"
 
