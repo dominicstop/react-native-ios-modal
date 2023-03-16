@@ -1,5 +1,11 @@
 # TODO
 
+- [ ] `TODO:2023-03-09-17-36-51` - Impl: Close Preceding Modals
+  * Desc: Implement a way to close proceeding modals w/o permanently closing the succeeding/topmost modals. 
+  	* When trying to close a modal that is "not in focus" (i.e. a modal that isn't at the very top; e.g. a modal that has a `modalIndex` that is lower than the topmost modal), will throw an error: "`ModalView`, `setVisibility` failed: Cannot dismiss modal because it's not in focus. Enable `allowModalForceDismiss` to dismiss".
+
+<br>
+
 - [ ] `TODO:2023-03-08-03-51-37` - **Impl**: `ModalEventListener` Component
   * **Desc**: Implement `ModalEventListener` dummy component.
   	* A dummy component that render nothing.
@@ -14,57 +20,8 @@
 
 <br>
 
-- [ ] `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
-
-  * **Desc**: Cleanup + Re-write `RNIModalViewModule.dismissModalByID`.
-
-  <br>
-
-  - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
-
-    * **Desc**: Add code to manually propagate modal blur/focus events.
-    	* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
-
-    * <u>Related</u>: `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
-
-<br>
-
-- [ ] `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
-
-  * **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
-  	* Modal focus/blur re-write.
-  	* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
-  	* It will then be responsible to notify/"hand out" blur/focus events to other modals.
-  	* Will be responsible for keeping track how many modals are currently active, etc.
-
-  <br>
-
-  - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Relocate `currentModalLevel`
-  - Desc: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
-
-  <br>
-
-  - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Relocate `delegatesFocus`
-    * **Desc**: Relocate `RNIModalViewManager.delegatesFocus` property to a singleton called `RNIModalManager`.
-
-  <br>
-
-  - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Relocate `presentedModalRefs`
-
-<br>
-
 - [ ] `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
   * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
-
-<br>
-
-- [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
-  * **Desc**: Rename `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
-
-<br>
-
-- [ ] `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
-  * **Desc**: Update `RNIModalView` native event parameters (i.e. send over more relevant data).
 
 <br>
 
@@ -87,29 +44,76 @@
 
 <br>
 
-- [ ] `TODO:2023-03-04-06-34-28` - Library Cleanup - 02
-  * **Desc**: TBA
-  * <u>Related</u>:
+- [ ] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
+
+  * **Desc**: Rewrite native to be more readable/consistent.
+
+  <br>
+
+  * [ ] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
+  	* **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
+  		* Modal focus/blur re-write.
+  		* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
+  		* It will then be responsible to notify/"hand out" blur/focus events to other modals.
+  		* Will be responsible for keeping track how many modals are currently active, etc.
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
+  	* **Desc**: Add code to manually propagate modal blur/focus events.
+  		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
+  	* **Desc**: Cleanup + Re-write `RNIModalViewModule.dismissModalByID`.
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Relocate `currentModalLevel`
+  - **Desc**: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Relocate `delegatesFocus`
+  	* **Desc**: Relocate `RNIModalViewManager.delegatesFocus` property to a singleton called `RNIModalManager`.
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Relocate `presentedModalRefs`
+
+  <br>
+
+  - [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
+  	* **Desc**: Update `RNIModalView` native event parameters (i.e. send over more relevant data).
+  		* Add param `isUserInitiated` to indicate if an event was fired due to a user action.
+  
+  <br>
+  
+  * [ ] **Subtask** - `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+  	* **Desc**: Rename `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+  
+  - <u>Related</u>:
   	*  `TODO:2023-03-04-05-25-44` - Library Cleanup
   	* `Note:2023-03-04-02-58-31`
 
-<br>
+<br><br>
 
-- [ ] `TODO:2023-03-04-03-59-43` - Re-Write Examples in Typescript
+## TODO - Completed
 
-  * **Desc**: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
+- [x] `TODO:2023-03-04-03-59-43` - Re-Write Examples in Typescript
 
-  - [x] **Subtask** - `TODO:2023-03-04-04-39-44` - Import + Re–write Example Components
-  	* **Desc**: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
+	* **Desc**: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
+
+	- [x] **Subtask** - `TODO:2023-03-04-04-39-44` - Import + Re–write Example Components
+		* **Desc**: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
 
 <br>
 
 - [x] `TODO:2023-03-04-04-20-46` - Library Typescript Re-Write
 	* **Desc**: Re-write `react-native-ios-modal` to support typescript.
 
-<br><br>
-
-## TODO - Completed
+<br>
 
 - [x]  `TODO:2023-03-04-05-25-44` - Library Cleanup
 
