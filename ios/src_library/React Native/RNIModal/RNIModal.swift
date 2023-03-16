@@ -67,8 +67,8 @@ public protocol RNIModalRequestable: AnyObject {
 /// The "implementer/delegator" notifies the "adoptee/delegate" of this protocol
 /// of modal focus/blur related events.
 ///
-/// An interface for the "adoptee/delegate" of incoming modal "focus/blur"
-/// related notifications.
+/// An interface for the "adoptee/delegate" to receive anad handle incoming
+/// modal "focus/blur"-related notifications.
 ///
 public protocol RNIModalFocusNotifiable {
   
@@ -91,6 +91,7 @@ public protocol RNIModalFocusNotifying: AnyObject {
   /// to be shown or hidden.
   ///
   /// That focus notification will then be relayed to the other modal instances.
+  ///
   var modalFocusDelegate: RNIModalFocusNotifiable? { get set };
 
 };
