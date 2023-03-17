@@ -29,7 +29,7 @@ public protocol RNIModalIdentity: AnyObject {
   
   var modalIndex: Int? { set get };
   
-  var modalID: String? { set get };
+  var modalNativeID: String? { set get };
 };
 
 /// Specifies that the "adoptee/delegate" that conforms to this protocol must

@@ -15,7 +15,7 @@ public class RNIModalManager {
   // MARK: - Properties
   // ------------------
   
-  private var counterModalID: UInt = 0;
+  private var counterModalNativeID: UInt = 0;
   
   private(set) public var currentModalIndex = -1;
   
@@ -43,17 +43,17 @@ public class RNIModalManager {
   // MARK: - Methods
   // ---------------
   
-  private func createModalID() -> String {
-    let modalID = self.counterModalID;
-    self.counterModalID += 1;
+  private func createModalNativeID() -> String {
+    let modalNativeID = self.counterModalNativeID;
+    self.counterModalNativeID += 1;
     
-    return "modal-id:\(modalID)";
+    return "modal-native-id:\(modalNativeID)";
   };
   
   public func register(modal: RNIModal) {
-    let key = self.createModalID();
+    let key = self.createModalNativeID();
     
-    modal.modalID = key;
+    modal.modalNativeID = key;
     modal.modalIndex = -1;
     
     modal.isModalPresented = false;
@@ -79,7 +79,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     for modalItem in self.modalInstances {
       // skip the modal that sent the notification
-      guard modalItem.modalID != modal.modalID
+      guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
       modalItem.onModalWillFocusNotification(sender: modal);
@@ -92,7 +92,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     for modalItem in self.modalInstances {
       // skip the modal that sent the notification
-      guard modalItem.modalID != modal.modalID
+      guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
       modalItem.onModalDidFocusNotification(sender: modal);
@@ -105,7 +105,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     for modalItem in self.modalInstances {
       // skip the modal that sent the notification
-      guard modalItem.modalID != modal.modalID
+      guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
       modalItem.onModalWillBlurNotification(sender: modal);
@@ -118,7 +118,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     for modalItem in self.modalInstances {
       // skip the modal that sent the notification
-      guard modalItem.modalID != modal.modalID
+      guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
       modalItem.onModalDidBlurNotification(sender: modal);
