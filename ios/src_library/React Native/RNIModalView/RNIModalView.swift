@@ -393,28 +393,6 @@ class RNIModalView: UIView {
     bridge.uiManager.setSize(newBounds.size, for: reactSubview);
   };
   
-  private func getTopMostPresentedVC() -> (topLevel: Int, topVC: UIViewController)? {
-    guard let rootVC = UIWindow.key?.rootViewController else {
-      #if DEBUG
-      print("RNIModalView, getTopMostVC Error: could not get root VC. ");
-      #endif
-      return nil;
-    };
-    
-    var index = 0;
-    var topmostVC = rootVC;
-    
-    // climb the vc hierarchy to find the topmost presented vc
-    while topmostVC.presentedViewController != nil {
-      if let parent = topmostVC.presentedViewController {
-        index += 1;
-        topmostVC = parent;
-      };
-    };
-    
-    return (index, topmostVC);
-  };
-  
   private func getPresentedVCList() -> [UIViewController] {
     guard let rootVC = UIWindow.key?.rootViewController else {
       #if DEBUG
@@ -437,10 +415,15 @@ class RNIModalView: UIView {
   // TODO:2023-03-17-15-32-16 - Rename to RNIModalView.isModalInFocus
   // * Rename to `isTopMostModal`
   private func isModalInFocus() -> Bool {
-    guard let (_, vc) = self.getTopMostPresentedVC()
-      else { return false };
+    let presentedViewControllers =
+      RNIModalManager.sharedInstance.getPresentedViewControllers();
     
-    return vc === self.modalNVC;
+    guard let topmostPresentedVC = presentedViewControllers.last
+    else { return false };
+    
+    /// Note:2023-03-17-15-41-23 - Possible bug/typo
+    /// * Replace `self.modalNVC` w/ `self.modalVC`
+    return topmostPresentedVC === self.modalNVC;
   };
   
   private func enableSwipeGesture(_ flag: Bool? = nil){
@@ -490,16 +473,40 @@ class RNIModalView: UIView {
   // --------------------------
   
   public func presentModal(completion: CompletionHandler? = nil) {
-    let hasWindow: Bool = (self.window != nil);
-    
-    guard (hasWindow && !self.isPresented),
-      let modalNVC = self.modalNVC,
-      let (index, topMostPresentedVC) = self.getTopMostPresentedVC()
-    else {
+    guard self.window != nil else {
       #if DEBUG
-      print("RNIModalView, presentModal: guard check failed");
+      print("RNIModalView - presentModal - guard check failed - no window");
+      #endif
+      completion?(false, nil);
+      return;
+    };
+    
+    guard self.isPresented else {
+      #if DEBUG
+      print("RNIModalView - presentModal: modal already presented");
       #endif
       completion?(false, .modalAlreadyPresented);
+      return;
+    };
+    
+    let presentedViewControllers =
+      RNIModalManager.sharedInstance.getPresentedViewControllers();
+    
+    let lastModalIndex = presentedViewControllers.count - 1;
+    
+    guard let topMostPresentedVC = presentedViewControllers.last else {
+      #if DEBUG
+      print("RNIModalView - presentModal: could not get vc");
+      #endif
+      completion?(false, nil);
+      return;
+    };
+    
+    guard let modalNVC = self.modalNVC else {
+      #if DEBUG
+      print("RNIModalView - presentModal: could not get navigation vc");
+      #endif
+      completion?(false, nil);
       return;
     };
     
@@ -511,11 +518,11 @@ class RNIModalView: UIView {
       default: break;
     };
     
-    modalNVC.modalTransitionStyle   = self._modalTransitionStyle;
+    modalNVC.modalTransitionStyle = self._modalTransitionStyle;
     modalNVC.modalPresentationStyle = self._modalPresentationStyle;
     
-    self.modalLevel  = index + 1;
-    self.isInFocus   = true;
+    self.modalLevel = lastModalIndex + 1;
+    self.isInFocus = true;
     self.isPresented = true;
     
     #if DEBUG
