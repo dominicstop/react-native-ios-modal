@@ -190,7 +190,7 @@ class RNIModalView: UIView {
   
   @objc var hideNonVisibleModals: Bool = false;
   
-  /// control modal present/dismiss by mounting/unmounting the react subview
+  /// control modal present/dismiss by mounting/un-mounting the react subview
   /// * `true`: the modal is presented/dismissed when the view is mounted
   ///   or unmounted
   ///
@@ -199,7 +199,7 @@ class RNIModalView: UIView {
   ///
   @objc var presentViaMount: Bool = false;
   
-  /// allow modal to be programatically closed even when not current focused
+  /// allow modal to be programmatically closed even when not current focused
   /// * `true`: the modal can be dismissed even when it's not the topmost
   ///    presented modal.
   ///
