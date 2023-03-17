@@ -178,11 +178,7 @@ class RNIModalView: UIView {
   };
   
   /// unique identifier for this modal
-  @objc var modalID: NSString? = nil {
-    willSet {
-      self.modalVC?.modalID = newValue;
-    }
-  };
+  @objc var modalID: NSString? = nil;
   
   /// disable swipe gesture recognizer for this modal
   @objc var enableSwipeGesture: Bool = true {

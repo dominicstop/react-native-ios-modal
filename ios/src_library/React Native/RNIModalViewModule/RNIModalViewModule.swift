@@ -81,7 +81,7 @@ extension RNIModalViewModule {
            let rootVC  = navVC.viewControllers.first,
            let modalVC = rootVC as? RNIModalViewController,
            // check if this is the modal we want to dismiss
-           modalVC.modalID == modalID {
+           modalVC.modalID == modalID as String {
           
           let completion = {
             // modal dismissed
