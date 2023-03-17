@@ -183,8 +183,10 @@ class RNIModalView: UIView {
   /// disable swipe gesture recognizer for this modal
   @objc var enableSwipeGesture: Bool = true {
     didSet {
-      guard self.enableSwipeGesture != oldValue else { return };
-      self.enableSwipeGesture(self.enableSwipeGesture);
+      let newValue = self.enableSwipeGesture;
+      guard newValue != oldValue else { return };
+      
+      self.enableSwipeGesture(newValue);
     }
   };
   
