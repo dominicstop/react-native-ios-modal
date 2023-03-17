@@ -63,6 +63,29 @@ public class RNIModalManager {
     
     self.modalInstanceDict[key] = modal;
   };
+  
+  public func getPresentedViewControllers() -> [UIViewController] {
+    guard let rootVC = UIWindow.key?.rootViewController else {
+      #if DEBUG
+      print(
+          "RNIModalManager - getTopMostPresentedVC - Error: Could not get root "
+        + "view controller"
+      );
+      #endif
+      return [];
+    };
+    
+    var presentedVCList: [UIViewController] = [rootVC];
+    
+    // climb the vc hierarchy to find the topmost presented vc
+    while presentedVCList.last!.presentedViewController != nil {
+      if let presentedVC = presentedVCList.last!.presentedViewController {
+        presentedVCList.append(presentedVC);
+      };
+    };
+    
+    return presentedVCList;
+  };
 };
 
 // MARK: RNIModalFocusNotifiable
