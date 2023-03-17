@@ -692,7 +692,6 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
 };
 
-// ------------------------------------------
 // MARK: Extension: RNIModalViewFocusDelegate
 // ------------------------------------------
 
