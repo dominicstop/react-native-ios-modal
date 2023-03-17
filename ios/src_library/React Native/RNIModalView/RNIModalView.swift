@@ -434,6 +434,8 @@ class RNIModalView: UIView {
     return vcList;
   };
   
+  // TODO:2023-03-17-15-32-16 - Rename to RNIModalView.isModalInFocus
+  // * Rename to `isTopMostModal`
   private func isModalInFocus() -> Bool {
     guard let (_, vc) = self.getTopMostPresentedVC()
       else { return false };
