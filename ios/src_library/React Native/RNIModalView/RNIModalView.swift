@@ -10,8 +10,8 @@ import Foundation
 
 
 class RNIModalView: UIView {
-  
-  typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void
+
+  typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
   // MARK: Properties
   // ----------------
