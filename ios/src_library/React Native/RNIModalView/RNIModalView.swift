@@ -569,7 +569,7 @@ class RNIModalView: UIView {
   
   public func dismissModal(completion: CompletionHandler? = nil) {
     guard self.isPresented,
-      let modalVC = self.modalVC
+          let modalVC = self.modalVC
     else {
       #if DEBUG
       print("RNIModalView, dismissModal failed:"
