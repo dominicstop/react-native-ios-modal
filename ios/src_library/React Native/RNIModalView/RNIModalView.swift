@@ -422,7 +422,7 @@ class RNIModalView: UIView {
   
   private func isTopMostPresentedVC() -> Bool {
     let presentedViewControllers =
-      RNIModalManager.sharedInstance.getPresentedViewControllers();
+      RNIModalManager.getPresentedViewControllers();
     
     guard let topmostPresentedVC = presentedViewControllers.last
     else { return false };
@@ -500,7 +500,7 @@ class RNIModalView: UIView {
     };
     
     let presentedViewControllers =
-      RNIModalManager.sharedInstance.getPresentedViewControllers();
+      RNIModalManager.getPresentedViewControllers();
     
     let lastModalIndex = presentedViewControllers.count - 1;
     
