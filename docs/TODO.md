@@ -50,6 +50,12 @@
 
   <br>
 
+  * [ ] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
+    * **Desc**: Re-write modal "focus checking"
+    	* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
+  
+  <br>
+  
   * [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
   * [ ] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
   * [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
@@ -63,32 +69,32 @@
     	* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
     	* It will then be responsible to notify/"hand out" blur/focus events to other modals.
     	* Will be responsible for keeping track how many modals are currently active, etc.
-  
+
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
   	* **Desc**: Add code to manually propagate modal blur/focus events.
   		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
-
-  <br>
   
+  <br>
+
   - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
   	* **Desc**: Cleanup + Re-write `RNIModalViewModule.dismissModalByID`.
-
+  
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Relocate `currentModalLevel`
   - **Desc**: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
-
+  
   <br>
-
+  
   - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Relocate `delegatesFocus`
   	* **Desc**: Relocate `RNIModalViewManager.delegatesFocus` property to a singleton called `RNIModalManager`.
   
   <br>
-
+  
   - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Relocate `presentedModalRefs`
-
+  
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
