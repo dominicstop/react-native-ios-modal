@@ -491,7 +491,7 @@ class RNIModalView: UIView {
       return;
     };
     
-    guard self.isPresented else {
+    guard !self.isPresented else {
       #if DEBUG
       print("RNIModalView - presentModal: modal already presented");
       #endif
@@ -581,7 +581,12 @@ class RNIModalView: UIView {
     };
     
     let isModalInFocus = self.isTopMostPresentedVC();
-    guard isModalInFocus, self.allowModalForceDismiss else {
+    
+    let shouldDismiss = isModalInFocus
+      ? true
+      : self.allowModalForceDismiss;
+    
+    guard shouldDismiss else {
       #if DEBUG
       print("RNIModalView, dismissModal failed: Modal not in focus");
       #endif
