@@ -53,6 +53,8 @@
   * [ ] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
     * **Desc**: Re-write modal "focus checking"
     	* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
+    	* ` getPresentedViewControllers().last === self.modalNVC: true`
+    	* ``getPresentedViewControllers.last === self.modalVC false`
   
   <br>
   
@@ -60,7 +62,7 @@
   * [ ] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
   * [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
   * [x] **Subtask** - `TODO:2023-03-16-15-19-13` - Remove `RCTSwiftLog`
-  
+
   <br>
 
   * [ ] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
@@ -69,13 +71,13 @@
     	* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
     	* It will then be responsible to notify/"hand out" blur/focus events to other modals.
     	* Will be responsible for keeping track how many modals are currently active, etc.
-
+  
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
   	* **Desc**: Add code to manually propagate modal blur/focus events.
   		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
-  
+
   <br>
 
   - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
