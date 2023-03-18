@@ -19,6 +19,14 @@ class RNIModalView: UIView {
   weak var bridge: RCTBridge?;
   weak var delegate: RNIModalViewPresentDelegate?;
   
+  /// TODO:2023-03-18-09-22-15 - Re-write Modal Focus Checking Logic
+  ///
+  /// * Re-write "focus checking"
+  ///
+  /// * instead of manually keeping track of focus per modal instance
+  ///   (potentially becoming stale over time), check focus via climbing the
+  ///   presented vc hierarchy.
+  ///
   var isInFocus: Bool = false;
   var isPresented: Bool = false;
   
