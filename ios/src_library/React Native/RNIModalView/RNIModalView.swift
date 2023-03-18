@@ -429,6 +429,10 @@ class RNIModalView: UIView {
     
     /// Note:2023-03-17-15-41-23 - Possible bug/typo
     /// * Replace `self.modalNVC` w/ `self.modalVC`
+    /// * Addendum: not a bug
+    /// * `getPresentedViewControllers().last === modalNVC`: true
+    /// * `getPresentedViewControllers().last === modalVC`: false
+    ///
     return topmostPresentedVC === self.modalNVC;
   };
   
