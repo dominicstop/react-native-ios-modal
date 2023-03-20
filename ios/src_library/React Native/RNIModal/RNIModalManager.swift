@@ -41,6 +41,10 @@ public class RNIModalManager {
     return presentedVCList;
   };
   
+  public static func getTopmostPresentedViewController() -> UIViewController? {
+    return Self.getPresentedViewControllers().last;
+  };
+  
   // MARK: - Properties
   // ------------------
   
