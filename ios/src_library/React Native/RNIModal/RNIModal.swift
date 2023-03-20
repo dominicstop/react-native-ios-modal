@@ -18,6 +18,9 @@ public typealias RNIModal =
   & RNIModalFocusNotifying;
 
 
+/// Contains modal-related properties that are used to uniquely identify a modal
+/// instance.
+///
 /// Specifies that the "adoptee/delegate" that conforms to this protocol must
 /// have the specified modal-related properties so that it can be uniquely
 /// identified amongst different modal instances.
@@ -32,6 +35,9 @@ public protocol RNIModalIdentity: AnyObject {
   var modalNativeID: String? { set get };
 };
 
+/// Contains modal-related properties for keeping track of the state of the
+/// modal.
+///
 /// Specifies that the "adoptee/delegate" that conforms to this protocol must
 /// have the specified modal-related properties for keeping track of state
 ///
@@ -46,6 +52,8 @@ public protocol RNIModalState: AnyObject {
   
 };
 
+/// Contains functions that are invoked to request modal-related actions.
+///
 /// The "implementer/delegator" notifies the "adoptee/delegate" of this protocol
 /// of requests to perform "modal-related" actions.
 ///
@@ -64,10 +72,12 @@ public protocol RNIModalRequestable: AnyObject {
   );
 };
 
+/// Contains functions that get called whenever a modal-related event occurs.
+///
 /// The "implementer/delegator" notifies the "adoptee/delegate" of this protocol
 /// of modal focus/blur related events.
 ///
-/// An interface for the "adoptee/delegate" to receive anad handle incoming
+/// An interface for the "adoptee/delegate" to receive and handle incoming
 /// modal "focus/blur"-related notifications.
 ///
 public protocol RNIModalFocusNotifiable {
