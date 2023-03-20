@@ -15,7 +15,8 @@ public typealias RNIModal =
   & RNIModalState
   & RNIModalRequestable
   & RNIModalFocusNotifiable
-  & RNIModalFocusNotifying;
+  & RNIModalFocusNotifying
+  & RNIModalPresentation;
 
 
 /// Contains modal-related properties that are used to uniquely identify a modal
@@ -103,5 +104,18 @@ public protocol RNIModalFocusNotifying: AnyObject {
   /// That focus notification will then be relayed to the other modal instances.
   ///
   var modalFocusDelegate: RNIModalFocusNotifiable? { get set };
+
+};
+
+/// Properties related to modal presentation.
+///
+/// Specifies that the "adoptee/delegate" that conforms to this protocol must
+/// implement this so that the "delegator" understands how the delegate presents
+/// the modal.
+///
+public protocol RNIModalPresentation: AnyObject {
+  
+  /// Returns the modal view controller that is to be presented
+  var modalViewController: UIViewController? { get };
 
 };
