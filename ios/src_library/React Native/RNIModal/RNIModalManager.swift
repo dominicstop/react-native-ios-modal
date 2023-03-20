@@ -62,8 +62,11 @@ public class RNIModalManager {
     #endif
   };
   
-  public static func getPresentedViewControllers() -> [UIViewController] {
-    guard let rootVC = Self.getRootViewController() else {
+  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
+  public static func getPresentedViewControllers(
+    for window: UIWindow? = nil
+  ) -> [UIViewController] {
+    guard let rootVC = Self.getRootViewController(for: window) else {
       #if DEBUG
       print(
         "RNIModalManager - getTopMostPresentedVC - Error: Could not get root "
@@ -85,8 +88,11 @@ public class RNIModalManager {
     return presentedVCList;
   };
   
-  public static func getTopmostPresentedViewController() -> UIViewController? {
-    return Self.getPresentedViewControllers().last;
+  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
+  public static func getTopmostPresentedViewController(
+    for window: UIWindow? = nil
+  ) -> UIViewController? {
+    return Self.getPresentedViewControllers(for: window).last;
   };
   
   // MARK: - Properties
