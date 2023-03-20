@@ -18,8 +18,52 @@ public class RNIModalManager {
   // MARK: - Static Functions
   // ------------------------
   
+  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
+  static func getRootViewController(
+    for window: UIWindow? = nil
+  ) -> UIViewController? {
+    
+    if let window = window {
+      return window.rootViewController;
+    };
+    
+    #if swift(>=5.5)
+    // Version: Swift 5.5 and newer - iOS 15 and newer
+    guard #available(iOS 13.0, *) else { return nil  };
+    
+    let scenes = UIApplication.shared.connectedScenes;
+    
+    guard let windowScene = scenes.first as? UIWindowScene,
+          let window = windowScene.windows.first
+    else { return nil };
+    
+    return window.rootViewController;
+    
+    #elseif swift(>=5)
+    // Version: Swift 5.4 and below - iOS 14.5 and below
+    // Note: 'windows' was deprecated in iOS 15.0+
+    guard let window = UIApplication.shared.windows.first else { return nil };
+    return window.rootViewController;
+
+    #elseif swift(>=4)
+    // Version: Swift 4 and below - iOS 12.4 and below
+    // Note: `keyWindow` was deprecated in iOS 13.0+
+    guard let window = UIApplication.shared.keyWindow else { return nil };
+    return window.rootViewController;
+    
+    #else
+    // Version: Swift 3.1 and below - iOS 10.3 and below
+    // Note: 'sharedApplication' has been renamed to 'shared'
+    guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
+          let window = appDelegate.window
+    else { return nil };
+    
+    return window.rootViewController;
+    #endif
+  };
+  
   public static func getPresentedViewControllers() -> [UIViewController] {
-    guard let rootVC = UIWindow.key?.rootViewController else {
+    guard let rootVC = Self.getRootViewController() else {
       #if DEBUG
       print(
         "RNIModalManager - getTopMostPresentedVC - Error: Could not get root "
