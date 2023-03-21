@@ -151,7 +151,7 @@ public class RNIModalManager {
 // MARK: RNIModalFocusNotifiable
 // -----------------------------
 
-/// The modal instances wjll notify the manager when they're about to show/hide
+/// The modal instances will notify the manager when they're about to show/hide
 /// a modal.
 ///
 extension RNIModalManager: RNIModalFocusNotifiable {
