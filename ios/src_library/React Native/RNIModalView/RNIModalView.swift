@@ -92,111 +92,20 @@ class RNIModalView: UIView, RNIModalPresentation {
     }
   };
   
-  @objc var modalBGBlurEffectStyle: NSString = {
-    // Provide default value
-    let defaultBlurEffectStyle: UIBlurEffect.Style = {
-      guard #available(iOS 13.0, *) else { return .light };
-      return .systemThinMaterial;
-    }();
-    
-    return defaultBlurEffectStyle.stringDescription() as NSString;
-  }() {
+  @objc var modalBGBlurEffectStyle: NSString = "" {
     didSet {
       guard oldValue != self.modalBGBlurEffectStyle
       else { return };
       
-      guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
-      else {
-        #if DEBUG
-        print(
-            "RNIModalView, modalBGBlurEffectStyle: Invalid value - "
-          + "\(self.modalBGBlurEffectStyle) is not a valid blur style"
-        );
-        #endif
-        return;
-      };
-      
-      self.modalVC?.blurEffectStyle = blurStyle;
+      self.modalVC?.blurEffectStyle = self.synthesizedModalBGBlurEffectStyle;
     }
   };
   
-  // TODO: 2023-03-22-11-33-06 - Add `synthesized-` prefix
-  private var _modalPresentationStyle: UIModalPresentationStyle = {
-    // Provide default value
-    guard #available(iOS 13.0, *) else { return .overFullScreen };
-    return .automatic;
-  }();
+  @objc var modalPresentationStyle: NSString = "";
   
-  @objc var modalPresentationStyle: NSString = {
-    // Provide default value
-    let defaultModalPresentationStyle: UIModalPresentationStyle = {
-      guard #available(iOS 13.0, *) else { return .overFullScreen };
-      return .automatic;
-    }();
-    
-    return defaultModalPresentationStyle.stringDescription() as NSString;
-  }() {
-    didSet {
-      guard oldValue != self.modalPresentationStyle
-      else { return };
-      
-      guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
-      else {
-        #if DEBUG
-        print(
-            "RNIModalView, modalPresentationStyle: Invalid value - "
-          + "\(self.modalPresentationStyle) is not a valid presentation style"
-        );
-        #endif
-        return;
-      };
-      
-      switch style {
-        case .automatic,
-             .pageSheet,
-             .formSheet,
-             .fullScreen,
-             .overFullScreen:
-          
-          self._modalPresentationStyle = style;
-          #if DEBUG
-          print("RNIModalView, modalPresentationStyle didSet: \(style.stringDescription())");
-          #endif
-
-        default:
-          #if DEBUG
-          print(
-              "RNIModalView, modalPresentationStyle: Unsupported Presentation Style - "
-            + "\(self.modalPresentationStyle) is not a supported presenatation style"
-          );
-          #endif
-      };
-    }
-  };
+  @objc var modalTransitionStyle: NSString = "";
   
-  // TODO: 2023-03-22-11-33-06 - Add `synthesized-` prefix
-  private var _modalTransitionStyle: UIModalTransitionStyle = .coverVertical;
-  @objc var modalTransitionStyle: NSString = "coverVertical" {
-    didSet {
-      guard oldValue != self.modalTransitionStyle
-      else { return };
-      
-      guard let style = UIModalTransitionStyle.fromString(self.modalTransitionStyle as String)
-      else {
-        #if DEBUG
-        print("RNIModalView, modalTransitionStyle: Invalid value");
-        #endif
-        return;
-      };
-      
-      self._modalTransitionStyle = style;
-      #if DEBUG
-      print("RNIModalView, modalTransitionStyle didSet: \(style.stringDescription())");
-      #endif
-    }
-  };
-  
-  /// unique identifier for this modal
+  /// user-provided identifier for this modal
   @objc var modalID: NSString? = nil;
   
   /// disable swipe gesture recognizer for this modal
@@ -236,6 +145,93 @@ class RNIModalView: UIView, RNIModalPresentation {
         vc.isModalInPresentation = newValue
       };
     }
+  };
+  
+  // MARK: - Properties: Synthesized
+  // -------------------------------
+  
+  var synthesizedModalPresentationStyle: UIModalPresentationStyle {
+    let defaultStyle: UIModalPresentationStyle = {
+      guard #available(iOS 13.0, *) else { return .overFullScreen };
+      return .automatic;
+    }();
+    
+    // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
+    guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
+    else {
+      #if DEBUG
+      print(
+          "RNIModalView - synthesizedModalPresentationStyle: Unable to parse "
+        + "presentation style string: '\(self.modalPresentationStyle)' - "
+        + "using default style: '\(defaultStyle)'"
+      );
+      #endif
+      return defaultStyle;
+    };
+    
+    switch style {
+      case .automatic,
+           .pageSheet,
+           .formSheet,
+           .fullScreen,
+           .overFullScreen:
+        
+        return style;
+
+      default:
+        #if DEBUG
+        print(
+            "RNIModalView - synthesizedModalPresentationStyle: Unsupported "
+          + "presentation style - '\(self.modalPresentationStyle)' is not a "
+          + "supported presentation style - using default style: "
+          + "'\(defaultStyle)'"
+        );
+        #endif
+        return defaultStyle;
+    };
+  };
+  
+  var synthesizedModalTransitionStyle: UIModalTransitionStyle {
+    let defaultStyle: UIModalTransitionStyle = .coverVertical ;
+    
+    // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
+    guard let style = UIModalTransitionStyle.fromString(self.modalTransitionStyle as String)
+    else {
+      #if DEBUG
+      print(
+          "RNIModalView - synthesizedModalTransitionStyle: Unsupported "
+        + "modalTransitionStyle style string: '\(self.modalPresentationStyle)'"
+        + " - using default style: '\(defaultStyle)'"
+      );
+      #endif
+      return defaultStyle;
+    };
+    
+    return style;
+  };
+  
+  var synthesizedModalBGBlurEffectStyle: UIBlurEffect.Style {
+    // Provide default value
+    let defaultStyle: UIBlurEffect.Style = {
+      guard #available(iOS 13.0, *) else { return .light };
+      return .systemThinMaterial;
+    }();
+    
+    // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
+    guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
+    else {
+      #if DEBUG
+      print(
+          "RNIModalView - synthesizedModalBGBlurEffectStyle: Unsupported "
+        + "modalBGBlurEffectStyle style string: "
+        + "'\(self.modalPresentationStyle)' - using default style: "
+        + "'\(defaultStyle)'"
+      );
+      #endif
+      return defaultStyle;
+    };
+    
+    return blurStyle;
   };
   
   // MARK: - Init
@@ -361,9 +357,7 @@ class RNIModalView: UIView, RNIModalPresentation {
       vc.isBGBlurred     = self.isModalBGBlurred;
       vc.isBGTransparent = self.isModalBGTransparent;
       
-      if let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle) {
-        vc.blurEffectStyle = blurStyle;
-      };
+      vc.blurEffectStyle = self.synthesizedModalBGBlurEffectStyle;
       
       vc.boundsDidChangeBlock = { [weak self] (newBounds: CGRect) in
         self?.notifyForBoundsChange(newBounds);
@@ -530,14 +524,14 @@ class RNIModalView: UIView, RNIModalPresentation {
     
     // weird bug where you cant present fullscreen if `presentationController`
     // delegate is set so only set the delegate when we are using a page sheet
-    switch self._modalPresentationStyle {
+    switch self.synthesizedModalPresentationStyle {
       case .automatic, .pageSheet, .formSheet:
         modalVC.presentationController?.delegate = self;
       default: break;
     };
     
-    modalVC.modalTransitionStyle = self._modalTransitionStyle;
-    modalVC.modalPresentationStyle = self._modalPresentationStyle;
+    modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
+    modalVC.modalPresentationStyle = self.synthesizedModalPresentationStyle;
     
     self.modalLevel = lastModalIndex + 1;
     self.isInFocus = true;
@@ -548,8 +542,8 @@ class RNIModalView: UIView, RNIModalPresentation {
       + " - for reactTag: \(self.reactTag ?? -1)"
       + " - modalLevel: \(self.modalLevel)"
       + " - modalID: \(self.modalID ?? "N/A")"
-      + " - with presentationStyle: \(self._modalPresentationStyle.stringDescription())"
-      + " - with transitionStyle: \(self._modalTransitionStyle.stringDescription())"
+      + " - with presentationStyle: \(self.synthesizedModalPresentationStyle)"
+      + " - with transitionStyle: \(self.synthesizedModalTransitionStyle)"
     );
     #endif
     
