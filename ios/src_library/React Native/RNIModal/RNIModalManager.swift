@@ -7,6 +7,7 @@
 
 import Foundation
 
+public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
 public class RNIModalManager {
   
