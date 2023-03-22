@@ -118,6 +118,10 @@ public protocol RNIModalPresentation: AnyObject {
   /// Returns the modal view controller that is to be presented
   var modalViewController: UIViewController? { get };
   
+  /// Returns the view controller that presented the `modalViewController`
+  /// instance.
+  var presentingViewController: UIViewController? { get };
+  
   /// The "main" window for this instance
   var window: UIWindow? { get };
 
