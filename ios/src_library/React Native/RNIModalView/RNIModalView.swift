@@ -9,7 +9,7 @@
 import Foundation
 
 
-class RNIModalView: UIView {
+class RNIModalView: UIView, RNIModalPresentation {
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -31,7 +31,6 @@ class RNIModalView: UIView {
   var isPresented: Bool = false;
   
   private var modalVC: RNIModalViewController?;
-  private var modalNVC: UINavigationController?;
   
   private var touchHandler: RCTTouchHandler!;
   private var reactSubview: UIView?;
@@ -45,6 +44,15 @@ class RNIModalView: UIView {
   
   /// TODO:2023-03-17-12-42-02 - Remove RNIModalView.modalUUID
   let modalUUID = UUID().uuidString;
+  
+  // MARK: Properties - RNIModalPresentation
+  // ---------------------------------------
+  
+  var modalViewController: UIViewController? {
+    self.modalVC;
+  };
+  
+  weak var presentingViewController: UIViewController?;
   
   // MARK: - Properties: React Props - Events
   // ----------------------------------------
@@ -363,14 +371,6 @@ class RNIModalView: UIView {
       
       return vc;
     }();
-    
-    self.modalNVC = {
-      /// by this time, `modalVC` will already be init. so it's ok to force unwrap
-      let nvc = UINavigationController(rootViewController: self.modalVC!);
-      nvc.setNavigationBarHidden(true, animated: false);
-      
-      return nvc;
-    }();
   };
   
   /// TODO:2023-03-22-12-18-37 - Refactor: Remove `deinitControllers`
@@ -381,10 +381,9 @@ class RNIModalView: UIView {
     #endif
     
     self.modalVC?.reactView = nil;
-    self.modalNVC?.viewControllers.removeAll();
     
-    self.modalVC  = nil;
-    self.modalNVC = nil;
+    self.modalVC = nil;
+    self.presentingViewController = nil;
   };
   
   private func notifyForBoundsChange(_ newBounds: CGRect){
@@ -437,11 +436,11 @@ class RNIModalView: UIView {
     /// * `getPresentedViewControllers().last === modalNVC`: true
     /// * `getPresentedViewControllers().last === modalVC`: false
     ///
-    return topmostPresentedVC === self.modalNVC;
+    return topmostPresentedVC === self.modalViewController;
   };
   
   private func enableSwipeGesture(_ flag: Bool? = nil){
-    self.modalNVC?
+    self.modalVC?
         .presentationController?
         .presentedView?
         .gestureRecognizers?[0]
@@ -449,7 +448,7 @@ class RNIModalView: UIView {
   };
   
   
-  /// TODO: 2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
+  /// TODO:2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList = self.getPresentedVCList();
@@ -521,9 +520,9 @@ class RNIModalView: UIView {
       return;
     };
     
-    guard let modalNVC = self.modalNVC else {
+    guard let modalVC = self.modalVC else {
       #if DEBUG
-      print("RNIModalView - presentModal: could not get navigation vc");
+      print("RNIModalView - presentModal: could not get modalVC");
       #endif
       completion?(false, nil);
       return;
@@ -533,12 +532,12 @@ class RNIModalView: UIView {
     // delegate is set so only set the delegate when we are using a page sheet
     switch self._modalPresentationStyle {
       case .automatic, .pageSheet, .formSheet:
-        modalNVC.presentationController?.delegate = self;
+        modalVC.presentationController?.delegate = self;
       default: break;
     };
     
-    modalNVC.modalTransitionStyle = self._modalTransitionStyle;
-    modalNVC.modalPresentationStyle = self._modalPresentationStyle;
+    modalVC.modalTransitionStyle = self._modalTransitionStyle;
+    modalVC.modalPresentationStyle = self._modalPresentationStyle;
     
     self.modalLevel = lastModalIndex + 1;
     self.isInFocus = true;
@@ -557,13 +556,16 @@ class RNIModalView: UIView {
     // Temporarily disable swipe gesture while it's being presented
     self.enableSwipeGesture(false);
     
-    topMostPresentedVC.present(modalNVC, animated: true) {
+    self.presentingViewController = topMostPresentedVC;
+    
+    topMostPresentedVC.present(modalVC, animated: true) {
       if self.hideNonVisibleModals {
         self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
       };
       
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
+      
       self.delegate?.onPresentModalView(modalView: self);
       
       self.onModalShow?(
