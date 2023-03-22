@@ -112,6 +112,7 @@ class RNIModalView: UIView {
     }
   };
   
+  // TODO: 2023-03-22-11-33-06 - Add `synthesized-` prefix
   private var _modalPresentationStyle: UIModalPresentationStyle = {
     // Provide default value
     guard #available(iOS 13.0, *) else { return .overFullScreen };
@@ -165,6 +166,7 @@ class RNIModalView: UIView {
     }
   };
   
+  // TODO: 2023-03-22-11-33-06 - Add `synthesized-` prefix
   private var _modalTransitionStyle: UIModalTransitionStyle = .coverVertical;
   @objc var modalTransitionStyle: NSString = "coverVertical" {
     didSet {
@@ -371,6 +373,8 @@ class RNIModalView: UIView {
     }();
   };
   
+  /// TODO:2023-03-22-12-18-37 - Refactor: Remove `deinitControllers`
+  /// * Refactor so that we don't have to constantly cleanup...
   private func deinitControllers(){
     #if DEBUG
     print("RNIModalView init - deinitControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
@@ -444,6 +448,8 @@ class RNIModalView: UIView {
         .isEnabled = flag ?? self.enableSwipeGesture;
   };
   
+  
+  /// TODO: 2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList = self.getPresentedVCList();
@@ -458,6 +464,9 @@ class RNIModalView: UIView {
   // MARK: - Functions - Internal
   // ----------------------------
   
+  /// TODO:2023-03-22-12-09-34 - Move to `get` property called
+  /// `synthesizedNativeEventBase`
+  ///
   /// helper function to create a `NativeEvent` object
   func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
     var dict: Dictionary<AnyHashable, Any> = [
@@ -545,6 +554,7 @@ class RNIModalView: UIView {
     );
     #endif
     
+    // Temporarily disable swipe gesture while it's being presented
     self.enableSwipeGesture(false);
     
     topMostPresentedVC.present(modalNVC, animated: true) {
@@ -552,6 +562,7 @@ class RNIModalView: UIView {
         self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
       };
       
+      // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
       self.delegate?.onPresentModalView(modalView: self);
       
@@ -594,6 +605,7 @@ class RNIModalView: UIView {
       return;
     };
     
+    /// TODO:2023-03-22-12-12-05 - Remove?
     let presentedVC: UIViewController = isModalInFocus
       ? modalVC
       : modalVC.presentingViewController!
