@@ -58,7 +58,7 @@
   
   <br>
   
-  * [ ] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
+  * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
   	* Remove `RNIModalView.modalNVC` + usage.
   
   <br>
