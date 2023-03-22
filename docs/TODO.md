@@ -58,32 +58,34 @@
   
   <br>
   
+  * [ ] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
+  
   * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
   	* Remove `RNIModalView.modalNVC` + usage.
-  
+
   <br>
 
   * [ ] **Subtask** - `TODO:2023-03-22-12-18-37` - **Refactor**: Remove `deinitControllers`
     * Refactor `RNIModalView` so that we don't have to constantly cleanup.
-  
+
   <br>
 
   * [ ] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
     * **Desc**: Refactor `createModalNativeEventDict`.
-  
+
   <br>
 
   * [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
     * **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
-  
+
   <br>
 
-  * [ ] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties.
+  * [x] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties in `RNIModalView`.
   * [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
   * [ ] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
   * [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
   * [x] **Subtask** - `TODO:2023-03-16-15-19-13` - Remove `RCTSwiftLog`
-
+  
   <br>
   
   * [ ] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
@@ -107,7 +109,8 @@
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Relocate `currentModalLevel`
-  - **Desc**: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
+  	- **Desc**: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
+  
   
   <br>
   
