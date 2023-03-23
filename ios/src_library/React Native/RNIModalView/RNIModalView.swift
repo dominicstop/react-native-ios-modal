@@ -217,9 +217,9 @@ class RNIModalView: UIView, RNIModalPresentation {
       return .systemThinMaterial;
     }();
     
-    // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
-    guard let blurStyle = UIBlurEffect.Style.fromString(self.modalBGBlurEffectStyle)
-    else {
+    guard let blurStyle = UIBlurEffect.Style(
+      string: self.modalBGBlurEffectStyle as String
+    ) else {
       #if DEBUG
       print(
           "RNIModalView - synthesizedModalBGBlurEffectStyle: Unsupported "

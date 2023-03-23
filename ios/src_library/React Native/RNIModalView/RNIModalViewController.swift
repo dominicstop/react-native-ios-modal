@@ -54,7 +54,10 @@ class RNIModalViewController: UIViewController {
             let blurEffectStyle = self.blurEffectStyle else { return };
       
       #if DEBUG
-      print("RNIModalViewController, didSet blurEffectStyle: \(blurEffectStyle.stringDescription())");
+      print(
+          "RNIModalViewController, didSet blurEffectStyle: "
+          + "'\(blurEffectStyle.description)'"
+      );
       #endif
       
       self.updateBackgroundBlur();

@@ -51,7 +51,7 @@ class RNIModalViewManager: RCTViewManager {
   @objc override func constantsToExport() -> [AnyHashable : Any]! {
     return [
       "availableBlurEffectStyles": UIBlurEffect.Style
-        .availableStyles.map { $0.stringDescription() },
+        .availableStyles.map { $0.description },
       
       "availablePresentationStyles": UIModalPresentationStyle
         .availableStyles.map { $0.stringDescription() },
