@@ -67,7 +67,7 @@
   
   <br>
   
-  * [ ] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
+  * [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
   
   * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
   	* Remove `RNIModalView.modalNVC` + usage.
