@@ -1,5 +1,19 @@
 # TODO
 
+- [ ] `2023-03-24-00-37-23` - **Refactor**: Use `react-native-utilities`
+
+  * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
+
+  <br>
+
+  - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
+  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` - Remove/Replace `UIWindow.key`.
+  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Move `RNIModalManager` helper functions to `RNIUtilities`.
+  - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
+  	* **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
+
+<br>
+
 - [ ] `TODO:2023-03-09-17-36-51` - Impl: Close Preceding Modals
   * Desc: Implement a way to close proceeding modals w/o permanently closing the succeeding/topmost modals. 
   	* When trying to close a modal that is "not in focus" (i.e. a modal that isn't at the very top; e.g. a modal that has a `modalIndex` that is lower than the topmost modal), will throw an error: "`ModalView`, `setVisibility` failed: Cannot dismiss modal because it's not in focus. Enable `allowModalForceDismiss` to dismiss".
@@ -17,11 +31,6 @@
 
 - [ ] `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06`
   * **Desc**: Enable `ModalView.isModalContentLazy` prop for example `Test06`.
-
-<br>
-
-- [ ] `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
-  * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
 
 <br>
 
