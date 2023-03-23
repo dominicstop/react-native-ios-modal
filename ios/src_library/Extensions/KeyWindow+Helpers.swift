@@ -8,6 +8,8 @@
 import Foundation
 
 extension UIWindow {
+  
+  /// TODO:2023-03-24-01-14-26 - Remove/Replace `UIWindow.key`
   static var key: UIWindow? {
     if #available(iOS 13, *) {
       return UIApplication.shared.windows.first { $0.isKeyWindow };
