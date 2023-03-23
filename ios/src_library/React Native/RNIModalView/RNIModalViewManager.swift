@@ -54,7 +54,7 @@ class RNIModalViewManager: RCTViewManager {
         .availableStyles.map { $0.description },
       
       "availablePresentationStyles": UIModalPresentationStyle
-        .availableStyles.map { $0.stringDescription() },
+        .availableStyles.map { $0.description },
     ];
   };
 };

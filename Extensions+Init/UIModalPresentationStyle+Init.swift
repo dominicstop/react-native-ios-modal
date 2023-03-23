@@ -1,13 +1,17 @@
 //
-//  UIModalPresentationStyle+Helpers.swift
-//  nativeUIModulesTest
+//  UIModalPresentationStyle+Init.swift
+//  react-native-ios-modal
 //
-//  Created by Dominic Go on 6/28/20.
+//  Created by Dominic Go on 3/24/23.
 //
 
 import Foundation
 
-extension UIModalPresentationStyle: CaseIterable {
+extension UIModalPresentationStyle: CaseIterable, CustomStringConvertible {
+  
+  /// The available `UIModalPresentationStyle` that can be used based on the
+  /// current platform version
+  ///
   public static var availableStyles: [UIModalPresentationStyle] {
     var styles: [UIModalPresentationStyle] = [
       .fullScreen,
@@ -30,12 +34,17 @@ extension UIModalPresentationStyle: CaseIterable {
     
     return styles;
   };
+
   
   public static var allCases: [UIModalPresentationStyle] {
     return self.availableStyles;
   };
   
-  func stringDescription() -> String {
+  // MARK: - CustomStringConvertible
+  // -------------------------------
+  
+  /// See: Note:2023-03-23-23-14-57
+  public var description: String {
     switch self {
       case .automatic         : return "automatic";
       case .none              : return "none";
@@ -56,11 +65,17 @@ extension UIModalPresentationStyle: CaseIterable {
     };
   };
   
-  static func fromString(_ string: String) -> UIModalPresentationStyle? {
-    return self.allCases.first{ $0.stringDescription() == string };
-  };
   
-  static func fromString(_ string: NSString) -> UIModalPresentationStyle? {
-    return self.fromString(string as String);
+  // MARK: - Init
+  // ------------
+  
+  init?(string: String){
+    /// See: Note:2023-03-23-23-21-21
+    let style = Self.allCases.first{
+      $0.description == string
+    };
+    
+    guard let style = style else { return nil };
+    self = style;
   };
 };

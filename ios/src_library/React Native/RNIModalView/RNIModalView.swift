@@ -155,10 +155,10 @@ class RNIModalView: UIView, RNIModalPresentation {
       guard #available(iOS 13.0, *) else { return .overFullScreen };
       return .automatic;
     }();
-    
-    // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
-    guard let style = UIModalPresentationStyle.fromString(self.modalPresentationStyle)
-    else {
+
+    guard let style = UIModalPresentationStyle(
+      string: self.modalPresentationStyle as String
+    ) else {
       #if DEBUG
       print(
           "RNIModalView - synthesizedModalPresentationStyle: Unable to parse "
