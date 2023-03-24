@@ -744,7 +744,7 @@ extension RNIModalView: RNIModalViewFocusDelegate {
       /// defer if the modal is not currently presented or if the modalLevel is -1
       self.synthesizedIsModalPresented && self.modalLevel > 0 else { return };
     
-    if isInFocus && self.synthesizedIsModalInFocus {
+    if isInFocus && !self.synthesizedIsModalInFocus {
       /// a new `RNIModalView` instance is in focus and this modal was prev. in focus so
       /// this modal shoud be now 'blurred'
       self.onModalBlur?(
