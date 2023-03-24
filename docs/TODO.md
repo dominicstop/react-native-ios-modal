@@ -112,7 +112,8 @@
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-  - [ ] **Subtask** - `TODO:2023-03-24-09-58-50` - Add temporary changes to  `RNIModalManager` for `RNIModalView` partial support. 
+  - [ ] **Subtask** - `TODO:2023-03-24-14-25-52` - Remove `RNIModalViewFocusDelegate`-related logic.
+  - [x] **Subtask** - `TODO:2023-03-24-09-58-50` - Add temporary changes to  `RNIModalManager` for `RNIModalView` partial conformance. 
   
   <br>
   
