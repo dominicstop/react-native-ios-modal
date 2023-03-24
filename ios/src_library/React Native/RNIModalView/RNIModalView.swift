@@ -24,6 +24,7 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
   private var touchHandler: RCTTouchHandler!;
   private var reactSubview: UIView?;
   
+  /// TODO:2023-03-24-09-41-16 - Remove `modalLevel`
   var modalLevelPrev = -1;
   var modalLevel = -1 {
     didSet {
