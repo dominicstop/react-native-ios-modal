@@ -13,8 +13,8 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
-  // MARK: Properties
-  // ----------------
+  // MARK: - Properties
+  // --------==--------
 
   weak var bridge: RCTBridge?;
   weak var delegate: RNIModalViewPresentDelegate?;
@@ -35,15 +35,15 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
   /// TODO:2023-03-17-12-42-02 - Remove RNIModalView.modalUUID
   let modalUUID = UUID().uuidString;
   
-  // MARK: Properties - RNIModalState
-  // --------------------------------
+  // MARK: - Properties - RNIModalState
+  // ----------------------------------
   
   var isModalPresented: Bool = false;
   var isModalInFocus: Bool = false;
   
   
-  // MARK: Properties - RNIModalPresentation
-  // ---------------------------------------
+  // MARK: - Properties - RNIModalPresentation
+  // -----------------------------------------
   
   var modalViewController: UIViewController? {
     self.modalVC;
