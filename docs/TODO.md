@@ -111,9 +111,19 @@
   
   <br>
   
+  - [ ] **Subtask** - `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+  - [ ] **Subtask** - `TODO:2023-03-24-09-58-50` - Add temporary changes to  `RNIModalManager` for `RNIModalView` partial support. 
+  
+  <br>
+  
+  - [ ] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
+    * Desc: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
+  
+  <br>
+  
   - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
-  	* **Desc**: Add code to manually propagate modal blur/focus events.
-  		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
+    * **Desc**: Add code to manually propagate modal blur/focus events.
+    	* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
   
   <br>
   
