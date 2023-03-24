@@ -9,7 +9,8 @@
 import Foundation
 
 
-class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
+class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
+                      RNIModalState, RNIModalPresentation {
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -34,6 +35,17 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
   
   /// TODO:2023-03-17-12-42-02 - Remove RNIModalView.modalUUID
   let modalUUID = UUID().uuidString;
+  
+  // MARK: - Properties - RNIModalFocusNotifying
+  // -------------------------------------------
+  
+  var modalFocusDelegate: RNIModalFocusNotifiable!;
+  
+  // MARK: - Properties - RNIModalIdentity
+  // -------------------------------------
+  
+  var modalIndex: Int!;
+  var modalNativeID: String!;
   
   // MARK: - Properties - RNIModalState
   // ----------------------------------
