@@ -9,7 +9,7 @@
 import Foundation
 
 
-class RNIModalView: UIView, RNIModalPresentation {
+class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -18,17 +18,6 @@ class RNIModalView: UIView, RNIModalPresentation {
 
   weak var bridge: RCTBridge?;
   weak var delegate: RNIModalViewPresentDelegate?;
-  
-  /// TODO:2023-03-18-09-22-15 - Re-write Modal Focus Checking Logic
-  ///
-  /// * Re-write "focus checking"
-  ///
-  /// * instead of manually keeping track of focus per modal instance
-  ///   (potentially becoming stale over time), check focus via climbing the
-  ///   presented vc hierarchy.
-  ///
-  var isInFocus: Bool = false;
-  var isPresented: Bool = false;
   
   private var modalVC: RNIModalViewController?;
   
@@ -44,6 +33,13 @@ class RNIModalView: UIView, RNIModalPresentation {
   
   /// TODO:2023-03-17-12-42-02 - Remove RNIModalView.modalUUID
   let modalUUID = UUID().uuidString;
+  
+  // MARK: Properties - RNIModalState
+  // --------------------------------
+  
+  var isModalPresented: Bool = false;
+  var isModalInFocus: Bool = false;
+  
   
   // MARK: Properties - RNIModalPresentation
   // ---------------------------------------
@@ -381,9 +377,9 @@ class RNIModalView: UIView, RNIModalPresentation {
   };
   
   private func notifyForBoundsChange(_ newBounds: CGRect){
-    guard (self.isPresented),
-      let bridge       = self.bridge,
-      let reactSubview = self.reactSubview
+    guard self.synthesizedIsModalPresented,
+          let bridge = self.bridge,
+          let reactSubview = self.reactSubview
     else {
       #if DEBUG
       print("RNIModalView, notifyForBoundsChange: guard check failed");
@@ -417,22 +413,6 @@ class RNIModalView: UIView, RNIModalPresentation {
     return vcList;
   };
   
-  private func isTopMostPresentedVC() -> Bool {
-    let presentedViewControllers =
-      RNIModalManager.getPresentedViewControllers();
-    
-    guard let topmostPresentedVC = presentedViewControllers.last
-    else { return false };
-    
-    /// Note:2023-03-17-15-41-23 - Possible bug/typo
-    /// * Replace `self.modalNVC` w/ `self.modalVC`
-    /// * Addendum: not a bug
-    /// * `getPresentedViewControllers().last === modalNVC`: true
-    /// * `getPresentedViewControllers().last === modalVC`: false
-    ///
-    return topmostPresentedVC === self.modalViewController;
-  };
-  
   private func enableSwipeGesture(_ flag: Bool? = nil){
     self.modalVC?
         .presentationController?
@@ -463,11 +443,16 @@ class RNIModalView: UIView, RNIModalPresentation {
   /// helper function to create a `NativeEvent` object
   func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
     var dict: Dictionary<AnyHashable, Any> = [
-      "modalUUID"     : self.modalUUID     ,
-      "isInFocus"     : self.isInFocus     ,
-      "isPresented"   : self.isPresented   ,
-      "modalLevel"    : self.modalLevel    ,
+      "modalUUID": self.modalUUID,
+      
+      "modalLevel": self.modalLevel,
       "modalLevelPrev": self.modalLevelPrev,
+      
+      "isModalInFocus": self.isModalInFocus,
+      "isModalPresented": self.isModalPresented,
+      
+      "synthesizedIsModalInFocus": self.synthesizedIsModalInFocus,
+      "synthesizedIsModalPresented": self.synthesizedIsModalPresented,
     ];
     
     if let reactTag = self.reactTag {
@@ -493,7 +478,7 @@ class RNIModalView: UIView, RNIModalPresentation {
       return;
     };
     
-    guard !self.isPresented else {
+    guard !self.synthesizedIsModalPresented else {
       #if DEBUG
       print("RNIModalView - presentModal: modal already presented");
       #endif
@@ -502,7 +487,7 @@ class RNIModalView: UIView, RNIModalPresentation {
     };
     
     let presentedViewControllers =
-      RNIModalManager.getPresentedViewControllers();
+      RNIModalManager.getPresentedViewControllers(for: self.window);
     
     let lastModalIndex = presentedViewControllers.count - 1;
     
@@ -534,8 +519,6 @@ class RNIModalView: UIView, RNIModalPresentation {
     modalVC.modalPresentationStyle = self.synthesizedModalPresentationStyle;
     
     self.modalLevel = lastModalIndex + 1;
-    self.isInFocus = true;
-    self.isPresented = true;
     
     #if DEBUG
     print("RNIModalView, presentModal: Start"
@@ -575,19 +558,27 @@ class RNIModalView: UIView, RNIModalPresentation {
   };
   
   public func dismissModal(completion: CompletionHandler? = nil) {
-    guard self.isPresented,
-          let modalVC = self.modalVC
-    else {
+    guard self.synthesizedIsModalPresented else {
       #if DEBUG
-      print("RNIModalView, dismissModal failed:"
-        + " - isPresented \(self.isPresented)"
+      print("RNIModalView - dismissModal failed:"
+        + " - synthesizedIsModalPresented: \(self.synthesizedIsModalPresented)"
       );
       #endif
       completion?(false, .modalAlreadyDismissed);
       return;
     };
     
-    let isModalInFocus = self.isTopMostPresentedVC();
+    guard let modalVC = self.modalVC else {
+      #if DEBUG
+      print("RNIModalView, dismissModal failed:"
+        + " - `modalVC` is `nil`"
+      );
+      #endif
+      completion?(false, .none);
+      return;
+    };
+    
+    let isModalInFocus = self.synthesizedIsModalInFocus ?? self.isModalInFocus;
     
     let shouldDismiss = isModalInFocus
       ? true
@@ -616,8 +607,6 @@ class RNIModalView: UIView, RNIModalPresentation {
     };
     
     self.modalLevel = -1;
-    self.isInFocus = false;
-    self.isPresented = false;
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
@@ -689,9 +678,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
   
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-    self.modalLevel  = -1;
-    self.isInFocus   = false;
-    self.isPresented = false;
+    self.modalLevel = -1;
     
     self.delegate?.onDismissModalView(modalView: self);
     
@@ -736,22 +723,20 @@ extension RNIModalView: RNIModalViewFocusDelegate {
       /// i.e defer  if this instance of `RNIModalView` was the one who broadcasted the event
       self.modalUUID != modalUUID,
       /// defer if the modal is not currently presented or if the modalLevel is -1
-      self.isPresented && self.modalLevel > 0 else { return };
+      self.synthesizedIsModalPresented && self.modalLevel > 0 else { return };
     
-    if isInFocus && self.isInFocus {
+    if isInFocus && self.synthesizedIsModalInFocus {
       /// a new `RNIModalView` instance is in focus and this modal was prev. in focus so
       /// this modal shoud be now 'blurred'
-      self.isInFocus = false;
       self.onModalBlur?(
         self.createModalNativeEventDict()
       );
       
-    } else if !isInFocus && !self.isInFocus {
+    } else if !isInFocus && !self.synthesizedIsModalInFocus {
       /// a  `RNIModalView` instance has lost focus, so the prev modal shoul be focused
       /// defer if the receiver's modalLevel isn't 1 value below the sender's modalLevel
       guard self.modalLevel + 1 >= modalLevel else { return };
-      
-      self.isInFocus = true;
+
       self.onModalFocus?(
         self.createModalNativeEventDict()
       );
