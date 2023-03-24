@@ -103,7 +103,7 @@ public protocol RNIModalFocusNotifying: AnyObject {
   ///
   /// That focus notification will then be relayed to the other modal instances.
   ///
-  var modalFocusDelegate: RNIModalFocusNotifiable? { get set };
+  var modalFocusDelegate: RNIModalFocusNotifiable! { get set };
 
 };
 
