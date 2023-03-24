@@ -59,7 +59,7 @@
 
   <br>
 
-  * [ ] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
+  * [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
     * **Desc**: Re-write modal "focus checking"
     	* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
     	* ` getPresentedViewControllers().last === self.modalNVC: true`
