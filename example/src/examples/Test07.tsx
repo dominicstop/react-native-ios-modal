@@ -12,19 +12,28 @@ import { CardBody, CardButton, CardTitle } from '../components/Card';
 import { ModalView } from 'react-native-ios-modal';
 import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
-export function Test07(props: ExampleProps) {
-  const modalRef = React.useRef<ModalView>(null);
+type ModalWrapperHandle = {
+  showModal: () => void;
+};
 
-  const [modalInfo, setModalInfo] = React.useState(null);
+type ModalWrapperProps = {
+  index: number;
+  onPressOpenModal?: () => void;
+};
 
-  return (
-    <ExampleCard
-      style={props.style}
-      index={props.index}
-      title={'Test07'}
-      subtitle={'getModalInfo'}
-      description={['Test for `ModalView.getModalInfo` method.']}
-    >
+const ModalWrapper = React.forwardRef<ModalWrapperHandle, ModalWrapperProps>(
+  (props, ref) => {
+    const modalRef = React.useRef<ModalView>(null);
+    const [modalInfo, setModalInfo] = React.useState(null);
+
+    // callable functions...
+    React.useImperativeHandle(ref, () => ({
+      showModal: () => {
+        modalRef.current?.setVisibility(true);
+      },
+    }));
+
+    return (
       <ModalView
         ref={modalRef}
         containerStyle={styles.modalContainer}
@@ -35,7 +44,7 @@ export function Test07(props: ExampleProps) {
         <React.Fragment>
           <CardBody style={styles.modalCard}>
             <CardTitle
-              title={'Modal Info'}
+              title={`Modal Info #${props.index + 1}`}
               subtitle={'Show return value of `getModalInfo` method'}
             />
             <ObjectPropertyDisplay object={modalInfo} />
@@ -47,12 +56,52 @@ export function Test07(props: ExampleProps) {
               setModalInfo(results);
             }}
           />
+          {props.onPressOpenModal && (
+            <CardButton
+              title={'⭐️ Open Next Modal'}
+              onPress={() => {
+                props.onPressOpenModal?.();
+              }}
+            />
+          )}
         </React.Fragment>
       </ModalView>
+    );
+  }
+);
+
+export function Test07(props: ExampleProps) {
+  const modalWrapperRef1 = React.useRef<ModalWrapperHandle>(null);
+  const modalWrapperRef2 = React.useRef<ModalWrapperHandle>(null);
+  const modalWrapperRef3 = React.useRef<ModalWrapperHandle>(null);
+
+  return (
+    <ExampleCard
+      style={props.style}
+      index={props.index}
+      title={'Test07'}
+      subtitle={'getModalInfo'}
+      description={['Test for `ModalView.getModalInfo` method.']}
+    >
+      <ModalWrapper
+        ref={modalWrapperRef1}
+        index={0}
+        onPressOpenModal={() => {
+          modalWrapperRef2.current?.showModal();
+        }}
+      />
+      <ModalWrapper
+        ref={modalWrapperRef2}
+        index={1}
+        onPressOpenModal={() => {
+          modalWrapperRef3.current?.showModal();
+        }}
+      />
+      <ModalWrapper ref={modalWrapperRef3} index={2} />
       <CardButton
         title={'Show Modal'}
         onPress={() => {
-          modalRef.current.setVisibility(true);
+          modalWrapperRef1.current?.showModal();
         }}
       />
     </ExampleCard>
