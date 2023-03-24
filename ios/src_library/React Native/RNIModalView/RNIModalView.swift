@@ -14,7 +14,7 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
   // MARK: - Properties
-  // --------==--------
+  // ------------------
 
   weak var bridge: RCTBridge?;
   weak var delegate: RNIModalViewPresentDelegate?;
