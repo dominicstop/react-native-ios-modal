@@ -31,3 +31,19 @@ extension RNIModalState where Self: RNIModalPresentation {
     return topmostVC === self.modalViewController;
   };
 };
+
+extension RNIModalIdentity where Self: RNIModalPresentation {
+  
+  /// Programmatically get the "modal index"
+  var synthesizedModalIndex: Int {
+    let listPresentedVC =
+      RNIModalManager.getPresentedViewControllers(for: self.window);
+    
+    for (index, vc) in listPresentedVC.enumerated() {
+      guard vc != self.modalViewController else { continue };
+      return index;
+    };
+    
+    return -1;
+  };
+};
