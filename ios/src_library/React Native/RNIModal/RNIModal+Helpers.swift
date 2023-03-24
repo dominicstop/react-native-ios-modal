@@ -16,17 +16,18 @@ extension RNIModalState where Self: RNIModalPresentation {
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
     return listPresentedVC.contains {
-      $0 === self;
+      $0 === self.modalViewController;
     };
   };
   
   /// Programmatically check if this instance is in focus
-  var synthesizedIsModalInFocus: Bool? {
+  var synthesizedIsModalInFocus: Bool {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
+    guard let topmostVC = listPresentedVC.last
+    else { return self.isModalInFocus };
     
-    guard let topmostVC = listPresentedVC.last else { return nil };
     return topmostVC === self.modalViewController;
   };
 };
