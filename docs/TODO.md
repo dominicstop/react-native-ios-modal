@@ -59,6 +59,11 @@
 
   <br>
 
+  * [ ] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
+    * **Desc**: Remove `RNIModalView.modalLevel`
+  
+  <br>
+  
   * [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
     * **Desc**: Re-write modal "focus checking"
     	* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
@@ -66,9 +71,9 @@
     	* ``getPresentedViewControllers.last === self.modalVC false`
   
   <br>
-  
+
   * [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
-  
+
   * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
   	* Remove `RNIModalView.modalNVC` + usage.
 
@@ -86,9 +91,9 @@
 
   * [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
     * **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
-
+  
   <br>
-
+  
   * [x] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties in `RNIModalView`.
   * [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
   * [ ] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
