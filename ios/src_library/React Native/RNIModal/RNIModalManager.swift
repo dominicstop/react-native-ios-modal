@@ -185,7 +185,9 @@ public class RNIModalManager {
 ///
 extension RNIModalManager: RNIModalFocusNotifiable {
   
-  public func onModalWillFocusNotification(sender modal: RNIModal) {
+  public func onModalWillFocusNotification(
+    sender modal: RNIModal
+  ) {
     self.currentModalIndex += 1;
     modal.modalIndex = self.currentModalIndex;
     
@@ -194,7 +196,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      modalItem.onModalWillFocusNotification(sender: modal);
+      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
+      // modalItem.onModalWillFocusNotification(sender: modal);
+      (modalItem as? RNIModalFocusNotifiable)?
+        .onModalWillFocusNotification(sender: modal);
     };
   };
   
@@ -207,7 +212,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      modalItem.onModalDidFocusNotification(sender: modal);
+      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
+      // modalItem.onModalDidFocusNotification(sender: modal);
+      (modalItem as? RNIModalFocusNotifiable)?
+        .onModalDidFocusNotification(sender: modal);
     };
   };
   
@@ -220,7 +228,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      modalItem.onModalWillBlurNotification(sender: modal);
+      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
+      // modalItem.onModalWillBlurNotification(sender: modal);
+      (modalItem as? RNIModalFocusNotifiable)?
+        .onModalWillBlurNotification(sender: modal);
     };
   };
   
@@ -233,7 +244,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      modalItem.onModalDidBlurNotification(sender: modal);
+      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
+      // modalItem.onModalDidBlurNotification(sender: modal);
+      (modalItem as? RNIModalFocusNotifiable)?
+        .onModalDidBlurNotification(sender: modal);
     };
   };
 };
