@@ -17,6 +17,9 @@ class RNIModalViewManager: RCTViewManager {
     return true;
   };
   
+  /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related
+  /// logic
+  ///
   // TODO: See TODO:2023-03-04-15-49-02 - Refactor:  Relocate 
   //`presentedModalRefs`
   //
@@ -63,6 +66,7 @@ class RNIModalViewManager: RCTViewManager {
 // MARK: RNIModalViewPresentDelegate
 // ---------------------------------
 
+/// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
 extension RNIModalViewManager: RNIModalViewPresentDelegate {
   
   func onPresentModalView(modalView: RNIModalView) {

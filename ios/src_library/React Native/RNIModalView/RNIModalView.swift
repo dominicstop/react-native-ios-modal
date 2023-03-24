@@ -18,6 +18,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   // ------------------
 
   weak var bridge: RCTBridge?;
+  
+  /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
   weak var delegate: RNIModalViewPresentDelegate?;
   
   private var modalVC: RNIModalViewController?;
@@ -556,6 +558,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
       
+      /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
       self.delegate?.onPresentModalView(modalView: self);
       
       self.onModalShow?(
@@ -623,6 +626,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
+      /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
       self.delegate?.onDismissModalView(modalView: self);
       self.onModalDismiss?(
         self.createModalNativeEventDict()
@@ -693,6 +697,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     self.modalLevel = -1;
     
+    /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
     self.delegate?.onDismissModalView(modalView: self);
     
     self.onModalDidDismiss?(
@@ -728,6 +733,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
 // MARK: Extension: RNIModalViewFocusDelegate
 // ------------------------------------------
 
+/// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
 extension RNIModalView: RNIModalViewFocusDelegate {
   
   func onModalChangeFocus(modalLevel: Int, modalUUID: String, isInFocus: Bool) {
