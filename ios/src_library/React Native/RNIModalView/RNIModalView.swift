@@ -579,7 +579,7 @@ class RNIModalView: UIView, RNIModalState, RNIModalPresentation {
       return;
     };
     
-    let isModalInFocus = self.synthesizedIsModalInFocus ?? self.isModalInFocus;
+    let isModalInFocus = self.synthesizedIsModalInFocus;
     
     let shouldDismiss = isModalInFocus
       ? true
