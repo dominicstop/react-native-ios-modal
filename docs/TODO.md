@@ -84,7 +84,7 @@
 
   <br>
 
-  * [ ] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
+  * [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
     * **Desc**: Refactor `createModalNativeEventDict`.
 
   <br>
