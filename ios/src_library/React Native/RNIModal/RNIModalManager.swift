@@ -189,14 +189,18 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     sender modal: RNIModal
   ) {
     self.currentModalIndex += 1;
-    modal.modalIndex = self.currentModalIndex;
     
-    for modalItem in self.modalInstances {
-      // skip the modal that sent the notification
-      guard modalItem.modalNativeID != modal.modalNativeID
-      else { continue };
+    modal.modalIndex = self.currentModalIndex;
+    modal.onModalWillFocusNotification(sender: modal);
+    
+    self.modalInstances.forEach {
+      guard $0 !== modal,
+            $0.isModalPresented,
+            $0.isModalInFocus,
+            $0.modalIndex == self.currentModalIndex - 1
+      else { return };
       
-      modalItem.onModalWillFocusNotification(sender: modal);
+      $0.onModalWillBlurNotification(sender: modal);
     };
   };
   
@@ -204,12 +208,17 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     modal.isModalInFocus = true;
     modal.isModalPresented = true;
     
-    for modalItem in self.modalInstances {
-      // skip the modal that sent the notification
-      guard modalItem.modalNativeID != modal.modalNativeID
-      else { continue };
+    modal.onModalDidFocusNotification(sender: modal);
+    
+    self.modalInstances.forEach {
+      guard $0 !== modal,
+            $0.isModalPresented,
+            $0.isModalInFocus,
+            $0.modalIndex == self.currentModalIndex - 1
+      else { return };
       
-      modalItem.onModalDidFocusNotification(sender: modal);
+      $0.isModalInFocus = false;
+      $0.onModalDidBlurNotification(sender: modal);
     };
   };
   
@@ -217,12 +226,16 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     self.currentModalIndex -= 1;
     modal.modalIndex = -1;
     
-    for modalItem in self.modalInstances {
-      // skip the modal that sent the notification
-      guard modalItem.modalNativeID != modal.modalNativeID
-      else { continue };
+    modal.onModalWillBlurNotification(sender: modal);
+    
+    self.modalInstances.forEach {
+      guard $0 !== modal,
+            $0.isModalPresented,
+            !$0.isModalInFocus,
+            $0.modalIndex >= self.currentModalIndex
+      else { return };
       
-      modalItem.onModalWillBlurNotification(sender: modal);
+      $0.onModalWillFocusNotification(sender: modal);
     };
   };
   
@@ -230,12 +243,15 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     modal.isModalInFocus = false;
     modal.isModalPresented = false;
     
-    for modalItem in self.modalInstances {
-      // skip the modal that sent the notification
-      guard modalItem.modalNativeID != modal.modalNativeID
-      else { continue };
+    self.modalInstances.forEach {
+      guard $0 !== modal,
+            $0.isModalPresented,
+            !$0.isModalInFocus,
+            $0.modalIndex >= self.currentModalIndex
+      else { return };
       
-      modalItem.onModalDidBlurNotification(sender: modal);
+      $0.isModalInFocus = true;
+      $0.onModalDidFocusNotification(sender: modal);
     };
   };
 };
