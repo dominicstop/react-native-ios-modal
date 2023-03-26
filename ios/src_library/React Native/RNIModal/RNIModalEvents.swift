@@ -14,7 +14,7 @@ public struct RNIModalBaseEventData: RNIDictionarySynthesizable {
   };
   
   public static var synthesizedDictionaryInlinedProperties: [
-    PartialKeyPath<RNIModalBaseEventData>
+    PartialKeyPath<Self>
   ] {
     [\.modalData];
   };
