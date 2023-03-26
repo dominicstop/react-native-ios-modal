@@ -7,16 +7,14 @@
 
 import Foundation
 
-/// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
-///
 /// A collection of protocols that the "adoptee" needs to implement in order to
 /// be considered a "modal".
 ///
 public typealias RNIModal =
     RNIModalIdentity
   & RNIModalState
-  // & RNIModalRequestable
-  // & RNIModalFocusNotifiable
+  & RNIModalRequestable
+  & RNIModalFocusNotifiable
   & RNIModalFocusNotifying
   & RNIModalPresentation;
 
@@ -84,15 +82,6 @@ public protocol RNIModalRequestable: AnyObject {
 /// modal "focus/blur"-related notifications.
 ///
 public protocol RNIModalFocusNotifiable {
-  
-  // func onModalWillFocusNotification(sender modal: RNIModal);
-  //
-  // func onModalDidFocusNotification(sender modal: RNIModal);
-  //
-  // func onModalWillBlurNotification(sender modal: RNIModal);
-  //
-  // func onModalDidBlurNotification(sender modal: RNIModal);
-  
   func onModalWillFocusNotification(sender modal: RNIModal);
   
   func onModalDidFocusNotification(sender modal: RNIModal);

@@ -196,10 +196,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
-      // modalItem.onModalWillFocusNotification(sender: modal);
-      (modalItem as? RNIModalFocusNotifiable)?
-        .onModalWillFocusNotification(sender: modal);
+      modalItem.onModalWillFocusNotification(sender: modal);
     };
   };
   
@@ -212,10 +209,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
-      // modalItem.onModalDidFocusNotification(sender: modal);
-      (modalItem as? RNIModalFocusNotifiable)?
-        .onModalDidFocusNotification(sender: modal);
+      modalItem.onModalDidFocusNotification(sender: modal);
     };
   };
   
@@ -228,10 +222,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
-      // modalItem.onModalWillBlurNotification(sender: modal);
-      (modalItem as? RNIModalFocusNotifiable)?
-        .onModalWillBlurNotification(sender: modal);
+      modalItem.onModalWillBlurNotification(sender: modal);
     };
   };
   
@@ -244,10 +235,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard modalItem.modalNativeID != modal.modalNativeID
       else { continue };
       
-      /// TODO:2023-03-24-09-56-09 - Remove temporary changes to `RNIModalManager`.
-      // modalItem.onModalDidBlurNotification(sender: modal);
-      (modalItem as? RNIModalFocusNotifiable)?
-        .onModalDidBlurNotification(sender: modal);
+      modalItem.onModalDidBlurNotification(sender: modal);
     };
   };
 };
