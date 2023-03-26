@@ -176,7 +176,9 @@ extension RNIModalViewModule {
       
       modalView.setModalVisibility(visibility: visibility) { isSuccess, error in
         if isSuccess {
-          resolve(modalView.createModalNativeEventDict());
+          resolve(
+            modalView.synthesizedBaseEventData.synthesizedDictionary
+          );
           
         } else {
           reject(nil, error?.errorMessage, nil);
@@ -197,7 +199,9 @@ extension RNIModalViewModule {
         return;
       };
       
-      resolve(modalView.createModalNativeEventDict());
+      resolve(
+        modalView.synthesizedBaseEventData.synthesizedDictionary
+      );
     };
   };
 };

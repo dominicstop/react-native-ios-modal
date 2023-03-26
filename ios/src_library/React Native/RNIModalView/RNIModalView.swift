@@ -242,6 +242,14 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     return blurStyle;
   };
   
+  var synthesizedBaseEventData: RNIModalBaseEventData {
+    RNIModalBaseEventData(
+      reactTag: self.reactTag.intValue,
+      modalID: self.modalID as? String,
+      modalData: self.synthesizedModalData
+    );
+  };
+  
   // MARK: - Init
   // ------------
   
@@ -455,26 +463,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   // MARK: - Functions - Internal
   // ----------------------------
   
-  /// TODO:2023-03-22-12-09-34 - Move to `get` property called
-  /// `synthesizedNativeEventBase`
-  ///
-  /// helper function to create a `NativeEvent` object
-  func createModalNativeEventDict() -> Dictionary<String, Any> {
-    let baseEvent = RNIModalBaseEventData(
-      reactTag: self.reactTag.intValue,
-      modalID: self.modalID as? String,
-      modalNativeID: self.modalNativeID,
-      modalIndex: self.modalIndex,
-      currentModalIndex: RNIModalManagerShared.currentModalIndex,
-      isModalPresented: self.isModalPresented,
-      isModalInFocus: self.isModalInFocus,
-      synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
-      synthesizedIsModalPresented: self.synthesizedIsModalPresented,
-      synthesizedModalIndex: self.synthesizedModalIndex
-    );
-    
-    return baseEvent.synthesizedDictionary;
-  };
   
   // MARK: - Functions - Public
   // --------------------------
@@ -561,7 +549,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
       
       self.onModalShow?(
-        self.createModalNativeEventDict()
+        self.synthesizedBaseEventData.synthesizedDictionary
       );
       
       completion?(true, nil);
@@ -629,7 +617,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       self.delegate?.onDismissModalView(modalView: self);
       
       self.onModalDismiss?(
-        self.createModalNativeEventDict()
+        self.synthesizedBaseEventData.synthesizedDictionary
       );
       
       self.deinitControllers();
@@ -652,7 +640,10 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       "visibility": visibility,
     ];
     
-    self.createModalNativeEventDict().forEach { (key, value) in
+    let baseEventDataDict =
+      self.synthesizedBaseEventData.synthesizedDictionary;
+    
+    baseEventDataDict.forEach { (key, value) in
       params[key] = value
     };
     
@@ -686,7 +677,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     };
     
     self.onModalWillDismiss?(
-      self.createModalNativeEventDict()
+      self.synthesizedBaseEventData.synthesizedDictionary
     );
     
     #if DEBUG
@@ -705,11 +696,11 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     self.delegate?.onDismissModalView(modalView: self);
     
     self.onModalDidDismiss?(
-      self.createModalNativeEventDict()
+      self.synthesizedBaseEventData.synthesizedDictionary
     );
     
     self.onModalDismiss?(
-      self.createModalNativeEventDict()
+      self.synthesizedBaseEventData.synthesizedDictionary
     );
     
     self.deinitControllers();
@@ -723,7 +714,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   
   func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
     self.onModalAttemptDismiss?(
-      self.createModalNativeEventDict()
+      self.synthesizedBaseEventData.synthesizedDictionary
     );
     
     #if DEBUG
