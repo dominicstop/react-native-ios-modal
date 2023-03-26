@@ -71,9 +71,9 @@
     	* ``getPresentedViewControllers.last === self.modalVC false`
   
   <br>
-
+  
   * [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
-
+  
   * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
   	* Remove `RNIModalView.modalNVC` + usage.
 
@@ -91,12 +91,12 @@
 
   * [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
     * **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
-  
+
   <br>
-  
+
   * [x] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties in `RNIModalView`.
   * [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
-  * [ ] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
+  * [x] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
   * [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
   * [x] **Subtask** - `TODO:2023-03-16-15-19-13` - Remove `RCTSwiftLog`
   
@@ -117,14 +117,14 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
-    * Desc: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
+  - [x] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
+    * **Desc**: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
   
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
-    * **Desc**: Add code to manually propagate modal blur/focus events.
-    	* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
+  	* **Desc**: Add code to manually propagate modal blur/focus events.
+  		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
   
   <br>
   
