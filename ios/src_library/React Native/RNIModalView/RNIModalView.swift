@@ -250,6 +250,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     self.bridge = bridge;
     self.touchHandler = RCTTouchHandler(bridge: self.bridge);
+    
+    RNIModalManagerShared.register(modal: self);
   };
   
   required init?(coder aDecoder: NSCoder) {
@@ -551,6 +553,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     self.presentingViewController = topMostPresentedVC;
     
+    self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
+    
     topMostPresentedVC.present(modalVC, animated: true) {
       if self.hideNonVisibleModals {
         self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
@@ -561,6 +565,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       
       /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
       self.delegate?.onPresentModalView(modalView: self);
+      
+      self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
       
       self.onModalShow?(
         self.createModalNativeEventDict()
@@ -629,6 +635,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     presentedVC.dismiss(animated: true){
       /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
       self.delegate?.onDismissModalView(modalView: self);
+      
       self.onModalDismiss?(
         self.createModalNativeEventDict()
       );
@@ -680,6 +687,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
 extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+    self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
+    
     if self.hideNonVisibleModals {
       self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
     };
@@ -696,6 +705,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
   
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
+    
     self.modalLevel = -1;
     
     /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
