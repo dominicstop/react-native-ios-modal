@@ -10,7 +10,7 @@ import Foundation
 
 
 class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
-                      RNIModalState, RNIModalPresentation {
+                    RNIModalState, RNIModalPresentation {
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -772,5 +772,42 @@ extension RNIModalView: RNIModalViewFocusDelegate {
         self.createModalNativeEventDict()
       );
     };
+  };
+};
+
+extension RNIModalView: RNIModalRequestable {
+  
+  func requestModalToShow(sender: RNIModal, onRequestApprovedBlock: () -> Void, onRequestDeniedBlock: (String) -> Void) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
+  };
+  
+  func requestModalToHide(sender: RNIModal, onRequestApprovedBlock: () -> Void, onRequestDeniedBlock: (String) -> Void) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
+  };
+};
+
+
+extension RNIModalView: RNIModalFocusNotifiable {
+  
+  func onModalWillFocusNotification(sender modal: RNIModal) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
+  };
+  
+  func onModalDidFocusNotification(sender modal: RNIModal) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
+  };
+  
+  func onModalWillBlurNotification(sender modal: RNIModal) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
+  };
+  
+  func onModalDidBlurNotification(sender modal: RNIModal) {
+    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+    /// No-op - TBA
   };
 };
