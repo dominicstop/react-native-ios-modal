@@ -47,3 +47,23 @@ extension RNIModalIdentity where Self: RNIModalPresentation {
     return -1;
   };
 };
+
+extension RNIModalIdentity where Self: RNIModal {
+  
+  var synthesizedModalData: RNIModalData {
+    RNIModalData(
+      modalNativeID: self.modalNativeID,
+      modalIndex: self.modalIndex,
+      currentModalIndex: RNIModalManagerShared.currentModalIndex,
+      isModalPresented: self.isModalPresented,
+      isModalInFocus: self.isModalInFocus,
+      synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
+      synthesizedIsModalPresented: self.synthesizedIsModalPresented,
+      synthesizedModalIndex: self.synthesizedModalIndex
+    );
+  };
+  
+  var synthesizedModalDataDict: Dictionary<String, Any> {
+    self.synthesizedModalData.synthesizedDictionary;
+  };
+};
