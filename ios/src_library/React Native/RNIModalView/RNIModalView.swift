@@ -459,29 +459,21 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   /// `synthesizedNativeEventBase`
   ///
   /// helper function to create a `NativeEvent` object
-  func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
-    var dict: Dictionary<AnyHashable, Any> = [
-      "modalNativeID": self.modalNativeID!,
-      
-      "modalLevel": self.modalLevel,
-      "modalLevelPrev": self.modalLevelPrev,
-      
-      "isModalInFocus": self.isModalInFocus,
-      "isModalPresented": self.isModalPresented,
-      
-      "synthesizedIsModalInFocus": self.synthesizedIsModalInFocus,
-      "synthesizedIsModalPresented": self.synthesizedIsModalPresented,
-    ];
+  func createModalNativeEventDict() -> Dictionary<String, Any> {
+    let baseEvent = RNIModalBaseEventData(
+      reactTag: self.reactTag.intValue,
+      modalID: self.modalID as? String,
+      modalNativeID: self.modalNativeID,
+      modalIndex: self.modalIndex,
+      currentModalIndex: RNIModalManagerShared.currentModalIndex,
+      isModalPresented: self.isModalPresented,
+      isModalInFocus: self.isModalInFocus,
+      synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
+      synthesizedIsModalPresented: self.synthesizedIsModalPresented,
+      synthesizedModalIndex: self.synthesizedModalIndex
+    );
     
-    if let reactTag = self.reactTag {
-      dict["reactTag"] = reactTag;
-    };
-    
-    if let modalID = self.modalID {
-      dict["modalID"] = modalID;
-    };
-    
-    return dict;
+    return baseEvent.synthesizedDictionary;
   };
   
   // MARK: - Functions - Public
