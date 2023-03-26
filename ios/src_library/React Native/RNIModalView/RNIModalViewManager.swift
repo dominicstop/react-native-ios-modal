@@ -71,16 +71,16 @@ extension RNIModalViewManager: RNIModalViewPresentDelegate {
   
   func onPresentModalView(modalView: RNIModalView) {
     let modalLevel = modalView.modalLevel;
-    let modalUUID  = modalView.modalUUID;
+    let modalNativeID = modalView.modalNativeID!;
     
     self.currentModalLevel = modalLevel;
-    self.presentedModalRefs.setObject(modalView, forKey: modalUUID as NSString);
+    self.presentedModalRefs.setObject(modalView, forKey: modalNativeID as NSString);
     
     // notify delegates that a new modal is in focus
     self.delegatesFocus.invoke {
       $0.onModalChangeFocus(
         modalLevel: modalLevel,
-        modalUUID : modalUUID,
+        modalNativeID: modalNativeID,
         isInFocus : true
       );
     };
@@ -88,16 +88,16 @@ extension RNIModalViewManager: RNIModalViewPresentDelegate {
   
   func onDismissModalView(modalView: RNIModalView) {
     let modalLevel = modalView.modalLevelPrev;
-    let modalUUID  = modalView.modalUUID;
+    let modalID    = modalView.modalNativeID!
     
     self.currentModalLevel = modalLevel;
-    self.presentedModalRefs.removeObject(forKey: modalUUID as NSString);
+    self.presentedModalRefs.removeObject(forKey: modalID as NSString);
     
     // notify delegates that a new modal is lost focus
     self.delegatesFocus.invoke {
       $0.onModalChangeFocus(
         modalLevel: modalLevel,
-        modalUUID : modalUUID,
+        modalNativeID: modalID,
         isInFocus : false
       );
     };

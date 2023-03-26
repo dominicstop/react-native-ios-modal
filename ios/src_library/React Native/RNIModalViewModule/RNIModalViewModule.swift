@@ -111,7 +111,7 @@ extension RNIModalViewModule {
               completion();
               
               let manager = RNIModalViewManager.sharedInstance;
-              manager?.presentedModalRefs.removeObject(forKey: modalRef.modalUUID as NSString);
+              manager?.presentedModalRefs.removeObject(forKey: modalRef.modalNativeID! as NSString);
             };
             
           } else {

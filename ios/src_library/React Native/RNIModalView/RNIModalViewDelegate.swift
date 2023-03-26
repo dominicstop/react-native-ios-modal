@@ -23,10 +23,10 @@ import Foundation
   /**
    - Parameters:
       - modalLevel: the `RNIModalView` sender's current modalLevel
-      - modalUUID  : the `RNIModalView` sender's modalUUID
-      - isInFocus  : Whether or not the modal is going in or out of focus
+      - modalID   : the `RNIModalView` sender's modalID
+      - isInFocus : Whether or not the modal is going in or out of focus
   */
-  func onModalChangeFocus(modalLevel: Int, modalUUID: String, isInFocus: Bool);
+  func onModalChangeFocus(modalLevel: Int, modalNativeID: String, isInFocus: Bool);
   
 };
 

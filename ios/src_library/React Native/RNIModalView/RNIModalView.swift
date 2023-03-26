@@ -35,9 +35,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     }
   };
   
-  /// TODO:2023-03-17-12-42-02 - Remove RNIModalView.modalUUID
-  let modalUUID = UUID().uuidString;
-  
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
   
@@ -357,8 +354,9 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   private func initControllers(){
     #if DEBUG
     print(
-        "RNIModalView init - initControllers for modal: "
-      + "\(self.modalID ?? self.modalUUID as NSString)");
+        "RNIModalView init - initControllers"
+      + " - modalNativeID: '\(self.modalNativeID!)'"
+    );
     #endif
     
     self.modalVC = {
@@ -382,7 +380,10 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   /// * Refactor so that we don't have to constantly cleanup...
   private func deinitControllers(){
     #if DEBUG
-    print("RNIModalView init - deinitControllers for modal: \(self.modalID ?? self.modalUUID as NSString)");
+    print(
+        "RNIModalView init - deinitControllers"
+      + " - modalNativeID: '\(self.modalNativeID!)'"
+    );
     #endif
     
     self.modalVC?.reactView = nil;
@@ -458,7 +459,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   /// helper function to create a `NativeEvent` object
   func createModalNativeEventDict() -> Dictionary<AnyHashable, Any> {
     var dict: Dictionary<AnyHashable, Any> = [
-      "modalUUID": self.modalUUID,
+      "modalNativeID": self.modalNativeID!,
       
       "modalLevel": self.modalLevel,
       "modalLevelPrev": self.modalLevelPrev,
@@ -736,11 +737,11 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
 /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
 extension RNIModalView: RNIModalViewFocusDelegate {
   
-  func onModalChangeFocus(modalLevel: Int, modalUUID: String, isInFocus: Bool) {
+  func onModalChangeFocus(modalLevel: Int, modalNativeID: String, isInFocus: Bool) {
     guard
       /// defer if the receiver of the event is the same as the sender
       /// i.e defer  if this instance of `RNIModalView` was the one who broadcasted the event
-      self.modalUUID != modalUUID,
+      self.modalNativeID != modalNativeID,
       /// defer if the modal is not currently presented or if the modalLevel is -1
       self.synthesizedIsModalPresented && self.modalLevel > 0 else { return };
     
