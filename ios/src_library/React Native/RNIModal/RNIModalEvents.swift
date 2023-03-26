@@ -8,19 +8,19 @@
 import Foundation
 
 public struct RNIModalBaseEventData: RNIDictionarySynthesizable {
+  
+  public static var synthesizedDictionaryIgnore: [String] {
+    ["modalData"]
+  };
+  
+  public static var synthesizedDictionaryInlinedProperties: [
+    PartialKeyPath<RNIModalBaseEventData>
+  ] {
+    [\.modalData];
+  };
+  
   let reactTag: Int;
-  
   let modalID: String?;
-  let modalNativeID: String;
   
-  let modalIndex: Int;
-  let currentModalIndex: Int;
-  
-  let isModalPresented: Bool;
-  let isModalInFocus: Bool;
-
-  let synthesizedIsModalInFocus: Bool;
-  let synthesizedIsModalPresented: Bool;
-  let synthesizedModalIndex: Int;
+  let modalData: RNIModalData;
 };
-
