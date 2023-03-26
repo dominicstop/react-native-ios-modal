@@ -57,6 +57,10 @@ extension RNIDictionarySynthesizable {
       guard let propertyKey = propertyKey,
             !Self.synthesizedDictionaryIgnore.contains(propertyKey)
       else { return nil };
+      
+      if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
+        return(propertyKey, synthesizableDict.synthesizedDictionary);
+      };
 
       return (propertyKey, value)
     };
