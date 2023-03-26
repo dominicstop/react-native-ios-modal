@@ -19,9 +19,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
 
   weak var bridge: RCTBridge?;
   
-  /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
-  weak var delegate: RNIModalViewPresentDelegate?;
-  
   private var modalVC: RNIModalViewController?;
   
   private var touchHandler: RCTTouchHandler!;
@@ -545,9 +542,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
       
-      /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
-      self.delegate?.onPresentModalView(modalView: self);
-      
       self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
       
       self.onModalShow?(
@@ -615,9 +609,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
-      /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
-      self.delegate?.onDismissModalView(modalView: self);
-      
       self.onModalDismiss?(
         self.synthesizedBaseEventData.synthesizedDictionary
       );
@@ -693,10 +684,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
     
     self.modalLevel = -1;
-    
-    /// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
-    self.delegate?.onDismissModalView(modalView: self);
-    
+
     self.onModalDidDismiss?(
       self.synthesizedBaseEventData.synthesizedDictionary
     );
@@ -727,38 +715,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
 };
 
-// MARK: Extension: RNIModalViewFocusDelegate
-// ------------------------------------------
-
-/// TODO:2023-03-24-14-25-52 - Remove `RNIModalViewFocusDelegate`-related logic
-extension RNIModalView: RNIModalViewFocusDelegate {
-  
-  func onModalChangeFocus(modalLevel: Int, modalNativeID: String, isInFocus: Bool) {
-    guard
-      /// defer if the receiver of the event is the same as the sender
-      /// i.e defer  if this instance of `RNIModalView` was the one who broadcasted the event
-      self.modalNativeID != modalNativeID,
-      /// defer if the modal is not currently presented or if the modalLevel is -1
-      self.synthesizedIsModalPresented && self.modalLevel > 0 else { return };
-    
-    if isInFocus && !self.synthesizedIsModalInFocus {
-      /// a new `RNIModalView` instance is in focus and this modal was prev. in focus so
-      /// this modal shoud be now 'blurred'
-      self.onModalBlur?(
-        self.createModalNativeEventDict()
-      );
-      
-    } else if !isInFocus && !self.synthesizedIsModalInFocus {
-      /// a  `RNIModalView` instance has lost focus, so the prev modal shoul be focused
-      /// defer if the receiver's modalLevel isn't 1 value below the sender's modalLevel
-      guard self.modalLevel + 1 >= modalLevel else { return };
-
-      self.onModalFocus?(
-        self.createModalNativeEventDict()
-      );
-    };
-  };
-};
+// MARK: Extension: RNIModalRequestable
+// ------------------------------------
 
 extension RNIModalView: RNIModalRequestable {
   
@@ -774,25 +732,51 @@ extension RNIModalView: RNIModalRequestable {
 };
 
 
+// MARK: Extension: RNIModalFocusNotifiable
+// ----------------------------------------
+
 extension RNIModalView: RNIModalFocusNotifiable {
   
   func onModalWillFocusNotification(sender modal: RNIModal) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
     /// No-op - TBA
   };
   
   func onModalDidFocusNotification(sender modal: RNIModal) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-    /// No-op - TBA
+    
+    let eventData = RNIOnModalFocusEventData(
+      modalData: self.synthesizedBaseEventData,
+      senderInfo: modal.synthesizedModalData,
+      isInitial: modal === self
+    );
+    
+    print(
+      "\nRNIModalFocusNotifiable - onModalDidFocusNotification - ",
+      "eventData: \(eventData.synthesizedDictionary)\n"
+    );
+    
+    self.onModalFocus?(
+      eventData.synthesizedDictionary
+    );
   };
   
   func onModalWillBlurNotification(sender modal: RNIModal) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
     /// No-op - TBA
   };
   
   func onModalDidBlurNotification(sender modal: RNIModal) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-    /// No-op - TBA
+    let eventData = RNIOnModalFocusEventData(
+      modalData: self.synthesizedBaseEventData,
+      senderInfo: modal.synthesizedModalData,
+      isInitial: modal === self
+    );
+    
+    print(
+      "\nRNIModalFocusNotifiable - onModalDidBlurNotification - ",
+      "eventData: \(eventData.synthesizedDictionary)\n"
+    );
+    
+    self.onModalBlur?(
+      eventData.synthesizedDictionary
+    );
   };
 };

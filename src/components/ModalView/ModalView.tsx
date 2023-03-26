@@ -341,30 +341,6 @@ export class ModalView extends
     );
 
     this.setStateIsModalVisible(true);
-
-    // TODO: Patch - Note:2023-03-04-02-58-31
-    // * Temp impl. to make focus/blur context to work
-    //
-    // * Modal focus/blur native event does not fire on initial
-    //   focus/blur - they only fire in response to another modal
-    //   stealing focus.
-    //
-    // * As such, when a modal becomes visible, the focus event
-    //   does not fire; conversely, the blur event also does not
-    //   fire when the modal becomes hidden.
-    //
-    // * Fix/Solution: Update focus/blur event to fire on initial
-    //   blur or focus, but there should be a `isInitialFocus`,
-    //   and `isInitialBlur` in the event params as a means to
-    //   distinguish if this is the first time it's going to
-    //   focus/blur.
-    //
-    //   * I.e. a means of distinguishing whether the focus/blur
-    //     was due to a `setVisibility` request, or due to
-    //     another modal stealing focus.
-    this.setState({
-      isModalInFocus: true,
-    });
   };
 
   private _handleOnModalDismiss: OnModalDismissEvent = (event) => {
@@ -385,9 +361,6 @@ export class ModalView extends
       // reset state values from props
       enableSwipeGesture: props.enableSwipeGesture,
       isModalInPresentation: props.isModalInPresentation,
-
-      // TODO: Patch - See Note:2023-03-04-02-58-31
-      isModalInFocus: false,
     });
   };
 
