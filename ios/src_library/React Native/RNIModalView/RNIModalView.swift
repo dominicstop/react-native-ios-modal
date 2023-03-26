@@ -382,6 +382,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
         self?.notifyForBoundsChange(newBounds);
       };
       
+      vc.presentationController?.delegate = self;
+      
       return vc;
     }();
   };
