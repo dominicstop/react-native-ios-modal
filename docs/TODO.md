@@ -122,7 +122,7 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
+  - [x] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
   	* **Desc**: Add code to manually propagate modal blur/focus events.
   		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
   
@@ -133,18 +133,11 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Relocate `currentModalLevel`
-  	- **Desc**: Relocate `RNIModalViewManager.currentModalLevel` property to a singleton called `RNIModalManager`.
+  - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
   
+  - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
   
-  <br>
-  
-  - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Relocate `delegatesFocus`
-  	* **Desc**: Relocate `RNIModalViewManager.delegatesFocus` property to a singleton called `RNIModalManager`.
-  
-  <br>
-  
-  - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Relocate `presentedModalRefs`
+  - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
   
   <br>
   
