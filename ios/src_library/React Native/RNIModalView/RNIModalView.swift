@@ -481,8 +481,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     let presentedViewControllers =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
-    let lastModalIndex = presentedViewControllers.count - 1;
-    
     guard let topMostPresentedVC = presentedViewControllers.last else {
       #if DEBUG
       print("RNIModalView - presentModal: could not get vc");
