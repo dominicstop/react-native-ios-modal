@@ -142,7 +142,11 @@ class RNIModalViewModule: RCTEventEmitter {
   ){
     DispatchQueue.main.async {
       guard let modalView = self.getModalViewInstance(for: node) else {
-        reject(nil, "Unable to get the corresponding 'RNIModalView' instance for node: \(node)", nil);
+        let message =
+            "RNIModalViewModule.setModalVisibility - Unable to get the "
+          + "corresponding 'RNIModalView' instance for node: \(node)"
+        
+        reject(nil, message, nil);
         return;
       };
       
@@ -167,7 +171,11 @@ class RNIModalViewModule: RCTEventEmitter {
   ){
     DispatchQueue.main.async {
       guard let modalView = self.getModalViewInstance(for: node) else {
-        reject(nil, "Unable to get the corresponding 'RNIModalView' instance for node: \(node)", nil);
+        let message =
+            "RNIModalViewModule.requestModalInfo - Unable to get the "
+          + "corresponding 'RNIModalView' instance for node: \(node)"
+        
+        reject(nil, message, nil);
         return;
       };
       
