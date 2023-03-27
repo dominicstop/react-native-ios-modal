@@ -53,85 +53,66 @@ class RNIModalViewModule: RCTEventEmitter {
   
   // MARK: - Module Functions
   // ------------------------
-  
-  // TODO: See TODO:2023-03-05-00-33-15  - Refactor: Re-write
-  // `dismissModalByID``
+
   @objc func dismissModalByID(
     _ modalID: NSString,
     callback: @escaping RCTResponseSenderBlock
   ) {
     DispatchQueue.main.async {
-      guard let rootVC = UIWindow.key?.rootViewController else {
+      let listPresentedVC = RNIModalManager.getPresentedViewControllers();
+      
+      
+      guard listPresentedVC.count > 0 else {
         #if DEBUG
-        print("RNIModalViewModule, dismissModalByID Error: could not get root VC. ");
+        print(
+            "RNIModalViewModule - dismissModalByID - Error - "
+          + "`listPresentedVC` is empty"
+        );
         #endif
         callback([false]);
         return;
       };
       
-      // climb the vc hierarchy to find the modal
-      var currentVC = rootVC;
-      while let presentedVC = currentVC.presentedViewController {
-        currentVC = presentedVC;
-
-        if let navVC   = presentedVC as? UINavigationController,
-           let rootVC  = navVC.viewControllers.first,
-           let modalVC = rootVC as? RNIModalViewController,
-           // check if this is the modal we want to dismiss
-           modalVC.modalID == modalID as String {
-          
-          let completion = {
-            // modal dismissed
-            callback([true]);
-            
-            #if DEBUG
-            print("RNIModalViewModule, dismissModalByID: dismissing \(modalVC.modalID ?? "N/A")");
-            #endif
-          };
-          
-          if let modalRef = modalVC.modalViewRef {
-            /// use `modalRef` to dismiss modal if it still exists so that modal blur/focus events will work
-            modalRef.dismissModal { (isSuccess, error) in
-              guard isSuccess else {
-                #if DEBUG
-                print(
-                    "RNIModalViewModule, dismissModalByID Fail: modalID \(modalRef.modalID ?? "N/A")"
-                  + " - error code: \(error?.rawValue ?? "N/A")"
-                  + " - error message: \(error?.errorMessage ?? "N/A")"
-                );
-                #endif
-                callback([false]);
-                return;
-              };
-              
-              // modal dismissed
-              completion();
-            };
-            
-          } else {
-            /// `modalRef` no longer exists, so we have dismiss manually
-
-            /// TODO: See TODO:2023-03-05-00-32-43 - Fix: Edge
-            // Case - Modal Focus/Blur Bug
-            //
-            // * Add code to manually propagate modal blur/focus
-            //   events
-            //
-            // * The modal is being dismissed via calling the
-            //   modal view controller's dismiss method. As such,
-            //   the focus/blur event is not being propagated.
-            modalVC.dismiss(animated: true){
-              // modal dismissed
-              completion();
-            };
-          };
-          
-          // early exit, stop loop
+      let listPresentedModalVC =
+        listPresentedVC.compactMap { $0 as? RNIModalViewController };
+      
+      let targetModalVC = listPresentedModalVC.first {
+        guard let modalID = $0.modalID else { return false };
+        return modalID == modalID;
+      };
+      
+      guard let targetModalView = targetModalVC?.modalViewRef else {
+        #if DEBUG
+        print(
+            "RNIModalViewModule - dismissModalByID - Error - "
+          + "Could not get matching `RNIModalView` instance."
+        );
+        #endif
+        callback([false]);
+        return;
+      };
+      
+      targetModalView.dismissModal { isSuccess, error in
+        guard isSuccess else {
+          #if DEBUG
+          print(
+              "RNIModalViewModule - dismissModalByID - Error - "
+            + "RNIModalView.dismissModal"
+          );
+          #endif
+          callback([false]);
           return;
         };
         
-        // reached end of loop, modal not found
-        callback([false]);
+        // modal dismissed
+        callback([true]);
+        
+        #if DEBUG
+        print(
+            "RNIModalViewModule - dismissModalByID - Dismissing modal - "
+          + "modalID: '\(targetModalView.modalID!)'"
+        );
+        #endif
       };
     };
   };
