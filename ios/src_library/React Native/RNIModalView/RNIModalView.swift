@@ -24,14 +24,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   private var touchHandler: RCTTouchHandler!;
   private var reactSubview: UIView?;
   
-  /// TODO:2023-03-24-09-41-16 - Remove `modalLevel`
-  var modalLevelPrev = -1;
-  var modalLevel = -1 {
-    didSet {
-      self.modalLevelPrev = oldValue;
-    }
-  };
-  
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
   
@@ -514,13 +506,11 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
     modalVC.modalPresentationStyle = self.synthesizedModalPresentationStyle;
-    
-    self.modalLevel = lastModalIndex + 1;
-    
+
     #if DEBUG
     print("RNIModalView, presentModal: Start"
       + " - for reactTag: \(self.reactTag ?? -1)"
-      + " - modalLevel: \(self.modalLevel)"
+      + " - modalIndex: \(self.modalIndex!)"
       + " - modalID: \(self.modalID ?? "N/A")"
       + " - with presentationStyle: \(self.synthesizedModalPresentationStyle)"
       + " - with transitionStyle: \(self.synthesizedModalTransitionStyle)"
@@ -536,7 +526,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     topMostPresentedVC.present(modalVC, animated: true) {
       if self.hideNonVisibleModals {
-        self.setIsHiddenForViewBelowLevel(self.modalLevel - 1, isHidden: true);
+        self.setIsHiddenForViewBelowLevel(self.modalIndex - 1, isHidden: true);
       };
       
       // Reset swipe gesture before it was temporarily disabled
@@ -602,10 +592,9 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     /// begin temp. hiding modals that are no longer visibile
     if self.hideNonVisibleModals {
-      self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
+      self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
     };
     
-    self.modalLevel = -1;
     self.enableSwipeGesture(false);
     
     presentedVC.dismiss(animated: true){
@@ -666,7 +655,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
     
     if self.hideNonVisibleModals {
-      self.setIsHiddenForViewBelowLevel(self.modalLevel, isHidden: false);
+      self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
     };
     
     self.onModalWillDismiss?(
@@ -682,8 +671,6 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
-    
-    self.modalLevel = -1;
 
     self.onModalDidDismiss?(
       self.synthesizedBaseEventData.synthesizedDictionary
