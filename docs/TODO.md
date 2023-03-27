@@ -10,7 +10,13 @@
   - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` - Remove/Replace `UIWindow.key`.
   - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Move `RNIModalManager` helper functions to `RNIUtilities`.
   - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
-  	* **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
+    * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
+  
+    <br>
+  
+  - [ ] **Subtask** - `TODO:2023-03-22-12-18-37` - **Refactor**: Remove `deinitControllers`
+  
+  	* Refactor `RNIModalView` so that we don't have to constantly cleanup.
 
 <br>
 
@@ -54,7 +60,9 @@
 <br>
 
 - [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+
 		* Remove `RNIModalView.onModalDismiss`
 		* Remove `RNIModalView.onModalShow`
 		* Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`
@@ -76,6 +84,10 @@
 		* Impl. `RNIModalView.onModaDidFocus`
 			* Add invocation for deprecated event `ModalView.onModalFocus`
 		* Update examples.
+
+		<br>
+
+	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
 
 <br>
 
@@ -105,11 +117,6 @@
 
   <br>
 
-  * [ ] **Subtask** - `TODO:2023-03-22-12-18-37` - **Refactor**: Remove `deinitControllers`
-    * Refactor `RNIModalView` so that we don't have to constantly cleanup.
-
-  <br>
-
   * [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
     * **Desc**: Refactor `createModalNativeEventDict`.
 
@@ -128,7 +135,7 @@
   
   <br>
   
-  * [ ] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
+  * [x] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
     * **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
     	* Modal focus/blur re-write.
     	* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
@@ -154,21 +161,13 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `dismissModalByID`
-  	* **Desc**: Cleanup + Re-write `RNIModalViewModule.dismissModalByID`.
-  
-  <br>
+  - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Remove `RNIModalViewModule.dismissModalByID`.
   
   - [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
   
   - [x] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
   
   - [x] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
-  
-  <br>
-  
-  - [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
-  	* **Desc**: Update `RNIModalView` native event parameters (i.e. send over more relevant data).
   
   <br>
   
