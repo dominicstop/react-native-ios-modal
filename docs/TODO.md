@@ -161,7 +161,7 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Remove `RNIModalViewModule.dismissModalByID`.
+  - [x] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `RNIModalViewModule.dismissModalByID`.
   
   - [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
   
