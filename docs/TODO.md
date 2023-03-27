@@ -59,7 +59,7 @@
 
   <br>
 
-  * [ ] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
+  * [x] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
     * **Desc**: Remove `RNIModalView.modalLevel`
   
   <br>
@@ -133,17 +133,16 @@
   
   <br>
   
-  - [ ] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
+  - [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
   
-  - [ ] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
+  - [x] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
   
-  - [ ] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
+  - [x] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
   
   <br>
   
   - [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
   	* **Desc**: Update `RNIModalView` native event parameters (i.e. send over more relevant data).
-  		* Add param `isUserInitiated` to indicate if an event was fired due to a user action.
   
   <br>
   
