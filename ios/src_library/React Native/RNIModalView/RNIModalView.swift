@@ -144,8 +144,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     }
   };
   
-  // MARK: - Properties: Synthesized
-  // -------------------------------
+  // MARK: - Properties: Synthesized From Props
+  // ------------------------------------------
   
   var synthesizedModalPresentationStyle: UIModalPresentationStyle {
     let defaultStyle: UIModalPresentationStyle = {
@@ -230,6 +230,9 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     
     return blurStyle;
   };
+  
+  // MARK: - Properties: Synthesized
+  // -------------------------------
   
   var synthesizedBaseEventData: RNIModalBaseEventData {
     RNIModalBaseEventData(
