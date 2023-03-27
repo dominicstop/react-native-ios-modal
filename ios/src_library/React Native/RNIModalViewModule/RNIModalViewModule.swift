@@ -50,14 +50,11 @@ class RNIModalViewModule: RCTEventEmitter {
     guard self.hasListeners else { return };
     self.sendEvent(withName: event.rawValue, body: params);
   };
-};
-
-// MARK: - Standalone Functions
-// ----------------------------
-
-extension RNIModalViewModule {
   
-  // TODO: See TODO:2023-03-05-00-33-15  - Refactor: Re-write 
+  // MARK: - Module Functions
+  // ------------------------
+  
+  // TODO: See TODO:2023-03-05-00-33-15  - Refactor: Re-write
   // `dismissModalByID``
   @objc func dismissModalByID(
     _ modalID: NSString,
@@ -114,14 +111,14 @@ extension RNIModalViewModule {
           } else {
             /// `modalRef` no longer exists, so we have dismiss manually
 
-            /// TODO: See TODO:2023-03-05-00-32-43 - Fix: Edge 
+            /// TODO: See TODO:2023-03-05-00-32-43 - Fix: Edge
             // Case - Modal Focus/Blur Bug
             //
-            // * Add code to manually propagate modal blur/focus 
+            // * Add code to manually propagate modal blur/focus
             //   events
             //
-            // * The modal is being dismissed via calling the 
-            //   modal view controller's dismiss method. As such, 
+            // * The modal is being dismissed via calling the
+            //   modal view controller's dismiss method. As such,
             //   the focus/blur event is not being propagated.
             modalVC.dismiss(animated: true){
               // modal dismissed
@@ -151,12 +148,9 @@ extension RNIModalViewModule {
       callback([success != nil]);
     };
   };
-};
 
-// MARK: - View-Related Functions
-// ------------------------------
-
-extension RNIModalViewModule {
+  // MARK: - View-Related Functions
+  // ------------------------------
   
   @objc func setModalVisibility(
     _ node: NSNumber,
