@@ -53,6 +53,32 @@
 
 <br>
 
+- [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+		* Remove `RNIModalView.onModalDismiss`
+		* Remove `RNIModalView.onModalShow`
+		* Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`
+			* Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
+		* Remove `RNIModalView.onModalBlur`
+		* Remove `RNIModalView.onModalFocus`
+		* Move deprecated native modal events from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`.
+		* Update typescript types for modal event objects to match native event object.
+		* Impl. `RNIModalView.onModalWilllDismiss`
+		* Impl. `RNIModalView.onModalDidlDismiss`
+			* Add invocation for deprecated event `ModalView.onModalDismiss`
+		* Impl. `RNIModalView.onModalWillShow`
+		* Impl. `RNIModalView.onModalDidShow`
+			* Add invocation for deprecated event `ModalView.onModalShow`
+		* Impl. `RNIModalView,onModalWillBlur`
+		* Impl. `RNIModalView.onModalDidBlur`
+			* Add invocation for deprecated event `ModalView.onModalBlur`
+		* Impl. `RNIModalView.onModalWillFocus`
+		* Impl. `RNIModalView.onModaDidFocus`
+			* Add invocation for deprecated event `ModalView.onModalFocus`
+		* Update examples.
+
+<br>
+
 - [ ] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
 
   * **Desc**: Rewrite native to be more readable/consistent.
@@ -145,9 +171,6 @@
   	* **Desc**: Update `RNIModalView` native event parameters (i.e. send over more relevant data).
   
   <br>
-  
-  * [ ] **Subtask** - `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
-  	* **Desc**: Rename `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
   
   - <u>Related</u>:
   	*  `TODO:2023-03-04-05-25-44` - Library Cleanup
