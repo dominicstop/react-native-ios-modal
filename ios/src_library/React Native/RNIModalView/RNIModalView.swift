@@ -414,25 +414,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     bridge.uiManager.setSize(newBounds.size, for: reactSubview);
   };
   
-  private func getPresentedVCList() -> [UIViewController] {
-    guard let rootVC = UIWindow.key?.rootViewController else {
-      #if DEBUG
-      print("RNIModalView, getTopMostVC Error: could not get root VC. ");
-      #endif
-      return [];
-    };
-    
-    var vcList: [UIViewController] = [];
-    vcList.append(rootVC);
-    
-    // climb the vc hierarchy to find the topmost presented vc
-    while let presentedVC = vcList.last?.presentedViewController {
-      vcList.append(presentedVC);
-    };
-    
-    return vcList;
-  };
-  
   private func enableSwipeGesture(_ flag: Bool? = nil){
     self.modalVC?
         .presentationController?
@@ -445,7 +426,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   /// TODO:2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
-    let presentedVCList = self.getPresentedVCList();
+    let presentedVCList =
+      RNIModalManager.getPresentedViewControllers(for: self.window);
     
     for (index, vc) in presentedVCList.enumerated() {
       if index < level {
