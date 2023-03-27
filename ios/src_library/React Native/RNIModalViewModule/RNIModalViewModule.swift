@@ -109,9 +109,6 @@ extension RNIModalViewModule {
               
               // modal dismissed
               completion();
-              
-              let manager = RNIModalViewManager.sharedInstance;
-              manager?.presentedModalRefs.removeObject(forKey: modalRef.modalNativeID! as NSString);
             };
             
           } else {
