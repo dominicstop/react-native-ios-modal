@@ -35,15 +35,9 @@
 
 <br>
 
-- [ ] `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06`
-  * **Desc**: Enable `ModalView.isModalContentLazy` prop for example `Test06`.
+- [ ] `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06` - Enable `ModalView.isModalContentLazy` prop for example `Test06`.
 
-<br>
-
-- [ ] `TODO:2023-03-04-13-02-45` - **Refactor**: Rename  to `shouldAutoCloseOnUnmount`
-  * **Desc**: Rename `ModalView.autoCloseOnUnmount` prop to `autoCloseOnUnmount`.
-
-<br>
+- [ ] `TODO:2023-03-04-13-02-45` - **Refactor**:  Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 
 - [ ] `TODO:20230-03-04-12-58-40` - **Refactor**: Types - Remove `KeyMapType` Usage
 
@@ -91,93 +85,97 @@
 
 <br>
 
-- [ ] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
-
-  * **Desc**: Rewrite native to be more readable/consistent.
-
-  <br>
-
-  * [x] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
-    * **Desc**: Remove `RNIModalView.modalLevel`
-  
-  <br>
-  
-  * [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
-    * **Desc**: Re-write modal "focus checking"
-    	* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
-    	* ` getPresentedViewControllers().last === self.modalNVC: true`
-    	* ``getPresentedViewControllers.last === self.modalVC false`
-  
-  <br>
-  
-  * [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
-  
-  * [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
-  	* Remove `RNIModalView.modalNVC` + usage.
-
-  <br>
-
-  * [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
-    * **Desc**: Refactor `createModalNativeEventDict`.
-
-  <br>
-
-  * [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
-    * **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
-
-  <br>
-
-  * [x] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties in `RNIModalView`.
-  * [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
-  * [x] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
-  * [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
-  * [x] **Subtask** - `TODO:2023-03-16-15-19-13` - Remove `RCTSwiftLog`
-  
-  <br>
-  
-  * [x] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
-    * **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
-    	* Modal focus/blur re-write.
-    	* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
-    	* It will then be responsible to notify/"hand out" blur/focus events to other modals.
-    	* Will be responsible for keeping track how many modals are currently active, etc.
-  
-  <br>
-  
-  - [x] **Subtask** - `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-  - [x] **Subtask** - `TODO:2023-03-24-14-25-52` - Remove `RNIModalViewFocusDelegate`-related logic.
-  - [x] **Subtask** - `TODO:2023-03-24-09-58-50` - Add temporary changes to  `RNIModalManager` for `RNIModalView` partial conformance. 
-  
-  <br>
-  
-  - [x] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
-    * **Desc**: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
-  
-  <br>
-  
-  - [x] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
-  	* **Desc**: Add code to manually propagate modal blur/focus events.
-  		* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
-  
-  <br>
-  
-  - [x] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `RNIModalViewModule.dismissModalByID`.
-  
-  - [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
-  
-  - [x] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
-  
-  - [x] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
-  
-  <br>
-  
-  - <u>Related</u>:
-  	*  `TODO:2023-03-04-05-25-44` - Library Cleanup
-  	* `Note:2023-03-04-02-58-31`
+- [ ] `TODO:2023-03-27-23-55-09` **Refactor**: Re-write `RNIModalView` error creation and handling. 
 
 <br><br>
 
 ## TODO - Completed
+
+- [x] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
+
+	* **Desc**: Rewrite native to be more readable/consistent.
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
+		* **Desc**: Remove `RNIModalView.modalLevel`
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
+		* **Desc**: Re-write modal "focus checking"
+			* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
+			* ` getPresentedViewControllers().last === self.modalNVC: true`
+			* ``getPresentedViewControllers.last === self.modalVC false`
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
+
+	* [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
+		* Remove `RNIModalView.modalNVC` + usage.
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
+		* **Desc**: Refactor `createModalNativeEventDict`.
+
+	<br>
+
+	* [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
+		* **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-22-11-33-06` - Add `synthesized-` prefix to properties in `RNIModalView`.
+	* [x] **Subtask** - `TODO:2023-03-17-15-32-16` - Rename to `RNIModalView.isModalInFocus`
+	* [x] **Subtask** - `TODO:2023-03-17-12-42-02` - Remove `RNIModalView.modalUUID`
+	* [x] **Subtask** - `TODO:2023-03-16-15-16-09` - Remove `RNIModalView.DefaultValues`
+	* [x] **Subtask** - `TODO:2023-03-16-15-19-13` - Remove `RCTSwiftLog`
+
+	<br>
+
+	* [x] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
+		* **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
+			* Modal focus/blur re-write.
+			* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
+			* It will then be responsible to notify/"hand out" blur/focus events to other modals.
+			* Will be responsible for keeping track how many modals are currently active, etc.
+
+	<br>
+
+	- [x] **Subtask** - `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
+	- [x] **Subtask** - `TODO:2023-03-24-14-25-52` - Remove `RNIModalViewFocusDelegate`-related logic.
+	- [x] **Subtask** - `TODO:2023-03-24-09-58-50` - Add temporary changes to  `RNIModalManager` for `RNIModalView` partial conformance. 
+
+	<br>
+
+	- [x] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
+		* **Desc**: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
+
+	<br>
+
+	- [x] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
+		* **Desc**: Add code to manually propagate modal blur/focus events.
+			* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
+
+	<br>
+
+	- [x] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `RNIModalViewModule.dismissModalByID`.
+
+	- [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
+
+	- [x] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
+
+	- [x] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
+
+	<br>
+
+	- <u>Related</u>:
+		*  `TODO:2023-03-04-05-25-44` - Library Cleanup
+		*  `Note:2023-03-04-02-58-31`
+
+<br>
 
 - [x] `TODO:2023-03-04-03-59-43` - Re-Write Examples in Typescript
 
