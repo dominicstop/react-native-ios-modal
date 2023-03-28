@@ -8,11 +8,11 @@
 import Foundation;
 
 
-public class RNIUtilities {
+internal class RNIUtilities {
   
-  public static weak var sharedBridge: RCTBridge?;
+  internal static weak var sharedBridge: RCTBridge?;
   
-  public static let osVersion = ProcessInfo().operatingSystemVersion;
+  internal static let osVersion = ProcessInfo().operatingSystemVersion;
   
   /// If you remove a "react view" from the view hierarchy (e.g. via
   /// `removeFromSuperview`), it won't be released, because it's being retained
@@ -26,7 +26,7 @@ public class RNIUtilities {
   /// If you are **absolutely sure** that a particular `reactView` is no longer
   /// being used, this helper func. will remove `reactView` (and all of it's
   /// subviews) in the `_viewRegistry`.
-  public static func recursivelyRemoveFromViewRegistry(bridge: RCTBridge, reactView: UIView) {
+  internal static func recursivelyRemoveFromViewRegistry(bridge: RCTBridge, reactView: UIView) {
     
     func getRegistry(forKey key: String) -> NSMutableDictionary? {
       return bridge.uiManager?.value(forKey: key) as? NSMutableDictionary;
@@ -91,7 +91,7 @@ public class RNIUtilities {
   
   /// Recursive climb the responder chain until `T` is found.
   /// Useful for finding the corresponding view controller of a view.
-  public static func getParent<T>(responder: UIResponder, type: T.Type) -> T? {
+  internal static func getParent<T>(responder: UIResponder, type: T.Type) -> T? {
     var parentResponder: UIResponder? = responder;
     
     while parentResponder != nil {
@@ -105,7 +105,7 @@ public class RNIUtilities {
     return nil;
   };
   
-  public static func getView<T>(
+  internal static func getView<T>(
     forNode node: NSNumber,
     type: T.Type,
     bridge: RCTBridge?
@@ -117,7 +117,7 @@ public class RNIUtilities {
     return view as? T;
   };
   
-  public static func recursivelyGetAllSubviews(for view: UIView) -> [UIView] {
+  internal static func recursivelyGetAllSubviews(for view: UIView) -> [UIView] {
     var views: [UIView] = [];
     
     for subview in view.subviews {
@@ -128,7 +128,7 @@ public class RNIUtilities {
     return views;
   };
   
-  public static func recursivelyGetAllSuperViews(for view: UIView) -> [UIView] {
+  internal static func recursivelyGetAllSuperViews(for view: UIView) -> [UIView] {
     var views: [UIView] = [];
     
     if let parentView = view.superview {
@@ -139,7 +139,7 @@ public class RNIUtilities {
     return views;
   };
   
-  public static func compareImages(_ a: UIImage?, _ b: UIImage?) -> Bool {
+  internal static func compareImages(_ a: UIImage?, _ b: UIImage?) -> Bool {
     if (a == nil && b == nil){
       // both are nil, equal
       return true;

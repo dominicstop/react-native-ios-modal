@@ -10,7 +10,7 @@ import Foundation
 @objc(RNIWrapperViewModule)
 internal class RNIWrapperViewModule: NSObject {
   
-  @objc public private(set) var bridge: RCTBridge!;
+  @objc internal private(set) var bridge: RCTBridge!;
   
   @objc static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread

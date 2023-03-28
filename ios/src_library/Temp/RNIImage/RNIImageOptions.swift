@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct RNIImageOptions {
+internal struct RNIImageOptions {
   let tint: UIColor?;
   let renderingMode: UIImage.RenderingMode;
   let cornerRadius: CGFloat?;

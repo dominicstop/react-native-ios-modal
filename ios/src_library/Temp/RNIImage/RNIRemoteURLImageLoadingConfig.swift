@@ -10,13 +10,13 @@ import Foundation
 
 
 /// Maps to: `ImageRemoteURLLoadingConfig`
-public struct RNIRemoteURLImageLoadingConfig: RNIImageLoadingConfigurable {
+internal struct RNIRemoteURLImageLoadingConfig: RNIImageLoadingConfigurable {
   
   // MARK: Embedded Types
   // --------------------
   
   /// Maps to: `ImageRemoteURLFallbackBehavior`
-  public enum FallbackBehavior: String {
+  internal enum FallbackBehavior: String {
     case afterFinalAttempt;
     case whileNotLoaded;
     case onLoadError;
@@ -25,17 +25,17 @@ public struct RNIRemoteURLImageLoadingConfig: RNIImageLoadingConfigurable {
   // MARK: Properties
   // ----------------
   
-  public let shouldCache: Bool?;
-  public let shouldLazyLoad: Bool?;
+  internal let shouldCache: Bool?;
+  internal let shouldLazyLoad: Bool?;
   
-  public let maxRetryAttempts: Int?;
-  public let shouldImmediatelyRetryLoading: Bool?;
-  public let fallbackBehavior: FallbackBehavior?;
+  internal let maxRetryAttempts: Int?;
+  internal let shouldImmediatelyRetryLoading: Bool?;
+  internal let fallbackBehavior: FallbackBehavior?;
   
   // MARK: Init
   // ----------
   
-  public init(dict: NSDictionary) {
+  internal init(dict: NSDictionary) {
     self.shouldCache = dict["shouldCache"] as? Bool;
     self.shouldLazyLoad = dict["shouldLazyLoad"] as? Bool;
     

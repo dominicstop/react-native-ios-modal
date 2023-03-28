@@ -8,7 +8,7 @@
 import Foundation
 
 
-public protocol RNIInternalCleanupMode {
+internal protocol RNIInternalCleanupMode {
   /// shadow variable for react prop
   var synthesizedInternalCleanupMode: RNICleanupMode { get };
   
@@ -20,7 +20,7 @@ public protocol RNIInternalCleanupMode {
 };
 
 // provide default implementation
-public extension RNIInternalCleanupMode {
+internal extension RNIInternalCleanupMode {
   var shouldEnableAttachToParentVC: Bool {
     self.cleanupMode == .viewController
   };

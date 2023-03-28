@@ -10,27 +10,27 @@ import UIKit;
 
 /// When added as a child VC, it will listen to the parent VC + navigation controller  for navigation events
 /// and report them to it's delegate and root view.
-public class RNINavigationEventsReportingViewController: UIViewController {
+internal class RNINavigationEventsReportingViewController: UIViewController {
   
-  public weak var parentVC: UIViewController?;
-  public weak var delegate: RNINavigationEventsNotifiable?;
+  internal weak var parentVC: UIViewController?;
+  internal weak var delegate: RNINavigationEventsNotifiable?;
   
   // MARK: - Init
   // ------------
   
-  public init() {
+  internal init() {
     super.init(nibName: nil, bundle: nil);
   };
   
   // loaded from a storyboard
-  public required init?(coder aDecoder: NSCoder) {
+  internal required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder);
   };
   
   // MARK: - Lifecycle
   // -----------------
   
-  public override func viewWillDisappear(_ animated: Bool) {
+  internal override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated);
     
     guard let navVC = self.navigationController,

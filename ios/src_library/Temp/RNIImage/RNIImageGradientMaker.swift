@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 
 
-public struct RNIImageGradientMaker {
-  public enum PointPresets: String {
+internal struct RNIImageGradientMaker {
+  internal enum PointPresets: String {
     case top, bottom, left, right;
     case bottomLeft, bottomRight, topLeft, topRight;
     
-    public var cgPoint: CGPoint {
+    internal var cgPoint: CGPoint {
       switch self {
         case .top   : return CGPoint(x: 0.5, y: 0.0);
         case .bottom: return CGPoint(x: 0.5, y: 1.0);
@@ -31,7 +31,7 @@ public struct RNIImageGradientMaker {
     };
   };
   
-  public enum DirectionPresets: String {
+  internal enum DirectionPresets: String {
     // horizontal
     case leftToRight, rightToLeft;
     // vertical
@@ -40,7 +40,7 @@ public struct RNIImageGradientMaker {
     case topLeftToBottomRight, topRightToBottomLeft;
     case bottomLeftToTopRight, bottomRightToTopLeft;
     
-    public var point: (start: CGPoint, end: CGPoint) {
+    internal var point: (start: CGPoint, end: CGPoint) {
       switch self {
         case .leftToRight:
           return (CGPoint(x: 0.0, y: 0.5), CGPoint(x: 1.0, y: 1.5));
@@ -93,17 +93,17 @@ public struct RNIImageGradientMaker {
     };
   }
   
-  public let type: CAGradientLayerType;
+  internal let type: CAGradientLayerType;
   
-  public let colors    : [CGColor];
-  public let locations : [NSNumber]?;
-  public let startPoint: CGPoint;
-  public let endPoint  : CGPoint;
+  internal let colors    : [CGColor];
+  internal let locations : [NSNumber]?;
+  internal let startPoint: CGPoint;
+  internal let endPoint  : CGPoint;
   
-  public var size: CGSize;
-  public let borderRadius: CGFloat;
+  internal var size: CGSize;
+  internal let borderRadius: CGFloat;
   
-  public var gradientLayer: CALayer {
+  internal var gradientLayer: CALayer {
     let layer = CAGradientLayer();
     
     layer.type         = self.type;
@@ -116,7 +116,7 @@ public struct RNIImageGradientMaker {
     return layer;
   };
   
-  public init?(dict: NSDictionary) {
+  internal init?(dict: NSDictionary) {
     guard let colors = dict["colors"] as? NSArray
     else { return nil };
     
@@ -155,14 +155,14 @@ public struct RNIImageGradientMaker {
     self.borderRadius = dict["borderRadius"] as? CGFloat ?? 0;
   };
   
-  public mutating func setSizeIfNotSet(_ newSize: CGSize){
+  internal mutating func setSizeIfNotSet(_ newSize: CGSize){
     self.size = CGSize(
       width : self.size.width  <= 0 ? newSize.width  : self.size.width,
       height: self.size.height <= 0 ? newSize.height : self.size.height
     );
   };
   
-  public func makeImage() -> UIImage {
+  internal func makeImage() -> UIImage {
     return UIGraphicsImageRenderer(size: self.size).image { context in
       let rect = CGRect(origin: .zero, size: self.size);
       

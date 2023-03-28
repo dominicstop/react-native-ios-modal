@@ -9,9 +9,9 @@ import UIKit
 
 
 /// Holds react views that have been detached, and are no longer managed by RN.
-public class RNIWrapperView: UIView {
+internal class RNIWrapperView: UIView {
   
-  public static var detachedViews = NSMapTable<NSNumber, RNIWrapperView>.init(
+  internal static var detachedViews = NSMapTable<NSNumber, RNIWrapperView>.init(
     keyOptions: .copyIn,
     valueOptions: .weakMemory
   );
@@ -19,23 +19,23 @@ public class RNIWrapperView: UIView {
   // MARK: - Properties
   // ------------------
   
-  public private(set) var bridge: RCTBridge!;
+  internal private(set) var bridge: RCTBridge!;
   
-  public weak var delegate: RNIWrapperViewEventsNotifiable?;
+  internal weak var delegate: RNIWrapperViewEventsNotifiable?;
   
   /// When `shouldAutoDetachSubviews` is enabled, all the child views that were removed from
   /// its parent  will be stored here.
   ///
   /// This is only usually used when `isDummyView` is enabled.
-  public var reactViews: [UIView] = [];
+  internal var reactViews: [UIView] = [];
   
-  public var touchHandlers: Dictionary<NSNumber, RCTTouchHandler> = [:];
+  internal var touchHandlers: Dictionary<NSNumber, RCTTouchHandler> = [:];
   
   // MARK: - Properties - Flags
   // --------------------------
   
   /// Whether or not `cleanup` was triggered.
-  public private(set) var didTriggerCleanup = false;
+  internal private(set) var didTriggerCleanup = false;
   
   /// Set this property to `true` before moving this view somewhere else (i.e.
   /// before calling `removeFromSuperView`).
@@ -44,16 +44,16 @@ public class RNIWrapperView: UIView {
   /// from it's  parent view...
   ///
   /// After you've finished moving this view, set this back to `false`.
-  public var isMovingToParent = false;
+  internal var isMovingToParent = false;
   
-  public var shouldDelayAutoCleanupOnJSUnmount = true;
+  internal var shouldDelayAutoCleanupOnJSUnmount = true;
   
   // MARK: - RN Exported Props - Config - Lifecycle Related
   // ------------------------------------------------------
   
   /// When this prop is set to `true`, the JS component will trigger
   /// `shouldNotifyComponentWillUnmount` during `componentWillUnmount`.
-  @objc public private(set) var shouldNotifyComponentWillUnmount: Bool = false;
+  @objc internal private(set) var shouldNotifyComponentWillUnmount: Bool = false;
     
   /// This property determines whether `cleanup` should be called when
   /// `shouldNotifyComponentWillUnmount` is called. Defaults to: `true`.
@@ -72,11 +72,11 @@ public class RNIWrapperView: UIView {
   /// * This also fixes the issue where the js comp. has already been unmounted,
   ///   but it's corresponding native view is still being used.
   ///
-  @objc public private(set) var shouldAutoCleanupOnJSUnmount = false;
+  @objc internal private(set) var shouldAutoCleanupOnJSUnmount = false;
       
   /// Determines whether `cleanup` is called when this view is removed from the
   /// view hierarchy (i.e. when the window ref. becomes nil).
-  @objc public private(set) var shouldAutoCleanupOnWindowNil = false;
+  @objc internal private(set) var shouldAutoCleanupOnWindowNil = false;
   
   /// Determines whether `layoutSubviews` will automatically trigger
   /// `notifyForBoundsChange`. Defaults to `true`.
@@ -85,7 +85,7 @@ public class RNIWrapperView: UIView {
   ///
   /// * Otherwise if the layout size is determined from the native side (e.g. via
   ///   the view controller, etc.) then set this to `true`.
-  @objc public private(set) var shouldAutoSetSizeOnLayout = false;
+  @objc internal private(set) var shouldAutoSetSizeOnLayout = false;
   
   // MARK: - RN Exported Props - Config - "Dummy View"-Related
   // ---------------------------------------------------------
@@ -95,13 +95,13 @@ public class RNIWrapperView: UIView {
   ///
   /// In this mode, it's child views are the ones that are being used for content, and the parent view will
   /// usually get removed from the view hierarchy.
-  @objc public private(set) var isDummyView = false;
+  @objc internal private(set) var isDummyView = false;
   
   /// When enabled, the child views will be automatically removed from it's parent, and will be stored in
   /// the `reactViews` property.
   ///
   /// This is usually enabled together with `isDummyView`.
-  @objc public private(set) var shouldAutoDetachSubviews = false;
+  @objc internal private(set) var shouldAutoDetachSubviews = false;
   
   // MARK: - RN Exported Props - Config - Touch Handlers
   // ---------------------------------------------------
@@ -111,11 +111,11 @@ public class RNIWrapperView: UIView {
   /// property to `true`.
   ///
   /// When in dummy mode, `shouldAutoDetachSubviews` is usually also enabled.
-  @objc public private(set) var shouldCreateTouchHandlerForParentView = false;
+  @objc internal private(set) var shouldCreateTouchHandlerForParentView = false;
   
   /// If you are planning on removing the subviews from the view hierarchy (i.e. using "dummy view" mode),
   /// and you still want them to receive touch event, then set this property to `true`.
-  @objc public private(set) var shouldCreateTouchHandlerForSubviews = false;
+  @objc internal private(set) var shouldCreateTouchHandlerForSubviews = false;
   
   
   // MARK: - Init/Lifecycle
@@ -139,7 +139,7 @@ public class RNIWrapperView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  public override func layoutSubviews() {
+  internal override func layoutSubviews() {
     super.layoutSubviews();
     
     if self.shouldAutoSetSizeOnLayout {
@@ -147,7 +147,7 @@ public class RNIWrapperView: UIView {
     };
   };
   
-  public override func didMoveToWindow() {
+  internal override func didMoveToWindow() {
     
     let isMovingToWindowNil = self.window == nil;
     
@@ -165,7 +165,7 @@ public class RNIWrapperView: UIView {
     };
   };
   
-  public override func removeFromSuperview() {
+  internal override func removeFromSuperview() {
     super.removeFromSuperview();
     Self.detachedViews.setObject(self, forKey: self.reactTag);
   }
@@ -173,7 +173,7 @@ public class RNIWrapperView: UIView {
   // MARK: - React Lifecycle
   // ----------------------
   
-  public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+  internal override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
     if self.shouldAutoDetachSubviews {
@@ -194,7 +194,7 @@ public class RNIWrapperView: UIView {
   // MARK: -  Functions
   // ------------------
   
-  public func notifyForBoundsChange(size: CGSize){
+  internal func notifyForBoundsChange(size: CGSize){
     if self.isDummyView {
       self.notifyForBoundsChangeForContent(size: size);
       
@@ -203,12 +203,12 @@ public class RNIWrapperView: UIView {
     };
   };
   
-  public func notifyForBoundsChangeForWrapper(size: CGSize){
+  internal func notifyForBoundsChangeForWrapper(size: CGSize){
     guard let bridge = self.bridge else { return };
     bridge.uiManager.setSize(size, for: self);
   };
   
-  public func notifyForBoundsChangeForContent(size: CGSize){
+  internal func notifyForBoundsChangeForContent(size: CGSize){
     guard let bridge = self.bridge
     else { return };
     
@@ -225,7 +225,7 @@ public class RNIWrapperView: UIView {
   // --------------------------
   
   /// Called by `RNIWrapperViewModule.notifyComponentWillUnmount`
-  public func onJSComponentWillUnmount(isManuallyTriggered: Bool){
+  internal func onJSComponentWillUnmount(isManuallyTriggered: Bool){
     self.delegate?.onJSComponentWillUnmount(
       sender: self,
       isManuallyTriggered: isManuallyTriggered
@@ -250,7 +250,7 @@ public class RNIWrapperView: UIView {
 
 extension RNIWrapperView: RNICleanable {
   
-  public func cleanup(){
+  internal func cleanup(){
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension UIViewController {
+internal extension UIViewController {
   func attachChildVC(_ child: UIViewController) {
     self.addChild(child);
     self.view.addSubview(child.view);

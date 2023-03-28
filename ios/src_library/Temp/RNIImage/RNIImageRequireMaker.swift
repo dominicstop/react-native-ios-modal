@@ -8,15 +8,15 @@
 import Foundation
 
 
-public class RNIImageRequireMaker {
+internal class RNIImageRequireMaker {
   static private var imageCache: [String: UIImage] = [:];
   
-  public let uri: String;
-  public let imageLoadingConfig: RNIImageLoadingConfig;
+  internal let uri: String;
+  internal let imageLoadingConfig: RNIImageLoadingConfig;
   
-  public let rawConfig: NSDictionary;
+  internal let rawConfig: NSDictionary;
   
-  public lazy var image: UIImage? = {
+  internal lazy var image: UIImage? = {
     let shouldCache = self.imageLoadingConfig._shouldCache;
     
     if shouldCache,
@@ -36,7 +36,7 @@ public class RNIImageRequireMaker {
     return image;
   }();
   
-  public init?(
+  internal init?(
     dict: NSDictionary,
     imageLoadingConfig loadingConfigDict: NSDictionary?
   ){

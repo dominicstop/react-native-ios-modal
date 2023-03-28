@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public extension UIImage.RenderingMode {
+internal extension UIImage.RenderingMode {
   init?(string: String){
     switch string {
       case "automatic"     : self = .automatic;
@@ -21,7 +21,7 @@ public extension UIImage.RenderingMode {
 };
 
 @available(iOS 13.0, *)
-public extension UIImage.SymbolWeight {
+internal extension UIImage.SymbolWeight {
   init?(string: String){
     switch string {
       case "unspecified": self = .unspecified;
@@ -41,7 +41,7 @@ public extension UIImage.SymbolWeight {
 };
 
 @available(iOS 13.0, *)
-public extension UIImage.SymbolScale {
+internal extension UIImage.SymbolScale {
   init?(string: String){
     switch string {
       case "default"     : self = .`default`;

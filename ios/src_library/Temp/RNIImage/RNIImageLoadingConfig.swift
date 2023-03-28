@@ -8,18 +8,18 @@
 import Foundation
 
 
-public protocol RNIImageLoadingConfigurable {
+internal protocol RNIImageLoadingConfigurable {
   var shouldCache: Bool? { get };
   var shouldLazyLoad: Bool? { get };
 };
 
 // TODO: Per file defaults via extension
-public struct RNIImageLoadingConfig: RNIImageLoadingConfigurable {
+internal struct RNIImageLoadingConfig: RNIImageLoadingConfigurable {
 
-  public let shouldCache: Bool?;
-  public let shouldLazyLoad: Bool?;
+  internal let shouldCache: Bool?;
+  internal let shouldLazyLoad: Bool?;
   
-  public init(dict: NSDictionary) {
+  internal init(dict: NSDictionary) {
     self.shouldCache = dict["shouldCache"] as? Bool;
     self.shouldLazyLoad = dict["shouldLazyLoad"] as? Bool;
   };

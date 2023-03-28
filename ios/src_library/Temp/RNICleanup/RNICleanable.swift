@@ -10,7 +10,7 @@ import Foundation
 ///
 /// When a class implements this protocol, it means that the class has "clean-up" related code.
 /// This is usually for  `UIView` subclasses, and a
-public protocol RNICleanable: AnyObject {
+internal protocol RNICleanable: AnyObject {
   
   func cleanup();
   

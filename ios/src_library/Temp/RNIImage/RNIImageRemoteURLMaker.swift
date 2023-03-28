@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 
-public class RNIImageRemoteURLMaker {
+internal class RNIImageRemoteURLMaker {
   
   // MARK: - Embedded Types
   // ----------------------
   
   /// Note: Unable to synthesize `Equatable` conformance because of `Error` associated value.
-  public enum State {
+  internal enum State {
     
     // MARK: - Start State
     // -------------------
@@ -76,7 +76,7 @@ public class RNIImageRemoteURLMaker {
     };
   };
   
-  public typealias ImageDidLoadHandler = (
+  internal typealias ImageDidLoadHandler = (
     _ isSuccess: Bool,
     _ sender: RNIImageRemoteURLMaker
   ) -> Void;
@@ -84,34 +84,34 @@ public class RNIImageRemoteURLMaker {
   // MARK: - Class Members
   // ---------------------
   
-  public static var imageCache: [String: UIImage] = [:];
+  internal static var imageCache: [String: UIImage] = [:];
   
   // MARK: - Properties - Serialized
   // -------------------------------
   
-  public let urlString: String;
+  internal let urlString: String;
   
   // MARK: - Properties - Derived/Parsed
   // -----------------------------------
   
-  public let url: URL?;
-  public let imageLoadingConfig: RNIRemoteURLImageLoadingConfig;
+  internal let url: URL?;
+  internal let imageLoadingConfig: RNIRemoteURLImageLoadingConfig;
   
-  public let fallbackImageConfig: RNIImageItem?;
+  internal let fallbackImageConfig: RNIImageItem?;
   
   // MARK: - Properties
   // ------------------
   
-  public lazy var imageLoader: RCTImageLoaderWithAttributionProtocol? = {
+  internal lazy var imageLoader: RCTImageLoaderWithAttributionProtocol? = {
     RNIUtilities.sharedBridge?.module(forName: "ImageLoader") as?
       RCTImageLoaderWithAttributionProtocol;
   }();
   
-  public var state: State = .INITIAL;
-  public var loadingAttemptsCount = 0;
+  internal var state: State = .INITIAL;
+  internal var loadingAttemptsCount = 0;
   
   /// Reminder: Use weak self to prevent retain cycle + memory leak
-  public var onImageDidLoadBlock: ImageDidLoadHandler?;
+  internal var onImageDidLoadBlock: ImageDidLoadHandler?;
   
   // MARK: - Properties - Computed
   // -----------------------------
@@ -124,7 +124,7 @@ public class RNIImageRemoteURLMaker {
     return cachedImage;
   };
   
-  public var shouldRetry: Bool {
+  internal var shouldRetry: Bool {
     let maxRetryAttempts = self.imageLoadingConfig._maxRetryAttempts;
     
     // Note: negative max retry attempt means infinite retry
@@ -135,7 +135,7 @@ public class RNIImageRemoteURLMaker {
   
   // Get image w/o triggering loading logic (i.e. no side effects)
   // This will also use the fallback image when appropriate
-  public var _image: UIImage? {
+  internal var _image: UIImage? {
     let fallbackBehavior = self.imageLoadingConfig._fallbackBehavior;
     
     switch self.state {
@@ -173,7 +173,7 @@ public class RNIImageRemoteURLMaker {
   };
   
   // Get image + trigger loading logic when not yet loaded
-  public var image: UIImage? {
+  internal var image: UIImage? {
     switch self.state {
       case .INITIAL:
         // A - image not loaded yet...
@@ -192,19 +192,19 @@ public class RNIImageRemoteURLMaker {
     };
   };
   
-  public var synthesizedURLRequest: URLRequest? {
+  internal var synthesizedURLRequest: URLRequest? {
     guard let url = self.url else { return nil };
     return URLRequest(url: url);
   };
   
-  public var fallbackImage: UIImage? {
+  internal var fallbackImage: UIImage? {
     self.fallbackImageConfig?.image
   };
   
   // MARK: - Init
   // ------------
   
-  public init?(
+  internal init?(
     dict: NSDictionary,
     imageLoadingConfig: NSDictionary?,
     onImageDidLoadBlock: ImageDidLoadHandler? = nil
@@ -269,7 +269,7 @@ public class RNIImageRemoteURLMaker {
     };
   };
   
-  public func loadImage(){
+  internal func loadImage(){
     // still has retry attempts remaining, and not currently loading
     let shouldLoad =
       self.shouldRetry && !self.state.isFinalState;

@@ -11,7 +11,7 @@ import Foundation
 ///
 /// When a class implements this protocol, it means that it receives a notification from JS-side whenever
 /// the component's `componentWillUnmount` lifecycle is triggered.
-public protocol RNIJSComponentWillUnmountNotifiable {
+internal protocol RNIJSComponentWillUnmountNotifiable {
   
   func notifyOnJSComponentWillUnmount();
   

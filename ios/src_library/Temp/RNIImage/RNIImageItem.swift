@@ -9,27 +9,27 @@ import Foundation
 import UIKit
 
 
-public class RNIImageItem {
+internal class RNIImageItem {
   
   // MARK: - Properties - Config
   // ---------------------------
   
-  public let type: RNIImageType;
-  public let imageValue: Any?;
-  public let imageOptions: RNIImageOptions;
+  internal let type: RNIImageType;
+  internal let imageValue: Any?;
+  internal let imageOptions: RNIImageOptions;
   
-  public var defaultSize: CGSize;
+  internal var defaultSize: CGSize;
   
   // MARK: Properties - Misc
   // -----------------------
   
-  public let imageConfig: RNIImageConfig;
-  public var loadedImage: UIImage?;
+  internal let imageConfig: RNIImageConfig;
+  internal var loadedImage: UIImage?;
   
   // MARK: Properties - Computed
   // ---------------------------
 
-  public var baseImage: UIImage? {
+  internal var baseImage: UIImage? {
     switch self.imageConfig {
       case let .IMAGE_ASSET(assetName):
         return UIImage(named: assetName);
@@ -55,7 +55,7 @@ public class RNIImageItem {
     };
   };
   
-  public var imageWithTint: UIImage? {
+  internal var imageWithTint: UIImage? {
     guard var image = self.baseImage else { return nil };
     guard let tint = self.imageOptions.tint else { return image };
     
@@ -87,7 +87,7 @@ public class RNIImageItem {
     return image;
   };
   
-  public var imageWithRoundedEdges: UIImage? {
+  internal var imageWithRoundedEdges: UIImage? {
     guard let image = self.imageWithTint
     else { return nil };
     
@@ -107,11 +107,11 @@ public class RNIImageItem {
     };
   };
   
-  public var image: UIImage? {
+  internal var image: UIImage? {
     self.imageWithRoundedEdges
   };
   
-  public var dictionary: [String: Any] {
+  internal var dictionary: [String: Any] {
     var dict: [String: Any] = [
       "type": self.type
     ];
@@ -126,7 +126,7 @@ public class RNIImageItem {
   // MARK: - Init
   // -----------
   
-  public init?(
+  internal init?(
     type: RNIImageType,
     imageValue: Any?,
     imageOptions: NSDictionary?,
@@ -198,7 +198,7 @@ public class RNIImageItem {
     self.imageOptions = RNIImageOptions(dict: imageOptions ?? [:]);
   };
   
-  public convenience init?(dict: NSDictionary){
+  internal convenience init?(dict: NSDictionary){
     guard let typeString = dict["type"] as? String,
           let type       = RNIImageType(rawValue: typeString)
     else { return nil };

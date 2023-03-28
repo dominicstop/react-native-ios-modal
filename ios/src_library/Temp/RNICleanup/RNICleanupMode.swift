@@ -9,7 +9,7 @@ import Foundation
 
 
 /// If a class conforms to `RNICleanable`, this enum determines how the cleanup routine is triggered.
-public enum RNICleanupMode: String {
+internal enum RNICleanupMode: String {
   
   case automatic;
   

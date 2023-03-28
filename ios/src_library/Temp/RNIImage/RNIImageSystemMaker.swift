@@ -9,18 +9,18 @@ import Foundation
 import UIKit
 
 
-public struct RNIImageSystemMaker {
-  public let systemName: String;
+internal struct RNIImageSystemMaker {
+  internal let systemName: String;
   
-  public let pointSize: CGFloat?;
-  public let weight: String?;
-  public let scale: String?;
+  internal let pointSize: CGFloat?;
+  internal let weight: String?;
+  internal let scale: String?;
   
-  public let hierarchicalColor: UIColor?;
-  public let paletteColors: [UIColor]?;
+  internal let hierarchicalColor: UIColor?;
+  internal let paletteColors: [UIColor]?;
   
   @available(iOS 13.0, *)
-  public var symbolConfigs: [UIImage.SymbolConfiguration] {
+  internal var symbolConfigs: [UIImage.SymbolConfiguration] {
     var configs: [UIImage.SymbolConfiguration] = [];
     
     if let pointSize = self.pointSize {
@@ -57,7 +57,7 @@ public struct RNIImageSystemMaker {
   };
   
   @available(iOS 13.0, *)
-  public var symbolConfig: UIImage.SymbolConfiguration? {
+  internal var symbolConfig: UIImage.SymbolConfiguration? {
     var combinedConfig: UIImage.SymbolConfiguration?;
     
     for config in symbolConfigs {
@@ -73,7 +73,7 @@ public struct RNIImageSystemMaker {
   };
   
   @available(iOS 13.0, *)
-  public var image: UIImage? {
+  internal var image: UIImage? {
     if let symbolConfig = symbolConfig {
       return UIImage(
         systemName: self.systemName,
@@ -84,7 +84,7 @@ public struct RNIImageSystemMaker {
     return UIImage(systemName: self.systemName);
   };
   
-  public init?(dict: NSDictionary){
+  internal init?(dict: NSDictionary){
     guard let systemName = dict["systemName"] as? String
     else { return nil };
     

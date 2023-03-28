@@ -8,7 +8,7 @@
 import Foundation
 
 
-public protocol RNIWrapperViewEventsNotifiable: AnyObject {
+internal protocol RNIWrapperViewEventsNotifiable: AnyObject {
   func onJSComponentWillUnmount(
     sender: RNIWrapperView,
     isManuallyTriggered: Bool

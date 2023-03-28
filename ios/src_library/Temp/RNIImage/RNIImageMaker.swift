@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 
-public struct RNIImageMaker {
+internal struct RNIImageMaker {
 
-  public let size        : CGSize;
-  public let fillColor   : UIColor;
-  public let borderRadius: CGFloat;
+  internal let size        : CGSize;
+  internal let fillColor   : UIColor;
+  internal let borderRadius: CGFloat;
   
-  public init(
+  internal init(
     size: CGSize,
     fillColor: UIColor,
     borderRadius: CGFloat
@@ -25,7 +25,7 @@ public struct RNIImageMaker {
     self.borderRadius = borderRadius;
   };
   
-  public init?(dict: NSDictionary) {
+  internal init?(dict: NSDictionary) {
     guard let width  = dict["width" ] as? CGFloat,
           let height = dict["height"] as? CGFloat
     else { return nil };
@@ -41,7 +41,7 @@ public struct RNIImageMaker {
     self.borderRadius = dict["borderRadius"] as? CGFloat ?? 0;
   };
 
-  public func makeImage() -> UIImage {
+  internal func makeImage() -> UIImage {
     return UIGraphicsImageRenderer(size: self.size).image { context in
       let rect = CGRect(origin: .zero, size: self.size);
       

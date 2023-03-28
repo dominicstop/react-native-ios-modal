@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum RNIImageType: String {
+internal enum RNIImageType: String {
   case IMAGE_ASSET;
   case IMAGE_SYSTEM;
   case IMAGE_REQUIRE;
@@ -18,7 +18,7 @@ public enum RNIImageType: String {
   case IMAGE_REMOTE_URL;
 };
 
-public enum RNIImageConfig {
+internal enum RNIImageConfig {
   case IMAGE_ASSET(assetName: String);
   case IMAGE_SYSTEM(config: RNIImageSystemMaker);
   case IMAGE_REQUIRE(config: RNIImageRequireMaker);
