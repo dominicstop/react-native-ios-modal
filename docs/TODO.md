@@ -2,17 +2,20 @@
 
 ## TODO - Current Tasks
 
-- [ ] `TODO:2023-03-04-13-02-45` - **Refactor**:  Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 - [ ] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
-	- [x] `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
-	- [x] `TODO:2023-03-29-04-50-50` - Copy over `react-native-ios-utilities` js/ts source to `src/temp`.
-	- [ ] Temporary fix for memory leak
+	- [x] **Subtask** - `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
+	- [x] **Subtask** - `TODO:2023-03-29-04-50-50` - Copy over `react-native-ios-utilities` js/ts source to `src/temp`.
+	- [ ] **Subtask** - `2023-03-29-05-04-40` - Refactor: Update `RNIModalView` + `ModalView` to use `RNIWrapperView`.
 
 <br>
 
-- [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+- [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 
-	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+<br>
+
+- [ ] `TODO:2023-03-04-13-15-11` Refactor: Use Will/Did Prefix for `RNIModalView` Events
+
+	* **Desc: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
 
 	<br>
 
@@ -40,51 +43,46 @@
 
 	<br>
 
-	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
+	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` Impl: Update `RNIModalView` Native Events
 
 <br>
 
-- [ ] `2023-03-24-00-37-23` - **Refactor**: Use `react-native-utilities`
+- [ ] `2023-03-24-00-37-23` Refactor: Use `react-native-utilities`
 
-  * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
+  * **Desc: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
 
   <br>
 
   - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
-  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` - **Refactor**: Remove/Replace `UIWindow.key` extension.
-  - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove `ios/src_library/Temp` file and update usage. 
-  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - **Refactor**: Move `RNIModalManager` helper functions to `RNIUtilities`.
-  - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
-    * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
-  
-    <br>
-  
-  - [ ] **Subtask** - `TODO:2023-03-22-12-18-37` - **Refactor**: Remove `deinitControllers`
-  
-  	* Refactor `RNIModalView` so that we don't have to constantly cleanup.
+  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` Refactor: Remove/Replace `UIWindow.key` extension.
+  - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove native iOS code in `ios/src_library/Temp` that was copied over from `react-native-ios-utilities` + update usage.
+  - [ ] **Subtask** - `TODO:2023-03-29-04-54-56` - Remove JS/TS code in `src/temp` that was copied over from `react-native-ios-utilities` + update usage.
+  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Refactor: Move `RNIModalManager` helper functions to `RNIUtilities`.
+  - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - Refactor: Remove `ViewModuleRelatedTypes`
+    * **Desc: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
 
 <br>
 
-- [ ] `TODO:2023-03-27-23-55-09` **Refactor**: Re-write `RNIModalView` error creation and handling. 
+- [ ] `TODO:2023-03-27-23-55-09` **Refactor: Re-write `RNIModalView` error creation and handling. 
 
-- [ ] `TODO:20230-03-04-12-58-40` - **Refactor**: Types - Remove `KeyMapType` Usage.
+- [ ] `TODO:20230-03-04-12-58-40` Refactor: Types - Remove `KeyMapType` Usage.
 
 <br><br>
 
 ## TODO - Bugs
 
-- [ ] `TODO:2023-03-04-12-50-04` - **Fix**: `isModalContentLazy` Prop 
+- [ ] `TODO:2023-03-04-12-50-04` Fix: `isModalContentLazy` Prop 
 
-	* **Desc**: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be.
+	* **Desc: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be.
 
 	<br>
 
-	- [ ] **Subtask** - `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06` - Enable `ModalView.isModalContentLazy` prop for example `Test06`.
+	- [ ] **Subtask** - `TODO:2023-03-08-03-48-33` Update: Ex - `Test06` - Enable `ModalView.isModalContentLazy` prop for example `Test06`.
 
 <br>
 
-- [ ] `TODO:2023-03-04-12-45-32` - **Fix**: `ModalView.enableSwipeGesture` prop not updating.
-	* **Desc**: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
+- [ ] `TODO:2023-03-04-12-45-32` Fix: `ModalView.enableSwipeGesture` prop not updating.
+	* **Desc: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
 
 <br><br>
 
@@ -96,12 +94,12 @@
 
 <br>
 
-- [ ] `TODO:2023-03-08-03-51-37` - **Impl**: `ModalEventListener` Component
-  * **Desc**: Implement `ModalEventListener` dummy component.
+- [ ] `TODO:2023-03-08-03-51-37` Impl: `ModalEventListener` Component
+  * **Desc: Implement `ModalEventListener` dummy component.
   	* A dummy component that render nothing.
   	* Used to listen to modal events via the modal context + modal event emitter ref.
   	* Complete this after refactor + rename of modal events.
-  * <u>Related</u>: `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+  * <u>Related</u>: `TODO:2023-03-04-13-15-11` Refactor: Use Will/Did Prefix for `RNIModalView` Events
 
 <br><br>
 
@@ -109,37 +107,37 @@
 
 - [x] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
 
-	* **Desc**: Rewrite native to be more readable/consistent.
+	* **Desc: Rewrite native to be more readable/consistent.
 
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
-		* **Desc**: Remove `RNIModalView.modalLevel`
+		* **Desc: Remove `RNIModalView.modalLevel`
 
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
-		* **Desc**: Re-write modal "focus checking"
+		* **Desc: Re-write modal "focus checking"
 			* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
 			* ` getPresentedViewControllers().last === self.modalNVC: true`
 			* ``getPresentedViewControllers.last === self.modalVC false`
 
 	<br>
 
-	* [x] **Subtask** - `TODO:2023-03-22-13-18-14` - **Refactor**: Move `fromString` to enum init
+	* [x] **Subtask** - `TODO:2023-03-22-13-18-14` Refactor: Move `fromString` to enum init
 
-	* [x] **Subtask** - `TODO:2023-03-22-12-33-26` - **Refactor**: Remove `modalNVC`
+	* [x] **Subtask** - `TODO:2023-03-22-12-33-26` Refactor: Remove `modalNVC`
 		* Remove `RNIModalView.modalNVC` + usage.
 
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
-		* **Desc**: Refactor `createModalNativeEventDict`.
+		* **Desc: Refactor `createModalNativeEventDict`.
 
 	<br>
 
-	* [ ] **Subtask** - `TODO:2023-03-22-12-07-54` - **Refactor**: Move to `RNIModalManager`
-		* **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
+	* [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
+		* **Desc: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
 
 	<br>
 
@@ -151,8 +149,8 @@
 
 	<br>
 
-	* [x] **Subtask** - `TODO:2023-03-04-15-39-46` - **Impl**: `RNIModalManager`
-		* **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
+	* [x] **Subtask** - `TODO:2023-03-04-15-39-46` Impl: `RNIModalManager`
+		* **Desc: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
 			* Modal focus/blur re-write.
 			* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
 			* It will then be responsible to notify/"hand out" blur/focus events to other modals.
@@ -167,23 +165,23 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
-		* **Desc**: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
+		* **Desc: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
 
 	<br>
 
-	- [x] **Subtask** - `TODO:2023-03-05-00-32-43` - **Fix**: Edge Case - Modal Focus/Blur Bug
-		* **Desc**: Add code to manually propagate modal blur/focus events.
+	- [x] **Subtask** - `TODO:2023-03-05-00-32-43` Fix: Edge Case - Modal Focus/Blur Bug
+		* **Desc: Add code to manually propagate modal blur/focus events.
 			* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
 
 	<br>
 
-	- [x] **Subtask** - `TODO:2023-03-05-00-33-15`  - **Refactor**: Re-write `RNIModalViewModule.dismissModalByID`.
+	- [x] **Subtask** - `TODO:2023-03-05-00-33-15`  Refactor: Re-write `RNIModalViewModule.dismissModalByID`.
 
-	- [x] **Subtask** - `TODO:2023-03-04-15-38-02` - **Refactor**: Remove `RNIModalViewManager.currentModalLevel`.
+	- [x] **Subtask** - `TODO:2023-03-04-15-38-02` Refactor: Remove `RNIModalViewManager.currentModalLevel`.
 
-	- [x] **Subtask** - `TODO:2023-03-04-15-33-15` - **Refactor**: Remove `RNIModalViewManager.delegatesFocus`.
+	- [x] **Subtask** - `TODO:2023-03-04-15-33-15` Refactor: Remove `RNIModalViewManager.delegatesFocus`.
 
-	- [x] **Subtask** - `TODO:2023-03-04-15-49-02` - **Refactor**:  Remove `RNIModalViewManager.presentedModalRefs`.
+	- [x] **Subtask** - `TODO:2023-03-04-15-49-02` Refactor:  Remove `RNIModalViewManager.presentedModalRefs`.
 
 	<br>
 
@@ -195,26 +193,26 @@
 
 - [x] `TODO:2023-03-04-03-59-43` - Re-Write Examples in Typescript
 
-	* **Desc**: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
+	* **Desc: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
 
 	- [x] **Subtask** - `TODO:2023-03-04-04-39-44` - Import + Re–write Example Components
-		* **Desc**: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
+		* **Desc: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
 
 <br>
 
 - [x] `TODO:2023-03-04-04-20-46` - Library Typescript Re-Write
-	* **Desc**: Re-write `react-native-ios-modal` to support typescript.
+	* **Desc: Re-write `react-native-ios-modal` to support typescript.
 
 <br>
 
 - [x]  `TODO:2023-03-04-05-25-44` - Library Cleanup
 
-	* **Desc**: Cleanup library's code to be more understandable.
+	* **Desc: Cleanup library's code to be more understandable.
 
 	<br>
 	
 	- [x] **Subtask** - `TODO:2023-03-04-04-20-46` - Library Native Cleanup
-		* **Desc**: Cleanup library's native code - Initial preparation for library overhaul to use `react-native-ios-utilities` as a peer dependency.
+		* **Desc: Cleanup library's native code - Initial preparation for library overhaul to use `react-native-ios-utilities` as a peer dependency.
 
 <br><br>
 
