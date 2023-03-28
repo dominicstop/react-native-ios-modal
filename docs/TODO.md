@@ -1,5 +1,45 @@
 # TODO
 
+## TODO - Current Tasks
+
+- [ ] `TODO:2023-03-04-13-02-45` - **Refactor**:  Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
+- [ ] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
+	- [ ] Temporary fix for memory leak
+
+- [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
+
+	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+
+	<br>
+
+	* Remove `RNIModalView.onModalDismiss`
+	* Remove `RNIModalView.onModalShow`
+	* Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`
+		* Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
+	* Remove `RNIModalView.onModalBlur`
+	* Remove `RNIModalView.onModalFocus`
+	* Move deprecated native modal events from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`.
+	* Update typescript types for modal event objects to match native event object.
+	* Impl. `RNIModalView.onModalWilllDismiss`
+	* Impl. `RNIModalView.onModalDidlDismiss`
+		* Add invocation for deprecated event `ModalView.onModalDismiss`
+	* Impl. `RNIModalView.onModalWillShow`
+	* Impl. `RNIModalView.onModalDidShow`
+		* Add invocation for deprecated event `ModalView.onModalShow`
+	* Impl. `RNIModalView,onModalWillBlur`
+	* Impl. `RNIModalView.onModalDidBlur`
+		* Add invocation for deprecated event `ModalView.onModalBlur`
+	* Impl. `RNIModalView.onModalWillFocus`
+	* Impl. `RNIModalView.onModaDidFocus`
+		* Add invocation for deprecated event `ModalView.onModalFocus`
+	* Update examples.
+
+	<br>
+
+	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
+
+<br>
+
 - [ ] `2023-03-24-00-37-23` - **Refactor**: Use `react-native-utilities`
 
   * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
@@ -7,8 +47,9 @@
   <br>
 
   - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
-  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` - Remove/Replace `UIWindow.key`.
-  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Move `RNIModalManager` helper functions to `RNIUtilities`.
+  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` - **Refactor**: Remove/Replace `UIWindow.key` extension.
+  - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove `Temp.swift` file and update usage. 
+  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - **Refactor**: Move `RNIModalManager` helper functions to `RNIUtilities`.
   - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - **Refactor**: Remove `ViewModuleRelatedTypes`
     * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
   
@@ -20,7 +61,32 @@
 
 <br>
 
-- [ ] `TODO:2023-03-09-17-36-51` - Impl: Close Preceding Modals
+- [ ] `TODO:2023-03-27-23-55-09` **Refactor**: Re-write `RNIModalView` error creation and handling. 
+
+- [ ] `TODO:20230-03-04-12-58-40` - **Refactor**: Types - Remove `KeyMapType` Usage.
+
+<br><br>
+
+## TODO - Bugs
+
+- [ ] `TODO:2023-03-04-12-50-04` - **Fix**: `isModalContentLazy` Prop 
+
+	* **Desc**: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be.
+
+	<br>
+
+	- [ ] **Subtask** - `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06` - Enable `ModalView.isModalContentLazy` prop for example `Test06`.
+
+<br>
+
+- [ ] `TODO:2023-03-04-12-45-32` - **Fix**: `ModalView.enableSwipeGesture` prop not updating.
+	* **Desc**: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
+
+<br><br>
+
+## TODO - Non-Priority
+
+- [ ] `TODO:2023-03-09-17-36-51` - Impl: Close preceding modals non-destructively
   * Desc: Implement a way to close proceeding modals w/o permanently closing the succeeding/topmost modals. 
   	* When trying to close a modal that is "not in focus" (i.e. a modal that isn't at the very top; e.g. a modal that has a `modalIndex` that is lower than the topmost modal), will throw an error: "`ModalView`, `setVisibility` failed: Cannot dismiss modal because it's not in focus. Enable `allowModalForceDismiss` to dismiss".
 
@@ -32,60 +98,6 @@
   	* Used to listen to modal events via the modal context + modal event emitter ref.
   	* Complete this after refactor + rename of modal events.
   * <u>Related</u>: `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
-
-<br>
-
-- [ ] `TODO:2023-03-08-03-48-33` - **Update**: Ex - `Test06` - Enable `ModalView.isModalContentLazy` prop for example `Test06`.
-
-- [ ] `TODO:2023-03-04-13-02-45` - **Refactor**:  Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
-
-- [ ] `TODO:20230-03-04-12-58-40` - **Refactor**: Types - Remove `KeyMapType` Usage
-
-<br>
-
-- [ ] `TODO:2023-03-04-12-50-04` - **Fix**: `isModalContentLazy` Prop 
-  * **Desc**: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be
-
-<br>
-
-- [ ] `TODO:2023-03-04-12-45-32` - **Fix**: `enableSwipeGesture` Not Updating
-  * **Desc**: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
-
-<br>
-
-- [ ] `TODO:2023-03-04-13-15-11` - **Refactor**: Use Will/Did Prefix for `RNIModalView` Events
-
-	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
-
-		* Remove `RNIModalView.onModalDismiss`
-		* Remove `RNIModalView.onModalShow`
-		* Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`
-			* Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
-		* Remove `RNIModalView.onModalBlur`
-		* Remove `RNIModalView.onModalFocus`
-		* Move deprecated native modal events from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`.
-		* Update typescript types for modal event objects to match native event object.
-		* Impl. `RNIModalView.onModalWilllDismiss`
-		* Impl. `RNIModalView.onModalDidlDismiss`
-			* Add invocation for deprecated event `ModalView.onModalDismiss`
-		* Impl. `RNIModalView.onModalWillShow`
-		* Impl. `RNIModalView.onModalDidShow`
-			* Add invocation for deprecated event `ModalView.onModalShow`
-		* Impl. `RNIModalView,onModalWillBlur`
-		* Impl. `RNIModalView.onModalDidBlur`
-			* Add invocation for deprecated event `ModalView.onModalBlur`
-		* Impl. `RNIModalView.onModalWillFocus`
-		* Impl. `RNIModalView.onModaDidFocus`
-			* Add invocation for deprecated event `ModalView.onModalFocus`
-		* Update examples.
-
-		<br>
-
-	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - **Impl**: Update `RNIModalView` Native Events
-
-<br>
-
-- [ ] `TODO:2023-03-27-23-55-09` **Refactor**: Re-write `RNIModalView` error creation and handling. 
 
 <br><br>
 
