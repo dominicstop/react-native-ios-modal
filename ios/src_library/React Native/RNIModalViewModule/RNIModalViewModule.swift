@@ -61,12 +61,12 @@ class RNIModalViewModule: RCTEventEmitter {
     DispatchQueue.main.async {
       let listPresentedVC = RNIModalManager.getPresentedViewControllers();
       
-      
       guard listPresentedVC.count > 0 else {
         #if DEBUG
         print(
-            "RNIModalViewModule - dismissModalByID - Error - "
-          + "`listPresentedVC` is empty"
+            "Error - RNIModalViewModule.dismissModalByID"
+          + " - arg modalID: \(modalID)"
+          + " - listPresentedVC is empty"
         );
         #endif
         callback([false]);
@@ -84,8 +84,9 @@ class RNIModalViewModule: RCTEventEmitter {
       guard let targetModalView = targetModalVC?.modalViewRef else {
         #if DEBUG
         print(
-            "RNIModalViewModule - dismissModalByID - Error - "
-          + "Could not get matching `RNIModalView` instance."
+            "Error - RNIModalViewModule.dismissModalByID"
+          + " - arg modalID: \(modalID)"
+          + " - Could not get matching 'RNIModalView' instance."
         );
         #endif
         callback([false]);
@@ -96,8 +97,10 @@ class RNIModalViewModule: RCTEventEmitter {
         guard isSuccess else {
           #if DEBUG
           print(
-              "RNIModalViewModule - dismissModalByID - Error - "
-            + "RNIModalView.dismissModal"
+              "Error - RNIModalViewModule.dismissModalByID"
+            + " - arg modalID: \(modalID)"
+            + " - Invoke: RNIModalView.dismissModal"
+            + " - Error: \(error?.errorMessage ?? "N/A")"
           );
           #endif
           callback([false]);
@@ -109,8 +112,8 @@ class RNIModalViewModule: RCTEventEmitter {
         
         #if DEBUG
         print(
-            "RNIModalViewModule - dismissModalByID - Dismissing modal - "
-          + "modalID: '\(targetModalView.modalID!)'"
+            "Log - RNIModalViewModule.dismissModalByID - Dismissing modal"
+          + " - target modalID: '\(targetModalView.modalID!)'"
         );
         #endif
       };

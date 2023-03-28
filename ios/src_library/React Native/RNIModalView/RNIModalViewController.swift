@@ -55,8 +55,10 @@ class RNIModalViewController: UIViewController {
       
       #if DEBUG
       print(
-          "RNIModalViewController, didSet blurEffectStyle: "
-          + "'\(blurEffectStyle.description)'"
+        "Log - RNIModalViewController.blurEffectStyle - didSet"
+        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+        + " - oldValue: '\(oldValue!.description)'"
+        + " - newValue: '\(blurEffectStyle.description)'"
       );
       #endif
       
@@ -94,7 +96,10 @@ class RNIModalViewController: UIViewController {
     super.viewDidLoad();
     
     #if DEBUG
-    print("RNIModalViewController - viewDidLoad");
+    print(
+        "Log - RNIModalViewController.viewDidLoad"
+      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+    );
     #endif
     
     // setup vc's view
@@ -125,7 +130,11 @@ class RNIModalViewController: UIViewController {
       self.prevViewFrame = self.view.frame;
       
       #if DEBUG
-      print("RNIModalViewController - viewDidLayoutSubviews - boundsDidChangeBlock");
+      print(
+          "Log - RNIModalViewController.viewDidLayoutSubviews"
+        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+        + " - invoke boundsDidChangeBlock"
+      );
       #endif
     };
   };
@@ -145,8 +154,9 @@ class RNIModalViewController: UIViewController {
     
     #if DEBUG
     print(
-        "RNIModalViewController - updateBackgroundTransparency"
-      + " - set backgroundColor: \(self.isBGTransparent)"
+        "Log - RNIModalViewController.updateBackgroundTransparency"
+      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - self.isBGTransparent: \(self.isBGTransparent)"
     );
     #endif
   };
@@ -166,8 +176,9 @@ class RNIModalViewController: UIViewController {
     
     #if DEBUG
     print(
-        "RNIModalViewController - initBackgroundBlur"
-        + " - set blurEffectStyle: \(blurEffect)"
+        "Log - RNIModalViewController.initBackgroundBlur"
+      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - self.blurEffectStyle: \(blurEffect)"
     );
     #endif
   };
@@ -206,8 +217,9 @@ class RNIModalViewController: UIViewController {
       
       #if DEBUG
       print(
-          "RNIModalViewController - updateBackgroundBlur"
-        + " - Set blur effect: \(blurEffectStyle)"
+          "Log - RNIModalViewController.updateBackgroundBlur"
+        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+        + " - blurEffectStyle: \(blurEffectStyle)"
       );
       #endif
 

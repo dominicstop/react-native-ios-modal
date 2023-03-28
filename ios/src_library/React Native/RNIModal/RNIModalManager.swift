@@ -98,8 +98,9 @@ public class RNIModalManager {
     guard let rootVC = Self.getRootViewController(for: window) else {
       #if DEBUG
       print(
-        "RNIModalManager - getTopMostPresentedVC - Error: Could not get root "
-        + "view controller"
+          "Error - RNIModalManager.getTopMostPresentedVC"
+        + " - arg window isNil: '\(window == nil)'"
+        + " - Could not get root view controller"
       );
       #endif
       return [];
