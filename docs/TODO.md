@@ -4,7 +4,8 @@
 
 - [ ] `TODO:2023-03-04-13-02-45` - **Refactor**:  Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 - [ ] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
-	- [ ] `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
+	- [x] `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
+	- [x] `TODO:2023-03-29-04-50-50` - Copy over `react-native-ios-utilities` js/ts source to `src/temp`.
 	- [ ] Temporary fix for memory leak
 
 <br>
