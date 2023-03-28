@@ -1,4 +1,16 @@
 //
+//  Temp.swift
+//  react-native-ios-modal
+//
+//  Created by Dominic Go on 3/28/23.
+//
+
+import Foundation
+
+
+///  `TODO:2023-03-28-18-58-47` - Remove `Temp.swift` file and update usage.
+
+//
 //  RNIUtilities.swift
 //  IosNavigatorExample
 //
@@ -161,4 +173,3 @@ internal class RNIUtilities {
     return a!.isEqual(b!);
   };
 };
-
