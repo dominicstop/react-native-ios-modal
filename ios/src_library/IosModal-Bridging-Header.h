@@ -20,8 +20,6 @@
 #import <React/RCTDevLoadingView.h>
 #endif
 
-#import "Temp/RNILog/_RNILog.h"
-
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
 
