@@ -12,35 +12,40 @@
 
 - [ ] `TODO:2023-03-04-13-15-11` Refactor: Use Will/Did Prefix for `RNIModalView` Events
 
-	* **Desc: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
+	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, and deprecate old event names (for backwards compatibility).
 
 	<br>
 
-	* Remove `RNIModalView.onModalDismiss`
-	* Remove `RNIModalView.onModalShow`
-	* Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`
-		* Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
-	* Remove `RNIModalView.onModalBlur`
-	* Remove `RNIModalView.onModalFocus`
-	* Move deprecated native modal events from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`.
-	* Update typescript types for modal event objects to match native event object.
-	* Impl. `RNIModalView.onModalWilllDismiss`
-	* Impl. `RNIModalView.onModalDidlDismiss`
-		* Add invocation for deprecated event `ModalView.onModalDismiss`
-	* Impl. `RNIModalView.onModalWillShow`
-	* Impl. `RNIModalView.onModalDidShow`
-		* Add invocation for deprecated event `ModalView.onModalShow`
-	* Impl. `RNIModalView,onModalWillBlur`
-	* Impl. `RNIModalView.onModalDidBlur`
-		* Add invocation for deprecated event `ModalView.onModalBlur`
-	* Impl. `RNIModalView.onModalWillFocus`
-	* Impl. `RNIModalView.onModaDidFocus`
-		* Add invocation for deprecated event `ModalView.onModalFocus`
-	* Update examples.
+	- [ ] **Subtask** - `TODO:2023-03-04-13-06-27` Impl: Update `RNIModalView` Native Events
+	- [ ] **Subtask** - `TODO:2023-03-30-15-52-42` - Update typescript types for modal event objects to match native event object.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-52-53` - Move deprecated native modal events from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-53-01` - Add `deprecated` suffix to event types in `RNIModalViewDeprecatedEvents`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-53-13` - Remove `RNIModalView.onModalDismiss`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-53-21` - Remove `RNIModalView.onModalShow`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-53-30` - Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-53-53` - Remove `RNIModalView.onModalBlur`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-00` - Remove `RNIModalView.onModalFocus`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-06` - Impl. `RNIModalView.onModalWilllDismiss`
+	- [ ] **Subtask** - `TODO:` - Impl. `RNIModalView.onModalDidlDismiss`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-22` - Impl. `RNIModalView.onModalWillShow`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-30` - Impl. `RNIModalView.onModalDidShow`
 
-	<br>
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-38` - Impl. `RNIModalView,onModalWillBlur`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-47` - Impl. `RNIModalView.onModalDidBlur`
 
-	* [ ] **Subtask** - `TODO:2023-03-04-13-06-27` Impl: Update `RNIModalView` Native Events
+	- [ ] **Subtask** - `TODO:2023-03-30-15-54-55` - Impl. `RNIModalView.onModalWillFocus`
+	- [ ] **Subtask** - `TODO:2023-03-30-15-55-03` - Impl. `RNIModalView.onModaDidFocus`
+
+	- [ ] **Subtask** - `TODO:2023-03-30-15-55-12` - Add invocation for deprecated event `ModalView.onModalFocus`.
+
+	- [ ] **Subtask** - `TODO:2023-03-30-15-55-53` - Add invocation for deprecated event `ModalView.onModalShow`.
+
+	- [ ] **Subtask** - `TODO:2023-03-30-15-56-11` - Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-56-18` - Add invocation for deprecated event `ModalView.onModalDismiss`.
+
+	- [ ] **Subtask** - `TODO:2023-03-30-15-56-30` - Add invocation for deprecated event `ModalView.onModalBlur`.
+
+	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples.
 
 <br>
 
