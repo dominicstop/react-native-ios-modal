@@ -7,6 +7,6 @@
 
 import Foundation
 
-extension UIWindow: RNIIdentifiable {
+extension UIWindow: RNIObjectMetadata, RNIIdentifiable {
   public static var synthesizedIdPrefix = "window-id-";
 };

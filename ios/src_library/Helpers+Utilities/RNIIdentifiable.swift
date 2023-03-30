@@ -7,7 +7,7 @@
 
 import Foundation
 
-fileprivate final class RNIObjectIdentifier {
+public final class RNIObjectIdentifier {
   static var counterID = -1;
   
   let id: Int = {
@@ -18,15 +18,8 @@ fileprivate final class RNIObjectIdentifier {
   let uuid = UUID();
 };
 
-fileprivate final class RNIObjectIdentifierMap {
-  static let map = NSMapTable<AnyObject, RNIObjectIdentifier>(
-    keyOptions: .weakMemory,
-    valueOptions: .strongMemory
-  );
-};
-
-
-public protocol RNIIdentifiable: AnyObject {
+public protocol RNIIdentifiable:
+  AnyObject, RNIObjectMetadata where T == RNIObjectIdentifier {
   
   static var synthesizedIdPrefix: String { set get };
   
@@ -37,13 +30,14 @@ public protocol RNIIdentifiable: AnyObject {
 };
 
 extension RNIIdentifiable {
+   
   fileprivate var identifier: RNIObjectIdentifier {
-    if let identifier = RNIObjectIdentifierMap.map.object(forKey: self) {
+    if let identifier = self.metadata {
       return identifier;
     };
     
     let identifier = RNIObjectIdentifier();
-    RNIObjectIdentifierMap.map.setObject(identifier, forKey: self);
+    self.metadata = identifier;
     
     return identifier;
   };
