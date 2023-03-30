@@ -11,31 +11,12 @@ import Foundation
 /// be considered a "modal".
 ///
 public typealias RNIModal =
-    RNIModalIdentity
+    RNIIdentifiable
   & RNIModalState
   & RNIModalRequestable
   & RNIModalFocusNotifiable
   & RNIModalFocusNotifying
   & RNIModalPresentation;
-
-
-/// Contains modal-related properties that are used to uniquely identify a modal
-/// instance.
-///
-/// Specifies that the "adoptee/delegate" that conforms to this protocol must
-/// have the specified modal-related properties so that it can be uniquely
-/// identified amongst different modal instances.
-///
-/// The "implementor/delegator" updates these properties; The delegate
-/// should treat the properties declared in this protocol as read-only.
-///
-public protocol RNIModalIdentity: AnyObject {
-  
-  var modalIndexPrev: Int! { set get };
-  
-  var modalNativeID: String! { set get };
-  
-};
 
 /// Contains modal-related properties for keeping track of the state of the
 /// modal.
@@ -47,6 +28,8 @@ public protocol RNIModalIdentity: AnyObject {
 /// should treat the properties declared in this protocol as read-only.
 ///
 public protocol RNIModalState: AnyObject {
+  
+  var modalIndexPrev: Int! { set get };
   
   var modalIndex: Int! { set get };
   
@@ -64,13 +47,13 @@ public protocol RNIModalState: AnyObject {
 public protocol RNIModalRequestable: AnyObject {
   
   func requestModalToShow(
-    sender: RNIModal,
+    sender: any RNIModal,
     onRequestApprovedBlock: () -> Void,
     onRequestDeniedBlock: (_ reason: String) -> Void
   );
   
   func requestModalToHide(
-    sender: RNIModal,
+    sender: any RNIModal,
     onRequestApprovedBlock: () -> Void,
     onRequestDeniedBlock: (_ reason: String) -> Void
   );
@@ -84,14 +67,14 @@ public protocol RNIModalRequestable: AnyObject {
 /// An interface for the "adoptee/delegate" to receive and handle incoming
 /// modal "focus/blur"-related notifications.
 ///
-public protocol RNIModalFocusNotifiable {
-  func onModalWillFocusNotification(sender modal: RNIModal);
+public protocol RNIModalFocusNotifiable: AnyObject {
+  func onModalWillFocusNotification(sender modal: any RNIModal);
   
-  func onModalDidFocusNotification(sender modal: RNIModal);
+  func onModalDidFocusNotification(sender modal: any RNIModal);
   
-  func onModalWillBlurNotification(sender modal: RNIModal);
+  func onModalWillBlurNotification(sender modal: any RNIModal);
   
-  func onModalDidBlurNotification(sender modal: RNIModal);
+  func onModalDidBlurNotification(sender modal: any RNIModal);
   
 };
 

@@ -60,7 +60,7 @@ class RNIModalViewController: UIViewController {
       #if DEBUG
       print(
         "Log - RNIModalViewController.blurEffectStyle - didSet"
-        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+        + " - modalNativeID: '\(self.modalViewRef?.synthesizedStringID ?? "N/A")'"
         + " - oldValue: '\(oldValue!.description)'"
         + " - newValue: '\(blurEffectStyle.description)'"
       );
@@ -109,7 +109,7 @@ class RNIModalViewController: UIViewController {
     #if DEBUG
     print(
         "Log - RNIModalViewController.viewDidLayoutSubviews"
-      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - modalNativeID: '\(self.modalViewRef?.synthesizedStringID ?? "N/A")'"
       + " - self.prevBounds: \(String(describing: self.prevBounds))"
       + " - nextBounds: \(nextBounds)"
     );
@@ -135,7 +135,7 @@ class RNIModalViewController: UIViewController {
     #if DEBUG
     print(
         "Log - RNIModalViewController.updateBackgroundTransparency"
-      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - modalNativeID: '\(self.modalViewRef?.synthesizedStringID ?? "N/A")'"
       + " - self.isBGTransparent: \(self.isBGTransparent)"
     );
     #endif
@@ -157,7 +157,7 @@ class RNIModalViewController: UIViewController {
     #if DEBUG
     print(
         "Log - RNIModalViewController.initBackgroundBlur"
-      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - modalNativeID: '\(self.modalViewRef?.synthesizedStringID ?? "N/A")'"
       + " - self.blurEffectStyle: \(blurEffect)"
     );
     #endif
@@ -198,7 +198,7 @@ class RNIModalViewController: UIViewController {
       #if DEBUG
       print(
           "Log - RNIModalViewController.updateBackgroundBlur"
-        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+        + " - modalNativeID: '\(self.modalViewRef?.synthesizedStringID ?? "N/A")'"
         + " - blurEffectStyle: \(blurEffectStyle)"
       );
       #endif

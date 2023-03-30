@@ -32,7 +32,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
 };
 
-extension RNIModalIdentity where Self: RNIModalPresentation {
+extension RNIModalState where Self: RNIModalPresentation {
   
   /// Programmatically get the "modal index"
   var synthesizedModalIndex: Int {
@@ -48,11 +48,11 @@ extension RNIModalIdentity where Self: RNIModalPresentation {
   };
 };
 
-extension RNIModalIdentity where Self: RNIModal {
+extension RNIModalState where Self: RNIModal {
   
   var synthesizedModalData: RNIModalData {
     RNIModalData(
-      modalNativeID: self.modalNativeID,
+      modalNativeID: self.synthesizedStringID,
       modalIndex: self.modalIndex,
       currentModalIndex: RNIModalManagerShared.currentModalIndex,
       isModalPresented: self.isModalPresented,

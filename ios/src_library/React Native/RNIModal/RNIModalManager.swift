@@ -9,8 +9,6 @@ import Foundation
 
 public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
-
-
 /// Note:2023-03-30-19-36-33
 ///
 /// * This assumes that the app is using a single window, and all the modals are
@@ -161,7 +159,8 @@ public class RNIModalManager {
   
   private(set) public var currentModalIndex = -1;
   
-  private(set) public var modalInstanceDict = RNIWeakDictionary<String, RNIModal>();
+  private(set) public var modalInstanceDict =
+    RNIWeakDictionary<UUID, any RNIModal>();
   
   // MARK: - Properties - Computed
   // -----------------------------
@@ -170,13 +169,13 @@ public class RNIModalManager {
     self.currentModalIndex >= 0;
   };
   
-  public var modalInstances: [RNIModal] {
+  public var modalInstances: [any RNIModal] {
     self.modalInstanceDict.dict.compactMap {
       $0.value.synthesizedRef;
     };
   };
   
-  public var presentedModals: [RNIModal] {
+  public var presentedModals: [any RNIModal] {
     self.modalInstances.compactMap {
       $0.isModalPresented ? $0 : nil;
     };
@@ -185,18 +184,7 @@ public class RNIModalManager {
   // MARK: - Methods
   // ---------------
   
-  private func createModalNativeID() -> String {
-    let modalNativeID = self.counterModalNativeID;
-    self.counterModalNativeID += 1;
-    
-    return "modal-native-id:\(modalNativeID)";
-  };
-  
-  public func register(modal: RNIModal) {
-    let key = self.createModalNativeID();
-    
-    modal.modalNativeID = key;
-    
+  public func register(modal: any RNIModal) {
     modal.modalIndex = -1;
     modal.modalIndexPrev = -1;
     
@@ -204,8 +192,7 @@ public class RNIModalManager {
     modal.isModalInFocus = false;
     
     modal.modalFocusDelegate = self;
-    
-    self.modalInstanceDict[key] = modal;
+    self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
 };
 
@@ -218,7 +205,7 @@ public class RNIModalManager {
 extension RNIModalManager: RNIModalFocusNotifiable {
   
   public func onModalWillFocusNotification(
-    sender modal: RNIModal
+    sender modal: any RNIModal
   ) {
     let nextModalIndex = self.currentModalIndex + 1;
     self.currentModalIndex = nextModalIndex;
@@ -239,7 +226,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalDidFocusNotification(sender modal: RNIModal) {
+  public func onModalDidFocusNotification(sender modal: any RNIModal) {
     modal.isModalInFocus = true;
     modal.isModalPresented = true;
     
@@ -257,7 +244,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalWillBlurNotification(sender modal: RNIModal) {
+  public func onModalWillBlurNotification(sender modal: any RNIModal) {
     self.currentModalIndex -= 1;
     
     modal.modalIndexPrev = modal.modalIndex;
@@ -276,7 +263,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalDidBlurNotification(sender modal: RNIModal) {
+  public func onModalDidBlurNotification(sender modal: any RNIModal) {
     modal.isModalInFocus = false;
     modal.isModalPresented = false;
     
