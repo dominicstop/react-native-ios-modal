@@ -16,6 +16,7 @@ export function ModalGroupItemContent(props: {
   modalIndex: number;
   onPressOpenNextModal: (modalIndex: number) => void;
   onPressClosePrevModal: (modalIndex: number) => void;
+  onPressCloseModal: (modalIndex: number) => void;
 }) {
   const logDisplayRef = React.useRef<CardLogDisplayHandle>(null);
 
@@ -82,7 +83,7 @@ export function ModalGroupItemContent(props: {
         <CardButton
           title={'🚫 Close Modal'}
           onPress={() => {
-            modalContext.setVisibility(false);
+            props.onPressCloseModal(props.modalIndex);
           }}
         />
         {props.modalIndex > 0 && (
