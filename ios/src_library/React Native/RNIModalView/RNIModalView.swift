@@ -30,7 +30,7 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
   
-  var modalFocusDelegate: RNIModalFocusNotifiable!;
+  weak var modalFocusDelegate: RNIModalFocusNotifiable!;
   
   // MARK: - Properties - RNIModalIdentity
   // -------------------------------------

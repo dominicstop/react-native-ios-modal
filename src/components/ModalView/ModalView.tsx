@@ -150,7 +150,7 @@ export class ModalView extends
         isModalContentLazy ?? true
       ),
       shouldEnableAggressiveCleanup: (
-        shouldEnableAggressiveCleanup ?? false
+        shouldEnableAggressiveCleanup ?? true
       ),
 
       // B - Pass down...
