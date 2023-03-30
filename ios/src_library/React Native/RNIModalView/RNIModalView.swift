@@ -523,12 +523,22 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       return;
     };
     
-    // weird bug where you cant present fullscreen if `presentationController`
-    // delegate is set so only set the delegate when we are using a page sheet
+    /// `Note:2023-03-30-15-20-27`
+    ///
+    /// * Weird bug where you cannot present set the modal to present in
+    ///   fullscreen if `presentationController` delegate is set.
+    ///
+    /// * So don't set the delegate when we are using a "fullscreen-like"
+    ///   presentation
+    ///
     switch self.synthesizedModalPresentationStyle {
-      case .automatic, .pageSheet, .formSheet:
+      case .overFullScreen,
+           .fullScreen:
+        // no-op
+        break;
+        
+      default:
         modalVC.presentationController?.delegate = self;
-      default: break;
     };
     
     modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
