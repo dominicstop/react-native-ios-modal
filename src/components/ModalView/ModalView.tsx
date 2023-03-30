@@ -34,17 +34,10 @@ import {
   ModalViewEventEmitter,
 } from './ModalViewEmitter';
 
-//
-//
-
-const VirtualizedListContext = React.createContext(null);
-
-// fix for react-native 0.60
-const hasScrollViewContext: boolean =
-  (ScrollView as any).Context?.Provider != null;
-
-//
-//
+import {
+  hasScrollViewContext,
+  VirtualizedListContext,
+} from './ModalViewConstants';
 
 // prettier-ignore
 export class ModalView extends
