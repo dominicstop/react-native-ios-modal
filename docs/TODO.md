@@ -6,8 +6,6 @@
 
 ## TODO - Current Tasks
 
-<br>
-
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
@@ -15,7 +13,7 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-03-30-15-52-53` - Move deprecated native modal event types from `RNIModalViewEvents` to `RNIModalViewDeprecatedEvents`, and update library imports/exports.
-	- [ ] **Subtask** - `TODO:2023-03-30-16-25-01` - Impl: `RNIModal.modalIndexPrev`
+	- [x] **Subtask** - `TODO:2023-03-30-16-25-01` - Impl: `RNIModal.modalIndexPrev`
 		* **Desc**: Implement in order to support deprecated event object property `modalLevelPrev`.
 
 	<br>
@@ -115,6 +113,10 @@
 <br><br>
 
 ## TODO - Completed
+
+- [x] `TODO:2023-03-30-20-13-10` - Impl: `UIWindow.windowID`.
+
+<br>
 
 - [x] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
 	- [x] **Subtask** - `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
