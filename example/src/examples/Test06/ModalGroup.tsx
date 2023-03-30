@@ -64,7 +64,7 @@ export const ModalGroup = React.forwardRef<ModalGroupHandle, ModalGroupProps>(
               setCurrentModalIndex(nextModalIndex);
               modalRef.setVisibility(true);
             }}
-            onPressClosePrevModal={(modalIndex) => {
+            onPressClosePrevModal={async (modalIndex) => {
               const prevModalIndex = modalIndex - 1;
 
               const prevModalRef = modalRefs.current[`${prevModalIndex}`];
@@ -74,7 +74,8 @@ export const ModalGroup = React.forwardRef<ModalGroupHandle, ModalGroupProps>(
                 return;
               }
 
-              prevModalRef.setVisibility(false);
+              await prevModalRef.setVisibility(false);
+              setCurrentModalIndex(prevModalIndex);
             }}
           />
         </ModalView>
