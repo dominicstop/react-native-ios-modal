@@ -60,7 +60,7 @@ extension RNIModalIdentity where Self: RNIModal {
       synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
       synthesizedIsModalPresented: self.synthesizedIsModalPresented,
       synthesizedModalIndex: self.synthesizedModalIndex,
-      synthesizedWindowID: self.window?.synthesizedID
+      synthesizedWindowID: self.window?.synthesizedStringID
     );
   };
   

@@ -20,5 +20,5 @@ public struct RNIModalData: RNIDictionarySynthesizable {
   let synthesizedIsModalPresented: Bool;
   let synthesizedModalIndex: Int;
   
-  let synthesizedWindowID: Int?;
+  let synthesizedWindowID: String?;
 };
