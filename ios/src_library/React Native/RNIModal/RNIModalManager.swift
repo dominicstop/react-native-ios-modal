@@ -9,6 +9,32 @@ import Foundation
 
 public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
+
+
+/// Note:2023-03-30-19-36-33
+///
+/// * This assumes that the app is using a single window, and all the modals are
+///   being presented on that window, as a chain of view controllers.
+///
+/// * E.g. "window 1" presents a modal, and "window 2" presents a modal
+///
+///   * Those 2 modals are not related to one another, and their respective
+///     modal index should both be 1, since they are the 1st modal presented on
+///     their respective window instances.
+///
+///   * Instead their modal indexes are 1, and 2, respectively.
+///
+///   * This also means the internal `currentModalIndex` state, and any other
+///     logic that relies on it will be wrong too.
+///
+/// * And since there is no distinction on which modal belongs to a particular
+///   window, all the modal instances in the app will get notified when a event
+///   occurs.
+///
+/// * This can be fixed by keeping a separate `currentModalIndex` for each
+///   window instance, and only updating it based on the modal's associated
+///   window instance.
+///
 public class RNIModalManager {
   
   // MARK: - Static Properties
