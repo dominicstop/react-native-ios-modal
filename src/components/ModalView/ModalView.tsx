@@ -3,11 +3,12 @@ import React from 'react';
 import {
   findNodeHandle,
   StyleSheet,
-  View,
   ScrollView,
   Platform,
   ViewProps,
 } from 'react-native';
+
+import { RNIWrapperView } from '../../temp';
 
 import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
@@ -36,6 +37,7 @@ import {
 
 import {
   hasScrollViewContext,
+  NATIVE_ID_KEYS,
   VirtualizedListContext,
 } from './ModalViewConstants';
 
@@ -81,6 +83,7 @@ export class ModalView extends
       isModalBGTransparent,
       isModalInPresentation,
       allowModalForceDismiss,
+      shouldEnableAggressiveCleanup,
 
       // native props - string
       modalID,
@@ -145,6 +148,9 @@ export class ModalView extends
       ),
       isModalContentLazy: (
         isModalContentLazy ?? true
+      ),
+      shouldEnableAggressiveCleanup: (
+        shouldEnableAggressiveCleanup ?? false
       ),
 
       // B - Pass down...
@@ -416,7 +422,7 @@ export class ModalView extends
         ref={(r) => {
           this.nativeRefModalView = r!;
         }}
-        style={styles.rootContainer}
+        style={styles.nativeModalView}
         onStartShouldSetResponder={this._shouldSetResponder}
         onModalBlur={this._handleOnModalBlur}
         onModalFocus={this._handleOnModalFocus}
@@ -429,9 +435,15 @@ export class ModalView extends
         {...viewProps}
       >
         {shouldMountModalContent && (
-          <View
-            style={[styles.modalContentContainer, props.containerStyle]}
+          <RNIWrapperView
+            style={[styles.modalContentWrapper, props.containerStyle]}
+            nativeID={NATIVE_ID_KEYS.modalViewContent}
+            isDummyView={false}
             collapsable={false}
+            shouldAutoDetachSubviews={false}
+            shouldCreateTouchHandlerForSubviews={true}
+            shouldNotifyComponentWillUnmount={props.shouldEnableAggressiveCleanup}
+            shouldAutoCleanupOnJSUnmount={props.shouldEnableAggressiveCleanup}
             onLayout={this._handleOnLayoutModalContentContainer}
           >
             {React.cloneElement(props.children as any, {
@@ -441,7 +453,7 @@ export class ModalView extends
               // pass down modalID
               modalID: props.modalID,
             })}
-          </View>
+          </RNIWrapperView>
         )}
       </RNIModalView>
     );
@@ -488,13 +500,18 @@ export class ModalView extends
 }
 
 const styles = StyleSheet.create({
-  rootContainer: {
+  nativeModalView: {
     position: 'absolute',
     width: 0,
     height: 0,
     overflow: 'hidden',
   },
-  modalContentContainer: {
+  modalContentWrapper: {
     position: 'absolute',
+    overflow: 'visible',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });

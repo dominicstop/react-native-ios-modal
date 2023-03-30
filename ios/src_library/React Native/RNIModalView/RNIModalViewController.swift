@@ -13,7 +13,7 @@ class RNIModalViewController: UIViewController {
   // MARK: - Properties
   // ------------------
   
-  var prevViewFrame: CGRect?;
+  var prevBounds: CGRect?;
   var boundsDidChangeBlock: ((CGRect) -> Void)?;
   
   weak var modalViewRef: RNIModalView?;
@@ -40,8 +40,12 @@ class RNIModalViewController: UIViewController {
     self.modalViewRef?.modalID as? String
   };
   
-  // MARK: - Properties - Views
-  // --------------------------
+  var modalContentWrapper: RNIWrapperView? {
+    self.modalViewRef?.modalContentWrapper;
+  };
+  
+  // MARK: - Properties
+  // ------------------
   
   var blurEffectView: UIVisualEffectView? = nil;
 
@@ -66,77 +70,53 @@ class RNIModalViewController: UIViewController {
     }
   };
   
-  var reactView: UIView? {
-    didSet {
-      
-      let didChange =
-        oldValue?.reactTag != self.reactView?.reactTag;
-      
-      let shouldRemoveOldView =
-        oldValue != nil && didChange;
-      
-      if shouldRemoveOldView,
-         let oldView = oldValue {
-        
-        oldView.removeFromSuperview();
-      };
-      
-      if didChange,
-         let newView = self.reactView {
-        
-        self.view.addSubview(newView);
-      };
-    }
-  };
-  
   // MARK: - View Controller Lifecycle
   // ---------------------------------
   
   override func viewDidLoad() {
     super.viewDidLoad();
     
-    #if DEBUG
-    print(
-        "Log - RNIModalViewController.viewDidLoad"
-      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
-    );
-    #endif
-    
-    // setup vc's view
     self.view = {
       let view = UIView();
       view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
+      
       return view;
     }();
     
+    if let modalContentWrapper = self.modalContentWrapper {
+      self.view.addSubview(modalContentWrapper);
+      modalContentWrapper.notifyForBoundsChange(size: self.view.bounds.size);
+    };
+    
     self.updateBackgroundTransparency();
     self.updateBackgroundBlur();
-    
-    self.boundsDidChangeBlock?(self.view.bounds)
   };
   
   override func viewDidLayoutSubviews(){
     super.viewDidLayoutSubviews();
     
-    let didChangeViewFrame: Bool = {
-      guard let lastViewFrame = self.prevViewFrame else { return true };
-      return !lastViewFrame.equalTo(self.view.frame);
+    let didChangeBounds: Bool = {
+      guard let prevBounds = self.prevBounds else { return true };
+      return !prevBounds.equalTo(self.view.bounds);
     }();
     
-    if didChangeViewFrame,
-       let boundsDidChangeBlock = self.boundsDidChangeBlock {
-      
-      boundsDidChangeBlock(self.view.bounds);
-      self.prevViewFrame = self.view.frame;
-      
-      #if DEBUG
-      print(
-          "Log - RNIModalViewController.viewDidLayoutSubviews"
-        + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
-        + " - invoke boundsDidChangeBlock"
-      );
-      #endif
-    };
+    guard didChangeBounds,
+          let modalContentWrapper = self.modalContentWrapper
+    else { return };
+    
+    let nextBounds = self.view.bounds;
+        
+    #if DEBUG
+    print(
+        "Log - RNIModalViewController.viewDidLayoutSubviews"
+      + " - modalNativeID: '\(self.modalViewRef?.modalNativeID ?? "N/A")'"
+      + " - self.prevBounds: \(String(describing: self.prevBounds))"
+      + " - nextBounds: \(nextBounds)"
+    );
+    #endif
+    
+    modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
+    self.prevBounds = nextBounds;
   };
   
   // MARK: - Private Functions

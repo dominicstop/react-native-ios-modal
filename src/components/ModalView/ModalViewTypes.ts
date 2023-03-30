@@ -36,7 +36,9 @@ export type ModalViewBaseProps = Partial<
   setModalInPresentationFromProps?: boolean;
   isModalContentLazy?: boolean;
 
-  containerStyle?: ViewStyle;
+  shouldEnableAggressiveCleanup?: boolean;
+
+  containerStyle: ViewStyle;
   children?: React.ReactNode;
 };
 

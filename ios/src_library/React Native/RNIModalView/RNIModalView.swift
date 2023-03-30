@@ -14,15 +14,18 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
 
   typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
+  enum NativeIDKey: String {
+    case modalViewContent;
+  };
+  
   // MARK: - Properties
   // ------------------
 
   weak var bridge: RCTBridge?;
   
-  private var modalVC: RNIModalViewController?;
+  var modalContentWrapper: RNIWrapperView?;
+  var modalVC: RNIModalViewController?;
   
-  private var touchHandler: RCTTouchHandler!;
-  private var reactSubview: UIView?;
   
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
@@ -256,8 +259,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     super.init(frame: CGRect());
     
     self.bridge = bridge;
-    self.touchHandler = RCTTouchHandler(bridge: self.bridge);
-    
     RNIModalManagerShared.register(modal: self);
   };
   
@@ -268,26 +269,6 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   
   // MARK: - UIKit Lifecycle
   // -----------------------
-  
-  override func layoutSubviews() {
-    super.layoutSubviews();
-    
-    guard let modalVC = self.modalVC,
-          let reactSubview = self.reactSubview else { return };
-    
-    #if DEBUG
-    print(
-        "Log - RNIModalView.layoutSubviews"
-      + " - self.modalNativeID: '\(self.modalNativeID!)'"
-      + " - Unable to parse string value"
-      + " - instance reactTag: '\(self.reactTag ?? -1)'"
-    );
-    #endif
-    
-    if !reactSubview.isDescendant(of: modalVC.view) {
-      modalVC.reactView = reactSubview;
-    };
-  };
   
   override func didMoveToWindow() {
     super.didMoveToWindow();
@@ -309,79 +290,35 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertReactSubview(subview, at: atIndex);
     
-    guard (self.reactSubview == nil) else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.insertReactSubview"
-        + " - self.modalNativeID: '\(self.modalNativeID!)'"
-        + " - arg subview.reactTag: \(subview.reactTag ?? -1)"
-        + " - arg atIndex: \(atIndex)"
-        + " - Guard check failed: Modal view can only have one subview "
-      );
-      #endif
-      return;
-    };
-    
-    #if DEBUG
-    print(
-        "Log - RNIModalView.insertReactSubview"
-      + " - self.modalNativeID: '\(self.modalNativeID!)'"
-      + " - arg subview.reactTag: \(subview.reactTag ?? -1)"
-      + " - arg atIndex: \(atIndex)"
-    );
-    #endif
-    
-    subview.removeFromSuperview();
-    subview.frame = CGRect(
-      origin: CGPoint(x: 0, y: 0),
-      size  : CGSize(width: 0, height: 0)
-    );
-    
-    if let newBounds = modalVC?.view.bounds {
-      self.bridge?.uiManager.setSize(newBounds.size, for: subview);
-    };
-    
-    self.reactSubview = subview;
-    self.touchHandler.attach(to: subview);
-    
-    // modal contents has been mounted, and is about to be presented so
-    // prepare for modal presentation and init the vc's
+    guard let wrapperView = subview as? RNIWrapperView,
+          let nativeID = subview.nativeID,
+          let nativeIDKey = NativeIDKey(rawValue: nativeID)
+    else { return };
+
     self.initControllers();
+    wrapperView.isMovingToParent = true;
+    
+    switch nativeIDKey {
+      case .modalViewContent:
+        if let oldModalContentWrapper = self.modalContentWrapper,
+           wrapperView !== oldModalContentWrapper {
+          
+          oldModalContentWrapper.cleanup();
+          self.modalContentWrapper = nil;
+          
+          self.deinitControllers();
+        };
+        
+        self.modalContentWrapper = wrapperView;
+        self.initControllers();
+    };
+    
+    wrapperView.removeFromSuperview();
+    wrapperView.isMovingToParent = false;
   };
   
   override func removeReactSubview(_ subview: UIView!) {
     super.removeReactSubview(subview);
-    
-    guard self.reactSubview == subview else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.removeReactSubview"
-        + " - self.modalNativeID: '\(self.modalNativeID!)'"
-        + " - arg subview.reactTag: '\(subview.reactTag ?? -1)'"
-        + " - Cannot remove view other than modal view"
-        + " - reactSubview.reactTag: '\(reactSubview?.reactTag ?? -1)'"
-      );
-      #endif
-      return;
-    };
-    
-    #if DEBUG
-    print(
-        "Log - RNIModalView.removeReactSubview"
-      + " - self.modalNativeID: '\(self.modalNativeID!)'"
-      + " - arg subview.reactTag: '\(subview.reactTag ?? -1)'"
-      + " - Cannot remove view other than modal view"
-      + " - reactSubview.reactTag: '\(reactSubview?.reactTag ?? -1)'"
-    );
-    #endif
-    
-    // modal contents has been unmounted so reset react subview
-    self.reactSubview = nil;
-    self.modalVC?.reactView = nil;
-    
-    // cleanup
-    self.touchHandler.detach(from: subview);
-    self.deinitControllers();
   };
   
   // MARK: - Functions - Private
@@ -404,18 +341,10 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
       
       vc.blurEffectStyle = self.synthesizedModalBGBlurEffectStyle;
       
-      vc.boundsDidChangeBlock = { [weak self] (newBounds: CGRect) in
-        self?.notifyForBoundsChange(newBounds);
-      };
-      
-      vc.presentationController?.delegate = self;
-      
       return vc;
     }();
   };
   
-  /// TODO:2023-03-22-12-18-37 - Refactor: Remove `deinitControllers`
-  /// * Refactor so that we don't have to constantly cleanup...
   private func deinitControllers(){
     #if DEBUG
     print(
@@ -424,27 +353,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
     );
     #endif
     
-    self.modalVC?.reactView = nil;
-    
     self.modalVC = nil;
     self.presentingViewController = nil;
-  };
-  
-  private func notifyForBoundsChange(_ newBounds: CGRect){
-    guard let bridge = self.bridge,
-          let reactSubview = self.reactSubview
-    else { return };
-    
-    #if DEBUG
-    print(
-        "LOG - RNIModalView.notifyForBoundsChange"
-      + " - self.modalNativeID: \(self.modalNativeID!)"
-      + " - args newBounds: \(newBounds)"
-      + " - reactSubview.bounds: \(reactSubview.bounds)"
-    );
-    #endif
-    
-    bridge.uiManager.setSize(newBounds.size, for: reactSubview);
   };
   
   private func enableSwipeGesture(_ flag: Bool? = nil){
