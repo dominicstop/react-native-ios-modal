@@ -68,13 +68,13 @@ public protocol RNIModalRequestable: AnyObject {
 /// modal "focus/blur"-related notifications.
 ///
 public protocol RNIModalFocusNotifiable: AnyObject {
-  func onModalWillFocusNotification(sender modal: any RNIModal);
+  func onModalWillFocusNotification(sender: any RNIModal);
   
-  func onModalDidFocusNotification(sender modal: any RNIModal);
+  func onModalDidFocusNotification(sender: any RNIModal);
   
-  func onModalWillBlurNotification(sender modal: any RNIModal);
+  func onModalWillBlurNotification(sender: any RNIModal);
   
-  func onModalDidBlurNotification(sender modal: any RNIModal);
+  func onModalDidBlurNotification(sender: any RNIModal);
   
 };
 

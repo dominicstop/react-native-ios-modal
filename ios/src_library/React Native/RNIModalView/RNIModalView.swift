@@ -717,16 +717,16 @@ extension RNIModalView: RNIModalRequestable {
 
 extension RNIModalView: RNIModalFocusNotifiable {
   
-  func onModalWillFocusNotification(sender modal: any RNIModal) {
+  func onModalWillFocusNotification(sender: any RNIModal) {
     /// No-op - TBA
   };
   
-  func onModalDidFocusNotification(sender modal: any RNIModal) {
+  func onModalDidFocusNotification(sender: any RNIModal) {
     
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
-      senderInfo: modal.synthesizedModalData,
-      isInitial: modal === self
+      senderInfo: sender.synthesizedModalData,
+      isInitial: sender === self
     );
     
     #if DEBUG
@@ -734,8 +734,8 @@ extension RNIModalView: RNIModalFocusNotifiable {
         "Log - RNIModalView.onModalDidFocusNotification"
       + " - self.synthesizedStringID: \(self.synthesizedStringID)"
       + " - self.modalIndex: \(self.modalIndex!)"
-      + " - arg modal.synthesizedStringID: \(modal.synthesizedStringID)"
-      + " - arg modal.modalIndex: \(modal.modalIndex!)"
+      + " - arg modal.synthesizedStringID: \(sender.synthesizedStringID)"
+      + " - arg modal.modalIndex: \(sender.modalIndex!)"
     );
     #endif
     
@@ -744,15 +744,15 @@ extension RNIModalView: RNIModalFocusNotifiable {
     );
   };
   
-  func onModalWillBlurNotification(sender modal: any RNIModal) {
+  func onModalWillBlurNotification(sender: any RNIModal) {
     /// No-op - TBA
   };
   
-  func onModalDidBlurNotification(sender modal: any RNIModal) {
+  func onModalDidBlurNotification(sender: any RNIModal) {
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
-      senderInfo: modal.synthesizedModalData,
-      isInitial: modal === self
+      senderInfo: sender.synthesizedModalData,
+      isInitial: sender === self
     );
     
     #if DEBUG
@@ -760,8 +760,8 @@ extension RNIModalView: RNIModalFocusNotifiable {
         "Log - RNIModalView.onModalDidBlurNotification"
       + " - self.synthesizedStringID: \(self.synthesizedStringID)"
       + " - self.modalIndex: \(self.modalIndex!)"
-      + " - arg modal.synthesizedStringID: \(modal.synthesizedStringID)"
-      + " - arg modal.modalIndex: \(modal.modalIndex!)"
+      + " - arg modal.synthesizedStringID: \(sender.synthesizedStringID)"
+      + " - arg modal.modalIndex: \(sender.modalIndex!)"
     );
     #endif
     

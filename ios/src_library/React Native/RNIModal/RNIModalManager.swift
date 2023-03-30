@@ -204,78 +204,76 @@ public class RNIModalManager {
 ///
 extension RNIModalManager: RNIModalFocusNotifiable {
   
-  public func onModalWillFocusNotification(
-    sender modal: any RNIModal
-  ) {
+  public func onModalWillFocusNotification(sender: any RNIModal) {
     let nextModalIndex = self.currentModalIndex + 1;
     self.currentModalIndex = nextModalIndex;
     
-    modal.modalIndexPrev = modal.modalIndex;
-    modal.modalIndex = nextModalIndex;
+    sender.modalIndexPrev = sender.modalIndex;
+    sender.modalIndex = nextModalIndex;
     
-    modal.onModalWillFocusNotification(sender: modal);
+    sender.onModalWillFocusNotification(sender: sender);
     
     self.modalInstances.forEach {
-      guard $0 !== modal,
+      guard $0 !== sender,
             $0.isModalPresented,
             $0.isModalInFocus,
             $0.modalIndex == self.currentModalIndex - 1
       else { return };
       
-      $0.onModalWillBlurNotification(sender: modal);
+      $0.onModalWillBlurNotification(sender: sender);
     };
   };
   
-  public func onModalDidFocusNotification(sender modal: any RNIModal) {
-    modal.isModalInFocus = true;
-    modal.isModalPresented = true;
+  public func onModalDidFocusNotification(sender: any RNIModal) {
+    sender.isModalInFocus = true;
+    sender.isModalPresented = true;
     
-    modal.onModalDidFocusNotification(sender: modal);
+    sender.onModalDidFocusNotification(sender: sender);
     
     self.modalInstances.forEach {
-      guard $0 !== modal,
+      guard $0 !== sender,
             $0.isModalPresented,
             $0.isModalInFocus,
             $0.modalIndex == self.currentModalIndex - 1
       else { return };
       
       $0.isModalInFocus = false;
-      $0.onModalDidBlurNotification(sender: modal);
+      $0.onModalDidBlurNotification(sender: sender);
     };
   };
   
-  public func onModalWillBlurNotification(sender modal: any RNIModal) {
+  public func onModalWillBlurNotification(sender: any RNIModal) {
     self.currentModalIndex -= 1;
     
-    modal.modalIndexPrev = modal.modalIndex;
-    modal.modalIndex = -1;
+    sender.modalIndexPrev = sender.modalIndex;
+    sender.modalIndex = -1;
     
-    modal.onModalWillBlurNotification(sender: modal);
+    sender.onModalWillBlurNotification(sender: sender);
     
     self.modalInstances.forEach {
-      guard $0 !== modal,
+      guard $0 !== sender,
             $0.isModalPresented,
             !$0.isModalInFocus,
             $0.modalIndex >= self.currentModalIndex
       else { return };
       
-      $0.onModalWillFocusNotification(sender: modal);
+      $0.onModalWillFocusNotification(sender: sender);
     };
   };
   
-  public func onModalDidBlurNotification(sender modal: any RNIModal) {
-    modal.isModalInFocus = false;
-    modal.isModalPresented = false;
+  public func onModalDidBlurNotification(sender: any RNIModal) {
+    sender.isModalInFocus = false;
+    sender.isModalPresented = false;
     
     self.modalInstances.forEach {
-      guard $0 !== modal,
+      guard $0 !== sender,
             $0.isModalPresented,
             !$0.isModalInFocus,
             $0.modalIndex >= self.currentModalIndex
       else { return };
       
       $0.isModalInFocus = true;
-      $0.onModalDidFocusNotification(sender: modal);
+      $0.onModalDidFocusNotification(sender: sender);
     };
   };
 };
