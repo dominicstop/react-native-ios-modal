@@ -31,7 +31,7 @@ public protocol RNIIdentifiable:
 
 extension RNIIdentifiable {
    
-  fileprivate var identifier: RNIObjectIdentifier {
+  public var synthesizedIdentifier: RNIObjectIdentifier {
     if let identifier = self.metadata {
       return identifier;
     };
@@ -45,7 +45,7 @@ extension RNIIdentifiable {
   static var synthesizedIdPrefix: String { "" };
   
   public var synthesizedID: Int {
-    self.identifier.id;
+    self.synthesizedIdentifier.id;
   };
   
   public var synthesizedStringID: String {
@@ -53,6 +53,6 @@ extension RNIIdentifiable {
   };
   
   public var synthesizedUUID: UUID {
-    self.identifier.uuid;
+    self.synthesizedIdentifier.uuid;
   };
 };
