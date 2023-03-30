@@ -31,8 +31,6 @@ public typealias RNIModal =
 ///
 public protocol RNIModalIdentity: AnyObject {
   
-  var modalIndex: Int! { set get };
-  
   var modalIndexPrev: Int! { set get };
   
   var modalNativeID: String! { set get };
@@ -49,6 +47,8 @@ public protocol RNIModalIdentity: AnyObject {
 /// should treat the properties declared in this protocol as read-only.
 ///
 public protocol RNIModalState: AnyObject {
+  
+  var modalIndex: Int! { set get };
   
   var isModalPresented: Bool { set get };
   
