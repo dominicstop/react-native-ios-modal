@@ -1,13 +1,10 @@
 # TODO
 
+☀️☁️
+
+<br><br>
+
 ## TODO - Current Tasks
-
-- [ ] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
-	- [x] **Subtask** - `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
-	- [x] **Subtask** - `TODO:2023-03-29-04-50-50` - Copy over `react-native-ios-utilities` js/ts source to `src/temp`.
-	- [ ] **Subtask** - `2023-03-29-05-04-40` - Refactor: Update `RNIModalView` + `ModalView` to use `RNIWrapperView`.
-
-<br>
 
 - [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 
@@ -104,6 +101,13 @@
 <br><br>
 
 ## TODO - Completed
+
+- [x] `TODO:2023-03-28-18-52-17` - Pre-migration to `react-native-ios-utilites`
+	- [x] **Subtask** - `TODO:2023-03-29-04-34-35` -  Copy over `react-native-ios-utilities` native source to `ios/src_library/Temp`.
+	- [x] **Subtask** - `TODO:2023-03-29-04-50-50` - Copy over `react-native-ios-utilities` js/ts source to `src/temp`.
+	- [x] **Subtask** - `2023-03-29-05-04-40` - Refactor: Update `RNIModalView` + `ModalView` to use `RNIWrapperView`.
+
+<br>
 
 - [x] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
 
