@@ -155,8 +155,6 @@ public class RNIModalManager {
   // MARK: - Properties
   // ------------------
   
-  private var counterModalNativeID: UInt = 0;
-  
   private(set) public var currentModalIndex = -1;
   
   private(set) public var modalInstanceDict =
