@@ -35,6 +35,9 @@ public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 ///   window instance, and only updating it based on the modal's associated
 ///   window instance.
 ///
+/// * This can also be fixed by programmatically determining the modal's
+///   `modalIndex`.
+///
 public class RNIModalManager {
   
   // MARK: - Static Properties
@@ -193,7 +196,9 @@ public class RNIModalManager {
     let key = self.createModalNativeID();
     
     modal.modalNativeID = key;
+    
     modal.modalIndex = -1;
+    modal.modalIndexPrev = -1;
     
     modal.isModalPresented = false;
     modal.isModalInFocus = false;
@@ -215,9 +220,12 @@ extension RNIModalManager: RNIModalFocusNotifiable {
   public func onModalWillFocusNotification(
     sender modal: RNIModal
   ) {
-    self.currentModalIndex += 1;
+    let nextModalIndex = self.currentModalIndex + 1;
+    self.currentModalIndex = nextModalIndex;
     
-    modal.modalIndex = self.currentModalIndex;
+    modal.modalIndexPrev = modal.modalIndex;
+    modal.modalIndex = nextModalIndex;
+    
     modal.onModalWillFocusNotification(sender: modal);
     
     self.modalInstances.forEach {
@@ -251,6 +259,8 @@ extension RNIModalManager: RNIModalFocusNotifiable {
   
   public func onModalWillBlurNotification(sender modal: RNIModal) {
     self.currentModalIndex -= 1;
+    
+    modal.modalIndexPrev = modal.modalIndex;
     modal.modalIndex = -1;
     
     modal.onModalWillBlurNotification(sender: modal);

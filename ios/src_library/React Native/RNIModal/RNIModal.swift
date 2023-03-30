@@ -33,7 +33,10 @@ public protocol RNIModalIdentity: AnyObject {
   
   var modalIndex: Int! { set get };
   
+  var modalIndexPrev: Int! { set get };
+  
   var modalNativeID: String! { set get };
+  
 };
 
 /// Contains modal-related properties for keeping track of the state of the

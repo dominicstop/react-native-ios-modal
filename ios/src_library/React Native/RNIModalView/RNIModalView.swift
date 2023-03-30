@@ -36,6 +36,8 @@ class RNIModalView: UIView, RNIModalFocusNotifying, RNIModalIdentity,
   // -------------------------------------
   
   var modalIndex: Int!;
+  var modalIndexPrev: Int!;
+  
   var modalNativeID: String!;
   
   // MARK: - Properties - RNIModalState
