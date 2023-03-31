@@ -441,11 +441,16 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     
     /// `Note:2023-03-30-15-20-27`
     ///
-    /// * Weird bug where you cannot present set the modal to present in
-    ///   fullscreen if `presentationController` delegate is set.
+    /// * Weird bug where you cannot set the modal to present in fullscreen
+    ///   if `presentationController` delegate is set.
     ///
     /// * So don't set the delegate when we are using a "fullscreen-like"
     ///   presentation
+    ///
+    /// * Removing the delegate means that the methods in
+    ///   `UIAdaptivePresentationControllerDelegate` will not be called,
+    ///   meaning we will no longer get notified of "blur/focus" related
+    ///   events.
     ///
     switch self.synthesizedModalPresentationStyle {
       case .overFullScreen,
@@ -629,8 +634,24 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
 // MARK: - UIAdaptivePresentationControllerDelegate
 // ------------------------------------------------
 
+/// `Note:2023-03-31-16-48-10`
+///
+/// * The "blur/focus"-related events in
+///   `UIAdaptivePresentationControllerDelegate` only fire in response to user
+///   gestures (i.e. if the user swiped the modal away).
+///
+/// * In other words, if the modal was closed programmatically, the
+///   `UIAdaptivePresentationControllerDelegate`-related events will not get
+///   invoked.
+///
 extension RNIModalView: UIAdaptivePresentationControllerDelegate {
-    
+  
+  /// `Note:2023-03-31-17-01-57`
+  ///
+  /// * This gets called whenever the user starts swiping the modal down,
+  ///   regardless of whether or not the swipe action was cancelled half-way
+  ///   through.
+  ///
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
     
@@ -715,6 +736,54 @@ extension RNIModalView: RNIModalRequestable {
 // MARK: Extension: RNIModalFocusNotifiable
 // ----------------------------------------
 
+/// `Note:2023-03-31-17-51-56`
+///
+/// * There are a couple of different ways we can get notified whenever a modal
+///   is about to be dismissed.
+///
+///   * **Method:A** - `RNIModalViewController.viewWillDisappear`, and
+///     `RNIModalViewController.viewWillDisappear`.
+///
+///     * **Method:A** gets invoked alongside
+///       `RNIModalView.presentationControllerWillDismiss`.
+///
+///     * As such, **Method:A** has the same problem as
+///       `Note:2023-03-31-17-01-57` (i.e. the event fires regardless if the
+///       swipe down gesture to close the modal was cancelled mid-way).
+///
+///   * **Method:B** - `UIAdaptivePresentationControllerDelegate`
+///
+///     * **Method:B** only gets invoked in response to user-initiated
+///       gestures (i.e. See `Note:2023-03-31-16-48-10`).
+///
+///     * Additionally, with **Method:B**, the "will blur"-like event gets
+///       fired multiple times whenever the dismiss gesture is cancelled
+///       half-way (i.e. see: `Note:2023-03-31-17-01-57`).
+///
+///     * **Method:B** also invokes `RNIModalViewController.viewWillDisappear`
+///       + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
+///
+///       * 1 - `RNIModalView.presentationControllerWillDismiss`
+///       * 2 - `RNIModalViewController.viewWillDisappear`
+///       * 3 - `RNIModalViewController.viewDidDisappear`
+///       * 4 - `RNIModalView.presentationControllerDidDismiss`
+///
+///   * **Method:C** - Programmatically/manually, via the  `present` and
+///     `dismiss` methods.
+///
+///     * **Method:C** only invokes the "blur/focus" events whenever the
+///       `present` + `dismiss` methods are being invoked.
+///
+///     * As such, **Method:C** does not account for whenever the modal is being
+///       dismissed via a swipe gesture.
+///
+///     * **Method:C** also invokes `RNIModalViewController.viewWillDisappear`
+///       + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
+///
+///       * 1 - `RNIModalView.dismissModal`
+///       * 2 - `RNIModalViewController.viewWillDisappear`
+///       * 3 - `RNIModalView.dismissModal - completion`
+///
 extension RNIModalView: RNIModalFocusNotifiable {
   
   func onModalWillFocusNotification(sender: any RNIModal) {
