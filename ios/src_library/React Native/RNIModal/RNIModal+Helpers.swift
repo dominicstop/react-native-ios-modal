@@ -7,6 +7,11 @@
 
 import Foundation
 
+extension RNIModalState where Self: RNIIdentifiable {
+  var modalNativeID: String {
+    self.synthesizedStringID
+  };
+};
 
 extension RNIModalState where Self: RNIModalPresentation {
   
