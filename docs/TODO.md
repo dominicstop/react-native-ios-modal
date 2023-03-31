@@ -11,6 +11,7 @@
 	- [ ] `TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`
 - [ ] `TODO:2023-03-31-18-34-31` - modal event object - is user initiated
 - [ ] `TODO:2023-03-31-18-33-52` - modal event object - via: programmatic, gesture, request
+- [ ] `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifecycleNotifiable` protocol.
 
 <br>
 
