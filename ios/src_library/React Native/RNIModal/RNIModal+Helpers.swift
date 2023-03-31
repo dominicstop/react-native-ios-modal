@@ -35,9 +35,6 @@ extension RNIModalState where Self: RNIModalPresentation {
     
     return topmostVC === self.modalViewController;
   };
-};
-
-extension RNIModalState where Self: RNIModalPresentation {
   
   /// Programmatically get the "modal index"
   ///
