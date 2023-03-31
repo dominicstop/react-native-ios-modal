@@ -6,6 +6,14 @@
 
 ## TODO - Current Tasks
 
+- [ ] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
+	- [ ] `TODO:2023-03-31-18-34-23` - Impl. modal focus/blur invocation state
+	- [ ] `TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`
+- [ ] `TODO:2023-03-31-18-34-31` - modal event object - is user initiated
+- [ ] `TODO:2023-03-31-18-33-52` - modal event object - via: programmatic, gesture, request
+
+<br>
+
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
