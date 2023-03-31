@@ -146,10 +146,11 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   
   @objc var isModalInPresentation: Bool = false {
     willSet {
-      if #available(iOS 13.0, *) {
-        guard let vc = self.modalVC else { return };
-        vc.isModalInPresentation = newValue
-      };
+      guard #available(iOS 13.0, *),
+            let vc = self.modalVC
+      else { return };
+      
+      vc.isModalInPresentation = newValue
     }
   };
   
