@@ -56,8 +56,8 @@ extension RNIModalState where Self: RNIModalPresentation {
 extension RNIModalState where Self: RNIModal {
   
   var synthesizedModalData: RNIModalData {
-    RNIModalData(
-      modalNativeID: self.synthesizedStringID,
+    return RNIModalData(
+      modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
       currentModalIndex: RNIModalManagerShared.currentModalIndex,
       isModalPresented: self.isModalPresented,

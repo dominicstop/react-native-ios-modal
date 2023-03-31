@@ -168,7 +168,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.synthesizedModalPresentationStyle"
-          + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+          + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Unable to parse presentation style string"
         + " - modalPresentationStyle: '\(self.modalPresentationStyle)'"
         + " - using default style: '\(defaultStyle)'"
@@ -190,7 +190,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
         #if DEBUG
         print(
             "Error - RNIModalView.synthesizedModalPresentationStyle"
-          + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+          + " - self.modalNativeID: \(self.modalNativeID)"
           + " - Unsupported presentation style string value"
           + " - modalPresentationStyle: '\(self.modalPresentationStyle)'"
           + " - Using default style: '\(defaultStyle)'"
@@ -210,7 +210,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.synthesizedModalTransitionStyle "
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Unable to parse string value"
         + " - modalPresentationStyle: '\(self.modalPresentationStyle)'"
         + " - Using default style: '\(defaultStyle)'"
@@ -235,7 +235,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.synthesizedModalBGBlurEffectStyle"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Unable to parse string value"
         + " - modalPresentationStyle: '\(self.modalPresentationStyle)'"
         + " - Using default style: '\(defaultStyle)'"
@@ -334,7 +334,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     #if DEBUG
     print(
         "Log - RNIModalView.initControllers"
-      + " - self.synthesizedStringID: '\(self.synthesizedStringID)'"
+      + " - self.modalNativeID: '\(self.modalNativeID)'"
     );
     #endif
     
@@ -355,7 +355,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     #if DEBUG
     print(
         "Log - RNIModalView.deinitControllers"
-      + " - self.synthesizedStringID: '\(self.synthesizedStringID)'"
+      + " - self.modalNativeID: '\(self.modalNativeID)'"
     );
     #endif
     
@@ -392,7 +392,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.presentModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: no window"
       );
       #endif
@@ -404,7 +404,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.presentModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: modal already presented"
       );
       #endif
@@ -419,7 +419,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.presentModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: could not get topMostPresentedVC"
       );
       #endif
@@ -431,7 +431,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.presentModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: Could not get modalVC"
       );
       #endif
@@ -464,7 +464,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     print(
         "Log - RNIModalView.presentModal - Start presenting"
       + " - self.reactTag: \(self.reactTag ?? -1)"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
       + " - self.modalID: \(self.modalID ?? "N/A")"
       + " - self.presentationStyle: \(self.synthesizedModalPresentationStyle)"
@@ -498,7 +498,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Log - RNIModalView.presentModal - Present modal finished"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - self.modalIndex: \(self.modalIndex!)"
         + " - self.modalID: \(self.modalID ?? "N/A")"
       );
@@ -511,7 +511,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.dismissModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - self.modalIndex: \(self.modalIndex!)"
         + " - Guard check failed: Modal presented state unknown"
       );
@@ -524,7 +524,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.dismissModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: Unable to get modalVC"
       );
       #endif
@@ -542,7 +542,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Error - RNIModalView.dismissModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: Unable to dismiss"
         + " - shouldDismiss: \(shouldDismiss)"
         + " - isModalInFocus: \(isModalInFocus)"
@@ -561,7 +561,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     #if DEBUG
     print(
         "Log - RNIModalView.dismissModal"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - Start dismissing modal"
     );
     #endif
@@ -584,7 +584,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       #if DEBUG
       print(
           "Log - RNIModalView.dismissModal"
-        + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+        + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Dismiss modal finished"
       );
       #endif
@@ -645,7 +645,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #if DEBUG
     print(
         "Log - RNIModalView.presentationControllerWillDismiss"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
     );
     #endif
@@ -667,7 +667,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #if DEBUG
     print(
         "Log - RNIModalView.presentationControllerDidDismiss"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
     );
     #endif
   };
@@ -680,7 +680,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #if DEBUG
     print(
         "Log - RNIModalView.presentationControllerDidAttemptToDismiss"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
     );
     #endif
@@ -732,10 +732,10 @@ extension RNIModalView: RNIModalFocusNotifiable {
     #if DEBUG
     print(
         "Log - RNIModalView.onModalDidFocusNotification"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
-      + " - arg modal.synthesizedStringID: \(sender.synthesizedStringID)"
-      + " - arg modal.modalIndex: \(sender.modalIndex!)"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - arg sender.modalIndex: \(sender.modalIndex!)"
     );
     #endif
     
@@ -758,10 +758,10 @@ extension RNIModalView: RNIModalFocusNotifiable {
     #if DEBUG
     print(
         "Log - RNIModalView.onModalDidBlurNotification"
-      + " - self.synthesizedStringID: \(self.synthesizedStringID)"
+      + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
-      + " - arg modal.synthesizedStringID: \(sender.synthesizedStringID)"
-      + " - arg modal.modalIndex: \(sender.modalIndex!)"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - arg sender.modalIndex: \(sender.modalIndex!)"
     );
     #endif
     
