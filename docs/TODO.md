@@ -11,7 +11,7 @@
 - [ ] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
 
 	- [x] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
-	- [ ] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
+	- [x] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
 	- [ ] **Subtask** - `TODO:2023-04-06-02-13-24` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
 	- [ ] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. modal presented/focused state.
 
