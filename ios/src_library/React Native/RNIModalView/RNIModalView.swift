@@ -653,6 +653,21 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///   regardless of whether or not the swipe action was cancelled half-way
   ///   through.
   ///
+  /// * Only called when the sheet is dismissed by DRAGGING.
+  ///
+  ///
+  /// `Note:2023-04-01-14-52-05`
+  ///
+  /// * Invocation history when a modal is dismissed via a swipe gesture, but
+  ///   was cancelled half-way
+  ///
+  ///   * A - Swipe dismiss gesture begin...
+  ///   * 1 - `presentationControllerWillDismiss
+  ///   * 2 - `viewWillDisappear`
+  ///   * B - Swipe dismiss gesture cancelled...
+  ///   * 3 - `viewWillAppear`
+  ///   * 4 - `viewDidAppear`
+  ///
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
     
@@ -752,6 +767,10 @@ extension RNIModalView: RNIModalRequestable {
 ///       `Note:2023-03-31-17-01-57` (i.e. the event fires regardless if the
 ///       swipe down gesture to close the modal was cancelled mid-way).
 ///
+///     * Using `Method:A`, it's also possible to distinguish if
+///       `viewWillAppear` was invoked due to a modal being dismissed (see
+///       `Note:2023-04-01-14-39-23`).
+///
 ///   * **Method:B** - `UIAdaptivePresentationControllerDelegate`
 ///
 ///     * **Method:B** only gets invoked in response to user-initiated
@@ -760,6 +779,10 @@ extension RNIModalView: RNIModalRequestable {
 ///     * Additionally, with **Method:B**, the "will blur"-like event gets
 ///       fired multiple times whenever the dismiss gesture is cancelled
 ///       half-way (i.e. see: `Note:2023-03-31-17-01-57`).
+///
+///       * However, `UIViewController.viewWillAppear` and
+///         `UIViewController.viewDidAppear` get called immediately when the
+///         swipe to close gesture is cancelled.
 ///
 ///     * **Method:B** also invokes `RNIModalViewController.viewWillDisappear`
 ///       + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
@@ -784,6 +807,18 @@ extension RNIModalView: RNIModalRequestable {
 ///       * 1 - `RNIModalView.dismissModal`
 ///       * 2 - `RNIModalViewController.viewWillDisappear`
 ///       * 3 - `RNIModalView.dismissModal - completion`
+///
+///   * **Method:D** - Overriding the `RNIModalViewController.dismiss` method
+///     and notifying `RNIModalView` when the method gets invoked.
+///
+///     * **Method:D** Works regardless of the method in which the modal was
+///       dismissed (i.e. swipe gesture, or programmatic).
+///
+///     * In addition, **Method:D** coupled with swizzling `UIViewController`,
+///       means that we can detect whenever a modal is about to be dismissed
+///       or presented via replacing the default `UIViewController.present`,
+///       and `UIViewController.dismiss` methods w/ our own implementation.
+///
 ///
 extension RNIModalView: RNIModalFocusNotifiable {
   
