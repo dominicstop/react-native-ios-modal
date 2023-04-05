@@ -15,6 +15,8 @@ class RNIModalViewController: UIViewController {
   
   var prevBounds: CGRect?;
   
+  weak var lifecycleDelegate: RNIViewControllerLifeCycleNotifiable?;
+  
   weak var modalViewRef: RNIModalView?;
   
   var isBGTransparent: Bool = true {
@@ -89,6 +91,8 @@ class RNIModalViewController: UIViewController {
     
     self.updateBackgroundTransparency();
     self.updateBackgroundBlur();
+    
+    self.lifecycleDelegate?.viewDidLoad(sender: self);
   };
   
   override func viewDidLayoutSubviews(){
@@ -116,6 +120,106 @@ class RNIModalViewController: UIViewController {
     
     modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
     self.prevBounds = nextBounds;
+    
+    self.lifecycleDelegate?.viewDidLayoutSubviews(sender: self);
+  };
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated);
+    
+    self.lifecycleDelegate?
+      .viewWillAppear(sender: self, animated: animated);
+    
+    #if DEBUG
+    print(
+      "Log - RNIModalViewController.viewWillAppear"
+      + " - arg animated: \(animated)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isBeingPresented: \(self.isBeingPresented)"
+    );
+    #endif
+  };
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated);
+    
+    self.lifecycleDelegate?
+      .viewDidAppear(sender: self, animated: animated);
+    
+    #if DEBUG
+    print(
+      "Log - RNIModalViewController.viewDidAppear"
+      + " - arg animated: \(animated)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isBeingPresented: \(self.isBeingPresented)"
+    );
+    #endif
+  };
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated);
+    
+    self.lifecycleDelegate?
+      .viewWillDisappear(sender: self, animated: animated);
+
+    #if DEBUG
+    print(
+        "Log - RNIModalViewController.viewWillDisappear"
+      + " - arg animated: \(animated)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isBeingDismissed: \(self.isBeingDismissed)"
+      + " - self.transitionCoordinator: \(String(describing: self.transitionCoordinator))"
+      + " - self.transitioningDelegate: \(String(describing: self.transitioningDelegate))"
+    );
+    #endif
+  };
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated);
+    
+    self.lifecycleDelegate?
+      .viewDidDisappear(sender: self, animated: animated);
+    
+    #if DEBUG
+    print(
+       "Log - RNIModalViewController.viewDidDisappear"
+      + " - arg animated: \(animated)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isBeingDismissed: \(self.isBeingDismissed)"
+    );
+    #endif
+  };
+
+  override func willMove(toParent parent: UIViewController?) {
+    super.willMove(toParent: parent);
+    
+    self.lifecycleDelegate?.willMove(sender: self, toParent: parent);
+    
+    #if DEBUG
+    print(
+       "Log - RNIModalViewController.willMove"
+      + " - arg parent == nil: \(parent == nil)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isMovingFromParent: \(self.isMovingFromParent)"
+      + " - self.isMovingToParent: \(self.isMovingToParent)"
+    );
+    #endif
+  };
+  
+  override func didMove(toParent parent: UIViewController?) {
+    super.didMove(toParent: parent);
+    
+    self.lifecycleDelegate?.didMove(sender: self, toParent: parent);
+    
+    #if DEBUG
+    print(
+       "Log - RNIModalViewController.willMove"
+      + " - arg parent == nil: \(parent == nil)"
+      + " - self.modalNativeID: \(self.modalViewRef?.modalNativeID ?? "N/A")"
+      + " - self.isMovingFromParent: \(self.isMovingFromParent)"
+      + " - self.isMovingToParent: \(self.isMovingToParent)"
+    );
+    #endif
   };
   
   // MARK: - Private Functions
