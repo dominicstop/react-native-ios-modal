@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
                     RNIModalState, RNIModalPresentation {
   
@@ -43,13 +42,11 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   var modalIndex: Int!;
   var modalIndexPrev: Int!;
   
-  
   // MARK: - Properties - RNIModalState
   // ----------------------------------
   
   var isModalPresented: Bool = false;
   var isModalInFocus: Bool = false;
-  
   
   // MARK: - Properties - RNIModalPresentation
   // -----------------------------------------
@@ -456,7 +453,6 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     switch self.synthesizedModalPresentationStyle {
       case .overFullScreen,
            .fullScreen:
-        // no-op
         break;
         
       default:
@@ -681,7 +677,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
     #if DEBUG
     print(
-        "Log - RNIModalView.presentationControllerWillDismiss"
+        "Log - RNIModalView+UIAdaptivePresentationControllerDelegate"
+      + " - RNIModalView.presentationControllerWillDismiss"
       + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
     );
@@ -703,7 +700,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
     #if DEBUG
     print(
-        "Log - RNIModalView.presentationControllerDidDismiss"
+        "Log - RNIModalView+UIAdaptivePresentationControllerDelegate"
+      + " - RNIModalView.presentationControllerDidDismiss"
       + " - self.modalNativeID: \(self.modalNativeID)"
     );
     #endif
@@ -716,7 +714,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     
     #if DEBUG
     print(
-        "Log - RNIModalView.presentationControllerDidAttemptToDismiss"
+        "Log - RNIModalView+UIAdaptivePresentationControllerDelegate"
+      + " - RNIModalView.presentationControllerDidAttemptToDismiss"
       + " - self.modalNativeID: \(self.modalNativeID)"
       + " - self.modalIndex: \(self.modalIndex!)"
     );
