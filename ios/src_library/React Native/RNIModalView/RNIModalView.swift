@@ -771,6 +771,9 @@ extension RNIModalView: RNIModalRequestable {
 ///       `viewWillAppear` was invoked due to a modal being dismissed (see
 ///       `Note:2023-04-01-14-39-23`).
 ///
+///     * Using `Method:A`, we can use the `transitionCoordinator` to get
+///       notified when the exit transition is finished.
+///
 ///   * **Method:B** - `UIAdaptivePresentationControllerDelegate`
 ///
 ///     * **Method:B** only gets invoked in response to user-initiated
