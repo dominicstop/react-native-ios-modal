@@ -14,7 +14,6 @@ class RNIModalViewController: UIViewController {
   // ------------------
   
   var prevBounds: CGRect?;
-  var boundsDidChangeBlock: ((CGRect) -> Void)?;
   
   weak var modalViewRef: RNIModalView?;
   
