@@ -6,12 +6,18 @@
 
 ## TODO - Current Tasks
 
+<br>
+
 - [ ] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
-	- [ ] `TODO:2023-03-31-18-34-23` - Impl. modal focus/blur invocation state
-	- [ ] `TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`
-- [ ] `TODO:2023-03-31-18-34-31` - modal event object - is user initiated
-- [ ] `TODO:2023-03-31-18-33-52` - modal event object - via: programmatic, gesture, request
-- [ ] `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifecycleNotifiable` protocol.
+
+	- [ ] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
+	- [ ] **Subtask** - `TODO:` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
+	- [ ] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. modal presented/focused state.
+
+	<br>
+
+	- [ ] **Subtask** -`TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`
+	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`.
 
 <br>
 
@@ -56,6 +62,7 @@
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-18` - Add invocation for deprecated event `ModalView.onModalDismiss`.
 
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-30` - Add invocation for deprecated event `ModalView.onModalBlur`.
+	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
 
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples.
 
