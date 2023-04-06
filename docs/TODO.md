@@ -12,7 +12,7 @@
 
 	- [x] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
 	- [x] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
-	- [ ] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. "modal presentation state" (i.e. `RNIModalPresentationState`).
+	- [x] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. "modal presentation state" (i.e. `RNIModalPresentationState`).
 	- [ ] **Subtask** - `TODO:2023-04-06-02-13-24` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
 	- [ ] **Subtask** - `TODO:2023-04-07-02-41-35` - Update `RNIModalView` to use "modal presentation state" (i.e. `RNIModalPresentationState`).
 
