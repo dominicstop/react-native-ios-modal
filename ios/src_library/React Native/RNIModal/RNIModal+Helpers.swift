@@ -36,6 +36,23 @@ extension RNIModalState where Self: RNIModalPresentation {
     return topmostVC === self.modalViewController;
   };
   
+  /// Note:2023-03-31-15-41-04
+  ///
+  /// * This is based on the view controller hierarchy
+  /// * So parent/child view controller that aren't modals are also counted
+  ///
+  var synthesizedViewControllerIndex: Int {
+    let listPresentedVC =
+      RNIModalManager.getPresentedViewControllers(for: self.window);
+    
+    for (index, vc) in listPresentedVC.enumerated() {
+      guard vc === self.modalViewController else { continue };
+      return index;
+    };
+    
+    return -1;
+  };
+  
   /// Programmatically get the "modal index"
   var synthesizedModalIndex: Int {
     let listPresentedVC =
@@ -73,6 +90,7 @@ extension RNIModalState where Self: RNIModal {
       synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
       synthesizedIsModalPresented: self.synthesizedIsModalPresented,
       synthesizedModalIndex: self.synthesizedModalIndex,
+      synthesizedViewControllerIndex: self.synthesizedViewControllerIndex,
       synthesizedWindowID: self.window?.synthesizedStringID
     );
   };
