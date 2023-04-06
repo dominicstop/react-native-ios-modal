@@ -372,6 +372,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   };
   
   /// TODO:2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
+  /// 
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList =
@@ -484,6 +485,8 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
     
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
+      /// `TODO:2023-04-07-02-39-15`
+      /// * Disable `hideNonVisibleModals`-related logic from triggering.
       if self.hideNonVisibleModals {
         self.setIsHiddenForViewBelowLevel(self.modalIndex - 1, isHidden: true);
       };
@@ -570,6 +573,9 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     );
     #endif
     
+    /// `TODO:2023-04-07-02-39-15`
+    /// * Disable `hideNonVisibleModals`-related logic from triggering.
+    ///
     /// begin temp. hiding modals that are no longer visible if needed
     if self.hideNonVisibleModals {
       self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
@@ -669,6 +675,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
     
+    /// `TODO:2023-04-07-02-39-15`
+    /// * Disable `hideNonVisibleModals`-related logic from triggering.
     if self.hideNonVisibleModals {
       self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
     };
