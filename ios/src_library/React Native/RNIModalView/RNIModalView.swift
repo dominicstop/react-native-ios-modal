@@ -338,7 +338,9 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     
     self.modalVC = {
       let vc = RNIModalViewController();
+      
       vc.modalViewRef = self;
+      vc.lifecycleDelegate = self;
       
       vc.isBGBlurred     = self.isModalBGBlurred;
       vc.isBGTransparent = self.isModalBGTransparent;
@@ -748,6 +750,25 @@ extension RNIModalView: RNIModalRequestable {
   ) {
     /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
     /// No-op - TBA
+  };
+};
+
+extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
+  
+  func viewWillAppear(sender: UIViewController, animated: Bool) {
+    guard sender.isBeingPresented else { return };
+  };
+  
+  func viewDidAppear(sender: UIViewController, animated: Bool) {
+    guard sender.isBeingPresented else { return };
+  };
+  
+  func viewWillDisappear(sender: UIViewController, animated: Bool) {
+    guard sender.isBeingDismissed else { return };
+  };
+  
+  func viewDidDisappear(sender: UIViewController, animated: Bool) {
+    guard sender.isBeingDismissed else { return };
   };
 };
 
