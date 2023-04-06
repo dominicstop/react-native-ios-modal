@@ -30,6 +30,15 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   var modalContentWrapper: RNIWrapperView?;
   var modalVC: RNIModalViewController?;
   
+  lazy var modalState = RNIModalPresentationStateMachine(
+    onDismissWillCancel: { [weak self] in
+      // no-op - TBA
+    },
+    onDismissDidCancel: { [weak self] in
+      // no-op - TBA
+    }
+  );
+  
   
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
@@ -372,7 +381,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   };
   
   /// TODO:2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
-  /// 
+  ///
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList =
@@ -482,7 +491,8 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     
     self.presentingViewController = topMostPresentedVC;
     
-    self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
+    /// set specific "presenting" state
+    self.modalState.set(state: .PRESENTING_PROGRAMMATIC);
     
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
       /// `TODO:2023-04-07-02-39-15`
@@ -493,13 +503,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
-      
-      self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
-      
-      self.onModalShow?(
-        self.synthesizedBaseEventData.synthesizedDictionary
-      );
-      
+            
       completion?(true, nil);
       
       #if DEBUG
@@ -583,12 +587,10 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     
     self.enableSwipeGesture(false);
     
+    /// set specific "dismissing" state
+    self.modalState.set(state: .DISMISSING_PROGRAMMATIC);
+    
     presentedVC.dismiss(animated: true){
-      self.onModalDismiss?(
-        self.synthesizedBaseEventData.synthesizedDictionary
-      );
-      
-      self.deinitControllers();
       completion?(true, nil);
       
       #if DEBUG
@@ -673,17 +675,13 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///   * 4 - `viewDidAppear`
   ///
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-    self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
+    self.modalState.set(state: .DISMISSING_GESTURE);
     
     /// `TODO:2023-04-07-02-39-15`
     /// * Disable `hideNonVisibleModals`-related logic from triggering.
     if self.hideNonVisibleModals {
       self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
     };
-    
-    self.onModalWillDismiss?(
-      self.synthesizedBaseEventData.synthesizedDictionary
-    );
     
     #if DEBUG
     print(
@@ -697,16 +695,6 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
-
-    self.onModalDidDismiss?(
-      self.synthesizedBaseEventData.synthesizedDictionary
-    );
-    
-    self.onModalDismiss?(
-      self.synthesizedBaseEventData.synthesizedDictionary
-    );
-    
-    self.deinitControllers();
     
     #if DEBUG
     print(
@@ -765,18 +753,54 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   func viewWillAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
+    self.modalState.set(state: .PRESENTING_UNKNOWN);
+    
+    self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
   };
   
   func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
+    self.modalState.set(state: .PRESENTED);
+    
+    self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
+    
+    if !self.modalState.wasDismissViaGestureCancelled {
+      self.onModalShow?(
+        self.synthesizedBaseEventData.synthesizedDictionary
+      );
+    };
   };
   
   func viewWillDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
+    self.modalState.set(state: .DISMISSING_UNKNOWN);
+    
+    self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
+    
+    if self.modalState.state.isDismissingViaGesture {
+      self.onModalWillDismiss?(
+        self.synthesizedBaseEventData.synthesizedDictionary
+      );
+    };
   };
   
   func viewDidDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
+    self.modalState.set(state: .DISMISSED);
+    
+    self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
+    
+    if self.modalState.statePrev.isDismissingViaGesture {
+      self.onModalDidDismiss?(
+        self.synthesizedBaseEventData.synthesizedDictionary
+      );
+    } else {
+      self.onModalDismiss?(
+        self.synthesizedBaseEventData.synthesizedDictionary
+      );
+    };
+    
+    self.deinitControllers();
   };
 };
 
