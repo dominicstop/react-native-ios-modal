@@ -101,6 +101,13 @@ public struct RNIModalPresentationStateMachine {
   var onDismissWillCancel: (() -> Void)?;
   var onDismissDidCancel: (() -> Void)?;
   
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  var wasDismissViaGestureCancelled: Bool {
+    self.statePrev.isDismissViaGestureCancelling
+  };
+  
   // MARK: - Functions
   // -----------------
   
