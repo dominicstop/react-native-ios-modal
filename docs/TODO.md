@@ -12,8 +12,9 @@
 
 	- [x] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
 	- [x] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
+	- [ ] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. "modal presentation state" (i.e. `RNIModalPresentationState`).
 	- [ ] **Subtask** - `TODO:2023-04-06-02-13-24` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
-	- [ ] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. modal presented/focused state.
+	- [ ] **Subtask** - `TODO:2023-04-07-02-41-35` - Update `RNIModalView` to use "modal presentation state" (i.e. `RNIModalPresentationState`).
 
 	<br>
 
@@ -69,13 +70,20 @@
 
 <br>
 
+- [ ] `TODO:2023-04-07-02-33-21` Refactor: Re-write "hide non-visible modal" logic (i.e. logic for temporarily hiding bottom-most  modals).
+	- [ ] **Subtask** - `TODO:2023-04-07-02-39-15` - Disable `hideNonVisibleModals`-related logic from triggering.
+	- [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
+		* **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
+
+<br>
+
 - [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
 
 <br>
 
 - [ ] `2023-03-24-00-37-23` Refactor: Use `react-native-utilities`
 
-  * **Desc: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
+  * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
 
   <br>
 
@@ -85,7 +93,7 @@
   - [ ] **Subtask** - `TODO:2023-03-29-04-54-56` - Remove JS/TS code in `src/temp` that was copied over from `react-native-ios-utilities` + update usage.
   - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Refactor: Move `RNIModalManager` helper functions to `RNIUtilities`.
   - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - Refactor: Remove `ViewModuleRelatedTypes`
-    * **Desc: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
+    * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
 
 <br>
 
@@ -108,7 +116,7 @@
 <br>
 
 - [ ] `TODO:2023-03-04-12-45-32` Fix: `ModalView.enableSwipeGesture` prop not updating.
-	* **Desc: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
+	* **Desc**: Fix `ModalView.enableSwipeGesture` prop not applying changes when updated via state.
 
 <br><br>
 
@@ -174,11 +182,6 @@
 
 	* [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
 		* **Desc: Refactor `createModalNativeEventDict`.
-
-	<br>
-
-	* [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
-		* **Desc: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
 
 	<br>
 
