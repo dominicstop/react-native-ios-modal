@@ -483,7 +483,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     
     self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
     
-    topMostPresentedVC.present(modalVC, animated: true) {
+    topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
       if self.hideNonVisibleModals {
         self.setIsHiddenForViewBelowLevel(self.modalIndex - 1, isHidden: true);
       };
