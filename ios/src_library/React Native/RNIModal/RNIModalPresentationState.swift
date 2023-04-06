@@ -89,11 +89,20 @@ public enum RNIModalPresentationState: String {
 
 public struct RNIModalPresentationStateMachine {
   
+  // MARK: - Properties
+  // ------------------
+  
   var state: RNIModalPresentationState = .INITIAL;
   var statePrev: RNIModalPresentationState = .INITIAL;
   
+  // MARK: - Properties - Completion Handlers
+  // ----------------------------------------
+  
   var onDismissWillCancel: (() -> Void)?;
   var onDismissDidCancel: (() -> Void)?;
+  
+  // MARK: - Functions
+  // -----------------
   
   mutating func set(state nextState: RNIModalPresentationState){
     let prevState = self.state;
