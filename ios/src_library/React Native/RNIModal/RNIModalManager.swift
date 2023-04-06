@@ -155,17 +155,14 @@ public class RNIModalManager {
   // MARK: - Properties
   // ------------------
   
-  private(set) public var currentModalIndex = -1;
-  
   private(set) public var modalInstanceDict =
     RNIWeakDictionary<UUID, any RNIModal>();
   
+  private(set) public var windowToCurrentModalIndexMap:
+    Dictionary<String, Int> = [:];
+  
   // MARK: - Properties - Computed
   // -----------------------------
-  
-  public var isAnyModalPresented: Bool {
-    self.currentModalIndex >= 0;
-  };
   
   public var modalInstances: [any RNIModal] {
     self.modalInstanceDict.dict.compactMap {
@@ -192,6 +189,23 @@ public class RNIModalManager {
     modal.modalFocusDelegate = self;
     self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
+  
+  func setCurrentModalIndex(for window: UIWindow, index: Int){
+    self.windowToCurrentModalIndexMap[window.synthesizedStringID] = index;
+  };
+  
+  func getCurrentModalIndex(for window: UIWindow) -> Int {
+    guard let currentModalIndex =
+            self.windowToCurrentModalIndexMap[window.synthesizedStringID]
+    else {
+      // No corresponding "modal index" for window yet, so initialize
+      // with value
+      self.setCurrentModalIndex(for: window, index: -1);
+      return -1;
+    };
+    
+    return currentModalIndex;
+  };
 };
 
 // MARK: RNIModalFocusNotifiable
@@ -203,11 +217,38 @@ public class RNIModalManager {
 extension RNIModalManager: RNIModalFocusNotifiable {
   
   public func onModalWillFocusNotification(sender: any RNIModal) {
-    let nextModalIndex = self.currentModalIndex + 1;
-    self.currentModalIndex = nextModalIndex;
+    guard let senderWindow = sender.window else {
+      #if DEBUG
+      print(
+          "Error - RNIModalManager.onModalWillFocusNotification"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - Unable to send event because sender.window is nil"
+      );
+      #endif
+      return;
+    };
+    
+    let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
+    
+    let prevModalIndex = currentModalIndex;
+    let nextModalIndex = prevModalIndex + 1;
+    
+    #if DEBUG
+    print(
+        "Test - RNIModalManager.onModalWillFocusNotification"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - prevModalIndex: \(prevModalIndex)"
+      + " - nextModalIndex: \(nextModalIndex)"
+      + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
+      + " - sender.modalIndex: \(sender.modalIndex!)"
+      + "\n\n"
+    );
+    #endif
     
     sender.modalIndexPrev = sender.modalIndex;
     sender.modalIndex = nextModalIndex;
+    
+    self.setCurrentModalIndex(for: senderWindow, index: nextModalIndex);
     
     sender.onModalWillFocusNotification(sender: sender);
     
@@ -215,7 +256,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard $0 !== sender,
             $0.isModalPresented,
             $0.isModalInFocus,
-            $0.modalIndex == self.currentModalIndex - 1
+            $0.modalIndex == prevModalIndex
       else { return };
       
       $0.onModalWillBlurNotification(sender: sender);
@@ -223,8 +264,31 @@ extension RNIModalManager: RNIModalFocusNotifiable {
   };
   
   public func onModalDidFocusNotification(sender: any RNIModal) {
+    guard let senderWindow = sender.window else {
+      #if DEBUG
+      print(
+          "Error - RNIModalManager.onModalDidFocusNotification"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - Unable to send event because sender.window is nil"
+      );
+      #endif
+      return;
+    };
+    
+    let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
+    
     sender.isModalInFocus = true;
     sender.isModalPresented = true;
+    
+    #if DEBUG
+    print(
+        "Test - RNIModalManager.onModalDidFocusNotification"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
+      + " - sender.modalIndex: \(sender.modalIndex!)"
+      + "\n\n"
+    );
+    #endif
     
     sender.onModalDidFocusNotification(sender: sender);
     
@@ -232,7 +296,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard $0 !== sender,
             $0.isModalPresented,
             $0.isModalInFocus,
-            $0.modalIndex == self.currentModalIndex - 1
+            $0.modalIndex == currentModalIndex - 1
       else { return };
       
       $0.isModalInFocus = false;
@@ -241,7 +305,21 @@ extension RNIModalManager: RNIModalFocusNotifiable {
   };
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
-    self.currentModalIndex -= 1;
+    guard let senderWindow = sender.window else {
+      #if DEBUG
+      print(
+          "Error - RNIModalManager.onModalWillBlurNotification"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - Unable to send event because sender.window is nil"
+      );
+      #endif
+      return;
+    };
+    
+    let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
+    
+    let nextModalIndex = currentModalIndex - 1;
+    self.setCurrentModalIndex(for: senderWindow, index: nextModalIndex);
     
     sender.modalIndexPrev = sender.modalIndex;
     sender.modalIndex = -1;
@@ -252,7 +330,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       guard $0 !== sender,
             $0.isModalPresented,
             !$0.isModalInFocus,
-            $0.modalIndex >= self.currentModalIndex
+            $0.modalIndex >= nextModalIndex
       else { return };
       
       $0.onModalWillFocusNotification(sender: sender);
@@ -260,14 +338,39 @@ extension RNIModalManager: RNIModalFocusNotifiable {
   };
   
   public func onModalDidBlurNotification(sender: any RNIModal) {
+    guard let senderWindow = sender.window else {
+      #if DEBUG
+      print(
+          "Error - RNIModalManager.onModalDidBlurNotification"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - Unable to send event because sender.window is nil"
+      );
+      #endif
+      return;
+    };
+    
+    let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
+    
     sender.isModalInFocus = false;
     sender.isModalPresented = false;
+    
+    #if DEBUG
+    print(
+        "Test - RNIModalManager.onModalDidBlurNotification"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
+      + " - sender.modalIndex: \(sender.modalIndex!)"
+      + "\n\n"
+    );
+    #endif
+    
+    sender.onModalDidBlurNotification(sender: sender);
     
     self.modalInstances.forEach {
       guard $0 !== sender,
             $0.isModalPresented,
             !$0.isModalInFocus,
-            $0.modalIndex >= self.currentModalIndex
+            $0.modalIndex >= currentModalIndex
       else { return };
       
       $0.isModalInFocus = true;

@@ -54,6 +54,11 @@ extension RNIModalState where Self: RNIModalPresentation {
     
     return -1;
   };
+  
+  var synthesizedCurrentModalIndex: Int {
+    guard let window = self.window else { return -1 };
+    return RNIModalManagerShared.getCurrentModalIndex(for: window);
+  };
 };
 
 extension RNIModalState where Self: RNIModal {
@@ -62,7 +67,7 @@ extension RNIModalState where Self: RNIModal {
     return RNIModalData(
       modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
-      currentModalIndex: RNIModalManagerShared.currentModalIndex,
+      currentModalIndex: self.synthesizedCurrentModalIndex,
       isModalPresented: self.isModalPresented,
       isModalInFocus: self.isModalInFocus,
       synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
