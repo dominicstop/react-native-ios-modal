@@ -6,6 +6,8 @@
 
 ## TODO - Current Tasks
 
+- [ ] `TODO:2023-04-07-01-44-05` - Refactor: Replace `RNIModalManager.currentModalIndex` with per window instance "modal index".
+
 <br>
 
 - [ ] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
