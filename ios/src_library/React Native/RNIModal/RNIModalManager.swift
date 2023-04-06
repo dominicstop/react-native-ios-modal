@@ -147,10 +147,12 @@ public class RNIModalManager {
     var presentedVCList: [UIViewController] = [rootVC];
     
     // climb the vc hierarchy to find the topmost presented vc
-    while presentedVCList.last!.presentedViewController != nil {
-      if let presentedVC = presentedVCList.last!.presentedViewController {
-        presentedVCList.append(presentedVC);
-      };
+    while true {
+      guard let topVC = presentedVCList.last,
+            let presentedVC = topVC.presentedViewController
+      else { break };
+      
+      presentedVCList.append(presentedVC);
     };
     
     return presentedVCList;
