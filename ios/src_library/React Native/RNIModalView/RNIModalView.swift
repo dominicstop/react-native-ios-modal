@@ -30,16 +30,6 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   var modalContentWrapper: RNIWrapperView?;
   var modalVC: RNIModalViewController?;
   
-  lazy var modalState = RNIModalPresentationStateMachine(
-    onDismissWillCancel: { [weak self] in
-      // no-op - TBA
-    },
-    onDismissDidCancel: { [weak self] in
-      // no-op - TBA
-    }
-  );
-  
-  
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
   
@@ -54,7 +44,15 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - Properties - RNIModalState
   // ----------------------------------
   
-  var isModalPresented: Bool = false;
+  lazy var modalState = RNIModalPresentationStateMachine(
+    onDismissWillCancel: { [weak self] in
+      // no-op - TBA
+    },
+    onDismissDidCancel: { [weak self] in
+      // no-op - TBA
+    }
+  );
+  
   var isModalInFocus: Bool = false;
   
   // MARK: - Properties - RNIModalPresentation

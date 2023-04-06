@@ -185,7 +185,7 @@ public class RNIModalManager {
   
   public var presentedModals: [any RNIModal] {
     self.modalInstances.compactMap {
-      $0.isModalPresented ? $0 : nil;
+      $0.modalState.isPresented ? $0 : nil;
     };
   };
   
@@ -196,7 +196,6 @@ public class RNIModalManager {
     modal.modalIndex = -1;
     modal.modalIndexPrev = -1;
     
-    modal.isModalPresented = false;
     modal.isModalInFocus = false;
     
     modal.modalFocusDelegate = self;
@@ -263,11 +262,12 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     self.setCurrentModalIndex(for: senderWindow, index: nextModalIndex);
     
+    sender.modalState.set(state: .PRESENTING_UNKNOWN);
     sender.onModalWillFocusNotification(sender: sender);
     
     self.modalInstances.forEach {
       guard $0 !== sender,
-            $0.isModalPresented,
+            $0.modalState.isPresented,
             $0.isModalInFocus,
             $0.modalIndex == prevModalIndex
       else { return };
@@ -291,7 +291,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
     
     sender.isModalInFocus = true;
-    sender.isModalPresented = true;
+    sender.modalState.set(state: .PRESENTED);
     
     #if DEBUG
     print(
@@ -307,7 +307,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     self.modalInstances.forEach {
       guard $0 !== sender,
-            $0.isModalPresented,
+            $0.modalState.isPresented,
             $0.isModalInFocus,
             $0.modalIndex == currentModalIndex - 1
       else { return };
@@ -337,11 +337,12 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     sender.modalIndexPrev = sender.modalIndex;
     sender.modalIndex = -1;
     
+    sender.modalState.set(state: .DISMISSING_UNKNOWN);
     sender.onModalWillBlurNotification(sender: sender);
     
     self.modalInstances.forEach {
       guard $0 !== sender,
-            $0.isModalPresented,
+            $0.modalState.isPresented,
             !$0.isModalInFocus,
             $0.modalIndex >= nextModalIndex
       else { return };
@@ -365,7 +366,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     let currentModalIndex = self.getCurrentModalIndex(for: senderWindow);
     
     sender.isModalInFocus = false;
-    sender.isModalPresented = false;
+    sender.modalState.set(state: .DISMISSED);
     
     #if DEBUG
     print(
@@ -381,7 +382,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     self.modalInstances.forEach {
       guard $0 !== sender,
-            $0.isModalPresented,
+            $0.modalState.isPresented,
             !$0.isModalInFocus,
             $0.modalIndex >= currentModalIndex
       else { return };

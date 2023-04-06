@@ -104,6 +104,10 @@ public struct RNIModalPresentationStateMachine {
   // MARK: - Computed Properties
   // ---------------------------
   
+  var isPresented: Bool {
+    self.state == .PRESENTED;
+  };
+  
   var wasDismissViaGestureCancelled: Bool {
     self.statePrev.isDismissViaGestureCancelling
   };

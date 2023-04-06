@@ -85,7 +85,7 @@ extension RNIModalState where Self: RNIModal {
       modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
       currentModalIndex: self.synthesizedCurrentModalIndex,
-      isModalPresented: self.isModalPresented,
+      isModalPresented: self.modalState.isPresented,
       isModalInFocus: self.isModalInFocus,
       synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
       synthesizedIsModalPresented: self.synthesizedIsModalPresented,
