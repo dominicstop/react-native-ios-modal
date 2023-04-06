@@ -380,7 +380,8 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
         .isEnabled = flag ?? self.enableSwipeGesture;
   };
   
-  /// TODO:2023-03-22-12-07-54 - Refactor: Move to `RNIModalManager`
+  /// `TODO:2023-03-22-12-07-54`
+  /// * Refactor: Move to `RNIModalManager`
   ///
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
@@ -495,12 +496,6 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     self.modalState.set(state: .PRESENTING_PROGRAMMATIC);
     
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
-      /// `TODO:2023-04-07-02-39-15`
-      /// * Disable `hideNonVisibleModals`-related logic from triggering.
-      if self.hideNonVisibleModals {
-        self.setIsHiddenForViewBelowLevel(self.modalIndex - 1, isHidden: true);
-      };
-      
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
             
@@ -576,15 +571,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
       + " - Start dismissing modal"
     );
     #endif
-    
-    /// `TODO:2023-04-07-02-39-15`
-    /// * Disable `hideNonVisibleModals`-related logic from triggering.
-    ///
-    /// begin temp. hiding modals that are no longer visible if needed
-    if self.hideNonVisibleModals {
-      self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
-    };
-    
+
     self.enableSwipeGesture(false);
     
     /// set specific "dismissing" state
@@ -676,12 +663,6 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     self.modalState.set(state: .DISMISSING_GESTURE);
-    
-    /// `TODO:2023-04-07-02-39-15`
-    /// * Disable `hideNonVisibleModals`-related logic from triggering.
-    if self.hideNonVisibleModals {
-      self.setIsHiddenForViewBelowLevel(self.modalIndex, isHidden: false);
-    };
     
     #if DEBUG
     print(
