@@ -707,6 +707,10 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #endif
   };
   
+  /// `Note:2023-04-07-01-28-57`
+  /// No other "view controller"-related lifecycle method was trigger in
+  /// response to this event being invoked.
+  ///
   func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
     self.onModalAttemptDismiss?(
       self.synthesizedBaseEventData.synthesizedDictionary
