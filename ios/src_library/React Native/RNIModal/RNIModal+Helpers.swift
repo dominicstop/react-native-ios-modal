@@ -37,18 +37,18 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   /// Programmatically get the "modal index"
-  ///
-  /// Note:2023-03-31-15-41-04
-  ///
-  /// * This is based on the view controller hierarchy
-  /// * So parent/child view controller that aren't modals are also counted
-  ///
   var synthesizedModalIndex: Int {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
-    for (index, vc) in listPresentedVC.enumerated() {
-      guard vc != self.modalViewController else { continue };
+    var index = -1;
+    
+    for vc in listPresentedVC {
+      if vc.presentingViewController != nil {
+        index += 1;
+      };
+      
+      guard vc === self.modalViewController else { continue };
       return index;
     };
     
