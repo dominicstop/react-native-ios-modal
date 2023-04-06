@@ -9,7 +9,18 @@ import Foundation
 
 public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
-/// Note:2023-03-30-19-36-33
+/// `Note:2023-04-07-03-22-48`
+///
+/// * Manually incrementing and decrementing the `modalIndex` is fragile.
+///
+/// * For example:
+///   * 1 -If multiple blur/focus events were to fire consecutively, the
+///     `modalIndex` might be wrong.
+///
+///   * 2 - If a modal presented/dismissed w/o notifying `RNIModalManager`,
+///     the `modalIndex` will be stale.
+///
+/// `Note:2023-03-30-19-36-33` - Archived/Old
 ///
 /// * This assumes that the app is using a single window, and all the modals are
 ///   being presented on that window, as a chain of view controllers.
