@@ -71,7 +71,7 @@
 <br>
 
 - [ ] `TODO:2023-04-07-02-33-21` Refactor: Re-write "hide non-visible modal" logic (i.e. logic for temporarily hiding bottom-most  modals).
-	- [ ] **Subtask** - `TODO:2023-04-07-02-39-15` - Disable `hideNonVisibleModals`-related logic from triggering.
+	- [x] **Subtask** - `TODO:2023-04-07-02-39-15` - Disable `hideNonVisibleModals`-related logic from triggering.
 	- [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
 		* **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
 
