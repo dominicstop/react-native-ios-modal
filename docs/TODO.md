@@ -18,8 +18,10 @@
 
 	<br>
 
-	- [ ] **Subtask** -`TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`
-	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`.
+	- [ ] **Subtask** - `TODO:2023-04-07-05-44-22` - Impl. `RNIModalPresentationTrigger` enum.
+
+	- [ ] **Subtask** -`TODO:2023-03-31-18-33-43` - Move all `RNIModalManager` focus/blur logic into `onModalDidFocusNotification` and `onModalDidBlurNotification`.
+	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
 
 <br>
 
