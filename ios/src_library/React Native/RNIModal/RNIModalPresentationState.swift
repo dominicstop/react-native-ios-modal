@@ -117,7 +117,21 @@ public struct RNIModalPresentationStateMachine {
   
   public mutating func set(state nextState: RNIModalPresentationState){
     let prevState = self.state;
+    
+    guard prevState != nextState else {
+      // early exit if no change
+      return
+    };
+    
     self.statePrev = prevState;
+    
+    /// Do not over-write specific/"known state", with non-specific/"unknown
+    /// state", e.g.
+    ///
+    /// * ✅: `PRESENTING_UNKNOWN` -> `PRESENTING_PROGRAMMATIC`
+    /// * ❌: `DISMISSING_GESTURE` -> `DISMISSING_UNKNOWN`
+    ///
+    guard prevState.isNotSpecific && !nextState.isNotSpecific else { return };
     
     if prevState.isDismissingViaGesture && nextState.isPresenting {
       self.state = .DISMISS_GESTURE_CANCELLING;
@@ -127,14 +141,6 @@ public struct RNIModalPresentationStateMachine {
       self.state = nextState;
       self.onDismissDidCancel?();
       
-    } else if !prevState.isNotSpecific && nextState.isNotSpecific {
-      /// Do not over-write specific/"known state", with non-specific/"unknown
-      /// state", e.g.
-      ///
-      /// * ✅: `PRESENTING_UNKNOWN` -> `PRESENTING_PROGRAMMATIC`
-      /// * ❌: `DISMISSING_GESTURE` -> `DISMISSING_UNKNOWN`
-      return;
-              
     } else {
       self.state = nextState;
     };
