@@ -17,7 +17,7 @@ extension UIModalTransitionStyle: CaseIterable {
     ];
   };
   
-  func stringDescription() -> String {
+  public func stringDescription() -> String {
     switch self {
       case .coverVertical : return "coverVertical";
       case .flipHorizontal: return "flipHorizontal";
@@ -28,7 +28,7 @@ extension UIModalTransitionStyle: CaseIterable {
     };
   };
   
-  static func fromString(_ string: String) -> UIModalTransitionStyle? {
+  public static func fromString(_ string: String) -> UIModalTransitionStyle? {
     return self.allCases.first{ $0.stringDescription() == string };
   };
 };

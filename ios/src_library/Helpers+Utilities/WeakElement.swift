@@ -8,6 +8,6 @@
 import Foundation
 
 
-class WeakElement<Element: AnyObject> {
+public class WeakElement<Element: AnyObject> {
   private(set) weak var value: Element?;
 };

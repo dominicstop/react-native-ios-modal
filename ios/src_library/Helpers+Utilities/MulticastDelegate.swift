@@ -8,18 +8,18 @@
 import Foundation
 
 
-class MulticastDelegate<T: AnyObject> {
+public class MulticastDelegate<T: AnyObject> {
   private let delegates: NSHashTable<T> = NSHashTable.weakObjects();
   
-  func add(_ delegate: T) {
+  public func add(_ delegate: T) {
     delegates.add(delegate);
   };
   
-  func remove(_ delegate: T) {
+  public func remove(_ delegate: T) {
     self.delegates.remove(delegate);
   };
   
-  func invoke (_ invocation: @escaping (T) -> Void) {
+  public func invoke (_ invocation: @escaping (T) -> Void) {
     for delegate in delegates.allObjects {
       invocation(delegate)
     };

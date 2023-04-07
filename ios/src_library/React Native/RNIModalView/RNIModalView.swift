@@ -8,10 +8,10 @@
 
 import Foundation
 
-class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
-                    RNIModalState, RNIModalPresentation {
+public class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
+                           RNIModalState, RNIModalPresentation {
   
-  typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
+  public typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
   enum NativeIDKey: String {
     case modalViewContent;
@@ -20,7 +20,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - Properties - RNIIdentifiable
   // ------------------------------------
   
-  static var synthesizedIdPrefix: String = "modal-id-";
+  public static var synthesizedIdPrefix: String = "modal-id-";
   
   // MARK: - Properties
   // ------------------
@@ -28,23 +28,23 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   weak var bridge: RCTBridge?;
   
   var modalContentWrapper: RNIWrapperView?;
-  var modalVC: RNIModalViewController?;
+  public var modalVC: RNIModalViewController?;
   
   // MARK: - Properties - RNIModalFocusNotifying
   // -------------------------------------------
   
-  weak var modalFocusDelegate: RNIModalFocusNotifiable!;
+  public weak var modalFocusDelegate: RNIModalFocusNotifiable!;
   
   // MARK: - Properties - RNIModalIdentity
   // -------------------------------------
   
-  var modalIndex: Int!;
-  var modalIndexPrev: Int!;
+  public var modalIndex: Int!;
+  public var modalIndexPrev: Int!;
   
   // MARK: - Properties - RNIModalState
   // ----------------------------------
   
-  lazy var modalState = RNIModalPresentationStateMachine(
+  public lazy var modalState = RNIModalPresentationStateMachine(
     onDismissWillCancel: { [weak self] in
       // no-op - TBA
     },
@@ -53,16 +53,16 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     }
   );
   
-  var isModalInFocus: Bool = false;
+  public var isModalInFocus: Bool = false;
   
   // MARK: - Properties - RNIModalPresentation
   // -----------------------------------------
   
-  var modalViewController: UIViewController? {
+  public var modalViewController: UIViewController? {
     self.modalVC;
   };
   
-  weak var presentingViewController: UIViewController?;
+  public weak var presentingViewController: UIViewController?;
   
   // MARK: - Properties: React Props - Events
   // ----------------------------------------
@@ -161,7 +161,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - Properties: Synthesized From Props
   // ------------------------------------------
   
-  var synthesizedModalPresentationStyle: UIModalPresentationStyle {
+  public var synthesizedModalPresentationStyle: UIModalPresentationStyle {
     let defaultStyle: UIModalPresentationStyle = {
       guard #available(iOS 13.0, *) else { return .overFullScreen };
       return .automatic;
@@ -205,7 +205,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     };
   };
   
-  var synthesizedModalTransitionStyle: UIModalTransitionStyle {
+  public var synthesizedModalTransitionStyle: UIModalTransitionStyle {
     let defaultStyle: UIModalTransitionStyle = .coverVertical ;
     
     // TODO:2023-03-22-13-18-14 - Refactor: Move `fromString` to enum init
@@ -227,7 +227,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     return style;
   };
   
-  var synthesizedModalBGBlurEffectStyle: UIBlurEffect.Style {
+  public var synthesizedModalBGBlurEffectStyle: UIBlurEffect.Style {
     // Provide default value
     let defaultStyle: UIBlurEffect.Style = {
       guard #available(iOS 13.0, *) else { return .light };
@@ -255,7 +255,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - Properties: Synthesized
   // -------------------------------
   
-  var synthesizedBaseEventData: RNIModalBaseEventData {
+  public var synthesizedBaseEventData: RNIModalBaseEventData {
     RNIModalBaseEventData(
       reactTag: self.reactTag.intValue,
       modalID: self.modalID as? String,
@@ -281,14 +281,14 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - UIKit Lifecycle
   // -----------------------
   
-  override func didMoveToWindow() {
+  public override func didMoveToWindow() {
     super.didMoveToWindow();
     if self.presentViaMount {
       self.dismissModal();
     };
   };
   
-  override func didMoveToSuperview() {
+  public override func didMoveToSuperview() {
     super.didMoveToSuperview();
     if self.presentViaMount {
       self.presentModal();
@@ -298,7 +298,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   // MARK: - React-Native Lifecycle
   // ------------------------------
   
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+  public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertReactSubview(subview, at: atIndex);
     
     guard let wrapperView = subview as? RNIWrapperView,
@@ -328,7 +328,7 @@ class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
     wrapperView.isMovingToParent = false;
   };
   
-  override func removeReactSubview(_ subview: UIView!) {
+  public override func removeReactSubview(_ subview: UIView!) {
     super.removeReactSubview(subview);
   };
   
@@ -659,7 +659,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///   * 3 - `viewWillAppear`
   ///   * 4 - `viewDidAppear`
   ///
-  func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
     self.modalState.set(state: .DISMISSING_GESTURE);
     
     #if DEBUG
@@ -672,7 +672,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #endif
   };
   
-  func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
     
     #if DEBUG
@@ -688,7 +688,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   /// No other "view controller"-related lifecycle method was trigger in
   /// response to this event being invoked.
   ///
-  func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
     self.onModalAttemptDismiss?(
       self.synthesizedBaseEventData.synthesizedDictionary
     );
@@ -709,7 +709,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
 
 extension RNIModalView: RNIModalRequestable {
   
-  func requestModalToShow(
+  public func requestModalToShow(
     sender:any RNIModal,
     onRequestApprovedBlock: () -> Void,
     onRequestDeniedBlock: (String) -> Void
@@ -718,7 +718,7 @@ extension RNIModalView: RNIModalRequestable {
     /// No-op - TBA
   };
   
-  func requestModalToHide(
+  public func requestModalToHide(
     sender: any RNIModal,
     onRequestApprovedBlock: () -> Void,
     onRequestDeniedBlock: (String) -> Void
@@ -730,14 +730,14 @@ extension RNIModalView: RNIModalRequestable {
 
 extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
-  func viewWillAppear(sender: UIViewController, animated: Bool) {
+  public func viewWillAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
     self.modalState.set(state: .PRESENTING_UNKNOWN);
     
     self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
   };
   
-  func viewDidAppear(sender: UIViewController, animated: Bool) {
+  public func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
     self.modalState.set(state: .PRESENTED);
     
@@ -750,7 +750,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     };
   };
   
-  func viewWillDisappear(sender: UIViewController, animated: Bool) {
+  public func viewWillDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
     self.modalState.set(state: .DISMISSING_UNKNOWN);
     
@@ -763,7 +763,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     };
   };
   
-  func viewDidDisappear(sender: UIViewController, animated: Bool) {
+  public func viewDidDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
     self.modalState.set(state: .DISMISSED);
     
@@ -860,11 +860,11 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
 ///
 extension RNIModalView: RNIModalFocusNotifiable {
   
-  func onModalWillFocusNotification(sender: any RNIModal) {
+  public func onModalWillFocusNotification(sender: any RNIModal) {
     /// No-op - TBA
   };
   
-  func onModalDidFocusNotification(sender: any RNIModal) {
+  public func onModalDidFocusNotification(sender: any RNIModal) {
     
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
@@ -887,11 +887,11 @@ extension RNIModalView: RNIModalFocusNotifiable {
     );
   };
   
-  func onModalWillBlurNotification(sender: any RNIModal) {
+  public func onModalWillBlurNotification(sender: any RNIModal) {
     /// No-op - TBA
   };
   
-  func onModalDidBlurNotification(sender: any RNIModal) {
+  public func onModalDidBlurNotification(sender: any RNIModal) {
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,

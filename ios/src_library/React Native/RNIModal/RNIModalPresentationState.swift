@@ -28,7 +28,7 @@ public enum RNIModalPresentationState: String {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var isDismissing: Bool {
+  public var isDismissing: Bool {
     switch self {
       case .DISMISSING_UNKNOWN,
            .DISMISSING_GESTURE,
@@ -40,11 +40,11 @@ public enum RNIModalPresentationState: String {
     };
   };
   
-  var isDismissingKnown: Bool {
+  public var isDismissingKnown: Bool {
     self.isDismissing && self != .DISMISSING_UNKNOWN;
   };
   
-  var isPresenting: Bool {
+  public var isPresenting: Bool {
     switch self {
       case .PRESENTING_PROGRAMMATIC,
            .PRESENTING_UNKNOWN,
@@ -56,7 +56,7 @@ public enum RNIModalPresentationState: String {
     };
   };
   
-  var isNotSpecific: Bool {
+  public var isNotSpecific: Bool {
     switch self {
       case .PRESENTING_UNKNOWN,
            .DISMISSING_UNKNOWN:
@@ -70,19 +70,19 @@ public enum RNIModalPresentationState: String {
   // MARK: - Computed Properties - Alias
   // -----------------------------------
   
-  var isDismissViaGestureCancelling: Bool {
+  public var isDismissViaGestureCancelling: Bool {
     self == .DISMISS_GESTURE_CANCELLING;
   };
   
-  var isDismissingViaGesture: Bool {
+  public var isDismissingViaGesture: Bool {
     self == .DISMISSING_GESTURE
   };
   
-  var isPresented: Bool {
+  public var isPresented: Bool {
     self == .PRESENTED;
   };
   
-  var isDismissed: Bool {
+  public var isDismissed: Bool {
     self == .DISMISSED;
   };
 };
@@ -92,30 +92,30 @@ public struct RNIModalPresentationStateMachine {
   // MARK: - Properties
   // ------------------
   
-  var state: RNIModalPresentationState = .INITIAL;
-  var statePrev: RNIModalPresentationState = .INITIAL;
+  private(set) public var state: RNIModalPresentationState = .INITIAL;
+  private(set) public var statePrev: RNIModalPresentationState = .INITIAL;
   
   // MARK: - Properties - Completion Handlers
   // ----------------------------------------
   
-  var onDismissWillCancel: (() -> Void)?;
-  var onDismissDidCancel: (() -> Void)?;
+  public var onDismissWillCancel: (() -> Void)?;
+  public var onDismissDidCancel: (() -> Void)?;
   
   // MARK: - Computed Properties
   // ---------------------------
   
-  var isPresented: Bool {
+  public var isPresented: Bool {
     self.state == .PRESENTED;
   };
   
-  var wasDismissViaGestureCancelled: Bool {
+  public var wasDismissViaGestureCancelled: Bool {
     self.statePrev.isDismissViaGestureCancelling
   };
   
   // MARK: - Functions
   // -----------------
   
-  mutating func set(state nextState: RNIModalPresentationState){
+  public mutating func set(state nextState: RNIModalPresentationState){
     let prevState = self.state;
     self.statePrev = prevState;
     
@@ -131,7 +131,7 @@ public struct RNIModalPresentationStateMachine {
       /// Do not over-write specific/"known state", with non-specific/"unknown
       /// state", e.g.
       ///
-      /// * ✅: `PRESENTING_PROGRAMMATIC` -> `PRESENTING_UNKNOWN`
+      /// * ✅: `PRESENTING_UNKNOWN` -> `PRESENTING_PROGRAMMATIC`
       /// * ❌: `DISMISSING_GESTURE` -> `DISMISSING_UNKNOWN`
       return;
               

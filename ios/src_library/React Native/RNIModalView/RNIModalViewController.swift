@@ -8,12 +8,12 @@
 
 import Foundation
 
-class RNIModalViewController: UIViewController {
+public class RNIModalViewController: UIViewController {
   
   // MARK: - Properties
   // ------------------
   
-  var prevBounds: CGRect?;
+  private(set) public var prevBounds: CGRect?;
   
   weak var lifecycleDelegate: RNIViewControllerLifeCycleNotifiable?;
   
@@ -74,7 +74,7 @@ class RNIModalViewController: UIViewController {
   // MARK: - View Controller Lifecycle
   // ---------------------------------
   
-  override func viewDidLoad() {
+  public override func viewDidLoad() {
     super.viewDidLoad();
     
     self.view = {
@@ -95,7 +95,7 @@ class RNIModalViewController: UIViewController {
     self.lifecycleDelegate?.viewDidLoad(sender: self);
   };
   
-  override func viewDidLayoutSubviews(){
+  public override func viewDidLayoutSubviews(){
     super.viewDidLayoutSubviews();
     
     let didChangeBounds: Bool = {
@@ -124,7 +124,7 @@ class RNIModalViewController: UIViewController {
     self.lifecycleDelegate?.viewDidLayoutSubviews(sender: self);
   };
   
-  override func viewWillAppear(_ animated: Bool) {
+  public override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated);
     
     self.lifecycleDelegate?
@@ -140,7 +140,7 @@ class RNIModalViewController: UIViewController {
     #endif
   };
   
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
     
     self.lifecycleDelegate?
@@ -156,7 +156,7 @@ class RNIModalViewController: UIViewController {
     #endif
   };
   
-  override func viewWillDisappear(_ animated: Bool) {
+  public override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated);
     
     self.lifecycleDelegate?
@@ -174,7 +174,7 @@ class RNIModalViewController: UIViewController {
     #endif
   };
   
-  override func viewDidDisappear(_ animated: Bool) {
+  public override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated);
     
     self.lifecycleDelegate?
@@ -190,7 +190,7 @@ class RNIModalViewController: UIViewController {
     #endif
   };
 
-  override func willMove(toParent parent: UIViewController?) {
+  public override func willMove(toParent parent: UIViewController?) {
     super.willMove(toParent: parent);
     
     self.lifecycleDelegate?.willMove(sender: self, toParent: parent);
@@ -206,7 +206,7 @@ class RNIModalViewController: UIViewController {
     #endif
   };
   
-  override func didMove(toParent parent: UIViewController?) {
+  public override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent);
     
     self.lifecycleDelegate?.didMove(sender: self, toParent: parent);

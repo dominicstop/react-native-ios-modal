@@ -19,10 +19,10 @@ public struct RNIModalBaseEventData: RNIDictionarySynthesizable {
     [\.modalData];
   };
   
-  let reactTag: Int;
-  let modalID: String?;
+  public let reactTag: Int;
+  public let modalID: String?;
   
-  let modalData: RNIModalData;
+  public let modalData: RNIModalData;
 };
 
 public struct RNIOnModalFocusEventData: RNIDictionarySynthesizable {
@@ -37,8 +37,8 @@ public struct RNIOnModalFocusEventData: RNIDictionarySynthesizable {
     [\.modalData];
   };
   
-  let modalData: RNIModalBaseEventData;
-  let senderInfo: RNIModalData;
+  public let modalData: RNIModalBaseEventData;
+  public let senderInfo: RNIModalData;
   
-  let isInitial: Bool;
+  public let isInitial: Bool;
 };

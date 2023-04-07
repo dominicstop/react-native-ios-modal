@@ -58,7 +58,7 @@ public class RNIModalManager {
   // ------------------------
   
   /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
-  static func getWindows() -> [UIWindow] {
+  public static func getWindows() -> [UIWindow] {
     var windows: [UIWindow] = [];
     
     #if swift(>=5.5)
@@ -118,7 +118,7 @@ public class RNIModalManager {
   };
   
   /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
-  static func getRootViewController(
+  public static func getRootViewController(
     for window: UIWindow? = nil
   ) -> UIViewController? {
     

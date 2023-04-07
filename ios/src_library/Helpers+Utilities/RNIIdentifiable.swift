@@ -45,10 +45,10 @@ fileprivate class Counter {
 };
 
 public final class RNIObjectIdentifier {
-  let id: Int;
-  let uuid = UUID();
+  public let id: Int;
+  public let uuid = UUID();
   
-  init(type: Any) {
+  public init(type: Any) {
     self.id = Counter.getAndIncrement(forType: type);
   };
 };

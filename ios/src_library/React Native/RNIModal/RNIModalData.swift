@@ -8,19 +8,19 @@
 import Foundation
 
 public struct RNIModalData: RNIDictionarySynthesizable {
-  let modalNativeID: String;
+  public let modalNativeID: String;
   
-  let modalIndex: Int;
-  let currentModalIndex: Int;
+  public let modalIndex: Int;
+  public let currentModalIndex: Int;
   
-  let isModalPresented: Bool;
-  let isModalInFocus: Bool;
+  public let isModalPresented: Bool;
+  public let isModalInFocus: Bool;
 
-  let synthesizedIsModalInFocus: Bool;
-  let synthesizedIsModalPresented: Bool;
+  public let synthesizedIsModalInFocus: Bool;
+  public let synthesizedIsModalPresented: Bool;
   
-  let synthesizedModalIndex: Int;
-  let synthesizedViewControllerIndex: Int;
+  public let synthesizedModalIndex: Int;
+  public let synthesizedViewControllerIndex: Int;
   
-  let synthesizedWindowID: String?;
+  public let synthesizedWindowID: String?;
 };

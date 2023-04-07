@@ -25,13 +25,13 @@ public class RNIWeakArray<T> {
     return purgedArray;
   };
   
-  init(initialItems: [T] = []){
+  public init(initialItems: [T] = []){
     self.rawArray = initialItems.compactMap {
       RNIWeakRef(with: $0)
     };
   };
   
-  func get(index: Int) -> T? {
+  public func get(index: Int) -> T? {
     guard self.rawArray.count < index else {
       return nil
     };
@@ -44,7 +44,7 @@ public class RNIWeakArray<T> {
     return ref;
   };
   
-  func set(index: Int, element: T) {
+  public func set(index: Int, element: T) {
     guard self.rawArray.count < index else {
       return;
     };
@@ -53,7 +53,7 @@ public class RNIWeakArray<T> {
   };
 
   
-  func append(element: T){
+  public func append(element: T){
     self.rawArray.append(
       RNIWeakRef(with: element)
     );

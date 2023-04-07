@@ -61,7 +61,7 @@ extension RNIDictionarySynthesizable {
       if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
         return(propertyKey, synthesizableDict.synthesizedDictionary);
       };
-
+      
       return (propertyKey, value)
     };
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol RNIViewControllerLifeCycleNotifiable: AnyObject {
+public protocol RNIViewControllerLifeCycleNotifiable: AnyObject {
   
   func viewDidLoad(sender: UIViewController);
   
@@ -34,35 +34,35 @@ protocol RNIViewControllerLifeCycleNotifiable: AnyObject {
 };
 
 extension RNIViewControllerLifeCycleNotifiable {
-  func viewDidLoad(sender: UIViewController) {
+  public func viewDidLoad(sender: UIViewController) {
     // no-op
   };
   
-  func viewDidLayoutSubviews(sender: UIViewController) {
+  public func viewDidLayoutSubviews(sender: UIViewController) {
     // no-op
   };
   
-  func viewWillAppear(sender: UIViewController, animated: Bool) {
+  public func viewWillAppear(sender: UIViewController, animated: Bool) {
     // no-op
   };
   
-  func viewDidAppear(sender: UIViewController, animated: Bool) {
+  public func viewDidAppear(sender: UIViewController, animated: Bool) {
     // no-op
   };
   
-  func viewWillDisappear(sender: UIViewController, animated: Bool) {
+  public func viewWillDisappear(sender: UIViewController, animated: Bool) {
     // no-op
   };
   
-  func viewDidDisappear(sender: UIViewController, animated: Bool) {
+  public func viewDidDisappear(sender: UIViewController, animated: Bool) {
     // no-op
   };
   
-  func willMove(sender: UIViewController, toParent parent: UIViewController?) {
+  public func willMove(sender: UIViewController, toParent parent: UIViewController?) {
     // no-op
   };
   
-  func didMove(sender: UIViewController, toParent parent: UIViewController?) {
+  public func didMove(sender: UIViewController, toParent parent: UIViewController?) {
     // no-op
   };
 };

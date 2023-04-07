@@ -8,7 +8,7 @@
 import Foundation
 
 extension RNIModalState where Self: RNIIdentifiable {
-  var modalNativeID: String {
+  public var modalNativeID: String {
     self.synthesizedStringID
   };
 };
@@ -16,7 +16,7 @@ extension RNIModalState where Self: RNIIdentifiable {
 extension RNIModalState where Self: RNIModalPresentation {
   
   /// Programmatically check if this instance is presented
-  var synthesizedIsModalPresented: Bool {
+  public var synthesizedIsModalPresented: Bool {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -26,7 +26,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   /// Programmatically check if this instance is in focus
-  var synthesizedIsModalInFocus: Bool {
+  public var synthesizedIsModalInFocus: Bool {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -41,7 +41,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// * This is based on the view controller hierarchy
   /// * So parent/child view controller that aren't modals are also counted
   ///
-  var synthesizedViewControllerIndex: Int {
+  public var synthesizedViewControllerIndex: Int {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -54,7 +54,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   /// Programmatically get the "modal index"
-  var synthesizedModalIndex: Int {
+  public var synthesizedModalIndex: Int {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -72,7 +72,7 @@ extension RNIModalState where Self: RNIModalPresentation {
     return -1;
   };
   
-  var synthesizedCurrentModalIndex: Int {
+  public var synthesizedCurrentModalIndex: Int {
     guard let window = self.window else { return -1 };
     return RNIModalManagerShared.getCurrentModalIndex(for: window);
   };
@@ -80,7 +80,7 @@ extension RNIModalState where Self: RNIModalPresentation {
 
 extension RNIModalState where Self: RNIModal {
   
-  var synthesizedModalData: RNIModalData {
+  public var synthesizedModalData: RNIModalData {
     return RNIModalData(
       modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
@@ -95,7 +95,7 @@ extension RNIModalState where Self: RNIModal {
     );
   };
   
-  var synthesizedModalDataDict: Dictionary<String, Any> {
+  public var synthesizedModalDataDict: Dictionary<String, Any> {
     self.synthesizedModalData.synthesizedDictionary;
   };
 };

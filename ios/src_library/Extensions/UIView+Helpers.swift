@@ -3,7 +3,7 @@
 /// `react-native-utilities`
 ///
 extension UIView {
-  var parentViewController: UIViewController? {
+  public var parentViewController: UIViewController? {
     var parentResponder: UIResponder? = self;
     
     while parentResponder != nil {
@@ -13,7 +13,7 @@ extension UIView {
       };
     };
     
-    return nil
+    return nil;
   };
   
   /// Remove all ancestor constraints that are affecting this view instance
