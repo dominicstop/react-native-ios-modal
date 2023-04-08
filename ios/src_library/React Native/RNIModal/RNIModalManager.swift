@@ -201,6 +201,46 @@ public class RNIModalManager {
     return Self.getPresentedViewControllers(for: window).last;
   };
   
+  static func computeModalIndex(
+    forWindow window: UIWindow,
+    forViewController viewController: UIViewController? = nil
+  ) -> Int {
+    
+    let listPresentedVC =
+      RNIModalManager.getPresentedViewControllers(for: window);
+    
+    var index = -1;
+    
+    for vc in listPresentedVC {
+      if vc.presentingViewController != nil {
+        index += 1;
+      };
+      
+      /// A - no `viewController` arg., keep counting until all items in
+      ///     `listPresentedVC` have been exhausted.
+      guard viewController == nil else { continue };
+      
+      /// B - `viewController` arg. specified, stop counting if found matching
+      ///      instance of `viewController` in `listPresentedVC`.
+      guard viewController !== vc
+      else { break };
+    };
+    
+    return index;
+  };
+  
+  static func computeModalIndex(
+    forWindow window: UIWindow?,
+    forViewController viewController: UIViewController? = nil
+  ) -> Int {
+    guard let window = window else { return -1 };
+    
+    return Self.computeModalIndex(
+      forWindow: window,
+      forViewController: viewController
+    );
+  };
+  
   // MARK: - Properties
   // ------------------
   

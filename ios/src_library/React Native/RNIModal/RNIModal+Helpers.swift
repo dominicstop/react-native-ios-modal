@@ -55,26 +55,23 @@ extension RNIModalState where Self: RNIModalPresentation {
   
   /// Programmatically get the "modal index"
   public var synthesizedModalIndex: Int {
-    let listPresentedVC =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+    guard let window = self.window,
+          let modalVC = self.modalViewController
+    else { return -1 };
     
-    var index = -1;
-    
-    for vc in listPresentedVC {
-      if vc.presentingViewController != nil {
-        index += 1;
-      };
-      
-      guard vc === self.modalViewController else { continue };
-      return index;
-    };
-    
-    return -1;
+    return RNIModalManager.computeModalIndex(
+      forWindow: window,
+      forViewController: modalVC
+    );
   };
   
   public var synthesizedCurrentModalIndex: Int {
-    guard let window = self.window else { return -1 };
-    return RNIModalManagerShared.getCurrentModalIndex(for: window);
+    RNIModalManager.computeModalIndex(forWindow: self.window);
+  };
+  
+  internal var synthesizedWindowMapData: RNIWindowMapData? {
+    guard let window = self.window else { return nil };
+    return RNIModalWindowMapShared.get(forWindow: window);
   };
 };
 
