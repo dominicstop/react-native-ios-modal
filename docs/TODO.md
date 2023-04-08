@@ -26,6 +26,10 @@
 
 <br>
 
+- [ ] `TODO:2023-04-08-18-37-57` - Replace inappropriate use of "synthesized" prefix w/ "computed".
+
+<br>
+
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
