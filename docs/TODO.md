@@ -21,7 +21,7 @@
 	- [x] **Subtask** - `TODO:2023-04-07-05-44-22` - Impl. `RNIModalPresentationTrigger` enum.
 	- [x] **Subtask** - `TODO:2023-04-07-06-10-22` Refactor - Replace `RNIModalState.isModalPresented`  w/  `RNIModalPresentationState`.
 
-	- [ ] **Subtask** -`TODO:2023-03-31-18-33-43` - Refactor `RNIModalManager` focus/blur logic to not rely on "modal index".
+	- [x] **Subtask** -`TODO:2023-03-31-18-33-43` - Refactor `RNIModalManager` focus/blur logic to not rely on "modal index".
 	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
 
 <br>
