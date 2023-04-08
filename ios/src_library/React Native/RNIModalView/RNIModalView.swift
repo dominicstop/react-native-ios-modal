@@ -739,7 +739,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
-    self.modalState.set(state: .PRESENTED);
+    self.modalState.set(state: .PRESENTED_UNKNOWN);
     
     self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
     

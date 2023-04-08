@@ -418,7 +418,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     #endif
         
     sender.isModalInFocus = true;
-    sender.modalState.set(state: .PRESENTED);
+    sender.modalState.set(state: .PRESENTED_FOCUSED);
     
     sender.onModalDidFocusNotification(sender: sender);
 

@@ -8,13 +8,20 @@
 import Foundation
 
 
-public enum RNIModalPresentationState: String {
+public enum RNIModalPresentationState: String, CaseIterable {
+  
+  // MARK: - Enum Cases
+  // ------------------
+  
   case INITIAL;
   
   case PRESENTING_PROGRAMMATIC;
   case PRESENTING_UNKNOWN;
-  
-  case PRESENTED;
+
+  case PRESENTED_FOCUSING;
+  case PRESENTED_FOCUSED;
+  case PRESENTED_BLURRING;
+  case PRESENTED_BLURRED;
   case PRESENTED_UNKNOWN;
   
   case DISMISSING_GESTURE;
@@ -25,8 +32,40 @@ public enum RNIModalPresentationState: String {
   
   case DISMISSED;
   
-  // MARK: - Computed Properties
-  // ---------------------------
+  // MARK: - Computed Properties - Private
+  // -------------------------------------
+  
+  fileprivate var step: Int {
+    switch self {
+      case .INITIAL:
+        return 0;
+      
+      case .PRESENTING_PROGRAMMATIC: fallthrough;
+      case .PRESENTING_UNKNOWN     :
+        return 1;
+
+      case .PRESENTED_FOCUSING: fallthrough;
+      case .PRESENTED_FOCUSED : fallthrough;
+      case .PRESENTED_BLURRING: fallthrough;
+      case .PRESENTED_BLURRED : fallthrough;
+      case .PRESENTED_UNKNOWN :
+        return 2;
+      
+      case .DISMISSING_GESTURE     : fallthrough;
+      case .DISMISSING_PROGRAMMATIC: fallthrough;
+      case .DISMISSING_UNKNOWN     :
+        return 3;
+      
+      case .DISMISS_GESTURE_CANCELLING:
+        return 4;
+      
+      case .DISMISSED:
+        return 5;
+    };
+  };
+  
+  // MARK: - Computed Properties - Public
+  // ------------------------------------
   
   public var isDismissing: Bool {
     switch self {
@@ -56,9 +95,24 @@ public enum RNIModalPresentationState: String {
     };
   };
   
+  public var isPresented: Bool {
+    switch self {
+      case .PRESENTED_FOCUSING,
+           .PRESENTED_FOCUSED,
+           .PRESENTED_BLURRING,
+           .PRESENTED_BLURRED,
+           .PRESENTED_UNKNOWN:
+        return true;
+        
+      default:
+        return false;
+    };
+  };
+  
   public var isNotSpecific: Bool {
     switch self {
-      case .PRESENTING_UNKNOWN,
+      case .PRESENTED_UNKNOWN,
+           .PRESENTING_UNKNOWN,
            .DISMISSING_UNKNOWN:
         return true;
         
@@ -78,12 +132,12 @@ public enum RNIModalPresentationState: String {
     self == .DISMISSING_GESTURE
   };
   
-  public var isPresented: Bool {
-    self == .PRESENTED;
-  };
-  
   public var isDismissed: Bool {
     self == .DISMISSED;
+  };
+  
+  public var isInFocus: Bool {
+    self == .PRESENTED_FOCUSED;
   };
 };
 
@@ -105,7 +159,11 @@ public struct RNIModalPresentationStateMachine {
   // ---------------------------
   
   public var isPresented: Bool {
-    self.state == .PRESENTED;
+    self.state.isPresented
+  };
+  
+  public var isInFocus: Bool {
+    self.state.isInFocus
   };
   
   public var wasDismissViaGestureCancelled: Bool {
@@ -125,13 +183,24 @@ public struct RNIModalPresentationStateMachine {
     
     self.statePrev = prevState;
     
+    let isBecomingUnknown = prevState.isNotSpecific && !nextState.isNotSpecific;
+    let isSameStep = prevState.step == nextState.step;
+    
     /// Do not over-write specific/"known state", with non-specific/"unknown
     /// state", e.g.
     ///
     /// * ✅: `PRESENTING_UNKNOWN` -> `PRESENTING_PROGRAMMATIC`
     /// * ❌: `DISMISSING_GESTURE` -> `DISMISSING_UNKNOWN`
     ///
-    guard prevState.isNotSpecific && !nextState.isNotSpecific else { return };
+    if isBecomingUnknown && isSameStep {
+      #if DEBUG
+      print(
+          "Warning - RNIModalPresentationStateMachine.set"
+        + " - arg nextState: \(nextState)"
+      );
+      #endif
+      return;
+    };
     
     if prevState.isDismissingViaGesture && nextState.isPresenting {
       self.state = .DISMISS_GESTURE_CANCELLING;
