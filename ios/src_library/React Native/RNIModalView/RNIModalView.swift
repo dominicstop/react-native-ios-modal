@@ -603,7 +603,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
     ];
     
     let baseEventDataDict =
-      self.synthesizedBaseEventData.synthesizedDictionary;
+      self.synthesizedBaseEventData.synthesizedJSDictionary;
     
     baseEventDataDict.forEach { (key, value) in
       params[key] = value
@@ -694,7 +694,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///
   public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
     self.onModalAttemptDismiss?(
-      self.synthesizedBaseEventData.synthesizedDictionary
+      self.synthesizedBaseEventData.synthesizedJSDictionary
     );
     
     #if DEBUG
@@ -751,7 +751,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     
     if !self.modalPresentationState.wasDismissViaGestureCancelled {
       self.onModalShow?(
-        self.synthesizedBaseEventData.synthesizedDictionary
+        self.synthesizedBaseEventData.synthesizedJSDictionary
       );
     };
   };
@@ -765,7 +765,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     
     if self.modalPresentationState.state.isDismissingViaGesture {
       self.onModalWillDismiss?(
-        self.synthesizedBaseEventData.synthesizedDictionary
+        self.synthesizedBaseEventData.synthesizedJSDictionary
       );
     };
   };
@@ -779,12 +779,12 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     
     if self.modalPresentationState.statePrev.isDismissingViaGesture {
       self.onModalDidDismiss?(
-        self.synthesizedBaseEventData.synthesizedDictionary
+        self.synthesizedBaseEventData.synthesizedJSDictionary
       );
       
     } else {
       self.onModalDismiss?(
-        self.synthesizedBaseEventData.synthesizedDictionary
+        self.synthesizedBaseEventData.synthesizedJSDictionary
       );
     };
     
@@ -892,7 +892,7 @@ extension RNIModalView: RNIModalFocusNotifiable {
     #endif
     
     self.onModalFocus?(
-      eventData.synthesizedDictionary
+      eventData.synthesizedJSDictionary
     );
   };
   
@@ -918,7 +918,7 @@ extension RNIModalView: RNIModalFocusNotifiable {
     #endif
     
     self.onModalBlur?(
-      eventData.synthesizedDictionary
+      eventData.synthesizedJSDictionary
     );
   };
 };

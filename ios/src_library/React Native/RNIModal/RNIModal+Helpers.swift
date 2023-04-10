@@ -100,8 +100,4 @@ extension RNIModalState where Self: RNIModal {
       synthesizedWindowID: self.window?.synthesizedStringID
     );
   };
-  
-  public var synthesizedModalDataDict: Dictionary<String, Any> {
-    self.synthesizedModalData.synthesizedDictionary;
-  };
 };

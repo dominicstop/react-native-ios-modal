@@ -21,8 +21,7 @@ public protocol RNIDictionarySynthesizable {
   static var synthesizedDictionaryInlinedProperties: [PartialKeyPath<Self>] { get };
   
   /// A map of the property names and their respective values
-  var synthesizedDictionary: Dictionary<String, Any> { get };
-
+  func synthesizedDictionary(isJSDict: Bool) -> Dictionary<String, Any>;
 };
 
 extension RNIDictionarySynthesizable {
@@ -35,7 +34,10 @@ extension RNIDictionarySynthesizable {
     [];
   };
   
-  public var synthesizedDictionary: Dictionary<String, Any> {
+  public func synthesizedDictionary(
+    isJSDict: Bool
+  ) -> Dictionary<String, Any> {
+    
     let mirror = Mirror(reflecting: self);
     let properties = mirror.children;
     
@@ -58,11 +60,22 @@ extension RNIDictionarySynthesizable {
             !Self.synthesizedDictionaryIgnore.contains(propertyKey)
       else { return nil };
       
-      if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
-        return(propertyKey, synthesizableDict.synthesizedDictionary);
-      };
+      let parseValue: Any = {
+        if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
+          return synthesizableDict.synthesizedDictionary;
+          
+        } else if isJSDict,
+                  let rawValue = value as? any RawRepresentable {
+          
+          return rawValue.rawValue;
+        };
+        
+        return value;
+      }();
       
-      return (propertyKey, value)
+      
+      
+      return (propertyKey, parseValue)
     };
     
     var baseDict = Dictionary(
@@ -73,10 +86,14 @@ extension RNIDictionarySynthesizable {
       guard let value = self[keyPath: $0] as? (any RNIDictionarySynthesizable)
       else { return };
       
-      baseDict =
-        baseDict.merging(value.synthesizedDictionary){ old, _ in old };
+      let inlindedDict = value.synthesizedDictionary(isJSDict: isJSDict);
+      baseDict = baseDict.merging(inlindedDict){ old, _ in old };
     };
     
     return baseDict;
+  };
+  
+  public var synthesizedJSDictionary: Dictionary<String, Any> {
+    self.synthesizedDictionary(isJSDict: true);
   };
 };

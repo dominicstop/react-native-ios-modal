@@ -156,7 +156,7 @@ class RNIModalViewModule: RCTEventEmitter {
       modalView.setModalVisibility(visibility: visibility) { isSuccess, error in
         if isSuccess {
           resolve(
-            modalView.synthesizedBaseEventData.synthesizedDictionary
+            modalView.synthesizedBaseEventData.synthesizedJSDictionary
           );
           
         } else {
@@ -183,7 +183,7 @@ class RNIModalViewModule: RCTEventEmitter {
       };
       
       resolve(
-        modalView.synthesizedBaseEventData.synthesizedDictionary
+        modalView.synthesizedBaseEventData.synthesizedJSDictionary
       );
     };
   };
