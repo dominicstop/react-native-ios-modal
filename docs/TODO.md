@@ -22,7 +22,8 @@
 	- [x] **Subtask** - `TODO:2023-04-07-06-10-22` Refactor - Replace `RNIModalState.isModalPresented`  w/  `RNIModalPresentationState`.
 
 	- [x] **Subtask** -`TODO:2023-03-31-18-33-43` - Refactor `RNIModalManager` focus/blur logic to not rely on "modal index".
-	- [ ] **Subtask** - `TODO:2023-04-08-20-06-31` - Consolidate/combine `RNIModalState.isModalInFocus` into `RNIModalState.modalState`/`RNIModalPresentationState`.
+	- [ ] **Subtask** - `TODO:2023-04-08-20-06-31` - Impl. modal fous state.
+	- [ ] Subtask - `TODO:` - Refactor to use "modal focus state" (i.e. `RNIModalFocusState`.)
 	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
 
 <br>
