@@ -205,7 +205,8 @@ public class RNIModalManager {
     let vcItems = Self.getPresentedViewControllers(for: window);
     
     return vcItems.compactMap {
-      $0 as? (any RNIModal);
+      guard let modalVC = $0 as? RNIModalViewController else { return nil };
+      return modalVC.modalViewRef;
     };
   };
   
@@ -281,6 +282,7 @@ public class RNIModalManager {
     modal.modalIndexPrev = -1;
     
     modal.modalPresentationNotificationDelegate = self;
+    
     self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
   
@@ -312,7 +314,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     
     let windowData = RNIModalWindowMapShared.get(forWindow: senderWindow);
-
     guard windowData.nextModalToFocus !== sender else {
       #if DEBUG
       let nextModalToFocus = windowData.nextModalToFocus!;
@@ -327,6 +328,12 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       return;
     };
     
+    /// `Note:2023-04-10-20-47-52`
+    /// * The sender will already be in `presentedModalList` despite it being
+    ///   not fully presented yet.
+    ///
+    let presentedModalList = Self.getPresentedModals(forWindow: senderWindow);
+    
     #if DEBUG
     if windowData.nextModalToFocus != nil {
       print(
@@ -338,7 +345,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let modalInstances = self.getModalInstances(forWindow: senderWindow);
     windowData.set(nextModalToFocus: sender);
     
     #if DEBUG
@@ -349,21 +355,26 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       + " - windowData.modalIndexNext: \(windowData.modalIndexNext_)"
       + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
       + " - sender.modalIndex: \(sender.modalIndex!)"
-      + " - presentedModals.count: \(presentedModals.count)"
+      + " - presentedModalList.count: \(presentedModalList.count)"
     );
     #endif
     
     sender.modalFocusState.set(state: .FOCUSING);
     sender.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
+    
     sender.onModalWillFocusNotification(sender: sender);
     
-    modalInstances.forEach {
+    presentedModalList.forEach {
       guard $0 !== sender,
-            $0.isModalInFocus
+            $0.modalFocusState.state.isFocusedOrFocusing
       else { return };
       
       $0.modalFocusState.set(state: .BLURRING);
       $0.onModalWillBlurNotification(sender: sender);
+    };
+    
+    if let modalToBlur = presentedModalList.secondToLast {
+      windowData.nextModalToBlur = modalToBlur;
     };
   };
   
@@ -380,7 +391,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     
     let windowData = RNIModalWindowMapShared.get(forWindow: senderWindow);
-
     guard let nextModalToFocus = windowData.nextModalToFocus else {
       #if DEBUG
       print(
@@ -405,7 +415,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let modalInstances = self.getModalInstances(forWindow: senderWindow);
+    let presentedModalList = Self.getPresentedModals(forWindow: senderWindow);
     windowData.apply(forFocusedModal: sender);
     
     #if DEBUG
@@ -421,15 +431,18 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     sender.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
     
     sender.onModalDidFocusNotification(sender: sender);
-
-    modalInstances.forEach {
+    
+    presentedModalList.forEach {
       guard $0 !== sender,
-            $0.isModalInFocus
+            $0.modalFocusState.state.isBlurring
       else { return };
       
-      $0.onModalDidBlurNotification(sender: sender);
       $0.modalFocusState.set(state: .BLURRED);
+      $0.onModalDidBlurNotification(sender: sender);
     };
+    
+    // Reset
+    windowData.nextModalToBlur = nil;
   };
   
   public func notifyOnModalWillHide(sender: any RNIModal) {
@@ -445,7 +458,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     
     let windowData = RNIModalWindowMapShared.get(forWindow: senderWindow);
-
     guard windowData.nextModalToBlur !== sender else {
       #if DEBUG
       let nextModalToBlur = windowData.nextModalToBlur!;
@@ -471,7 +483,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let modalInstances = self.getModalInstances(forWindow: senderWindow);
+    let presentedModalList = Self.getPresentedModals(forWindow: senderWindow);
     windowData.set(nextModalToBlur: sender);
     
     #if DEBUG
@@ -487,16 +499,15 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     sender.modalFocusState.set(state: .BLURRING);
     sender.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
+  
     sender.onModalWillBlurNotification(sender: sender);
     
-    modalInstances.forEach {
-      guard $0 !== sender,
-            !$0.isModalInFocus
-      else { return };
-      
-      $0.modalFocusState.set(state: .FOCUSING);
-      $0.onModalWillFocusNotification(sender: sender);
-    };
+    guard let modalToFocus = presentedModalList.secondToLast else { return };
+    
+    modalToFocus.modalFocusState.set(state: .FOCUSING);
+    modalToFocus.onModalWillFocusNotification(sender: sender);
+    
+    windowData.nextModalToFocus = modalToFocus;
   };
   
   public func notifyOnModalDidHide(sender: any RNIModal) {
@@ -512,7 +523,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     
     let windowData = RNIModalWindowMapShared.get(forWindow: senderWindow);
-
     guard let nextModalToBlur = windowData.nextModalToBlur else {
       #if DEBUG
       print(
@@ -537,7 +547,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let modalInstances = self.getModalInstances(forWindow: senderWindow);
+    let presentedModalList = Self.getPresentedModals(forWindow: senderWindow);
     windowData.apply(forBlurredModal: sender);
     
     #if DEBUG
@@ -553,14 +563,17 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     sender.modalPresentationState.set(state: .DISMISSED);
     
     sender.onModalDidBlurNotification(sender: sender);
-
-    modalInstances.forEach {
+    
+    presentedModalList.forEach {
       guard $0 !== sender,
-            !$0.isModalInFocus
+            $0.modalFocusState.state.isTransitioning
       else { return };
       
+      $0.modalFocusState.set(state: .FOCUSED);
       $0.onModalDidFocusNotification(sender: sender);
-      sender.modalFocusState.set(state: .FOCUSED);
     };
+    
+    // reset
+    windowData.nextModalToFocus = nil;
   };
 };

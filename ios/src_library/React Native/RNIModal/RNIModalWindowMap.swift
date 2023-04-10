@@ -19,8 +19,8 @@ internal class RNIWindowMapData {
   private(set) var modalIndexPrev: Int = -1;
   private(set) var modalIndexNext: Int?;
   
-  private(set) weak var nextModalToFocus: (any RNIModal)?;
-  private(set) weak var nextModalToBlur: (any RNIModal)?;
+  weak var nextModalToFocus: (any RNIModal)?;
+  weak var nextModalToBlur: (any RNIModal)?;
   
   #if DEBUG
   var modalIndexNext_: String {
