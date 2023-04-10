@@ -8,28 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
-
-	- [x] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
-	- [x] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
-	- [x] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. "modal presentation state" (i.e. `RNIModalPresentationState`).
-	- [x] **Subtask** - `TODO:2023-04-06-02-13-24` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
-	- [x] **Subtask** - `TODO:2023-04-07-02-41-35` - Update `RNIModalView` to use "modal presentation state" (i.e. `RNIModalPresentationState`).
-
-	<br>
-
-	- [x] **Subtask** - `TODO:2023-04-07-05-44-22` - Impl. `RNIModalPresentationTrigger` enum.
-	- [x] **Subtask** - `TODO:2023-04-07-06-10-22` Refactor - Replace `RNIModalState.isModalPresented`  w/  `RNIModalPresentationState`.
-
-	- [x] **Subtask** -`TODO:2023-03-31-18-33-43` - Refactor `RNIModalManager` focus/blur logic to not rely on "modal index".
-	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
-
-<br>
-
-- [ ] `TODO:2023-04-08-18-37-57` - Replace inappropriate use of "synthesized" prefix w/ "computed".
-
-<br>
-
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
@@ -43,6 +21,7 @@
 	<br>
 
 	- [ ] **Subtask** - `TODO:2023-03-30-19-18-20` - Impl: Create `RNIModalDeprecatedBaseEventData`.
+	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
 	- [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-52-42` - Update typescript types for modal event objects to match native event object.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-53-01` - Add `deprecated` suffix to event types in `RNIModalViewDeprecatedEvents`.
@@ -55,24 +34,17 @@
 	- [ ] **Subtask** - `TODO:` - Impl. `RNIModalView.onModalDidlDismiss`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-22` - Impl. `RNIModalView.onModalWillShow`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-30` - Impl. `RNIModalView.onModalDidShow`
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-38` - Impl. `RNIModalView,onModalWillBlur`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-47` - Impl. `RNIModalView.onModalDidBlur`
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-55` - Impl. `RNIModalView.onModalWillFocus`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-55-03` - Impl. `RNIModalView.onModaDidFocus`
 	- [ ] **Subtask** - `TODO:2023-03-30-16-36-50` - Update `ModalView` to use the new events.
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-55-12` - Add invocation for deprecated event `ModalView.onModalFocus`.
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-55-53` - Add invocation for deprecated event `ModalView.onModalShow`.
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-11` - Add invocation for deprecated event `ModalView.onModalAttemptDismiss`.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-18` - Add invocation for deprecated event `ModalView.onModalDismiss`.
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-30` - Add invocation for deprecated event `ModalView.onModalBlur`.
 	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
-
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples.
 
 <br>
@@ -147,6 +119,25 @@
 ## TODO - Completed
 
 <br>
+
+- [x] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
+
+	- [x] **Subtask** - `TODO:2023-03-31-18-37-00` - Impl. `RNIViewControllerLifeCycleNotifiable` protocol.
+	- [x] **Subtask** - `TODO:2023-04-06-02-14-59` Update `RNIModalViewController` to use `RNIViewControllerLifeCycleNotifiable`.
+	- [x] **Subtask** -`TODO:2023-03-31-18-34-23` - Impl. "modal presentation state" (i.e. `RNIModalPresentationState`).
+	- [x] **Subtask** - `TODO:2023-04-06-02-13-24` - Update `RNIModalView` to use `RNIViewControllerLifeCycleNotifiable`.
+	- [x] **Subtask** - `TODO:2023-04-07-02-41-35` - Update `RNIModalView` to use "modal presentation state" (i.e. `RNIModalPresentationState`).
+
+	<br>
+
+	- [x] **Subtask** - `TODO:2023-04-07-05-44-22` - Impl. `RNIModalPresentationTrigger` enum.
+	- [x] **Subtask** - `TODO:2023-04-07-06-10-22` Refactor - Replace `RNIModalState.isModalPresented`  w/  `RNIModalPresentationState`.
+
+	- [x] **Subtask** -`TODO:2023-03-31-18-33-43` - Refactor `RNIModalManager` focus/blur logic to not rely on "modal index".
+
+<br>
+
+- [x] `TODO:2023-04-08-18-37-57` - Replace inappropriate use of "synthesized" prefix w/ "computed".
 
 - [x] `TODO:2023-04-07-01-44-05` - Refactor: Replace `RNIModalManager.currentModalIndex` with per window instance "modal index".
 
