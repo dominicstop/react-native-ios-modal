@@ -91,12 +91,23 @@ extension RNIModalState where Self: RNIModal {
       modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
       currentModalIndex: self.currentModalIndex,
+      
+      modalFocusState: self.modalFocusState.state,
+      modalFocusStatePref: self.modalFocusState.statePrev,
+      
+      modalPresentationState: self.modalPresentationState.state,
+      modalPresentationStatePrev: self.modalPresentationState.statePrev,
+      
       isModalPresented: self.modalPresentationState.isPresented,
       isModalInFocus: self.synthesizedIsModalInFocus,
+      
       computedIsModalInFocus: self.computedIsModalInFocus,
       computedIsModalPresented: self.computedIsModalPresented,
+      
       computedModalIndex: self.computedModalIndex,
       computedViewControllerIndex: self.computedViewControllerIndex,
+      computedCurrentModalIndex: self.computedCurrentModalIndex,
+      
       synthesizedWindowID: self.window?.synthesizedStringID
     );
   };
