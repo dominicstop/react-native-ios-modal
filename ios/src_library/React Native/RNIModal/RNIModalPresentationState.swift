@@ -164,9 +164,7 @@ public struct RNIModalPresentationStateMachine {
       return
     };
     
-    self.statePrev = prevState;
-    
-    let isBecomingUnknown = prevState.isNotSpecific && !nextState.isNotSpecific;
+    let isBecomingUnknown = !prevState.isNotSpecific && nextState.isNotSpecific;
     let isSameStep = prevState.step == nextState.step;
     
     /// Do not over-write specific/"known state", with non-specific/"unknown
@@ -175,15 +173,22 @@ public struct RNIModalPresentationStateMachine {
     /// * ✅: `PRESENTING_UNKNOWN` -> `PRESENTING_PROGRAMMATIC`
     /// * ❌: `DISMISSING_GESTURE` -> `DISMISSING_UNKNOWN`
     ///
-    if isBecomingUnknown && isSameStep {
+    if isSameStep {
+      if !isBecomingUnknown {
+        self.state = nextState;
+      };
+      
       #if DEBUG
       print(
           "Warning - RNIModalPresentationStateMachine.set"
-        + " - arg nextState: \(nextState)"
+        + " - prevState: \(prevState)"
+        + " - nextState: \(nextState)"
       );
       #endif
       return;
     };
+    
+    self.statePrev = prevState;
     
     if prevState.isDismissingViaGesture && nextState.isPresenting {
       self.state = .DISMISS_GESTURE_CANCELLING;
@@ -193,7 +198,7 @@ public struct RNIModalPresentationStateMachine {
       self.state = nextState;
       self.onDismissDidCancel?();
       
-    } else {
+    } else  {
       self.state = nextState;
     };
   };
