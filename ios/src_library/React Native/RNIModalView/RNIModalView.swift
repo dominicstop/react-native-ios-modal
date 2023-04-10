@@ -55,7 +55,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
     }
   );
   
-  public var isModalInFocus: Bool = false;
+  public var modalFocusState = RNIModalFocusStateMachine();
   
   // MARK: - Properties - RNIModalPresentation
   // -----------------------------------------

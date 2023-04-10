@@ -73,6 +73,11 @@ extension RNIModalState where Self: RNIModalPresentation {
     guard let window = self.window else { return nil };
     return RNIModalWindowMapShared.get(forWindow: window);
   };
+  
+  public var isModalInFocus: Bool {
+    self.modalPresentationState.isPresented &&
+      self.modalFocusState.state.isFocused;
+  };
 };
 
 extension RNIModalState where Self: RNIModal {

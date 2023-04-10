@@ -280,8 +280,6 @@ public class RNIModalManager {
     modal.modalIndex = -1;
     modal.modalIndexPrev = -1;
     
-    modal.isModalInFocus = false;
-    
     modal.modalPresentationNotificationDelegate = self;
     self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
@@ -355,6 +353,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
     
+    sender.modalFocusState.set(state: .FOCUSING);
     sender.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
     sender.onModalWillFocusNotification(sender: sender);
     
@@ -363,6 +362,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
             $0.isModalInFocus
       else { return };
       
+      $0.modalFocusState.set(state: .BLURRING);
       $0.onModalWillBlurNotification(sender: sender);
     };
   };
@@ -417,7 +417,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
         
-    sender.isModalInFocus = true;
+    sender.modalFocusState.set(state: .FOCUSED);
     sender.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
     
     sender.onModalDidFocusNotification(sender: sender);
@@ -428,7 +428,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       else { return };
       
       $0.onModalDidBlurNotification(sender: sender);
-      $0.isModalInFocus = false;
+      $0.modalFocusState.set(state: .BLURRED);
     };
   };
   
@@ -485,6 +485,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
     
+    sender.modalFocusState.set(state: .BLURRING);
     sender.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
     sender.onModalWillBlurNotification(sender: sender);
     
@@ -493,6 +494,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
             !$0.isModalInFocus
       else { return };
       
+      $0.modalFocusState.set(state: .FOCUSING);
       $0.onModalWillFocusNotification(sender: sender);
     };
   };
@@ -547,7 +549,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
         
-    sender.isModalInFocus = false;
+    sender.modalFocusState.set(state: .BLURRED);
     sender.modalPresentationState.set(state: .DISMISSED);
     
     sender.onModalDidBlurNotification(sender: sender);
@@ -558,7 +560,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       else { return };
       
       $0.onModalDidFocusNotification(sender: sender);
-      $0.isModalInFocus = true;
+      sender.modalFocusState.set(state: .FOCUSED);
     };
   };
 };

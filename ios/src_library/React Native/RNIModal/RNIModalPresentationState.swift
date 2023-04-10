@@ -18,10 +18,7 @@ public enum RNIModalPresentationState: String, CaseIterable {
   case PRESENTING_PROGRAMMATIC;
   case PRESENTING_UNKNOWN;
 
-  case PRESENTED_FOCUSING;
-  case PRESENTED_FOCUSED;
-  case PRESENTED_BLURRING;
-  case PRESENTED_BLURRED;
+  case PRESENTED;
   case PRESENTED_UNKNOWN;
   
   case DISMISSING_GESTURE;
@@ -44,11 +41,8 @@ public enum RNIModalPresentationState: String, CaseIterable {
       case .PRESENTING_UNKNOWN     :
         return 1;
 
-      case .PRESENTED_FOCUSING: fallthrough;
-      case .PRESENTED_FOCUSED : fallthrough;
-      case .PRESENTED_BLURRING: fallthrough;
-      case .PRESENTED_BLURRED : fallthrough;
-      case .PRESENTED_UNKNOWN :
+      case .PRESENTED        : fallthrough
+      case .PRESENTED_UNKNOWN:
         return 2;
       
       case .DISMISSING_GESTURE     : fallthrough;
@@ -97,10 +91,7 @@ public enum RNIModalPresentationState: String, CaseIterable {
   
   public var isPresented: Bool {
     switch self {
-      case .PRESENTED_FOCUSING,
-           .PRESENTED_FOCUSED,
-           .PRESENTED_BLURRING,
-           .PRESENTED_BLURRED,
+      case .PRESENTED,
            .PRESENTED_UNKNOWN:
         return true;
         
@@ -135,10 +126,6 @@ public enum RNIModalPresentationState: String, CaseIterable {
   public var isDismissed: Bool {
     self == .DISMISSED;
   };
-  
-  public var isInFocus: Bool {
-    self == .PRESENTED_FOCUSED;
-  };
 };
 
 public struct RNIModalPresentationStateMachine {
@@ -160,10 +147,6 @@ public struct RNIModalPresentationStateMachine {
   
   public var isPresented: Bool {
     self.state.isPresented
-  };
-  
-  public var isInFocus: Bool {
-    self.state.isInFocus
   };
   
   public var wasDismissViaGestureCancelled: Bool {

@@ -33,10 +33,9 @@ public protocol RNIModalState: AnyObject {
   
   var modalIndex: Int! { set get };
   
-  
-  var isModalInFocus: Bool { set get };
   var modalPresentationState: RNIModalPresentationStateMachine { set get };
   
+  var modalFocusState: RNIModalFocusStateMachine { set get };
 };
 
 /// Contains functions that are invoked to request modal-related actions.
