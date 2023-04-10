@@ -269,7 +269,7 @@ public class RNIModalManager {
   
   public var presentedModals: [any RNIModal] {
     self.modalInstances.compactMap {
-      $0.modalState.isPresented ? $0 : nil;
+      $0.modalPresentationState.isPresented ? $0 : nil;
     };
   };
   
@@ -355,7 +355,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
     
-    sender.modalState.set(state: .PRESENTING_UNKNOWN);
+    sender.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
     sender.onModalWillFocusNotification(sender: sender);
     
     modalInstances.forEach {
@@ -418,7 +418,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     #endif
         
     sender.isModalInFocus = true;
-    sender.modalState.set(state: .PRESENTED_FOCUSED);
+    sender.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
     
     sender.onModalDidFocusNotification(sender: sender);
 
@@ -485,7 +485,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     );
     #endif
     
-    sender.modalState.set(state: .DISMISSING_UNKNOWN);
+    sender.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
     sender.onModalWillBlurNotification(sender: sender);
     
     modalInstances.forEach {
@@ -548,7 +548,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     #endif
         
     sender.isModalInFocus = false;
-    sender.modalState.set(state: .DISMISSED);
+    sender.modalPresentationState.set(state: .DISMISSED);
     
     sender.onModalDidBlurNotification(sender: sender);
 

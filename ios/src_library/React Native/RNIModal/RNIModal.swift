@@ -33,9 +33,9 @@ public protocol RNIModalState: AnyObject {
   
   var modalIndex: Int! { set get };
   
-  var modalState: RNIModalPresentationStateMachine { set get };
   
   var isModalInFocus: Bool { set get };
+  var modalPresentationState: RNIModalPresentationStateMachine { set get };
   
 };
 

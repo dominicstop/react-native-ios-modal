@@ -46,7 +46,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
   // MARK: - Properties - RNIModalState
   // ----------------------------------
   
-  public lazy var modalState = RNIModalPresentationStateMachine(
+  public lazy var modalPresentationState = RNIModalPresentationStateMachine(
     onDismissWillCancel: { [weak self] in
       // no-op - TBA
     },
@@ -493,12 +493,13 @@ public class RNIModalView: UIView, RNIIdentifiable,
     self.presentingViewController = topMostPresentedVC;
     
     /// set specific "presenting" state
-    self.modalState.set(state: .PRESENTING_PROGRAMMATIC);
+    self.modalPresentationState.set(state: .PRESENTING_PROGRAMMATIC);
     
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
-            
+      
+      self.modalPresentationState.set(state: .PRESENTED);
       completion?(true, nil);
       
       #if DEBUG
@@ -575,7 +576,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
     self.enableSwipeGesture(false);
     
     /// set specific "dismissing" state
-    self.modalState.set(state: .DISMISSING_PROGRAMMATIC);
+    self.modalPresentationState.set(state: .DISMISSING_PROGRAMMATIC);
     
     presentedVC.dismiss(animated: true){
       completion?(true, nil);
@@ -662,7 +663,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///   * 4 - `viewDidAppear`
   ///
   public func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-    self.modalState.set(state: .DISMISSING_GESTURE);
+    self.modalPresentationState.set(state: .DISMISSING_GESTURE);
     
     #if DEBUG
     print(
@@ -735,7 +736,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   public func viewWillAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
-    self.modalState.set(state: .PRESENTING_UNKNOWN);
+    self.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillShow(sender: self);
@@ -743,12 +744,12 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
-    self.modalState.set(state: .PRESENTED_UNKNOWN);
+    self.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidShow(sender: self);
     
-    if !self.modalState.wasDismissViaGestureCancelled {
+    if !self.modalPresentationState.wasDismissViaGestureCancelled {
       self.onModalShow?(
         self.synthesizedBaseEventData.synthesizedDictionary
       );
@@ -757,12 +758,12 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   public func viewWillDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
-    self.modalState.set(state: .DISMISSING_UNKNOWN);
+    self.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillHide(sender: self);
     
-    if self.modalState.state.isDismissingViaGesture {
+    if self.modalPresentationState.state.isDismissingViaGesture {
       self.onModalWillDismiss?(
         self.synthesizedBaseEventData.synthesizedDictionary
       );
@@ -771,15 +772,16 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
   public func viewDidDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
-    self.modalState.set(state: .DISMISSED);
+    self.modalPresentationState.set(state: .DISMISSED);
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidHide(sender: self);
     
-    if self.modalState.statePrev.isDismissingViaGesture {
+    if self.modalPresentationState.statePrev.isDismissingViaGesture {
       self.onModalDidDismiss?(
         self.synthesizedBaseEventData.synthesizedDictionary
       );
+      
     } else {
       self.onModalDismiss?(
         self.synthesizedBaseEventData.synthesizedDictionary
