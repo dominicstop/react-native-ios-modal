@@ -75,7 +75,6 @@ public protocol RNIModalFocusNotifiable: AnyObject {
   func onModalWillBlurNotification(sender: any RNIModal);
   
   func onModalDidBlurNotification(sender: any RNIModal);
-  
 };
 
 /// Specifies that the "adoptee/delegate" that conforms to this protocol must
@@ -109,5 +108,4 @@ public protocol RNIModalPresentation: AnyObject {
   
   /// The "main" window for this instance
   var window: UIWindow? { get };
-
 };
