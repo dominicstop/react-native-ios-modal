@@ -8,8 +8,9 @@
 
 import Foundation
 
-public class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
-                           RNIModalState, RNIModalPresentation {
+public class RNIModalView: UIView, RNIIdentifiable,
+                           RNIModalPresentationNotifying, RNIModalState,
+                           RNIModalPresentation {
   
   public typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -30,10 +31,11 @@ public class RNIModalView: UIView, RNIIdentifiable, RNIModalFocusNotifying,
   var modalContentWrapper: RNIWrapperView?;
   public var modalVC: RNIModalViewController?;
   
-  // MARK: - Properties - RNIModalFocusNotifying
-  // -------------------------------------------
+  // MARK: - Properties - RNIModalPresentationNotifying
+  // --------------------------------------------------
   
-  public weak var modalFocusDelegate: RNIModalFocusNotifiable!;
+  public weak var modalPresentationNotificationDelegate:
+    RNIModalPresentationNotifiable!;
   
   // MARK: - Properties - RNIModalIdentity
   // -------------------------------------
@@ -673,7 +675,8 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
   
   public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-    self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
+    self.modalPresentationNotificationDelegate
+      .notifyOnModalDidHide(sender: self);
     
     #if DEBUG
     print(
@@ -734,14 +737,16 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingPresented else { return };
     self.modalState.set(state: .PRESENTING_UNKNOWN);
     
-    self.modalFocusDelegate.onModalWillFocusNotification(sender: self);
+    self.modalPresentationNotificationDelegate
+      .notifyOnModalWillShow(sender: self);
   };
   
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
     self.modalState.set(state: .PRESENTED_UNKNOWN);
     
-    self.modalFocusDelegate.onModalDidFocusNotification(sender: self);
+    self.modalPresentationNotificationDelegate
+      .notifyOnModalDidShow(sender: self);
     
     if !self.modalState.wasDismissViaGestureCancelled {
       self.onModalShow?(
@@ -754,7 +759,8 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingDismissed else { return };
     self.modalState.set(state: .DISMISSING_UNKNOWN);
     
-    self.modalFocusDelegate.onModalWillBlurNotification(sender: self);
+    self.modalPresentationNotificationDelegate
+      .notifyOnModalWillHide(sender: self);
     
     if self.modalState.state.isDismissingViaGesture {
       self.onModalWillDismiss?(
@@ -767,7 +773,8 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingDismissed else { return };
     self.modalState.set(state: .DISMISSED);
     
-    self.modalFocusDelegate.onModalDidBlurNotification(sender: self);
+    self.modalPresentationNotificationDelegate
+      .notifyOnModalDidHide(sender: self);
     
     if self.modalState.statePrev.isDismissingViaGesture {
       self.onModalDidDismiss?(

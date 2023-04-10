@@ -282,7 +282,7 @@ public class RNIModalManager {
     
     modal.isModalInFocus = false;
     
-    modal.modalFocusDelegate = self;
+    modal.modalPresentationNotificationDelegate = self;
     self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
   
@@ -293,19 +293,19 @@ public class RNIModalManager {
   };
 };
 
-// MARK: RNIModalFocusNotifiable
-// -----------------------------
+// MARK: RNIModalPresentationNotifiable
+// ------------------------------------
 
 /// The modal instances will notify the manager when they're about to show/hide
 /// a modal.
 ///
-extension RNIModalManager: RNIModalFocusNotifiable {
+extension RNIModalManager: RNIModalPresentationNotifiable {
   
-  public func onModalWillFocusNotification(sender: any RNIModal) {
+  public func notifyOnModalWillShow(sender: any RNIModal) {
     guard let senderWindow = sender.window else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalWillFocusNotification"
+          "Error - RNIModalManager.notifyOnModalWillShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - Unable to send event because sender.window is nil"
       );
@@ -319,7 +319,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       #if DEBUG
       let nextModalToFocus = windowData.nextModalToFocus!;
       print(
-          "Error - RNIModalManager.onModalWillFocusNotification"
+          "Error - RNIModalManager.notifyOnModalWillShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToFocus.modalNativeID: \(nextModalToFocus.modalNativeID)"
         + " - possible multiple invokation"
@@ -332,7 +332,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     #if DEBUG
     if windowData.nextModalToFocus != nil {
       print(
-          "Warning - RNIModalManager.onModalWillFocusNotification"
+          "Warning - RNIModalManager.notifyOnModalWillShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToFocus is not nil"
         + " - a different modal is about to be focused"
@@ -345,7 +345,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     #if DEBUG
     print(
-        "Log - RNIModalManager.onModalWillFocusNotification"
+        "Log - RNIModalManager.notifyOnModalWillShow"
       + " - arg sender.modalNativeID: \(sender.modalNativeID)"
       + " - prevModalIndex: \(windowData.modalIndexPrev)"
       + " - windowData.modalIndexNext: \(windowData.modalIndexNext_)"
@@ -367,11 +367,11 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalDidFocusNotification(sender: any RNIModal) {
+  public func notifyOnModalDidShow(sender: any RNIModal) {
     guard let senderWindow = sender.window else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalDidFocusNotification"
+          "Error - RNIModalManager.notifyOnModalDidShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - Unable to send event because sender.window is nil"
       );
@@ -384,10 +384,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     guard let nextModalToFocus = windowData.nextModalToFocus else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalDidFocusNotification"
+          "Error - RNIModalManager.notifyOnModalDidShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToFocus: nil"
-        + " - possible onModalWillFocusNotification not invoked for sender"
+        + " - possible notifyOnModalWillShow not invoked for sender"
       );
       #endif
       return;
@@ -396,7 +396,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     #if DEBUG
     if nextModalToFocus !== sender {
       print(
-          "Warning - RNIModalManager.onModalDidFocusNotification"
+          "Warning - RNIModalManager.notifyOnModalDidShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToFocus.modalNativeID: \(nextModalToFocus.modalNativeID)"
         + " - nextModalToFocus !== sender"
@@ -410,7 +410,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     #if DEBUG
     print(
-        "Log - RNIModalManager.onModalDidFocusNotification"
+        "Log - RNIModalManager.notifyOnModalDidShow"
       + " - arg sender.modalNativeID: \(sender.modalNativeID)"
       + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
       + " - sender.modalIndex: \(sender.modalIndex!)"
@@ -432,11 +432,11 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalWillBlurNotification(sender: any RNIModal) {
+  public func notifyOnModalWillHide(sender: any RNIModal) {
     guard let senderWindow = sender.window else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalWillBlurNotification"
+          "Error - RNIModalManager.notifyOnModalWillHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - Unable to send event because sender.window is nil"
       );
@@ -450,7 +450,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
       #if DEBUG
       let nextModalToBlur = windowData.nextModalToBlur!;
       print(
-          "Error - RNIModalManager.onModalWillBlurNotification"
+          "Error - RNIModalManager.notifyOnModalWillHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToBlur.modalNativeID: \(nextModalToBlur.modalNativeID)"
         + " - possible multiple invokation"
@@ -463,7 +463,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     #if DEBUG
     if windowData.nextModalToBlur != nil {
       print(
-          "Warning - RNIModalManager.onModalWillBlurNotification"
+          "Warning - RNIModalManager.notifyOnModalWillHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToBlur is not nil"
         + " - a different modal is about to blur"
@@ -476,7 +476,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     #if DEBUG
     print(
-        "Log - RNIModalManager.onModalWillBlurNotification"
+        "Log - RNIModalManager.notifyOnModalWillHide"
       + " - arg sender.modalNativeID: \(sender.modalNativeID)"
       + " - prevModalIndex: \(windowData.modalIndexPrev)"
       + " - windowData.modalIndexNext: \(windowData.modalIndexNext_)"
@@ -497,11 +497,11 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     };
   };
   
-  public func onModalDidBlurNotification(sender: any RNIModal) {
+  public func notifyOnModalDidHide(sender: any RNIModal) {
     guard let senderWindow = sender.window else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalDidBlurNotification"
+          "Error - RNIModalManager.notifyOnModalDidHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - Unable to send event because sender.window is nil"
       );
@@ -514,10 +514,10 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     guard let nextModalToBlur = windowData.nextModalToBlur else {
       #if DEBUG
       print(
-          "Error - RNIModalManager.onModalDidBlurNotification"
+          "Error - RNIModalManager.notifyOnModalDidHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToBlur: nil"
-        + " - possible onModalWillBlurNotification not invoked for sender"
+        + " - possible notifyOnModalWillHide not invoked for sender"
       );
       #endif
       return;
@@ -526,7 +526,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     #if DEBUG
     if nextModalToBlur !== sender {
       print(
-          "Warning - RNIModalManager.onModalDidBlurNotification"
+          "Warning - RNIModalManager.notifyOnModalDidHide"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
         + " - nextModalToBlur.modalNativeID: \(nextModalToBlur.modalNativeID)"
         + " - nextModalToBlur !== sender"
@@ -540,7 +540,7 @@ extension RNIModalManager: RNIModalFocusNotifiable {
     
     #if DEBUG
     print(
-        "Log - RNIModalManager.onModalDidBlurNotification"
+        "Log - RNIModalManager.notifyOnModalDidHide"
       + " - arg sender.modalNativeID: \(sender.modalNativeID)"
       + " - sender.modalIndexPrev: \(sender.modalIndexPrev!)"
       + " - sender.modalIndex: \(sender.modalIndex!)"

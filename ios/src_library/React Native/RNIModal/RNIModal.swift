@@ -15,7 +15,7 @@ public typealias RNIModal =
   & RNIModalState
   & RNIModalRequestable
   & RNIModalFocusNotifiable
-  & RNIModalFocusNotifying
+  & RNIModalPresentationNotifying
   & RNIModalPresentation;
 
 /// Contains modal-related properties for keeping track of the state of the
@@ -78,17 +78,17 @@ public protocol RNIModalFocusNotifiable: AnyObject {
 };
 
 /// Specifies that the "adoptee/delegate" that conforms to this protocol must
-/// notify a delegate of modal "focus/blur"-related events
+/// notify a delegate of modal presentation-related events
 ///
-public protocol RNIModalFocusNotifying: AnyObject {
+public protocol RNIModalPresentationNotifying: AnyObject {
   
   /// Notify the "shared modal manager" if the current modal instance is going
   /// to be shown or hidden.
   ///
   /// That focus notification will then be relayed to the other modal instances.
   ///
-  var modalFocusDelegate: RNIModalFocusNotifiable! { get set };
-
+  var modalPresentationNotificationDelegate:
+    RNIModalPresentationNotifiable! { get set };
 };
 
 /// Properties related to modal presentation.
