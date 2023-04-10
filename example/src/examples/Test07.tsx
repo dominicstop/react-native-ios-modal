@@ -1,7 +1,7 @@
 // Note: Created based on `example/src_old/ModalViewTest8.js`
 
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import type { ExampleProps } from './SharedExampleTypes';
 
@@ -33,6 +33,33 @@ const ModalWrapper = React.forwardRef<ModalWrapperHandle, ModalWrapperProps>(
       },
     }));
 
+    const ModalContents = (
+      <React.Fragment>
+        <CardBody style={styles.modalCard}>
+          <CardTitle
+            title={`Modal Info #${props.index + 1}`}
+            subtitle={'Show return value of `getModalInfo` method'}
+          />
+          <ObjectPropertyDisplay object={modalInfo} />
+        </CardBody>
+        <CardButton
+          title={'🌼 Get Modal Info'}
+          onPress={async () => {
+            const results = await modalRef.current.getModalInfo();
+            setModalInfo(results);
+          }}
+        />
+        {props.onPressOpenModal && (
+          <CardButton
+            title={'⭐️ Open Next Modal'}
+            onPress={() => {
+              props.onPressOpenModal?.();
+            }}
+          />
+        )}
+      </React.Fragment>
+    );
+
     return (
       <ModalView
         ref={modalRef}
@@ -41,30 +68,15 @@ const ModalWrapper = React.forwardRef<ModalWrapperHandle, ModalWrapperProps>(
           setModalInfo(null);
         }}
       >
-        <React.Fragment>
-          <CardBody style={styles.modalCard}>
-            <CardTitle
-              title={`Modal Info #${props.index + 1}`}
-              subtitle={'Show return value of `getModalInfo` method'}
-            />
-            <ObjectPropertyDisplay object={modalInfo} />
-          </CardBody>
-          <CardButton
-            title={'🌼 Get Modal Info'}
-            onPress={async () => {
-              const results = await modalRef.current.getModalInfo();
-              setModalInfo(results);
-            }}
-          />
-          {props.onPressOpenModal && (
-            <CardButton
-              title={'⭐️ Open Next Modal'}
-              onPress={() => {
-                props.onPressOpenModal?.();
-              }}
-            />
+        <View style={styles.modalWrapper}>
+          {modalInfo == null ? (
+            <View style={styles.modalWrapperEmpty}>{ModalContents}</View>
+          ) : (
+            <ScrollView contentContainerStyle={styles.modalScrollView}>
+              {ModalContents}
+            </ScrollView>
           )}
-        </React.Fragment>
+        </View>
       </ModalView>
     );
   }
@@ -111,8 +123,19 @@ export function Test07(props: ExampleProps) {
 export const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
+  },
+  modalWrapper: {
+    flex: 1,
+  },
+  modalWrapperEmpty: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalScrollView: {
+    alignItems: 'center',
+    marginTop: 20,
+    paddingBottom: 100,
   },
   modalCard: {
     alignSelf: 'stretch',
