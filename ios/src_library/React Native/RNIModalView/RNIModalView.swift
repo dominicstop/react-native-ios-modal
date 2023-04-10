@@ -579,6 +579,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
     self.modalPresentationState.set(state: .DISMISSING_PROGRAMMATIC);
     
     presentedVC.dismiss(animated: true){
+      self.modalPresentationState.set(state: .DISMISSED);
       completion?(true, nil);
       
       #if DEBUG
