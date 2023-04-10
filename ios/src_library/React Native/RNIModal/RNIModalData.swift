@@ -16,11 +16,11 @@ public struct RNIModalData: RNIDictionarySynthesizable {
   public let isModalPresented: Bool;
   public let isModalInFocus: Bool;
 
-  public let synthesizedIsModalInFocus: Bool;
-  public let synthesizedIsModalPresented: Bool;
+  public let computedIsModalInFocus: Bool;
+  public let computedIsModalPresented: Bool;
   
-  public let synthesizedModalIndex: Int;
-  public let synthesizedViewControllerIndex: Int;
+  public let computedModalIndex: Int;
+  public let computedViewControllerIndex: Int;
   
   public let synthesizedWindowID: String?;
 };

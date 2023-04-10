@@ -15,8 +15,13 @@ extension RNIModalState where Self: RNIIdentifiable {
 
 extension RNIModalState where Self: RNIModalPresentation {
   
+  internal var synthesizedWindowMapData: RNIWindowMapData? {
+    guard let window = self.window else { return nil };
+    return RNIModalWindowMapShared.get(forWindow: window);
+  };
+  
   /// Programmatically check if this instance is presented
-  public var synthesizedIsModalPresented: Bool {
+  public var computedIsModalPresented: Bool {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -26,12 +31,12 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   /// Programmatically check if this instance is in focus
-  public var synthesizedIsModalInFocus: Bool {
+  public var computedIsModalInFocus: Bool {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
     guard let topmostVC = listPresentedVC.last
-    else { return self.isModalInFocus };
+    else { return self.synthesizedIsModalInFocus };
     
     return topmostVC === self.modalViewController;
   };
@@ -41,7 +46,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// * This is based on the view controller hierarchy
   /// * So parent/child view controller that aren't modals are also counted
   ///
-  public var synthesizedViewControllerIndex: Int {
+  public var computedViewControllerIndex: Int {
     let listPresentedVC =
       RNIModalManager.getPresentedViewControllers(for: self.window);
     
@@ -54,7 +59,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   /// Programmatically get the "modal index"
-  public var synthesizedModalIndex: Int {
+  public var computedModalIndex: Int {
     guard let window = self.window,
           let modalVC = self.modalViewController
     else { return -1 };
@@ -65,16 +70,15 @@ extension RNIModalState where Self: RNIModalPresentation {
     );
   };
   
-  public var synthesizedCurrentModalIndex: Int {
+  public var currentModalIndex: Int {
+    self.synthesizedWindowMapData?.modalIndexCurrent ?? -1;
+  };
+  
+  public var computedCurrentModalIndex: Int {
     RNIModalManager.computeModalIndex(forWindow: self.window);
   };
   
-  internal var synthesizedWindowMapData: RNIWindowMapData? {
-    guard let window = self.window else { return nil };
-    return RNIModalWindowMapShared.get(forWindow: window);
-  };
-  
-  public var isModalInFocus: Bool {
+  public var synthesizedIsModalInFocus: Bool {
     self.modalPresentationState.isPresented &&
       self.modalFocusState.state.isFocused;
   };
@@ -86,13 +90,13 @@ extension RNIModalState where Self: RNIModal {
     return RNIModalData(
       modalNativeID: self.modalNativeID,
       modalIndex: self.modalIndex,
-      currentModalIndex: self.synthesizedCurrentModalIndex,
+      currentModalIndex: self.currentModalIndex,
       isModalPresented: self.modalPresentationState.isPresented,
-      isModalInFocus: self.isModalInFocus,
-      synthesizedIsModalInFocus: self.synthesizedIsModalInFocus,
-      synthesizedIsModalPresented: self.synthesizedIsModalPresented,
-      synthesizedModalIndex: self.synthesizedModalIndex,
-      synthesizedViewControllerIndex: self.synthesizedViewControllerIndex,
+      isModalInFocus: self.synthesizedIsModalInFocus,
+      computedIsModalInFocus: self.computedIsModalInFocus,
+      computedIsModalPresented: self.computedIsModalPresented,
+      computedModalIndex: self.computedModalIndex,
+      computedViewControllerIndex: self.computedViewControllerIndex,
       synthesizedWindowID: self.window?.synthesizedStringID
     );
   };

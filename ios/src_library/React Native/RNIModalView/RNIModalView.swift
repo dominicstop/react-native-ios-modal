@@ -411,7 +411,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
       return;
     };
     
-    guard !self.synthesizedIsModalPresented else {
+    guard !self.computedIsModalPresented else {
       #if DEBUG
       print(
           "Error - RNIModalView.presentModal"
@@ -514,7 +514,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
   };
   
   public func dismissModal(completion: CompletionHandler? = nil) {
-    guard self.synthesizedIsModalPresented else {
+    guard self.computedIsModalPresented else {
       #if DEBUG
       print(
           "Error - RNIModalView.dismissModal"
@@ -539,7 +539,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
       return;
     };
     
-    let isModalInFocus = self.synthesizedIsModalInFocus;
+    let isModalInFocus = self.computedIsModalInFocus;
     
     let shouldDismiss = isModalInFocus
       ? true
@@ -552,7 +552,7 @@ public class RNIModalView: UIView, RNIIdentifiable,
         + " - self.modalNativeID: \(self.modalNativeID)"
         + " - Guard check failed: Unable to dismiss"
         + " - shouldDismiss: \(shouldDismiss)"
-        + " - isModalInFocus: \(isModalInFocus)"
+        + " - isModalInFocus: \(computedIsModalInFocus)"
       );
       #endif
       completion?(false, .modalDismissFailedNotInFocus);
