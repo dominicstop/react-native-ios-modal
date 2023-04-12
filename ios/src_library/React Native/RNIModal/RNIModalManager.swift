@@ -286,6 +286,17 @@ public class RNIModalManager {
     self.modalInstanceDict[modal.modalNativeID] = modal;
   };
   
+  public func isRegistered(modal: any RNIModal) -> Bool {
+    self.modalInstances.contains {
+      $0.modalNativeID == modal.modalNativeID;
+    };
+  };
+  
+  public func isRegistered(viewController: UIViewController) -> Bool {
+    self.modalInstances.contains {
+      $0.presentingViewController === viewController
+    };
+  };
   public func getModalInstances(
     forWindow window: UIWindow
   ) -> [any RNIModal] {
