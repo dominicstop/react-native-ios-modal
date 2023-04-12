@@ -392,6 +392,16 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
             $0.modalFocusState.state.isFocusedOrFocusing
       else { return };
       
+      #if DEBUG
+      print(
+          "Log - RNIModalManager.notifyOnModalWillShow"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - notify BLURRING"
+        + " - for modal.modalNativeID:\($0.modalNativeID)"
+        + " - for modal.modalIndex:\($0.modalIndex ?? -1)"
+      );
+      #endif
+      
       $0.modalFocusState.set(state: .BLURRING);
       $0.onModalWillBlurNotification(sender: sender);
     };
@@ -460,6 +470,16 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
             $0.modalFocusState.state.isBlurring
       else { return };
       
+      #if DEBUG
+      print(
+          "Log - RNIModalManager.notifyOnModalDidShow"
+        + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+        + " - notify BLURRED"
+        + " - for modal.modalNativeID:\($0.modalNativeID)"
+        + " - for modal.modalIndex:\($0.modalIndex ?? -1)"
+      );
+      #endif
+      
       $0.modalFocusState.set(state: .BLURRED);
       $0.onModalDidBlurNotification(sender: sender);
     };
@@ -527,6 +547,16 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     guard let modalToFocus = presentedModalList.secondToLast else { return };
     
+    #if DEBUG
+    print(
+        "Log - RNIModalManager.notifyOnModalWillHide"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - notify FOCUSING"
+      + " - for modalToFocus.modalNativeID:\(modalToFocus.modalNativeID)"
+      + " - for modalToFocus.modalIndex:\(modalToFocus.modalIndex ?? -1)"
+    );
+    #endif
+    
     modalToFocus.modalFocusState.set(state: .FOCUSING);
     modalToFocus.onModalWillFocusNotification(sender: sender);
     
@@ -589,8 +619,18 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     presentedModalList.forEach {
       guard $0 !== sender,
-            $0.modalFocusState.state.isTransitioning
+            $0.modalFocusState.state.isFocusing
       else { return };
+      
+    #if DEBUG
+    print(
+        "Log - RNIModalManager.notifyOnModalDidHide"
+      + " - arg sender.modalNativeID: \(sender.modalNativeID)"
+      + " - notify FOCUSED"
+      + " - for modal.modalNativeID:\($0.modalNativeID)"
+      + " - for modal.modalIndex:\($0.modalIndex ?? -1)"
+    );
+    #endif
       
       $0.modalFocusState.set(state: .FOCUSED);
       $0.onModalDidFocusNotification(sender: sender);
