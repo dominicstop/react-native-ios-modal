@@ -80,6 +80,15 @@ extension UIViewController {
     );
     #endif
     
+    let presentingModal = RNIModalManagerShared.getModalInstance(
+      forPresentingViewController: self
+    ) as? RNIModalViewControllerWrapper;
+    
+    if let presentingModal = presentingModal {
+      presentingModal.modalPresentationNotificationDelegate
+        .notifyOnModalWillHide(sender: presentingModal);
+    };
+    
     // call original impl.
     self._swizzled_dismiss(animated: flag) {
       #if DEBUG
@@ -89,6 +98,12 @@ extension UIViewController {
         + " - completion invoked"
       );
       #endif
+      
+      if let presentingModal = presentingModal {
+        presentingModal.modalPresentationNotificationDelegate
+          .notifyOnModalDidHide(sender: presentingModal);
+      };
+      
       completion?();
     };
   };
