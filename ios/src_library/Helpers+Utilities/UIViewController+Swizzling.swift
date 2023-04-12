@@ -11,6 +11,62 @@ extension UIViewController {
   
   static var isSwizzled = false;
   
+  fileprivate var modalWrapper: RNIModalViewControllerWrapper? {
+    RNIModalManagerShared.getModalInstance(
+      forPresentingViewController: self
+    ) as? RNIModalViewControllerWrapper;
+  };
+  
+  @discardableResult
+  func registerIfNeeded(
+    viewControllerToPresent: UIViewController? = nil
+  ) -> RNIModalViewControllerWrapper? {
+    guard !(self is RNIModalViewController),
+          !RNIModalManagerShared.isRegistered(viewController: self)
+    else { return nil };
+    
+    let modalWrapper = self.modalWrapper ?? RNIModalViewControllerWrapper();
+    
+    modalWrapper.presentingViewController = self;
+    modalWrapper.modalViewController = viewControllerToPresent;
+    
+    return modalWrapper;
+  };
+  
+  func getPresentedModal(
+    viewControllerToPresent: UIViewController? = nil
+  ) -> (any RNIModal)? {
+    if let presentedModalVC = viewControllerToPresent as? RNIModalViewController {
+      return presentedModalVC.modalViewRef;
+      
+    } else if let presentedVC = self.presentedViewController,
+              let presentedModalVC = presentedVC as? RNIModalViewController {
+      return presentedModalVC.modalViewRef;
+      
+    } else if let presentingModalVC = self as? RNIModalViewController,
+              let presentingModal = presentingModalVC.modalViewRef,
+              let presentedModalVC = presentingModal.modalVC {
+      return presentedModalVC.modalViewRef;
+      
+    } else if let viewControllerToPresent = viewControllerToPresent,
+              let presentedModal =
+                RNIModalManagerShared.getModalInstance(
+                  forPresentedViewController: viewControllerToPresent
+                ) {
+      return presentedModal;
+      
+    } else if let presentingModalWrapper = self.modalWrapper,
+              let presentingModalVC = presentingModalWrapper.modalViewController,
+              let presentedModal =
+                RNIModalManagerShared.getModalInstance(
+                  forPresentedViewController: presentingModalVC
+                ) {
+      return presentedModal;
+    };
+    
+    return nil;
+  };
+  
   @objc fileprivate func _swizzled_present(
     _ viewControllerToPresent: UIViewController,
     animated flag: Bool,
@@ -25,27 +81,14 @@ extension UIViewController {
     );
     #endif
     
-    let presentingModal: (any RNIModal)? = {
-      if let modalVC = self as? RNIModalViewController {
-        return modalVC.modalViewRef
-      };
-      
-      let matchingModalWrapper = RNIModalManagerShared.getModalInstance(
-        forPresentingViewController: viewControllerToPresent
-      ) as? RNIModalViewControllerWrapper;
-      
-      let modalWrapper =
-        matchingModalWrapper ?? RNIModalViewControllerWrapper();
-      
-      modalWrapper.presentingViewController = self;
-      modalWrapper.modalViewController = viewControllerToPresent;
-      
-      return modalWrapper;
-    }();
+    self.registerIfNeeded(viewControllerToPresent: viewControllerToPresent);
     
-    if let presentingModal = presentingModal {
-      presentingModal.modalPresentationNotificationDelegate
-        .notifyOnModalWillShow(sender: presentingModal);
+    let presentedModal =
+      self.getPresentedModal(viewControllerToPresent: viewControllerToPresent);
+    
+    if let presentedModal = presentedModal {
+      presentedModal.modalPresentationNotificationDelegate
+        .notifyOnModalWillShow(sender: presentedModal);
     };
     
     // call original impl.
@@ -58,9 +101,9 @@ extension UIViewController {
       );
       #endif
       
-      if let presentingModal = presentingModal {
-        presentingModal.modalPresentationNotificationDelegate
-          .notifyOnModalDidShow(sender: presentingModal);
+      if let presentedModal = presentedModal {
+        presentedModal.modalPresentationNotificationDelegate
+          .notifyOnModalDidShow(sender: presentedModal);
       };
       
       completion?();
@@ -80,13 +123,11 @@ extension UIViewController {
     );
     #endif
     
-    let presentingModal = RNIModalManagerShared.getModalInstance(
-      forPresentingViewController: self
-    ) as? RNIModalViewControllerWrapper;
+    let presentedModal = self.getPresentedModal();
     
-    if let presentingModal = presentingModal {
-      presentingModal.modalPresentationNotificationDelegate
-        .notifyOnModalWillHide(sender: presentingModal);
+    if let presentedModal = presentedModal {
+      presentedModal.modalPresentationNotificationDelegate
+        .notifyOnModalWillHide(sender: presentedModal);
     };
     
     // call original impl.
@@ -99,9 +140,9 @@ extension UIViewController {
       );
       #endif
       
-      if let presentingModal = presentingModal {
-        presentingModal.modalPresentationNotificationDelegate
-          .notifyOnModalDidHide(sender: presentingModal);
+      if let presentedModal = presentedModal {
+        presentedModal.modalPresentationNotificationDelegate
+          .notifyOnModalDidHide(sender: presentedModal);
       };
       
       completion?();
