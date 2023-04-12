@@ -25,6 +25,10 @@ class RNIModalViewManager: RCTViewManager {
   override init() {
     super.init();
     RNIModalViewManager.sharedInstance = self;
+    
+    if !UIViewController.isSwizzled {
+      UIViewController.swizzleMethods();
+    };
   };
   
   @objc override func constantsToExport() -> [AnyHashable : Any]! {
