@@ -56,7 +56,7 @@ public final class RNIObjectIdentifier {
 public protocol RNIIdentifiable:
   AnyObject, RNIObjectMetadata where T == RNIObjectIdentifier {
   
-  static var synthesizedIdPrefix: String { set get };
+  static var synthesizedIdPrefix: String { get };
   
   var synthesizedID: Int { get };
   
