@@ -254,7 +254,7 @@ public class RNIModalManager {
   // ------------------
   
   private(set) public var modalInstanceDict =
-    RNIWeakDictionary<UUID, any RNIModal>();
+    RNIWeakDictionary<String, any RNIModal>();
   
   private(set) public var windowToCurrentModalIndexMap:
     Dictionary<String, Int> = [:];
@@ -283,7 +283,7 @@ public class RNIModalManager {
     
     modal.modalPresentationNotificationDelegate = self;
     
-    self.modalInstanceDict[modal.synthesizedUUID] = modal;
+    self.modalInstanceDict[modal.modalNativeID] = modal;
   };
   
   public func getModalInstances(
