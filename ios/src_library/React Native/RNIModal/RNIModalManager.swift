@@ -286,7 +286,10 @@ public class RNIModalManager {
     self.modalInstanceDict[modal.synthesizedUUID] = modal;
   };
   
-  public func getModalInstances(forWindow window: UIWindow) -> [any RNIModal] {
+  public func getModalInstances(
+    forWindow window: UIWindow
+  ) -> [any RNIModal] {
+    
     return self.modalInstances.filter {
       $0.window === window
     };

@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class RNIModalView: UIView, RNIIdentifiable,
-                           RNIModalPresentationNotifying, RNIModalState,
-                           RNIModalPresentation {
+public class RNIModalView:
+  UIView, RNIIdentifiable, RNIModalPresentationNotifying, RNIModalState,
+  RNIModalPresentation {
   
   public typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
   
@@ -37,14 +37,11 @@ public class RNIModalView: UIView, RNIIdentifiable,
   public weak var modalPresentationNotificationDelegate:
     RNIModalPresentationNotifiable!;
   
-  // MARK: - Properties - RNIModalIdentity
-  // -------------------------------------
+  // MARK: - Properties - RNIModalState
+  // ----------------------------------
   
   public var modalIndex: Int!;
   public var modalIndexPrev: Int!;
-  
-  // MARK: - Properties - RNIModalState
-  // ----------------------------------
   
   public lazy var modalPresentationState = RNIModalPresentationStateMachine(
     onDismissWillCancel: { [weak self] in
