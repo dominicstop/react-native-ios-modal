@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension UIViewController {
   
   static var isSwizzled = false;
@@ -26,6 +25,29 @@ extension UIViewController {
     );
     #endif
     
+    let presentingModal: (any RNIModal)? = {
+      if let modalVC = self as? RNIModalViewController {
+        return modalVC.modalViewRef
+      };
+      
+      let matchingModalWrapper = RNIModalManagerShared.getModalInstance(
+        forPresentingViewController: viewControllerToPresent
+      ) as? RNIModalViewControllerWrapper;
+      
+      let modalWrapper =
+        matchingModalWrapper ?? RNIModalViewControllerWrapper();
+      
+      modalWrapper.presentingViewController = self;
+      modalWrapper.modalViewController = viewControllerToPresent;
+      
+      return modalWrapper;
+    }();
+    
+    if let presentingModal = presentingModal {
+      presentingModal.modalPresentationNotificationDelegate
+        .notifyOnModalWillShow(sender: presentingModal);
+    };
+    
     // call original impl.
     self._swizzled_present(viewControllerToPresent, animated: flag) {
       #if DEBUG
@@ -35,6 +57,11 @@ extension UIViewController {
         + " - completion invoked"
       );
       #endif
+      
+      if let presentingModal = presentingModal {
+        presentingModal.modalPresentationNotificationDelegate
+          .notifyOnModalDidShow(sender: presentingModal);
+      };
       
       completion?();
     };
