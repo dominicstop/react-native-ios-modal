@@ -306,6 +306,19 @@ public class RNIModalManager {
     };
   };
   
+  public func getModalInstance(
+    forPresentedViewController viewController: UIViewController
+  ) -> (any RNIModal)? {
+    let presentingModal = self.modalInstances.first {
+      $0.modalViewController === viewController;
+    };
+    
+    guard let presentingVC = presentingModal?.modalViewController
+    else { return nil };
+    
+    return self.getModalInstance(forPresentingViewController: presentingVC);
+  };
+  
   public func getModalInstances(
     forWindow window: UIWindow
   ) -> [any RNIModal] {
