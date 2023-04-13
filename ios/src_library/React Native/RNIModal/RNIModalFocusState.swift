@@ -61,6 +61,9 @@ public struct RNIModalFocusStateMachine {
   private(set) public var state: RNIModalFocusState = .INITIAL;
   private(set) public var statePrev: RNIModalFocusState = .INITIAL;
   
+  public var wasBlurCancelled: Bool = false;
+  public var wasFocusCancelled: Bool = false;
+  
   // MARK: - Functions
   // ------------------
   
@@ -88,6 +91,35 @@ public struct RNIModalFocusStateMachine {
     } else {
       self.state = nextState;
       self.statePrev = prevState;
+    };
+    
+    if prevState.isBlurring && nextState.isFocusing {
+      self.wasBlurCancelled = true;
+      
+    } else if prevState.isFocusing && nextState.isBlurring {
+      self.wasFocusCancelled = true;
+    };
+    
+    #if DEBUG
+    print(
+        "Log - RNIModalFocusState.set"
+      + " - prevState: \(prevState)"
+      + " - nextState: \(nextState)"
+      + " - self.wasBlurCancelled: \(self.wasBlurCancelled)"
+      + " - self.wasFocusCancelled: \(self.wasFocusCancelled)"
+    );
+    #endif
+    
+    self.resetIfNeeded();
+  };
+  
+  mutating func resetIfNeeded(){
+    if self.state.isBlurred {
+      self.wasBlurCancelled = false;
+    };
+    
+    if self.state.isFocused {
+      self.wasFocusCancelled = false;
     };
   };
 };
