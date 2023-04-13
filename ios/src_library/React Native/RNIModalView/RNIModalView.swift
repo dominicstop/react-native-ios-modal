@@ -747,7 +747,7 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidShow(sender: self);
     
-    if !self.modalPresentationState.wasDismissViaGestureCancelled {
+    if !self.modalPresentationState.wasCancelledDismissViaGesture {
       self.onModalShow?(
         self.synthesizedBaseEventData.synthesizedJSDictionary
       );

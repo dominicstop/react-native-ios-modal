@@ -142,6 +142,11 @@ public struct RNIModalPresentationStateMachine {
   public var onDismissWillCancel: (() -> Void)?;
   public var onDismissDidCancel: (() -> Void)?;
   
+  // MARK: - Properties
+  // ------------------
+  
+  public var wasCancelledDismissViaGesture: Bool = false;
+  
   // MARK: - Computed Properties
   // ---------------------------
   
@@ -149,12 +154,16 @@ public struct RNIModalPresentationStateMachine {
     self.state.isPresented
   };
   
-  public var wasDismissViaGestureCancelled: Bool {
-    self.statePrev.isDismissViaGestureCancelling
-  };
-  
   // MARK: - Functions
   // -----------------
+  
+  init(
+    onDismissWillCancel: ( () -> Void)? = nil,
+    onDismissDidCancel: ( () -> Void)? = nil
+  ) {
+    self.onDismissWillCancel = onDismissWillCancel;
+    self.onDismissDidCancel = onDismissDidCancel;
+  }
   
   public mutating func set(state nextState: RNIModalPresentationState){
     let prevState = self.state;
@@ -191,6 +200,7 @@ public struct RNIModalPresentationStateMachine {
     self.statePrev = prevState;
     
     if prevState.isDismissingViaGesture && nextState.isPresenting {
+      self.wasCancelledDismissViaGesture = true;
       self.state = .DISMISS_GESTURE_CANCELLING;
       self.onDismissWillCancel?();
       
@@ -200,6 +210,24 @@ public struct RNIModalPresentationStateMachine {
       
     } else  {
       self.state = nextState;
+    };
+    
+    #if DEBUG
+    print(
+        "Log - RNIModalPresentationStateMachine.set"
+      + " - statePrev: \(self.statePrev)"
+      + " - nextState: \(self.state)"
+      + " - wasCancelledDismissViaGesture: \(wasCancelledDismissViaGesture)"
+    );
+    #endif
+    
+    self.resetIfNeeded();
+  };
+  
+  mutating func resetIfNeeded(){
+    if self.state == .DISMISSED {
+      // reset
+      self.wasCancelledDismissViaGesture = false;
     };
   };
 };
