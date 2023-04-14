@@ -7,26 +7,70 @@
 
 import Foundation
 
+
+fileprivate class RNIModalWrapperMap {
+  static let instanceMap = NSMapTable<
+    UIViewController,
+    RNIModalViewControllerWrapper
+  >(
+    keyOptions: .weakMemory,
+    valueOptions: .weakMemory
+  );
+  
+  static func get(
+    forViewController viewController: UIViewController
+  ) -> RNIModalViewControllerWrapper? {
+    
+    Self.instanceMap.object(forKey: viewController);
+  };
+  
+  static func set(
+    forViewController viewController: UIViewController,
+    _ modalWrapper: RNIModalViewControllerWrapper
+  ){
+    
+    Self.instanceMap.setObject(modalWrapper, forKey: viewController);
+  };
+  
+  static func isRegistered(
+    forViewController viewController: UIViewController
+  ) -> Bool {
+    Self.get(forViewController: viewController) != nil;
+  };
+};
+
+
 extension UIViewController {
   
   static var isSwizzled = false;
   
   fileprivate var modalWrapper: RNIModalViewControllerWrapper? {
-    RNIModalManagerShared.getModalInstance(
-      forPresentingViewController: self
-    ) as? RNIModalViewControllerWrapper;
+    RNIModalWrapperMap.get(forViewController: self);
   };
   
   @discardableResult
-  func registerIfNeeded(
-    viewControllerToPresent: UIViewController? = nil
+  fileprivate func registerIfNeeded(
+    viewControllerToPresent: UIViewController
   ) -> RNIModalViewControllerWrapper? {
-    guard !(self is RNIModalViewController),
-          !RNIModalManagerShared.isRegistered(viewController: self)
-    else { return nil };
+    guard !(self is RNIModalViewController) else { return nil };
     
-    let modalWrapper = self.modalWrapper ?? RNIModalViewControllerWrapper();
-    
+    let modalWrapper: RNIModalViewControllerWrapper = {
+      guard let modalWrapper = RNIModalWrapperMap.get(
+        forViewController: viewControllerToPresent
+      ) else {
+        let newModalWrapper = RNIModalViewControllerWrapper();
+        
+        RNIModalWrapperMap.set(
+          forViewController: self,
+          newModalWrapper
+        );
+        
+        return newModalWrapper;
+      };
+      
+      return modalWrapper;
+    }();
+ 
     modalWrapper.presentingViewController = self;
     modalWrapper.modalViewController = viewControllerToPresent;
     
@@ -41,27 +85,34 @@ extension UIViewController {
       
     } else if let presentedVC = self.presentedViewController,
               let presentedModalVC = presentedVC as? RNIModalViewController {
+      
+      /// A - Arg `viewControllerToPresent` is a `RNIModalViewController`
       return presentedModalVC.modalViewRef;
       
     } else if let presentingModalVC = self as? RNIModalViewController,
               let presentingModal = presentingModalVC.modalViewRef,
               let presentedModalVC = presentingModal.modalVC {
+      
+      /// B - Current vc instance is a `RNIModalViewController` (and was
+      ///     presented by a `RNIModalView`).
       return presentedModalVC.modalViewRef;
       
-    } else if let viewControllerToPresent = viewControllerToPresent,
-              let presentedModal =
-                RNIModalManagerShared.getModalInstance(
-                  forPresentedViewController: viewControllerToPresent
-                ) {
-      return presentedModal;
+    } else if let presentedVC = viewControllerToPresent,
+              let presentedModalWrapper =
+                RNIModalWrapperMap.get(forViewController: presentedVC) {
+      
+      /// C - `viewControllerToPresent` has a corresponding
+      ///     `RNIModalViewControllerWrapper` instance associated to it.
+      return presentedModalWrapper;
       
     } else if let presentingModalWrapper = self.modalWrapper,
-              let presentingModalVC = presentingModalWrapper.modalViewController,
-              let presentedModal =
-                RNIModalManagerShared.getModalInstance(
-                  forPresentedViewController: presentingModalVC
-                ) {
-      return presentedModal;
+              let presentedVC = presentingModalWrapper.modalViewController,
+              let presentedModalWrapper =
+                RNIModalWrapperMap.get(forViewController: presentedVC) {
+      
+      /// D - Current vc instance has a `RNIModalViewControllerWrapper`
+      ///     instance associated to it.
+      return presentedModalWrapper;
     };
     
     return nil;
