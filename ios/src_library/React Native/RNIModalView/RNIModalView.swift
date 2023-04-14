@@ -66,23 +66,6 @@ public class RNIModalView:
   // MARK: - Properties: React Props - Events
   // ----------------------------------------
   
-  /// RN event callbacks for whenever a modal is presented/dismissed
-  /// via functions or from swipe to dismiss gestures
-  @objc var onModalShow: RCTDirectEventBlock?;
-  @objc var onModalDismiss: RCTDirectEventBlock?;
-  
-  /// RN event callbacks for: UIAdaptivePresentationControllerDelegate
-  /// Note: that these are only invoked in response to dismiss gestures
-  @objc var onModalDidDismiss: RCTDirectEventBlock?;
-  @objc var onModalWillDismiss: RCTDirectEventBlock?;
-  @objc var onModalAttemptDismiss: RCTDirectEventBlock?;
-  
-  /// RN event callbacks whenever a modal is focused/blurred
-  /// note: is not called when the modal is topmost to prevent duplication
-  /// of the onModalShow/onModalDismiss events
-  @objc var onModalBlur: RCTDirectEventBlock?;
-  @objc var onModalFocus: RCTDirectEventBlock?;
-  
 
   // MARK: - Properties: React Props - Value
   // ---------------------------------------
@@ -697,10 +680,7 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   public func presentationControllerDidAttemptToDismiss(
     _ presentationController: UIPresentationController
   ) {
-    self.onModalAttemptDismiss?(
-      self.synthesizedBaseEventData.synthesizedJSDictionary
-    );
-    
+
     #if DEBUG
     print(
         "Log - RNIModalView+UIAdaptivePresentationControllerDelegate"
@@ -753,11 +733,6 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidShow(sender: self);
     
-    if !self.modalPresentationState.wasCancelledDismissViaGesture {
-      self.onModalShow?(
-        self.synthesizedBaseEventData.synthesizedJSDictionary
-      );
-    };
   };
   
   public func viewWillDisappear(sender: UIViewController, animated: Bool) {
@@ -767,11 +742,6 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillHide(sender: self);
     
-    if self.modalPresentationState.state.isDismissingViaGesture {
-      self.onModalWillDismiss?(
-        self.synthesizedBaseEventData.synthesizedJSDictionary
-      );
-    };
   };
   
   public func viewDidDisappear(sender: UIViewController, animated: Bool) {
@@ -780,17 +750,6 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidHide(sender: self);
-    
-    if self.modalPresentationState.statePrev.isDismissingViaGesture {
-      self.onModalDidDismiss?(
-        self.synthesizedBaseEventData.synthesizedJSDictionary
-      );
-      
-    } else {
-      self.onModalDismiss?(
-        self.synthesizedBaseEventData.synthesizedJSDictionary
-      );
-    };
     
     self.deinitControllers();
   };
@@ -895,9 +854,6 @@ extension RNIModalView: RNIModalFocusNotifiable {
     );
     #endif
     
-    self.onModalFocus?(
-      eventData.synthesizedJSDictionary
-    );
   };
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
@@ -921,8 +877,5 @@ extension RNIModalView: RNIModalFocusNotifiable {
     );
     #endif
     
-    self.onModalBlur?(
-      eventData.synthesizedJSDictionary
-    );
   };
 };
