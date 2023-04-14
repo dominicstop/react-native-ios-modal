@@ -66,7 +66,28 @@ public class RNIModalView:
   // MARK: - Properties: React Props - Events
   // ----------------------------------------
   
-
+  var onModalWillPresent: RCTBubblingEventBlock?;
+  var onModalDidPresent: RCTBubblingEventBlock?;
+  
+  var onModalWillDismiss: RCTBubblingEventBlock?;
+  var onModalDidDismiss: RCTBubblingEventBlock?;
+  
+  var onModalWillShow: RCTBubblingEventBlock?;
+  var onModalDidShow: RCTBubblingEventBlock?;
+  
+  var onModalWillHide: RCTBubblingEventBlock?;
+  var onModalDidHide: RCTBubblingEventBlock?;
+  
+  var onModalWillFocus: RCTBubblingEventBlock?;
+  var onModalDidFocus: RCTBubblingEventBlock?;
+  
+  var onModalWillBlur: RCTBubblingEventBlock?;
+  var onModalDidBlur: RCTBubblingEventBlock?;
+  
+  var onPresentationControllerWillDismiss: RCTBubblingEventBlock?;
+  var onPresentationControllerDidDismiss: RCTBubblingEventBlock?;
+  var onPresentationControllerDidAttemptToDismiss: RCTBubblingEventBlock?;
+ 
   // MARK: - Properties: React Props - Value
   // ---------------------------------------
   
@@ -475,11 +496,20 @@ public class RNIModalView:
     /// set specific "presenting" state
     self.modalPresentationState.set(state: .PRESENTING_PROGRAMMATIC);
     
+    self.onModalWillPresent?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
+    
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
       // Reset swipe gesture before it was temporarily disabled
       self.enableSwipeGesture();
       
       self.modalPresentationState.set(state: .PRESENTED);
+      
+      self.onModalDidPresent?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+      
       completion?(true, nil);
       
       #if DEBUG
@@ -558,8 +588,17 @@ public class RNIModalView:
     /// set specific "dismissing" state
     self.modalPresentationState.set(state: .DISMISSING_PROGRAMMATIC);
     
+    self.onModalWillDismiss?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
+    
     presentedVC.dismiss(animated: true){
       self.modalPresentationState.set(state: .DISMISSED);
+      
+      self.onModalDidDismiss?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+      
       completion?(true, nil);
       
       #if DEBUG
@@ -722,6 +761,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingPresented else { return };
     self.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
     
+    self.onModalWillShow?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
+    
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillShow(sender: self);
   };
@@ -729,6 +772,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingPresented else { return };
     self.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
+    
+    self.onModalDidShow?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidShow(sender: self);
@@ -739,6 +786,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingDismissed else { return };
     self.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
     
+    self.onModalWillHide?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
+    
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillHide(sender: self);
     
@@ -747,6 +798,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   public func viewDidDisappear(sender: UIViewController, animated: Bool) {
     guard sender.isBeingDismissed else { return };
     self.modalPresentationState.set(state: .DISMISSED);
+    
+    self.onModalDidHide?(
+      self.synthesizedBaseEventData.synthesizedJSDictionary
+    );
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidHide(sender: self);
@@ -833,7 +888,15 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
 extension RNIModalView: RNIModalFocusNotifiable {
   
   public func onModalWillFocusNotification(sender: any RNIModal) {
-    /// No-op - TBA
+    let eventData = RNIOnModalFocusEventData(
+      modalData: self.synthesizedBaseEventData,
+      senderInfo: sender.synthesizedModalData,
+      isInitial: sender === self
+    );
+    
+    self.onModalWillFocus?(
+      eventData.synthesizedJSDictionary
+    );
   };
   
   public func onModalDidFocusNotification(sender: any RNIModal) {
@@ -842,6 +905,10 @@ extension RNIModalView: RNIModalFocusNotifiable {
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,
       isInitial: sender === self
+    );
+    
+    self.onModalDidFocus?(
+      eventData.synthesizedJSDictionary
     );
     
     #if DEBUG
@@ -857,7 +924,15 @@ extension RNIModalView: RNIModalFocusNotifiable {
   };
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
-    /// No-op - TBA
+    let eventData = RNIOnModalFocusEventData(
+      modalData: self.synthesizedBaseEventData,
+      senderInfo: sender.synthesizedModalData,
+      isInitial: sender === self
+    );
+    
+    self.onModalWillBlur?(
+      eventData.synthesizedJSDictionary
+    );
   };
   
   public func onModalDidBlurNotification(sender: any RNIModal) {
@@ -865,6 +940,10 @@ extension RNIModalView: RNIModalFocusNotifiable {
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,
       isInitial: sender === self
+    );
+    
+    self.onModalDidFocus?(
+      eventData.synthesizedJSDictionary
     );
     
     #if DEBUG
@@ -876,6 +955,5 @@ extension RNIModalView: RNIModalFocusNotifiable {
       + " - arg sender.modalIndex: \(sender.modalIndex!)"
     );
     #endif
-    
   };
 };

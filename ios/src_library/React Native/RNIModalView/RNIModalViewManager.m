@@ -7,6 +7,28 @@
 // MARK: Props - Callbacks/Events
 // ------------------------------
 
+RCT_EXPORT_VIEW_PROPERTY(onModalWillPresent, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidPresent, RCTDirectEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalWillDismiss, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidDismiss, RCTDirectEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalWillShow, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidShow, RCTDirectEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalWillHide, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidHide, RCTDirectEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalWillFocus, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidFocus, RCTDirectEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalWillBlur, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onModalDidBlur, RCTDirectEventBlock)
+
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTDirectEventBlock);
+
 // --------------------------------
 // MARK: Props - RN Component Props
 // --------------------------------
