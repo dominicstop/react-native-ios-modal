@@ -613,7 +613,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let presentedModalList = Self.getPresentedModals(forWindow: senderWindow);
     windowData.apply(forBlurredModal: sender);
     
     #if DEBUG
@@ -630,24 +629,20 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     sender.onModalDidBlurNotification(sender: sender);
     
-    presentedModalList.forEach {
-      guard $0 !== sender,
-            $0.modalFocusState.state.isFocusing
-      else { return };
-      
+    guard let modalToFocus = windowData.nextModalToFocus else { return };
+    
     #if DEBUG
     print(
         "Log - RNIModalManager.notifyOnModalDidHide"
       + " - arg sender.modalNativeID: \(sender.modalNativeID)"
       + " - notify FOCUSED"
-      + " - for modal.modalNativeID:\($0.modalNativeID)"
-      + " - for modal.modalIndex:\($0.modalIndex ?? -1)"
+      + " - for modal.modalNativeID:\(modalToFocus.modalNativeID)"
+      + " - for modal.modalIndex:\(modalToFocus.modalIndex ?? -1)"
     );
     #endif
       
-      $0.modalFocusState.set(state: .FOCUSED);
-      $0.onModalDidFocusNotification(sender: sender);
-    };
+    modalToFocus.modalFocusState.set(state: .FOCUSED);
+    modalToFocus.onModalDidFocusNotification(sender: sender);
     
     // reset
     windowData.nextModalToFocus = nil;
