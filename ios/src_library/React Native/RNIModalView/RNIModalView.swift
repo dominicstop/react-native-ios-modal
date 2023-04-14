@@ -761,9 +761,11 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingPresented else { return };
     self.modalPresentationState.set(state: .PRESENTING_UNKNOWN);
     
-    self.onModalWillShow?(
-      self.synthesizedBaseEventData.synthesizedJSDictionary
-    );
+    if self.modalPresentationState.didChange {
+      self.onModalWillShow?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+    };
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillShow(sender: self);
@@ -773,9 +775,11 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingPresented else { return };
     self.modalPresentationState.set(state: .PRESENTED_UNKNOWN);
     
-    self.onModalDidShow?(
-      self.synthesizedBaseEventData.synthesizedJSDictionary
-    );
+    if self.modalPresentationState.didChange {
+      self.onModalDidShow?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+    };
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidShow(sender: self);
@@ -786,9 +790,11 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingDismissed else { return };
     self.modalPresentationState.set(state: .DISMISSING_UNKNOWN);
     
-    self.onModalWillHide?(
-      self.synthesizedBaseEventData.synthesizedJSDictionary
-    );
+    if self.modalPresentationState.didChange {
+      self.onModalWillHide?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+    };
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalWillHide(sender: self);
@@ -799,9 +805,11 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     guard sender.isBeingDismissed else { return };
     self.modalPresentationState.set(state: .DISMISSED);
     
-    self.onModalDidHide?(
-      self.synthesizedBaseEventData.synthesizedJSDictionary
-    );
+    if self.modalPresentationState.didChange {
+      self.onModalDidHide?(
+        self.synthesizedBaseEventData.synthesizedJSDictionary
+      );
+    };
     
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidHide(sender: self);
@@ -888,6 +896,8 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
 extension RNIModalView: RNIModalFocusNotifiable {
   
   public func onModalWillFocusNotification(sender: any RNIModal) {
+    guard self.modalFocusState.didChange else { return };
+    
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,
@@ -900,6 +910,7 @@ extension RNIModalView: RNIModalFocusNotifiable {
   };
   
   public func onModalDidFocusNotification(sender: any RNIModal) {
+    guard self.modalFocusState.didChange else { return };
     
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
@@ -924,6 +935,8 @@ extension RNIModalView: RNIModalFocusNotifiable {
   };
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
+    guard self.modalFocusState.didChange else { return };
+    
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,
@@ -936,6 +949,8 @@ extension RNIModalView: RNIModalFocusNotifiable {
   };
   
   public func onModalDidBlurNotification(sender: any RNIModal) {
+    guard self.modalFocusState.didChange else { return };
+    
     let eventData = RNIOnModalFocusEventData(
       modalData: self.synthesizedBaseEventData,
       senderInfo: sender.synthesizedModalData,
