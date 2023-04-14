@@ -126,6 +126,17 @@ public enum RNIModalPresentationState: String, CaseIterable {
   public var isDismissed: Bool {
     self == .DISMISSED;
   };
+  
+  // MARK: - Computed Properties - Composite
+  // ---------------------------------------
+  
+  public var isDismissedOrDismissing: Bool {
+    self.isDismissed || self.isDismissing;
+  };
+  
+  public var isPresentedOrPresenting: Bool {
+    self.isPresented || self.isPresenting;
+  };
 };
 
 public struct RNIModalPresentationStateMachine {
@@ -155,10 +166,6 @@ public struct RNIModalPresentationStateMachine {
   
   public var isInitialPresent: Bool {
     self._isInitialPresent ?? true;
-  };
-  
-  public var wasCancelledPresent: Bool {
-    self._wasCancelledPresent || self.wasCancelledDismissViaGesture;
   };
   
   public var isPresented: Bool {
