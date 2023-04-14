@@ -23,14 +23,10 @@
 	- [x] **Subtask** - `TODO:2023-04-14-23-40-15` - Impl. Update `RNIModalData` - Add more modal-related data.
 	- [x] **Subtask** - `TODO:2023-03-30-19-18-20` - Impl: Types - Create `ModalDeprecatedBaseEventData`.
 	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
-	- [x] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-52-42` - Update typescript types for modal event objects to match native event object.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-53-01` - Add `deprecated` suffix to event types in `RNIModalViewDeprecatedEvents`.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-53-13` - Remove `RNIModalView.onModalDismiss`.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-53-21` - Remove `RNIModalView.onModalShow`.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-53-30` - Rename `RNIModalView.onModalAttemptDismiss` to `RNIModalView.onModalDidAttemptToDismiss`.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-53-53` - Remove `RNIModalView.onModalBlur`
-	- [ ] **Subtask** - `TODO:2023-03-30-15-54-00` - Remove `RNIModalView.onModalFocus`
+	- [x] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
+	- [x] **Subtask** - `TODO:2023-03-30-15-52-42` - Update typescript types for modal event objects to match native event object.
+	- [x] **Subtask** - `TODO:2023-03-30-15-53-13` - Remove deprecated native events.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-06` - Impl. `RNIModalView.onModalWilllDismiss`
 	- [ ] **Subtask** - `TODO:` - Impl. `RNIModalView.onModalDidlDismiss`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-54-22` - Impl. `RNIModalView.onModalWillShow`
