@@ -20,10 +20,10 @@
 
 	<br>
 
-	- [ ] **Subtask** - `TODO:2023-04-14-23-40-15` - Impl. Update `RNIModalData` - Add more modal-related data.
-	- [ ] **Subtask** - `TODO:2023-03-30-19-18-20` - Impl: Create `RNIModalDeprecatedBaseEventData`.
+	- [x] **Subtask** - `TODO:2023-04-14-23-40-15` - Impl. Update `RNIModalData` - Add more modal-related data.
+	- [x] **Subtask** - `TODO:2023-03-30-19-18-20` - Impl: Types - Create `ModalDeprecatedBaseEventData`.
 	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
-	- [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
+	- [x] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-52-42` - Update typescript types for modal event objects to match native event object.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-53-01` - Add `deprecated` suffix to event types in `RNIModalViewDeprecatedEvents`.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-53-13` - Remove `RNIModalView.onModalDismiss`.
