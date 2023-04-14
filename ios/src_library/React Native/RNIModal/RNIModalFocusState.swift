@@ -64,6 +64,10 @@ public struct RNIModalFocusStateMachine {
   public var wasBlurCancelled: Bool = false;
   public var wasFocusCancelled: Bool = false;
   
+  public var didChange: Bool {
+    self.statePrev != self.state;
+  };
+  
   // MARK: - Functions
   // ------------------
   

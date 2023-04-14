@@ -177,6 +177,10 @@ public struct RNIModalPresentationStateMachine {
     self._wasCancelledDismiss || self.wasCancelledDismissViaGesture;
   };
   
+  public var didChange: Bool {
+    self.statePrev != self.state;
+  };
+  
   // MARK: - Functions
   // -----------------
   
