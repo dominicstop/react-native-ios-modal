@@ -20,6 +20,7 @@
 
 	<br>
 
+	- [ ] **Subtask** - `TODO:2023-04-14-23-40-15` - Impl. Update `RNIModalData` - Add more modal-related data.
 	- [ ] **Subtask** - `TODO:2023-03-30-19-18-20` - Impl: Create `RNIModalDeprecatedBaseEventData`.
 	- [ ] **Subtask** -`TODO:2023-03-31-18-33-52` - Add modal event object property - `triggeredVia`: `programmatic`, `gesture`, `request`, `reordering`, etc.
 	- [ ] **Subtask** - `TODO:2023-03-04-13-06-27` - Impl: Update `RNIModalView` Native Events.
