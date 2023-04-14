@@ -660,7 +660,9 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   ///   * 3 - `viewWillAppear`
   ///   * 4 - `viewDidAppear`
   ///
-  public func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerWillDismiss(
+    _ presentationController: UIPresentationController
+  ) {
     self.modalPresentationState.set(state: .DISMISSING_GESTURE);
     
     #if DEBUG
@@ -673,7 +675,9 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
     #endif
   };
   
-  public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerDidDismiss(
+    _ presentationController: UIPresentationController
+  ) {
     self.modalPresentationNotificationDelegate
       .notifyOnModalDidHide(sender: self);
     
@@ -690,7 +694,9 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   /// No other "view controller"-related lifecycle method was trigger in
   /// response to this event being invoked.
   ///
-  public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+  public func presentationControllerDidAttemptToDismiss(
+    _ presentationController: UIPresentationController
+  ) {
     self.onModalAttemptDismiss?(
       self.synthesizedBaseEventData.synthesizedJSDictionary
     );
