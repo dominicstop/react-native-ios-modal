@@ -1,17 +1,47 @@
 import type { NativeSyntheticEvent } from 'react-native';
 
+import type {
+  ModalFocusState,
+  ModalPresentationState,
+} from 'src/types/RNIModalViewRelatedTypes';
+
 // Event Object Types
 // ------------------
 
 /**
  * Based on `RNIModalData`
  */
-export type RNIModalData = {};
+export type RNIModalData = {
+  modalNativeID: string;
+  modalIndex: number;
+  currentModalIndex: number;
+  modalFocusState: ModalFocusState;
+  modalFocusStatePref: ModalFocusState;
+  wasBlurCancelled: boolean;
+  wasFocusCancelled: boolean;
+  modalPresentationState: ModalPresentationState;
+  modalPresentationStatePrev: ModalPresentationState;
+  isInitialPresent: boolean;
+  wasCancelledPresent: boolean;
+  wasCancelledDismiss: boolean;
+  wasCancelledDismissViaGesture: boolean;
+  isModalPresented: boolean;
+  isModalInFocus: boolean;
+  computedIsModalInFocus: boolean;
+  computedIsModalPresented: boolean;
+  computedModalIndex: number;
+  computedViewControllerIndex: number;
+  computedCurrentModalIndex: number;
+  synthesizedWindowID?: string;
+};
 
 /**
  * Based on `RNIModalBaseEventData`
  */
-export type RNIModalBaseEvent = RNIModalData & {};
+export type RNIModalBaseEvent = RNIModalData & {
+  reactTag: number;
+  modalID?: string;
+};
 
 /**
  * Based on `RNIOnModalFocusEventData`
