@@ -21,8 +21,10 @@ public struct RNIModalData: RNIDictionarySynthesizable {
   
   public let modalPresentationState: RNIModalPresentationState;
   public let modalPresentationStatePrev: RNIModalPresentationState;
-  
+
   public let isInitialPresent: Bool;
+  public let wasCancelledPresent: Bool;
+  public let wasCancelledDismiss: Bool;
   public let wasCancelledDismissViaGesture: Bool;
   
   public let isModalPresented: Bool;
