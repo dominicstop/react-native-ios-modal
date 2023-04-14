@@ -157,8 +157,8 @@ public struct RNIModalPresentationStateMachine {
   // ------------------
   
   private var _isInitialPresent: Bool? = nil;
-  private var _wasCancelledPresent: Bool = false;
   
+  public var wasCancelledPresent: Bool = false;
   public var wasCancelledDismissViaGesture: Bool = false;
   
   // MARK: - Computed Properties
@@ -256,8 +256,8 @@ public struct RNIModalPresentationStateMachine {
       self._isInitialPresent = false;
     };
     
-    if prevState.isPresenting && nextState.isDismissing {
-      self._wasCancelledPresent = true;
+    if prevState.isPresenting && nextState.isDismissedOrDismissing {
+      self.wasCancelledPresent = true;
     };
   };
   
@@ -268,8 +268,8 @@ public struct RNIModalPresentationStateMachine {
       self._isInitialPresent = false;
     };
     
-    if self.state.isPresenting {
-      self._wasCancelledPresent = false;
+    if self.state.isPresented {
+      self.wasCancelledPresent = false;
     };
   };
 };
