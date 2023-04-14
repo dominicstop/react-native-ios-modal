@@ -146,15 +146,19 @@ public struct RNIModalPresentationStateMachine {
   // ------------------
   
   private var _isInitialPresent: Bool? = nil;
+  private var _wasCancelledPresent: Bool = false;
   
   public var wasCancelledDismissViaGesture: Bool = false;
-  
   
   // MARK: - Computed Properties
   // ---------------------------
   
   public var isInitialPresent: Bool {
     self._isInitialPresent ?? true;
+  };
+  
+  public var wasCancelledPresent: Bool {
+    self._wasCancelledPresent || self.wasCancelledDismissViaGesture;
   };
   
   public var isPresented: Bool {
@@ -219,13 +223,7 @@ public struct RNIModalPresentationStateMachine {
       self.state = nextState;
     };
     
-    if nextState.isPresenting && self._isInitialPresent == nil {
-      self._isInitialPresent = true;
-      
-    } else if nextState.isPresenting && self._isInitialPresent == true {
-      self._isInitialPresent = false;
-    };
-    
+    self.updateProperties();
     self.resetIfNeeded();
     
     #if DEBUG
@@ -233,17 +231,38 @@ public struct RNIModalPresentationStateMachine {
         "Log - RNIModalPresentationStateMachine.set"
       + " - statePrev: \(self.statePrev)"
       + " - nextState: \(self.state)"
-      + " - wasCancelledDismissViaGesture: \(wasCancelledDismissViaGesture)"
+      + " - wasCancelledDismissViaGesture: \(self.wasCancelledDismissViaGesture)"
       + " - isInitialPresent: \(self.isInitialPresent)"
+      + " - wasCancelledPresent: \(self.wasCancelledPresent)"
     );
     #endif
   };
   
-  mutating func resetIfNeeded(){
+  private mutating func updateProperties(){
+    let nextState = self.state;
+    let prevState = self.statePrev;
+    
+    if nextState.isPresenting && self._isInitialPresent == nil {
+      self._isInitialPresent = true;
+      
+    } else if nextState.isPresenting && self._isInitialPresent == true {
+      self._isInitialPresent = false;
+    };
+    
+    if prevState.isPresenting && nextState.isDismissing {
+      self._wasCancelledPresent = true;
+    };
+  };
+  
+  private mutating func resetIfNeeded(){
     if self.state == .DISMISSED {
       // reset
       self.wasCancelledDismissViaGesture = false;
       self._isInitialPresent = false;
+    };
+    
+    if self.state.isPresenting {
+      self._wasCancelledPresent = false;
     };
   };
 };
