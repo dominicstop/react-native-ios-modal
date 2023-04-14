@@ -10,13 +10,21 @@ import type {
 import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
 
 import type {
-  OnModalShowEvent,
-  OnModalDismissEvent,
-  OnModalBlurEvent,
-  OnModalFocusEvent,
-  OnModalDidDismissEvent,
+  OnModalWillPresentEvent,
+  OnModalDidPresentEvent,
   OnModalWillDismissEvent,
-  OnModalAttemptDismissEvent,
+  OnModalDidDismissEvent,
+  OnModalWillShowEvent,
+  OnModalDidShowEvent,
+  OnModalWillHideEvent,
+  OnModalDidHideEvent,
+  OnModalWillFocusEvent,
+  OnModalDidFocusEvent,
+  OnModalWillBlurEvent,
+  OnModalDidBlurEvent,
+  OnPresentationControllerWillDismissEvent,
+  OnPresentationControllerDidDismissEvent,
+  OnPresentationControllerDidAttemptToDismissEvent,
 } from './RNIModalViewEvents';
 
 export type RNIModalViewBaseProps = {
@@ -47,15 +55,27 @@ export type RNIModalViewBaseProps = {
   //
   // * Rename - Add `will/did` prefix and deprecate prev. props
   //
-  onModalShow: OnModalShowEvent;
-  onModalDismiss: OnModalDismissEvent;
+  onModalWillPresent: OnModalWillPresentEvent;
+  onModalDidPresent: OnModalDidPresentEvent;
 
-  onModalBlur: OnModalBlurEvent;
-  onModalFocus: OnModalFocusEvent;
-
-  onModalDidDismiss: OnModalDidDismissEvent;
   onModalWillDismiss: OnModalWillDismissEvent;
-  onModalAttemptDismiss: OnModalAttemptDismissEvent;
+  onModalDidDismiss: OnModalDidDismissEvent;
+
+  onModalWillShow: OnModalWillShowEvent;
+  onModalDidShow: OnModalDidShowEvent;
+
+  onModalWillHide: OnModalWillHideEvent;
+  onModalDidHide: OnModalDidHideEvent;
+
+  onModalWillFocus: OnModalWillFocusEvent;
+  onModalDidFocus: OnModalDidFocusEvent;
+
+  onModalWillBlur: OnModalWillBlurEvent;
+  onModalDidBlur: OnModalDidBlurEvent;
+
+  onPresentationControllerWillDismiss: OnPresentationControllerWillDismissEvent;
+  onPresentationControllerDidDismiss: OnPresentationControllerDidDismissEvent;
+  onPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEvent;
 };
 
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;

@@ -17,12 +17,21 @@ import * as Helpers from '../../functions/helpers';
 import { ModalContext } from '../../context/ModalContext';
 
 import {
-  OnModalAttemptDismissEvent,
-  OnModalBlurEvent,
+  OnModalWillPresentEvent,
+  OnModalDidPresentEvent,
+  OnModalWillDismissEvent,
   OnModalDidDismissEvent,
-  OnModalDismissEvent,
-  OnModalFocusEvent,
-  OnModalShowEvent,
+  OnModalWillShowEvent,
+  OnModalDidShowEvent,
+  OnModalWillHideEvent,
+  OnModalDidHideEvent,
+  OnModalWillFocusEvent,
+  OnModalDidFocusEvent,
+  OnModalWillBlurEvent,
+  OnModalDidBlurEvent,
+  OnPresentationControllerWillDismissEvent,
+  OnPresentationControllerDidDismissEvent,
+  OnPresentationControllerDidAttemptToDismissEvent,
   RNIModalView,
 } from '../../native_components/RNIModalView';
 
@@ -92,13 +101,21 @@ export class ModalView extends
       modalPresentationStyle,
 
       // native props - events
-      onModalShow,
-      onModalDismiss,
-      onModalBlur,
-      onModalFocus,
-      onModalDidDismiss,
+      onModalWillPresent,
+      onModalDidPresent,
       onModalWillDismiss,
-      onModalAttemptDismiss,
+      onModalDidDismiss,
+      onModalWillShow,
+      onModalDidShow,
+      onModalWillHide,
+      onModalDidHide,
+      onModalWillFocus,
+      onModalDidFocus,
+      onModalWillBlur,
+      onModalDidBlur,
+      onPresentationControllerWillDismiss,
+      onPresentationControllerDidDismiss,
+      onPresentationControllerDidAttemptToDismiss,
 
       // component props
       autoCloseOnUnmount,
@@ -157,13 +174,21 @@ export class ModalView extends
       modalID,
       allowModalForceDismiss,
       modalBGBlurEffectStyle,
-      onModalShow,
-      onModalDismiss,
-      onModalBlur,
-      onModalFocus,
-      onModalDidDismiss,
+      onModalWillPresent,
+      onModalDidPresent,
       onModalWillDismiss,
-      onModalAttemptDismiss,
+      onModalDidDismiss,
+      onModalWillShow,
+      onModalDidShow,
+      onModalWillHide,
+      onModalDidHide,
+      onModalWillFocus,
+      onModalDidFocus,
+      onModalWillBlur,
+      onModalDidBlur,
+      onPresentationControllerWillDismiss,
+      onPresentationControllerDidDismiss,
+      onPresentationControllerDidAttemptToDismiss,
       containerStyle,
 
       // C - View-Related Props
@@ -174,21 +199,6 @@ export class ModalView extends
 
   getEmitterRef = () => {
     return this.emitter;
-  };
-
-  setStateIsModalVisible = (nextModalVisibility: boolean) => {
-    const { isModalVisible: prevModalVisibility } = this.state;
-
-    const didModalVisibilityChange =
-      prevModalVisibility !== nextModalVisibility;
-
-    if (!didModalVisibilityChange) {
-      return;
-    }
-
-    this.setState({
-      isModalVisible: nextModalVisibility,
-    });
   };
 
   setVisibility = async (
@@ -302,97 +312,125 @@ export class ModalView extends
   // Native Event Handlers
   // ---------------------
 
-  private _handleOnModalBlur: OnModalBlurEvent = (event) => {
-    this.props.onModalBlur?.(event);
+  private _handleOnModalWillPresent: OnModalWillPresentEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillPresent?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalDidPresent: OnModalDidPresentEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidPresent?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalWillDismiss: OnModalWillDismissEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillDismiss?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidDismiss?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalWillShow: OnModalWillShowEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillShow?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalDidShow: OnModalDidShowEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidShow?.(event);
     event.stopPropagation();
 
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalBlur,
-      event.nativeEvent
-    );
-
     this.setState({
-      isModalInFocus: false,
+      isModalVisible: true,
     });
   };
 
-  private _handleOnModalFocus: OnModalFocusEvent = (event) => {
-    this.props.onModalFocus?.(event);
+  private _handleOnModalWillHide: OnModalWillHideEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillHide?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalDidHide: OnModalDidHideEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidHide?.(event);
     event.stopPropagation();
 
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalFocus,
-      event.nativeEvent
-    );
+    this.setState({
+      isModalVisible: false,
+    });
+  };
+
+  private _handleOnModalWillFocus: OnModalWillFocusEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillFocus?.(event);
+    event.stopPropagation();
+  };
+
+  private _handleOnModalDidFocus: OnModalDidFocusEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidFocus?.(event);
+    event.stopPropagation();
 
     this.setState({
       isModalInFocus: true,
     });
   };
 
-  private _handleOnModalShow: OnModalShowEvent = (event) => {
-    this.props.onModalShow?.(event);
+  private _handleOnModalWillBlur: OnModalWillBlurEvent = (event) => {
+    const props = this.props;
+
+    props.onModalWillBlur?.(event);
     event.stopPropagation();
-
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalShow,
-      event.nativeEvent
-    );
-
-    this.setStateIsModalVisible(true);
   };
 
-  private _handleOnModalDismiss: OnModalDismissEvent = (event) => {
-    const props = this.getProps();
+  private _handleOnModalDidBlur: OnModalDidBlurEvent = (event) => {
+    const props = this.props;
 
-    this.props.onModalDismiss?.(event);
+    props.onModalDidBlur?.(event);
     event.stopPropagation();
 
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalDismiss,
-      event.nativeEvent
-    );
-
     this.setState({
-      isModalVisible: false,
-      childProps: null,
-
-      // reset state values from props
-      enableSwipeGesture: props.enableSwipeGesture,
-      isModalInPresentation: props.isModalInPresentation,
+      isModalInFocus: false,
     });
   };
 
-  private _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
-    this.props.onModalDidDismiss?.(event);
+  private _handleOnPresentationControllerWillDismiss: OnPresentationControllerWillDismissEvent = (event) => {
+    const props = this.props;
+
+    props.onPresentationControllerWillDismiss?.(event);
     event.stopPropagation();
-
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalDidDismiss,
-      event.nativeEvent
-    );
-
-    this.setStateIsModalVisible(false);
   };
 
-  private _handleOnModalWillDismiss: OnModalDidDismissEvent = (event) => {
-    this.props.onModalWillDismiss?.(event);
-    event.stopPropagation();
+  private _handleOnPresentationControllerDidDismiss: OnPresentationControllerDidDismissEvent = (event) => {
+    const props = this.props;
 
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalWillDismiss,
-      event.nativeEvent
-    );
+    props.onPresentationControllerDidDismiss?.(event);
+    event.stopPropagation();
   };
 
-  private _handleOnModalAttemptDismiss: OnModalAttemptDismissEvent = (event) => {
-    this.props.onModalAttemptDismiss?.(event);
-    event.stopPropagation();
+  private _handleOnPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEvent = (event) => {
+    const props = this.props;
 
-    this.emitter.emit(
-      ModalViewEmitterEvents.onModalAttemptDismiss,
-      event.nativeEvent
-    );
+    props.onPresentationControllerDidAttemptToDismiss?.(event);
+    event.stopPropagation();
   };
 
  private _renderModal() {
@@ -424,13 +462,21 @@ export class ModalView extends
         }}
         style={styles.nativeModalView}
         onStartShouldSetResponder={this._shouldSetResponder}
-        onModalBlur={this._handleOnModalBlur}
-        onModalFocus={this._handleOnModalFocus}
-        onModalShow={this._handleOnModalShow}
-        onModalDismiss={this._handleOnModalDismiss}
-        onModalDidDismiss={this._handleOnModalDidDismiss}
+        onModalWillPresent={this._handleOnModalWillPresent}
+        onModalDidPresent={this._handleOnModalDidPresent}
         onModalWillDismiss={this._handleOnModalWillDismiss}
-        onModalAttemptDismiss={this._handleOnModalAttemptDismiss}
+        onModalDidDismiss={this._handleOnModalDidDismiss}
+        onModalWillShow={this._handleOnModalWillShow}
+        onModalDidShow={this._handleOnModalDidShow}
+        onModalWillHide={this._handleOnModalWillHide}
+        onModalDidHide={this._handleOnModalDidHide}
+        onModalWillFocus={this._handleOnModalWillFocus}
+        onModalDidFocus={this._handleOnModalDidFocus}
+        onModalWillBlur={this._handleOnModalWillBlur}
+        onModalDidBlur={this._handleOnModalDidBlur}
+        onPresentationControllerWillDismiss={this._handleOnPresentationControllerWillDismiss}
+        onPresentationControllerDidDismiss={this._handleOnPresentationControllerDidDismiss}
+        onPresentationControllerDidAttemptToDismiss={this._handleOnPresentationControllerDidAttemptToDismiss}
         {...overrideProps}
         {...viewProps}
       >
@@ -515,3 +561,5 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
+
+class ModalViewHelpers {}

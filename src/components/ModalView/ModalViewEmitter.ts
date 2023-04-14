@@ -2,16 +2,42 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
 import type {
-  OnModalDidDismissEventObject,
+  OnModalWillPresentEventObject,
+  OnModalDidPresentEventObject,
   OnModalWillDismissEventObject,
+  OnModalDidDismissEventObject,
+  OnModalWillShowEventObject,
+  OnModalDidShowEventObject,
+  OnModalWillHideEventObject,
+  OnModalDidHideEventObject,
+  OnModalWillFocusEventObject,
+  OnModalDidFocusEventObject,
+  OnModalWillBlurEventObject,
+  OnModalDidBlurEventObject,
+  OnPresentationControllerWillDismissEventObject,
+  OnPresentationControllerDidDismissEventObject,
+  OnPresentationControllerDidAttemptToDismissEventObject,
 } from 'src/native_components/RNIModalView';
 
 import type { KeyMapType } from '../../types/UtilityTypes';
 
 export enum ModalViewEmitterEvents {
   // `RNIModalView` Events
-  onModalDidDismiss = 'onModalDidDismiss',
+  onModalWillPresent = 'onModalWillPresent',
+  onModalDidPresent = 'onModalDidPresent',
   onModalWillDismiss = 'onModalWillDismiss',
+  onModalDidDismiss = 'onModalDidDismiss',
+  onModalWillShow = 'onModalWillShow',
+  onModalDidShow = 'onModalDidShow',
+  onModalWillHide = 'onModalWillHide',
+  onModalDidHide = 'onModalDidHide',
+  onModalWillFocus = 'onModalWillFocus',
+  onModalDidFocus = 'onModalDidFocus',
+  onModalWillBlur = 'onModalWillBlur',
+  onModalDidBlur = 'onModalDidBlur',
+  onPresentationControllerWillDismiss = 'onPresentationControllerWillDismiss',
+  onPresentationControllerDidDismiss = 'onPresentationControllerDidDismiss',
+  onPresentationControllerDidAttemptToDismiss = 'onPresentationControllerDidAttemptToDismiss',
 
   onLayoutModalContentContainer = 'onLayoutModalContentContainer',
 }
@@ -23,8 +49,21 @@ export type ModalViewEmitterEventMap =
   // prettier-ignore
   KeyMapType<ModalViewEmitterEvents, {
     // `RNIModalView` Events
-    onModalDidDismiss: OnModalDidDismissEventObject['nativeEvent'];
+    onModalWillPresent: OnModalWillPresentEventObject['nativeEvent'];
+    onModalDidPresent: OnModalDidPresentEventObject['nativeEvent'];
     onModalWillDismiss: OnModalWillDismissEventObject['nativeEvent'];
+    onModalDidDismiss: OnModalDidDismissEventObject['nativeEvent'];
+    onModalWillShow: OnModalWillShowEventObject['nativeEvent'];
+    onModalDidShow: OnModalDidShowEventObject['nativeEvent'];
+    onModalWillHide: OnModalWillHideEventObject['nativeEvent'];
+    onModalDidHide: OnModalDidHideEventObject['nativeEvent'];
+    onModalWillFocus: OnModalWillFocusEventObject['nativeEvent'];
+    onModalDidFocus: OnModalDidFocusEventObject['nativeEvent'];
+    onModalWillBlur: OnModalWillBlurEventObject['nativeEvent'];
+    onModalDidBlur: OnModalDidBlurEventObject['nativeEvent'];
+    onPresentationControllerWillDismiss: OnPresentationControllerWillDismissEventObject['nativeEvent'];
+    onPresentationControllerDidDismiss: OnPresentationControllerDidDismissEventObject['nativeEvent'];
+    onPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEventObject['nativeEvent'];
 
     onLayoutModalContentContainer: LayoutChangeEvent['nativeEvent'];
   }

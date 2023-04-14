@@ -20,13 +20,21 @@ export type ModalViewBaseProps = Partial<
     | 'modalPresentationStyle'
 
     // props - events
-    | 'onModalShow'
-    | 'onModalDismiss'
-    | 'onModalBlur'
-    | 'onModalFocus'
-    | 'onModalDidDismiss'
+    | 'onModalWillPresent'
+    | 'onModalDidPresent'
     | 'onModalWillDismiss'
-    | 'onModalAttemptDismiss'
+    | 'onModalDidDismiss'
+    | 'onModalWillShow'
+    | 'onModalDidShow'
+    | 'onModalWillHide'
+    | 'onModalDidHide'
+    | 'onModalWillFocus'
+    | 'onModalDidFocus'
+    | 'onModalWillBlur'
+    | 'onModalDidBlur'
+    | 'onPresentationControllerWillDismiss'
+    | 'onPresentationControllerDidDismiss'
+    | 'onPresentationControllerDidAttemptToDismiss'
   >
 > & {
   // TODO: See TODO:2023-03-04-13-02-45 - Refactor: Rename to

@@ -46,25 +46,75 @@ export type RNIModalBaseEvent = RNIModalData & {
 /**
  * Based on `RNIOnModalFocusEventData`
  */
-export type RNIOnModalFocusEvent = RNIModalData & {};
+export type RNIOnModalFocusEvent = RNIModalBaseEvent & {
+  senderInfo: RNIModalData;
+  isInitial: boolean;
+};
 
 // Native Event Object
 // -------------------
 
-// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
-// `RNIModalView` Native Events
-export type OnModalWillDismissEventObject = NativeSyntheticEvent<
+export type OnModalWillPresentEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
+export type OnModalDidPresentEventObject = NativeSyntheticEvent<
   RNIModalBaseEvent & {}
 >;
 
-// TODO - See TODO:2023-03-04-13-06-27 - Impl: Update
-// `RNIModalView` Native Events
+export type OnModalWillDismissEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
 export type OnModalDidDismissEventObject = NativeSyntheticEvent<
   RNIModalBaseEvent & {}
 >;
 
+export type OnModalWillShowEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
+export type OnModalDidShowEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
+
+export type OnModalWillHideEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
+export type OnModalDidHideEventObject = NativeSyntheticEvent<
+  RNIModalBaseEvent & {}
+>;
+
+export type OnPresentationControllerWillDismissEventObject =
+  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+
+export type OnPresentationControllerDidDismissEventObject =
+  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+
+export type OnPresentationControllerDidAttemptToDismissEventObject =
+  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+
+export type OnModalWillFocusEventObject = NativeSyntheticEvent<
+  RNIOnModalFocusEvent & {}
+>;
+export type OnModalDidFocusEventObject = NativeSyntheticEvent<
+  RNIOnModalFocusEvent & {}
+>;
+
+export type OnModalWillBlurEventObject = NativeSyntheticEvent<
+  RNIOnModalFocusEvent & {}
+>;
+export type OnModalDidBlurEventObject = NativeSyntheticEvent<
+  RNIOnModalFocusEvent & {}
+>;
+
 // Event Handler Types
 // -------------------
+
+export type OnModalWillPresentEvent = (
+  event: OnModalWillPresentEventObject
+) => void;
+
+export type OnModalDidPresentEvent = (
+  event: OnModalDidPresentEventObject
+) => void;
 
 export type OnModalWillDismissEvent = (
   event: OnModalWillDismissEventObject
@@ -73,3 +123,33 @@ export type OnModalWillDismissEvent = (
 export type OnModalDidDismissEvent = (
   event: OnModalDidDismissEventObject
 ) => void;
+
+export type OnModalWillShowEvent = (event: OnModalWillShowEventObject) => void;
+
+export type OnModalDidShowEvent = (event: OnModalDidShowEventObject) => void;
+
+export type OnModalWillHideEvent = (event: OnModalWillHideEventObject) => void;
+
+export type OnModalDidHideEvent = (event: OnModalDidHideEventObject) => void;
+
+export type OnPresentationControllerWillDismissEvent = (
+  event: OnPresentationControllerWillDismissEventObject
+) => void;
+
+export type OnPresentationControllerDidDismissEvent = (
+  event: OnPresentationControllerDidDismissEventObject
+) => void;
+
+export type OnPresentationControllerDidAttemptToDismissEvent = (
+  event: OnPresentationControllerDidAttemptToDismissEventObject
+) => void;
+
+export type OnModalWillFocusEvent = (
+  event: OnModalWillFocusEventObject
+) => void;
+
+export type OnModalDidFocusEvent = (event: OnModalDidFocusEventObject) => void;
+
+export type OnModalWillBlurEvent = (event: OnModalWillBlurEventObject) => void;
+
+export type OnModalDidBlurEvent = (event: OnModalDidBlurEventObject) => void;
