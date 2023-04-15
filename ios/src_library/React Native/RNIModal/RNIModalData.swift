@@ -11,6 +11,7 @@ public struct RNIModalData: RNIDictionarySynthesizable {
   public let modalNativeID: String;
   
   public let modalIndex: Int;
+  public let modalIndexPrev: Int;
   public let currentModalIndex: Int;
   
   public let modalFocusState: RNIModalFocusState;

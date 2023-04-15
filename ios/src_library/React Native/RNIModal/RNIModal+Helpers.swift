@@ -89,7 +89,9 @@ extension RNIModalState where Self: RNIModal {
   public var synthesizedModalData: RNIModalData {
     return RNIModalData(
       modalNativeID: self.modalNativeID,
+      
       modalIndex: self.modalIndex,
+      modalIndexPrev: self.modalIndexPrev,
       currentModalIndex: self.currentModalIndex,
       
       modalFocusState: self.modalFocusState.state,
