@@ -14,6 +14,7 @@ import type {
 export type RNIModalData = {
   modalNativeID: string;
   modalIndex: number;
+  modalIndexPrev: number;
   currentModalIndex: number;
   modalFocusState: ModalFocusState;
   modalFocusStatePref: ModalFocusState;
