@@ -13,6 +13,7 @@ import type {
 
 import type { KeyMapType } from '../../types/UtilityTypes';
 
+/** @deprecated */
 export enum ModalViewEmitterEventsDeprecated {
   // `RNIModalView` Events
   onModalBlur = 'onModalBlur',
@@ -29,6 +30,7 @@ export enum ModalViewEmitterEventsDeprecated {
 // TODO: See TODO:20230-03-04-12-58-40 - Refactor: Types -
 // Remove KeyMapType Usage
 //
+/** @deprecated */
 export type ModalViewEmitterEventMapDeprecated =
   // prettier-ignore
   KeyMapType<ModalViewEmitterEventsDeprecated, {
@@ -45,6 +47,7 @@ export type ModalViewEmitterEventMapDeprecated =
   }
 >;
 
+/** @deprecated */
 export type ModalViewEventEmitterDeprecated = TSEventEmitter<
   ModalViewEmitterEventsDeprecated,
   ModalViewEmitterEventMapDeprecated
