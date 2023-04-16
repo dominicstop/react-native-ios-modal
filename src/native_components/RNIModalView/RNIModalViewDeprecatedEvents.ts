@@ -42,6 +42,14 @@ export type OnModalAttemptDismissEventObject = NativeSyntheticEvent<
   RNIModalDeprecatedBaseEvent & {}
 >;
 
+export type OnModalWillDismissEventObject = NativeSyntheticEvent<
+  RNIModalDeprecatedBaseEvent & {}
+>;
+
+export type OnModalDidDismissEventObject = NativeSyntheticEvent<
+  RNIModalDeprecatedBaseEvent & {}
+>;
+
 // Event Handler Types
 // -------------------
 
@@ -72,4 +80,14 @@ export type OnModalFocusEvent = (
 /** @deprecated */
 export type OnModalAttemptDismissEvent = (
   event: OnModalAttemptDismissEventObject
+) => void;
+
+/** @deprecated */
+export type DeprecatedOnModalWillDismissEvent = (
+  event: OnModalWillDismissEventObject
+) => void;
+
+/** @deprecated */
+export type DeprecatedOnModalDidDismissEvent = (
+  event: OnModalDidDismissEventObject
 ) => void;
