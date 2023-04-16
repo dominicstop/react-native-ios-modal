@@ -62,7 +62,7 @@ extension RNIDictionarySynthesizable {
       
       let parseValue: Any = {
         if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
-          return synthesizableDict.synthesizedDictionary;
+          return synthesizableDict.synthesizedDictionary(isJSDict: isJSDict);
           
         } else if isJSDict,
                   let rawValue = value as? any RawRepresentable {
