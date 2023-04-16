@@ -29,7 +29,7 @@
 	- [x] **Subtask** - `TODO:2023-03-30-15-53-13` - Remove deprecated native events.
 	- [x] **Subtask** - `TODO:2023-03-30-15-54-06` - Impl. new `RNIModalView` native events.
 	- [x] **Subtask** - `TODO:2023-03-30-16-36-50` - Update `ModalView` to use the new events.
-	- [ ] **Subtask** - `TODO:2023-03-30-15-55-12` - Add invocation for deprecated events: `onModalFocus`, `onModalShow`, `onModalAttemptDismiss`, `onModalDismiss`, `onModalBlur`
+	- [x] **Subtask** - `TODO:2023-03-30-15-55-12` - Add invocation for deprecated events: `onModalFocus`, `onModalShow`, `onModalAttemptDismiss`, `onModalDismiss`, `onModalBlur`
 	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples.
 
