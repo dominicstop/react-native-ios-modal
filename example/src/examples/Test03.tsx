@@ -14,7 +14,10 @@ import {
   CardToggleButton,
 } from '../components/Card';
 
-import { ModalView, ModalViewEmitterEvents } from 'react-native-ios-modal';
+import {
+  ModalView,
+  ModalViewEmitterEventsDeprecated,
+} from 'react-native-ios-modal';
 
 import {
   CardLogDisplay,
@@ -22,7 +25,7 @@ import {
 } from '../components/Card/CardLogDisplay';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getEventMessageForEventKey(event: ModalViewEmitterEvents) {
+function getEventMessageForEventKey(event: ModalViewEmitterEventsDeprecated) {
   switch (event) {
     case 'onModalBlur':
       return 'The modal is in focus';
@@ -32,9 +35,9 @@ function getEventMessageForEventKey(event: ModalViewEmitterEvents) {
       return 'The modal is visible';
     case 'onModalDismiss':
       return 'The modal is dismissed';
-    case 'onModalDidDismiss':
+    case '_onModalDidDismiss':
       return 'The modal is dismissed via swipe';
-    case 'onModalWillDismiss':
+    case '_onModalWillDismiss':
       return 'The modal is being swiped down';
     case 'onModalAttemptDismiss':
       return 'User attempted to swipe down while isModalInPresentation';
@@ -97,11 +100,11 @@ export function Test03(props: ExampleProps) {
         onModalDismiss={() => {
           logEvent('onModalDismiss');
         }}
-        onModalDidDismiss={() => {
-          logEvent('onModalDidDismiss');
+        _onModalDidDismiss={() => {
+          logEvent('_onModalDidDismiss');
         }}
-        onModalWillDismiss={() => {
-          logEvent('onModalWillDismiss');
+        _onModalWillDismiss={() => {
+          logEvent('_onModalWillDismiss');
         }}
         onModalAttemptDismiss={() => {
           logEvent('onModalAttemptDismiss');

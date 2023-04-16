@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 
@@ -44,4 +43,4 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: 'white',
   },
-})
+});
