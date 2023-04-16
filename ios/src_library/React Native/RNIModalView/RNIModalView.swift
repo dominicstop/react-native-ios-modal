@@ -66,27 +66,27 @@ public class RNIModalView:
   // MARK: - Properties: React Props - Events
   // ----------------------------------------
   
-  var onModalWillPresent: RCTBubblingEventBlock?;
-  var onModalDidPresent: RCTBubblingEventBlock?;
+  @objc var onModalWillPresent: RCTBubblingEventBlock?;
+  @objc var onModalDidPresent: RCTBubblingEventBlock?;
   
-  var onModalWillDismiss: RCTBubblingEventBlock?;
-  var onModalDidDismiss: RCTBubblingEventBlock?;
+  @objc var onModalWillDismiss: RCTBubblingEventBlock?;
+  @objc var onModalDidDismiss: RCTBubblingEventBlock?;
   
-  var onModalWillShow: RCTBubblingEventBlock?;
-  var onModalDidShow: RCTBubblingEventBlock?;
+  @objc var onModalWillShow: RCTBubblingEventBlock?;
+  @objc var onModalDidShow: RCTBubblingEventBlock?;
   
-  var onModalWillHide: RCTBubblingEventBlock?;
-  var onModalDidHide: RCTBubblingEventBlock?;
+  @objc var onModalWillHide: RCTBubblingEventBlock?;
+  @objc var onModalDidHide: RCTBubblingEventBlock?;
   
-  var onModalWillFocus: RCTBubblingEventBlock?;
-  var onModalDidFocus: RCTBubblingEventBlock?;
+  @objc var onModalWillFocus: RCTBubblingEventBlock?;
+  @objc var onModalDidFocus: RCTBubblingEventBlock?;
   
-  var onModalWillBlur: RCTBubblingEventBlock?;
-  var onModalDidBlur: RCTBubblingEventBlock?;
+  @objc var onModalWillBlur: RCTBubblingEventBlock?;
+  @objc var onModalDidBlur: RCTBubblingEventBlock?;
   
-  var onPresentationControllerWillDismiss: RCTBubblingEventBlock?;
-  var onPresentationControllerDidDismiss: RCTBubblingEventBlock?;
-  var onPresentationControllerDidAttemptToDismiss: RCTBubblingEventBlock?;
+  @objc var onPresentationControllerWillDismiss: RCTBubblingEventBlock?;
+  @objc var onPresentationControllerDidDismiss: RCTBubblingEventBlock?;
+  @objc var onPresentationControllerDidAttemptToDismiss: RCTBubblingEventBlock?;
  
   // MARK: - Properties: React Props - Value
   // ---------------------------------------
@@ -957,7 +957,7 @@ extension RNIModalView: RNIModalFocusNotifiable {
       isInitial: sender === self
     );
     
-    self.onModalDidFocus?(
+    self.onModalDidBlur?(
       eventData.synthesizedJSDictionary
     );
     

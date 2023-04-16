@@ -7,27 +7,27 @@
 // MARK: Props - Callbacks/Events
 // ------------------------------
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillPresent, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onModalDidPresent, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalWillPresent, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidPresent, RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillDismiss, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onModalDidDismiss, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalWillDismiss, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidDismiss, RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillShow, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onModalDidShow, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalWillShow, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidShow, RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillHide, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onModalDidHide, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalWillHide, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidHide, RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillFocus, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onModalDidFocus, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalWillFocus, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDidFocus, RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onModalWillBlur, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onModalDidBlur, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onModalWillBlur, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onModalDidBlur, RCTBubblingEventBlock)
 
-RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTBubblingEventBlock);
 
 // --------------------------------
 // MARK: Props - RN Component Props
