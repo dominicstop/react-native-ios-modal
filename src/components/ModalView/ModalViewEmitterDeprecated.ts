@@ -6,9 +6,9 @@ import type {
   OnModalFocusEventObject,
   OnModalShowEventObject,
   OnModalDismissEventObject,
-  OnModalDidDismissEventObject,
-  OnModalWillDismissEventObject,
   OnModalAttemptDismissEventObject,
+  DeprecatedOnModalWillDismissEventObject,
+  DeprecatedOnModalDidDismissEventObject,
 } from 'src/native_components/RNIModalView';
 
 import type { KeyMapType } from '../../types/UtilityTypes';
@@ -20,8 +20,8 @@ export enum ModalViewEmitterEventsDeprecated {
   onModalFocus = 'onModalFocus',
   onModalShow = 'onModalShow',
   onModalDismiss = 'onModalDismiss',
-  onModalDidDismiss = 'onModalDidDismiss',
-  onModalWillDismiss = 'onModalWillDismiss',
+  _onModalDidDismiss = '_onModalDidDismiss',
+  _onModalWillDismiss = '_onModalWillDismiss',
   onModalAttemptDismiss = 'onModalAttemptDismiss',
 
   onLayoutModalContentContainer = 'onLayoutModalContentContainer',
@@ -39,8 +39,8 @@ export type ModalViewEmitterEventMapDeprecated =
     onModalFocus: OnModalFocusEventObject['nativeEvent'];
     onModalShow: OnModalShowEventObject['nativeEvent'];
     onModalDismiss: OnModalDismissEventObject['nativeEvent'];
-    onModalDidDismiss: OnModalDidDismissEventObject['nativeEvent'];
-    onModalWillDismiss: OnModalWillDismissEventObject['nativeEvent'];
+    _onModalDidDismiss: DeprecatedOnModalWillDismissEventObject['nativeEvent'];
+    _onModalWillDismiss: DeprecatedOnModalDidDismissEventObject['nativeEvent'];
     onModalAttemptDismiss: OnModalAttemptDismissEventObject['nativeEvent'];
 
     onLayoutModalContentContainer: LayoutChangeEvent['nativeEvent'];

@@ -42,11 +42,13 @@ export type OnModalAttemptDismissEventObject = NativeSyntheticEvent<
   RNIModalDeprecatedBaseEvent & {}
 >;
 
-export type OnModalWillDismissEventObject = NativeSyntheticEvent<
+/** @deprecated */
+export type DeprecatedOnModalWillDismissEventObject = NativeSyntheticEvent<
   RNIModalDeprecatedBaseEvent & {}
 >;
 
-export type OnModalDidDismissEventObject = NativeSyntheticEvent<
+/** @deprecated */
+export type DeprecatedOnModalDidDismissEventObject = NativeSyntheticEvent<
   RNIModalDeprecatedBaseEvent & {}
 >;
 
@@ -84,10 +86,10 @@ export type OnModalAttemptDismissEvent = (
 
 /** @deprecated */
 export type DeprecatedOnModalWillDismissEvent = (
-  event: OnModalWillDismissEventObject
+  event: DeprecatedOnModalWillDismissEventObject
 ) => void;
 
 /** @deprecated */
 export type DeprecatedOnModalDidDismissEvent = (
-  event: OnModalDidDismissEventObject
+  event: DeprecatedOnModalDidDismissEventObject
 ) => void;
