@@ -1,5 +1,15 @@
 import type { ViewProps, ViewStyle } from 'react-native';
-import type { RNIModalViewProps } from 'src/native_components/RNIModalView';
+
+import type {
+  RNIModalViewProps,
+  OnModalFocusEvent,
+  OnModalShowEvent,
+  OnModalAttemptDismissEvent,
+  OnModalDismissEvent,
+  OnModalBlurEvent,
+  DeprecatedOnModalWillDismissEvent,
+  DeprecatedOnModalDidDismissEvent,
+} from 'src/native_components/RNIModalView';
 
 export type ModalViewBaseProps = Partial<
   Pick<
@@ -50,9 +60,20 @@ export type ModalViewBaseProps = Partial<
   children?: React.ReactNode;
 };
 
+/** @deprecated */
+export type ModalViewDeprecatedProps = {
+  /** @deprecated */ onModalFocus?: OnModalFocusEvent;
+  /** @deprecated */ onModalShow?: OnModalShowEvent;
+  /** @deprecated */ onModalAttemptDismiss?: OnModalAttemptDismissEvent;
+  /** @deprecated */ onModalDismiss?: OnModalDismissEvent;
+  /** @deprecated */ onModalBlur?: OnModalBlurEvent;
+  /** @deprecated */ _onModalWillDismiss?: DeprecatedOnModalWillDismissEvent;
+  /** @deprecated */ _onModalDidDismiss?: DeprecatedOnModalDidDismissEvent;
+};
+
 // prettier-ignore
 export type ModalViewProps =
-  ViewProps & ModalViewBaseProps;
+  ViewProps & ModalViewBaseProps & ModalViewDeprecatedProps;
 
 export type ModalViewState = {
   isModalVisible: boolean;

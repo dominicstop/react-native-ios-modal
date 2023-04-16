@@ -6,6 +6,7 @@ import {
   ScrollView,
   Platform,
   ViewProps,
+  NativeSyntheticEvent,
 } from 'react-native';
 
 import { RNIWrapperView } from '../../temp';
@@ -33,6 +34,8 @@ import {
   OnPresentationControllerDidDismissEvent,
   OnPresentationControllerDidAttemptToDismissEvent,
   RNIModalView,
+  RNIModalBaseEvent,
+  RNIModalDeprecatedBaseEvent,
 } from '../../native_components/RNIModalView';
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
@@ -49,6 +52,7 @@ import {
   NATIVE_ID_KEYS,
   VirtualizedListContext,
 } from './ModalViewConstants';
+import { ModalViewEmitterEventsDeprecated } from './ModalViewEmitterDeprecated';
 
 // prettier-ignore
 export class ModalView extends
@@ -317,6 +321,11 @@ export class ModalView extends
 
     props.onModalWillPresent?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillPresent,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalDidPresent: OnModalDidPresentEvent = (event) => {
@@ -324,6 +333,11 @@ export class ModalView extends
 
     props.onModalDidPresent?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidPresent,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalWillDismiss: OnModalWillDismissEvent = (event) => {
@@ -331,6 +345,11 @@ export class ModalView extends
 
     props.onModalWillDismiss?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillDismiss,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalDidDismiss: OnModalDidDismissEvent = (event) => {
@@ -338,6 +357,11 @@ export class ModalView extends
 
     props.onModalDidDismiss?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidDismiss,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalWillShow: OnModalWillShowEvent = (event) => {
@@ -345,13 +369,34 @@ export class ModalView extends
 
     props.onModalWillShow?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillShow,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalDidShow: OnModalDidShowEvent = (event) => {
     const props = this.props;
 
     props.onModalDidShow?.(event);
+    props.onModalShow?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidShow,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated.onModalShow,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
 
     this.setState({
       isModalVisible: true,
@@ -362,6 +407,12 @@ export class ModalView extends
     const props = this.props;
 
     props.onModalWillHide?.(event);
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillHide,
+      event.nativeEvent
+    );
+
     event.stopPropagation();
   };
 
@@ -369,7 +420,23 @@ export class ModalView extends
     const props = this.props;
 
     props.onModalDidHide?.(event);
+    props.onModalDismiss?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidHide,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated.onModalDismiss,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
 
     this.setState({
       isModalVisible: false,
@@ -381,13 +448,34 @@ export class ModalView extends
 
     props.onModalWillFocus?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillFocus,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalDidFocus: OnModalDidFocusEvent = (event) => {
     const props = this.props;
 
     props.onModalDidFocus?.(event);
+    props.onModalFocus?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidFocus,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated.onModalFocus,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
 
     this.setState({
       isModalInFocus: true,
@@ -399,13 +487,34 @@ export class ModalView extends
 
     props.onModalWillBlur?.(event);
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalWillBlur,
+      event.nativeEvent
+    );
   };
 
   private _handleOnModalDidBlur: OnModalDidBlurEvent = (event) => {
     const props = this.props;
 
     props.onModalDidBlur?.(event);
+    props.onModalBlur?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidBlur,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated.onModalBlur,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
 
     this.setState({
       isModalInFocus: false,
@@ -416,21 +525,69 @@ export class ModalView extends
     const props = this.props;
 
     props.onPresentationControllerWillDismiss?.(event);
+    props._onModalWillDismiss?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onPresentationControllerWillDismiss,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated._onModalWillDismiss,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
   };
 
   private _handleOnPresentationControllerDidDismiss: OnPresentationControllerDidDismissEvent = (event) => {
     const props = this.props;
 
     props.onPresentationControllerDidDismiss?.(event);
+    props._onModalDidDismiss?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onPresentationControllerDidDismiss,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated._onModalDidDismiss,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
   };
 
   private _handleOnPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEvent = (event) => {
     const props = this.props;
 
     props.onPresentationControllerDidAttemptToDismiss?.(event);
+    props.onModalAttemptDismiss?.(
+      ModalViewHelpers.createDeprecatedBaseEventObject(event)
+    );
+
     event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onPresentationControllerDidAttemptToDismiss,
+      event.nativeEvent
+    );
+
+    this.emitter.emit(
+      ModalViewEmitterEventsDeprecated.onModalAttemptDismiss,
+      ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      )
+    );
   };
 
  private _renderModal() {
@@ -562,4 +719,29 @@ const styles = StyleSheet.create({
   },
 });
 
-class ModalViewHelpers {}
+class ModalViewHelpers {
+  static createDeprecatedEventObject(
+    event: RNIModalBaseEvent
+  ): RNIModalDeprecatedBaseEvent {
+    return {
+      modalUUID: event.modalNativeID,
+      modalID: event.modalID,
+      reactTag: event.reactTag,
+      isInFocus: event.isModalInFocus,
+      modalLevel: event.modalIndex,
+      modalLevelPrev: event.modalIndexPrev,
+      isPresented: event.isModalPresented,
+    };
+  }
+
+  static createDeprecatedBaseEventObject(
+    event: NativeSyntheticEvent<RNIModalBaseEvent>
+  ): NativeSyntheticEvent<RNIModalDeprecatedBaseEvent> {
+    return {
+      ...event,
+      nativeEvent: ModalViewHelpers.createDeprecatedEventObject(
+        event.nativeEvent
+      ),
+    };
+  }
+}

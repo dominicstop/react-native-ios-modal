@@ -21,6 +21,11 @@ import type {
 
 import type { KeyMapType } from '../../types/UtilityTypes';
 
+import type { 
+  ModalViewEmitterEventMapDeprecated,
+  ModalViewEmitterEventsDeprecated
+} from './ModalViewEmitterDeprecated';
+
 export enum ModalViewEmitterEvents {
   // `RNIModalView` Events
   onModalWillPresent = 'onModalWillPresent',
@@ -70,6 +75,6 @@ export type ModalViewEmitterEventMap =
 >;
 
 export type ModalViewEventEmitter = TSEventEmitter<
-  ModalViewEmitterEvents,
-  ModalViewEmitterEventMap
+  ModalViewEmitterEvents & ModalViewEmitterEventsDeprecated,
+  ModalViewEmitterEventMap & ModalViewEmitterEventMapDeprecated
 >;
