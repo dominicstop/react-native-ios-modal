@@ -118,7 +118,11 @@ public class RNIModalViewController: UIViewController {
     );
     #endif
     
+    let wrapperView = modalContentWrapper.reactViews.last!;
+        
     modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
+    wrapperView.center = self.view.center;
+    
     self.prevBounds = nextBounds;
     
     self.lifecycleDelegate?.viewDidLayoutSubviews(sender: self);
