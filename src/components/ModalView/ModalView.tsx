@@ -7,6 +7,7 @@ import {
   Platform,
   ViewProps,
   NativeSyntheticEvent,
+  View,
 } from 'react-native';
 
 import { RNIWrapperView } from '../../temp';
@@ -639,23 +640,28 @@ export class ModalView extends
       >
         {shouldMountModalContent && (
           <RNIWrapperView
-            style={[styles.modalContentWrapper, props.containerStyle]}
+            style={[styles.modalContentWrapper]}
             nativeID={NATIVE_ID_KEYS.modalViewContent}
-            isDummyView={false}
+            isDummyView={true}
             collapsable={false}
-            shouldAutoDetachSubviews={false}
+            shouldAutoDetachSubviews={true}
             shouldCreateTouchHandlerForSubviews={true}
             shouldNotifyComponentWillUnmount={props.shouldEnableAggressiveCleanup}
             shouldAutoCleanupOnJSUnmount={props.shouldEnableAggressiveCleanup}
             onLayout={this._handleOnLayoutModalContentContainer}
           >
-            {React.cloneElement(props.children as any, {
-              getModalRef: this._handleGetModalRef,
-              // pass down props received from setVisibility
-              ...(Helpers.isObject(state.childProps) && state.childProps),
-              // pass down modalID
-              modalID: props.modalID,
-            })}
+            <View
+              style={[styles.modalContentContainer, props.containerStyle]}
+              nativeID={'modalViewContentContainer'}
+            >
+                {React.cloneElement(props.children as any, {
+                getModalRef: this._handleGetModalRef,
+                // pass down props received from setVisibility
+                ...(Helpers.isObject(state.childProps) && state.childProps),
+                // pass down modalID
+                modalID: props.modalID,
+              })}
+            </View>
           </RNIWrapperView>
         )}
       </RNIModalView>
@@ -716,6 +722,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  modalContentContainer: {
+    position: 'absolute',
+    overflow: 'visible',
+    width: '100%',
+    height: '100%',
   },
 });
 

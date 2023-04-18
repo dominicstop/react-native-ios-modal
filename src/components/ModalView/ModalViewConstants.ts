@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native';
 
 export const NATIVE_ID_KEYS = {
   modalViewContent: 'modalViewContent',
+  modalViewContentContainer: 'modalViewContentContainer',
 };
 
 export const VirtualizedListContext = React.createContext(null);
