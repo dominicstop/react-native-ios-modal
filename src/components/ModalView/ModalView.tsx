@@ -3,11 +3,11 @@ import React from 'react';
 import {
   findNodeHandle,
   StyleSheet,
+  View,
   ScrollView,
   Platform,
   ViewProps,
   NativeSyntheticEvent,
-  View,
 } from 'react-native';
 
 import { RNIWrapperView } from '../../temp';
@@ -640,21 +640,18 @@ export class ModalView extends
       >
         {shouldMountModalContent && (
           <RNIWrapperView
-            style={[styles.modalContentWrapper]}
+            style={styles.modalContentWrapper}
             nativeID={NATIVE_ID_KEYS.modalViewContent}
-            isDummyView={true}
+            isDummyView={false}
             collapsable={false}
-            shouldAutoDetachSubviews={true}
+            shouldAutoDetachSubviews={false}
             shouldCreateTouchHandlerForSubviews={true}
             shouldNotifyComponentWillUnmount={props.shouldEnableAggressiveCleanup}
             shouldAutoCleanupOnJSUnmount={props.shouldEnableAggressiveCleanup}
             onLayout={this._handleOnLayoutModalContentContainer}
           >
-            <View
-              style={[styles.modalContentContainer, props.containerStyle]}
-              nativeID={'modalViewContentContainer'}
-            >
-                {React.cloneElement(props.children as any, {
+            <View style={[styles.modalContentContainer, props.containerStyle]}>
+              {React.cloneElement(props.children as any, {
                 getModalRef: this._handleGetModalRef,
                 // pass down props received from setVisibility
                 ...(Helpers.isObject(state.childProps) && state.childProps),
@@ -723,12 +720,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-  modalContentContainer: {
-    position: 'absolute',
-    overflow: 'visible',
-    width: '100%',
-    height: '100%',
-  },
+  modalContentContainer: {},
 });
 
 class ModalViewHelpers {

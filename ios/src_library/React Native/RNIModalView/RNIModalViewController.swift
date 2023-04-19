@@ -16,6 +16,7 @@ public class RNIModalViewController: UIViewController {
   private(set) public var prevBounds: CGRect?;
   
   weak var lifecycleDelegate: RNIViewControllerLifeCycleNotifiable?;
+  
   weak var modalViewRef: RNIModalView?;
   
   var isBGTransparent: Bool = true {
@@ -84,11 +85,8 @@ public class RNIModalViewController: UIViewController {
     }();
     
     if let modalContentWrapper = self.modalContentWrapper {
-      let parentView = self.view!;
-      let wrapperView = modalContentWrapper.reactViews.last!;
-      
-      parentView.addSubview(wrapperView);
-      wrapperView.center = parentView.center;
+      self.view.addSubview(modalContentWrapper);
+      modalContentWrapper.notifyForBoundsChange(size: self.view.bounds.size);
     };
     
     self.updateBackgroundTransparency();
@@ -113,9 +111,7 @@ public class RNIModalViewController: UIViewController {
     
     let prevBounds = self.prevBounds;
     self.prevBounds = nextBounds;
-    
-    let wrapperView = modalContentWrapper.reactViews.last!;
-    
+        
     #if DEBUG
     print(
         "Log - RNIModalViewController.viewDidLayoutSubviews"
@@ -126,7 +122,7 @@ public class RNIModalViewController: UIViewController {
     #endif
         
     modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
-    wrapperView.center = self.view.center;
+    modalContentWrapper.center = self.view.center;
     
     self.lifecycleDelegate?.viewDidLayoutSubviews(sender: self);
   };
