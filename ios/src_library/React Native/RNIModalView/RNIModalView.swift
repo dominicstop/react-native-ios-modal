@@ -161,6 +161,9 @@ public class RNIModalView:
     }
   };
   
+  
+  @objc var modalSheetDetents: NSArray?;
+  
   // MARK: - Properties: Synthesized From Props
   // ------------------------------------------
   
@@ -255,6 +258,22 @@ public class RNIModalView:
     return blurStyle;
   };
   
+  @available(iOS 15.0, *)
+  public var synthesizedModalSheetDetents: [UISheetPresentationController.Detent]? {
+    self.modalSheetDetents?.compactMap {
+      if let string = $0 as? String {
+        return UISheetPresentationController.Detent.fromString(string);
+        
+      } else if #available(iOS 16.0, *),
+                let dict = $0 as? Dictionary<String, Any> {
+        let customDetent = RNIModalCustomSheetDetent(forDict: dict)
+        return customDetent?.synthesizedDetent;
+      };
+      
+      return nil;
+    };
+  };
+  
   // MARK: - Properties: Synthesized
   // -------------------------------
   
@@ -264,6 +283,28 @@ public class RNIModalView:
       modalID: self.modalID as? String,
       modalData: self.synthesizedModalData
     );
+  };
+  
+  // MARK: - Properties: Computed
+  // ----------------------------
+  
+  @available(iOS 15.0, *)
+  var sheetPresentationController: UISheetPresentationController? {
+    guard let presentedVC = self.modalViewController else { return nil };
+    
+    switch presentedVC.modalPresentationStyle {
+      case .popover:
+        return presentedVC.popoverPresentationController?
+          .adaptiveSheetPresentationController;
+        
+      case .automatic,
+           .formSheet,
+           .pageSheet:
+        return presentedVC.sheetPresentationController;
+        
+      default:
+        return nil;
+    };
   };
   
   // MARK: - Init
@@ -475,6 +516,16 @@ public class RNIModalView:
     
     modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
     modalVC.modalPresentationStyle = self.synthesizedModalPresentationStyle;
+    
+    if #available(iOS 15.0, *),
+       let sheetController = self.sheetPresentationController {
+      
+      if let detents = self.synthesizedModalSheetDetents,
+         detents.count >= 1 {
+        
+        sheetController.detents = detents;
+      };
+    };
 
     #if DEBUG
     print(

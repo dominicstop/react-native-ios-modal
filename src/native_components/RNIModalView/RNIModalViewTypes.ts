@@ -1,12 +1,13 @@
 import type { ViewProps } from 'react-native';
 
-import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
-
 import type {
   TUIModalPresentationStyle,
   TUIModalTransitionStyle,
+  TUISheetPresentationControllerDetents,
 } from 'src/types/UIModalTypes';
 
+import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
+import type { RNIModalCustomSheetDetent } from 'src/types/RNIModalTypes';
 import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
 
 import type {
@@ -46,6 +47,13 @@ export type RNIModalViewBaseProps = {
   modalTransitionStyle?: TUIModalTransitionStyle;
   modalBGBlurEffectStyle?: TUIBlurEffectStyles;
   modalPresentationStyle?: TUIModalPresentationStyle;
+
+  // Props - Objects/Arrays
+  // ----------------------
+
+  modalSheetDetents?: Array<
+    TUISheetPresentationControllerDetents | RNIModalCustomSheetDetent
+  >;
 
   // Props - Events
   // --------------

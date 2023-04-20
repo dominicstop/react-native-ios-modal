@@ -105,6 +105,9 @@ export class ModalView extends
       modalBGBlurEffectStyle,
       modalPresentationStyle,
 
+      // native props - objects/arrays
+      modalSheetDetents,
+
       // native props - events
       onModalWillPresent,
       onModalDidPresent,
@@ -195,6 +198,7 @@ export class ModalView extends
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
       containerStyle,
+      modalSheetDetents,
 
       // C - View-Related Props
       children,

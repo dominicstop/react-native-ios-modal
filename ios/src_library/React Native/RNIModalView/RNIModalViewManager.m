@@ -3,9 +3,8 @@
  
 @interface RCT_EXTERN_MODULE(RNIModalViewManager, RCTViewManager)
 
-// ------------------------------
-// MARK: Props - Callbacks/Events
-// ------------------------------
+// MARK: - Props - Callbacks/Events
+// --------------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onModalWillPresent, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onModalDidPresent, RCTBubblingEventBlock);
@@ -29,9 +28,9 @@ RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTBubblingEventBl
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTBubblingEventBlock);
 
-// --------------------------------
-// MARK: Props - RN Component Props
-// --------------------------------
+
+// MARK: - Props - RN Component Props
+// ----------------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(presentViaMount       , BOOL);
 RCT_EXPORT_VIEW_PROPERTY(isModalBGBlurred      , BOOL);
@@ -41,11 +40,12 @@ RCT_EXPORT_VIEW_PROPERTY(isModalBGTransparent  , BOOL);
 RCT_EXPORT_VIEW_PROPERTY(isModalInPresentation , BOOL);
 RCT_EXPORT_VIEW_PROPERTY(allowModalForceDismiss, BOOL);
 
-
 RCT_EXPORT_VIEW_PROPERTY(modalID               , NSString);
 RCT_EXPORT_VIEW_PROPERTY(modalTransitionStyle  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(modalBGBlurEffectStyle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(modalPresentationStyle, NSString);
+
+RCT_EXPORT_VIEW_PROPERTY(modalSheetDetents, NSArray);
 
 @end
 

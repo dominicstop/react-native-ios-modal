@@ -29,6 +29,9 @@ export type ModalViewBaseProps = Partial<
     | 'modalBGBlurEffectStyle'
     | 'modalPresentationStyle'
 
+    // props - object/arrays
+    | 'modalSheetDetents'
+
     // props - events
     | 'onModalWillPresent'
     | 'onModalDidPresent'

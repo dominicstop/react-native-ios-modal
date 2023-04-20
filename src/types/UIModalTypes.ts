@@ -16,3 +16,6 @@ export type TUIModalPresentationStyle =
   | 'overCurrentContext'
   | 'popover'
   | 'blurOverFullScreen';
+
+/** Maps to `UISheetPresentationController.Detents` */
+export type TUISheetPresentationControllerDetents = 'medium' | 'large';
