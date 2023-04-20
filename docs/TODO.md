@@ -68,6 +68,12 @@
 
 	<br>
 
+	- [ ] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
+	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl.  `modalPreferredContentSize`
+		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
+		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
+		* This will also be used when `sheet.widthFollowsPreferredContentSizeWhenEdgeAttached` is set to `true`.
+
 <br>
 
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
