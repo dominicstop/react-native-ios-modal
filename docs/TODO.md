@@ -8,7 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-04-21-23-27-27` - Gloss: Re-Organize/Re-group props based on their relationship, not their type.
 - [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
 - [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
 	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
@@ -193,6 +192,8 @@
 ## TODO - Completed
 
 <br>
+
+- [x] `TODO:2023-04-21-23-27-27` - Gloss: Re-Organize/Re-group props based on their relationship, not their type.
 
 - [x] `TODO:2023-03-31-18-33-34` - Unify/streamline/consolidate logic for invoking modal focus/blur.
 
