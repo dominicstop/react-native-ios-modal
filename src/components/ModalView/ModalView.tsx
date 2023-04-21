@@ -109,6 +109,10 @@ export class ModalView extends
 
       // Native Props - Sheet-Related
       modalSheetDetents,
+      sheetPrefersScrollingExpandsWhenScrolledToEdge,
+      sheetPrefersEdgeAttachedInCompactHeight,
+      sheetWidthFollowsPreferredContentSizeWhenEdgeAttached,
+      sheetPrefersGrabberVisible,
 
       // Native Props - Events
       onModalWillPresent,
@@ -181,9 +185,15 @@ export class ModalView extends
       ),
 
       // B - Pass down...
+      containerStyle,
       modalID,
       allowModalForceDismiss,
       modalBGBlurEffectStyle,
+      modalSheetDetents,
+      sheetPrefersScrollingExpandsWhenScrolledToEdge,
+      sheetPrefersEdgeAttachedInCompactHeight,
+      sheetWidthFollowsPreferredContentSizeWhenEdgeAttached,
+      sheetPrefersGrabberVisible,
       onModalWillPresent,
       onModalDidPresent,
       onModalWillDismiss,
@@ -199,8 +209,7 @@ export class ModalView extends
       onPresentationControllerWillDismiss,
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
-      containerStyle,
-      modalSheetDetents,
+
 
       // C - View-Related Props
       children,

@@ -33,6 +33,10 @@ export type ModalViewBaseProps = Partial<
 
     // Props - Sheet-Related
     | 'modalSheetDetents'
+    | 'sheetPrefersScrollingExpandsWhenScrolledToEdge'
+    | 'sheetPrefersEdgeAttachedInCompactHeight'
+    | 'sheetWidthFollowsPreferredContentSizeWhenEdgeAttached'
+    | 'sheetPrefersGrabberVisible'
 
     // props - events
     | 'onModalWillPresent'

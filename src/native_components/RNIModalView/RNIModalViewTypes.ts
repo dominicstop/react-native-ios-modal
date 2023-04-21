@@ -60,6 +60,11 @@ export type RNIModalViewBaseProps = {
     TUISheetPresentationControllerDetents | RNIModalCustomSheetDetent
   >;
 
+  sheetPrefersScrollingExpandsWhenScrolledToEdge?: boolean;
+  sheetPrefersEdgeAttachedInCompactHeight?: boolean;
+  sheetWidthFollowsPreferredContentSizeWhenEdgeAttached?: boolean;
+  sheetPrefersGrabberVisible?: boolean;
+
   // Props - Events
   // --------------
 

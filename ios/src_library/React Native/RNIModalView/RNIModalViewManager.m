@@ -57,5 +57,10 @@ RCT_EXPORT_VIEW_PROPERTY(isModalInPresentation, BOOL);
 
 RCT_EXPORT_VIEW_PROPERTY(modalSheetDetents, NSArray);
 
+RCT_EXPORT_VIEW_PROPERTY(sheetPrefersScrollingExpandsWhenScrolledToEdge, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(sheetPrefersEdgeAttachedInCompactHeight, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(sheetWidthFollowsPreferredContentSizeWhenEdgeAttached, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(sheetPrefersGrabberVisible, BOOL);
+
 @end
 

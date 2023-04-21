@@ -172,6 +172,47 @@ public class RNIModalView:
   
   @objc var modalSheetDetents: NSArray?;
   
+  @objc var sheetPrefersScrollingExpandsWhenScrolledToEdge: Bool = true {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      sheetController.prefersScrollingExpandsWhenScrolledToEdge = newValue;
+    }
+  };
+  
+  @objc var sheetPrefersEdgeAttachedInCompactHeight: Bool = false {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      sheetController.prefersEdgeAttachedInCompactHeight = newValue;
+    }
+  };
+  
+  @objc var sheetWidthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      sheetController
+        .widthFollowsPreferredContentSizeWhenEdgeAttached = newValue;
+    }
+  };
+  
+  @objc var sheetPrefersGrabberVisible: Bool = false {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      sheetController.prefersGrabberVisible = newValue;
+    }
+  };
+  
   // MARK: - Properties: Synthesized From Props
   // ------------------------------------------
   
@@ -445,6 +486,29 @@ public class RNIModalView:
     };
   };
   
+  @available(iOS 15.0, *)
+  private func applyModalSheetProps(
+    to sheetController: UISheetPresentationController
+  ){
+    
+    if let detents = self.synthesizedModalSheetDetents,
+       detents.count >= 1 {
+      
+      sheetController.detents = detents;
+    };
+    
+    sheetController.prefersScrollingExpandsWhenScrolledToEdge =
+      self.sheetPrefersScrollingExpandsWhenScrolledToEdge;
+    
+    sheetController.prefersEdgeAttachedInCompactHeight =
+      self.sheetPrefersEdgeAttachedInCompactHeight;
+    
+    sheetController.widthFollowsPreferredContentSizeWhenEdgeAttached =
+      self.sheetWidthFollowsPreferredContentSizeWhenEdgeAttached;
+    
+    sheetController.prefersGrabberVisible = self.sheetPrefersGrabberVisible;
+  };
+  
   // MARK: - Functions - Public
   // --------------------------
   
@@ -528,11 +592,7 @@ public class RNIModalView:
     if #available(iOS 15.0, *),
        let sheetController = self.sheetPresentationController {
       
-      if let detents = self.synthesizedModalSheetDetents,
-         detents.count >= 1 {
-        
-        sheetController.detents = detents;
-      };
+      self.applyModalSheetProps(to: sheetController);
     };
 
     #if DEBUG
