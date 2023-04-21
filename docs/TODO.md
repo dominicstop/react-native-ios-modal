@@ -8,16 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
-- [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
-	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
-
-<br>
-
-- [ ] `TODO:2023-04-22-00-01-50` - Optimization - Add flag for caching the view-controller tree
-
-<br>
-
 - [ ] `TODO:2023-04-20-23-58-24` - Impl. sheets + detents.
 
 	* Research
@@ -130,6 +120,18 @@
 <br>
 
 - [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
+
+<br>
+
+- [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
+- [ ] `TODO:` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
+- [ ] `TODO:` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
+- [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
+	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
+
+<br>
+
+- [ ] `TODO:2023-04-22-00-01-50` - Optimization - Add flag for caching the view-controller tree.
 
 <br>
 
