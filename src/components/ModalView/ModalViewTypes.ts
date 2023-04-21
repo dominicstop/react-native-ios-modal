@@ -37,6 +37,10 @@ export type ModalViewBaseProps = Partial<
     | 'sheetPrefersEdgeAttachedInCompactHeight'
     | 'sheetWidthFollowsPreferredContentSizeWhenEdgeAttached'
     | 'sheetPrefersGrabberVisible'
+    | 'sheetShouldAnimateChanges'
+    | 'sheetLargestUndimmedDetentIdentifier'
+    | 'sheetPreferredCornerRadius'
+    | 'sheetSelectedDetentIdentifier'
 
     // props - events
     | 'onModalWillPresent'

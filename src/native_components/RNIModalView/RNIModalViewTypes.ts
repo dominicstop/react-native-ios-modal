@@ -27,6 +27,7 @@ import type {
   OnPresentationControllerDidDismissEvent,
   OnPresentationControllerDidAttemptToDismissEvent,
 } from './RNIModalViewEvents';
+import type { UnionWithAutoComplete } from 'src/types/UtilityTypes';
 
 export type RNIModalViewBaseProps = {
   // Props - General
@@ -64,6 +65,19 @@ export type RNIModalViewBaseProps = {
   sheetPrefersEdgeAttachedInCompactHeight?: boolean;
   sheetWidthFollowsPreferredContentSizeWhenEdgeAttached?: boolean;
   sheetPrefersGrabberVisible?: boolean;
+  sheetShouldAnimateChanges?: boolean;
+
+  sheetPreferredCornerRadius?: number;
+
+  sheetLargestUndimmedDetentIdentifier?: UnionWithAutoComplete<
+    TUISheetPresentationControllerDetents,
+    string
+  >;
+
+  sheetSelectedDetentIdentifier?: UnionWithAutoComplete<
+    TUISheetPresentationControllerDetents,
+    string
+  >;
 
   // Props - Events
   // --------------

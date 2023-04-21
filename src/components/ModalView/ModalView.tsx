@@ -113,6 +113,10 @@ export class ModalView extends
       sheetPrefersEdgeAttachedInCompactHeight,
       sheetWidthFollowsPreferredContentSizeWhenEdgeAttached,
       sheetPrefersGrabberVisible,
+      sheetShouldAnimateChanges,
+      sheetLargestUndimmedDetentIdentifier,
+      sheetPreferredCornerRadius,
+      sheetSelectedDetentIdentifier,
 
       // Native Props - Events
       onModalWillPresent,
@@ -194,6 +198,10 @@ export class ModalView extends
       sheetPrefersEdgeAttachedInCompactHeight,
       sheetWidthFollowsPreferredContentSizeWhenEdgeAttached,
       sheetPrefersGrabberVisible,
+      sheetShouldAnimateChanges,
+      sheetLargestUndimmedDetentIdentifier,
+      sheetPreferredCornerRadius,
+      sheetSelectedDetentIdentifier,
       onModalWillPresent,
       onModalDidPresent,
       onModalWillDismiss,
@@ -209,7 +217,6 @@ export class ModalView extends
       onPresentationControllerWillDismiss,
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
-
 
       // C - View-Related Props
       children,

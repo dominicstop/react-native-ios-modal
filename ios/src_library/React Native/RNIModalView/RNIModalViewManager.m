@@ -61,6 +61,11 @@ RCT_EXPORT_VIEW_PROPERTY(sheetPrefersScrollingExpandsWhenScrolledToEdge, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(sheetPrefersEdgeAttachedInCompactHeight, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(sheetWidthFollowsPreferredContentSizeWhenEdgeAttached, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(sheetPrefersGrabberVisible, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(sheetShouldAnimateChanges, BOOL);
+
+RCT_EXPORT_VIEW_PROPERTY(sheetLargestUndimmedDetentIdentifier, NSString);
+RCT_EXPORT_VIEW_PROPERTY(sheetSelectedDetentIdentifier, NSString);
+RCT_EXPORT_VIEW_PROPERTY(sheetPreferredCornerRadius, NSNumber);
 
 @end
 

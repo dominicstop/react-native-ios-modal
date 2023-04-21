@@ -188,7 +188,9 @@ public class RNIModalView:
             let sheetController = self.sheetPresentationController
       else { return };
       
-      sheetController.prefersEdgeAttachedInCompactHeight = newValue;
+      self.sheetAnimateChangesIfNeeded {
+        sheetController.prefersEdgeAttachedInCompactHeight = newValue;
+      };
     }
   };
   
@@ -209,7 +211,50 @@ public class RNIModalView:
             let sheetController = self.sheetPresentationController
       else { return };
       
-      sheetController.prefersGrabberVisible = newValue;
+      self.sheetAnimateChangesIfNeeded {
+        sheetController.prefersGrabberVisible = newValue;
+      };
+    }
+  };
+  
+  @objc var sheetShouldAnimateChanges: Bool = true;
+  
+  @objc var sheetLargestUndimmedDetentIdentifier: String? {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      self.sheetAnimateChangesIfNeeded {
+        sheetController.largestUndimmedDetentIdentifier =
+          self.synthesizedSheetLargestUndimmedDetentIdentifier;
+      };
+    }
+  };
+  
+  @objc var sheetPreferredCornerRadius: NSNumber? {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController,
+            let cornerRadius = newValue?.doubleValue
+      else { return };
+      
+      self.sheetAnimateChangesIfNeeded {
+        sheetController.preferredCornerRadius = cornerRadius;
+      };
+    }
+  };
+  
+  @objc var sheetSelectedDetentIdentifier: String? {
+    willSet {
+      guard #available(iOS 15.0, *),
+            let sheetController = self.sheetPresentationController
+      else { return };
+      
+      self.sheetAnimateChangesIfNeeded {
+        sheetController.selectedDetentIdentifier =
+          self.synthesizedSheetSelectedDetentIdentifier;
+      };
     }
   };
   
@@ -315,12 +360,37 @@ public class RNIModalView:
         
       } else if #available(iOS 16.0, *),
                 let dict = $0 as? Dictionary<String, Any> {
-        let customDetent = RNIModalCustomSheetDetent(forDict: dict)
+        
+        let customDetent = RNIModalCustomSheetDetent(forDict: dict);
         return customDetent?.synthesizedDetent;
       };
       
       return nil;
     };
+  };
+  
+  @available(iOS 15.0, *)
+  public var synthesizedSheetLargestUndimmedDetentIdentifier:
+    UISheetPresentationController.Detent.Identifier? {
+    
+    guard let identifierString = self.sheetLargestUndimmedDetentIdentifier
+    else { return nil };
+      
+    return UISheetPresentationController.Detent.Identifier(
+      fromString: identifierString
+    );
+  };
+  
+  @available(iOS 15.0, *)
+  public var synthesizedSheetSelectedDetentIdentifier:
+    UISheetPresentationController.Detent.Identifier? {
+    
+    guard let identifierString = self.sheetSelectedDetentIdentifier
+    else { return nil };
+      
+    return UISheetPresentationController.Detent.Identifier(
+      fromString: identifierString
+    );
   };
   
   // MARK: - Properties: Synthesized
@@ -412,7 +482,6 @@ public class RNIModalView:
           
           oldModalContentWrapper.cleanup();
           self.modalContentWrapper = nil;
-          
           self.deinitControllers();
         };
         
@@ -490,13 +559,26 @@ public class RNIModalView:
   };
   
   @available(iOS 15.0, *)
+  private func sheetAnimateChangesIfNeeded(_ block: () -> Void){
+    guard let sheetController = self.sheetPresentationController
+    else { return };
+    
+    if self.sheetShouldAnimateChanges {
+      sheetController.animateChanges {
+        block();
+      };
+      
+    } else {
+      block();
+    };
+  };
+  
+  @available(iOS 15.0, *)
   private func applyModalSheetProps(
     to sheetController: UISheetPresentationController
   ){
     
-    if let detents = self.synthesizedModalSheetDetents,
-       detents.count >= 1 {
-      
+    if let detents = self.synthesizedModalSheetDetents, detents.count >= 1 {
       sheetController.detents = detents;
     };
     
@@ -510,6 +592,16 @@ public class RNIModalView:
       self.sheetWidthFollowsPreferredContentSizeWhenEdgeAttached;
     
     sheetController.prefersGrabberVisible = self.sheetPrefersGrabberVisible;
+    
+    sheetController.largestUndimmedDetentIdentifier =
+      self.synthesizedSheetLargestUndimmedDetentIdentifier;
+    
+    if let cornerRadius = self.sheetPreferredCornerRadius?.doubleValue {
+      sheetController.preferredCornerRadius = cornerRadius;
+    };
+    
+    sheetController.selectedDetentIdentifier =
+      self.synthesizedSheetSelectedDetentIdentifier;
   };
   
   // MARK: - Functions - Public
