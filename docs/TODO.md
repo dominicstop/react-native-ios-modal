@@ -69,16 +69,17 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateSelectedDetentIdentifierChanges`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetSmallestUndimmedDetentIdentifier`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`
-	- [ ] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetSmallestUndimmedDetentIdentifier`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
+
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateSelectedDetentIdentifierChanges`.
 	- [ ] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
-	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl.  `modalPreferredContentSize`
+	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl. modal content prop  `modalPreferredContentSize`.
 		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
 		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
 		* This will also be used when `sheet.widthFollowsPreferredContentSizeWhenEdgeAttached` is set to `true`.
