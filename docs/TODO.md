@@ -8,7 +8,7 @@
 
 <br>
 
-- [ ] `TODO:2023-04-20-23-58-24` - Impl. sheets + detents.
+- [ ] `TODO:2023-04-20-23-58-24` - Impl. sheet-related props.
 
 	* Research
 		* A sheet is an instance of a new `UIPresentationController` subclass called `UISheetPresentationController`.
@@ -69,10 +69,10 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
 	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetSmallestUndimmedDetentIdentifier`.
 	- [ ] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`.
 	- [ ] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
