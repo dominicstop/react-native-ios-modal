@@ -9,11 +9,6 @@
 <br>
 
 - [ ] `TODO:2023-04-20-23-58-24` - Impl. sheet-related props.
-
-	* * * * *  
-	
-	<br>
-	
 	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
 	- [x] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
 	- [x] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
@@ -24,7 +19,9 @@
 	- [x] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
 	
 	- [x] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateChanges`.
+	- [ ] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDid`.
 	- [ ] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
+	- [ ] **Subtask**: `TODO:2023-04-22-06-24-51` - Impl. modal event `onModalDidChangeSelectedDetentIdentifier`
 	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl. modal content prop  `modalPreferredContentSize`.
 		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
 		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
@@ -71,15 +68,16 @@
 <br>
 
 - [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
-- [ ] `TODO:` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
-- [ ] `TODO:` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
-- [ ] `TODO:` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
+- [ ] `TODO:2023-04-22-05-29-50` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
+- [ ] `TODO:2023-04-22-05-30-00` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
+- [ ] `TODO:2023-04-22-05-29-50` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
 - [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
 	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
 
 <br>
 
 - [ ] `TODO:2023-04-22-00-01-50` - Optimization - Add flag for caching the view-controller tree.
+- [ ] `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureDidBegin` + `onModalSwipeGestureDidEnd`
 
 <br>
 
