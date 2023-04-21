@@ -404,8 +404,11 @@ public class RNIModalView:
     
     switch nativeIDKey {
       case .modalViewContent:
-        if let oldModalContentWrapper = self.modalContentWrapper,
-           wrapperView !== oldModalContentWrapper {
+        guard self.modalContentWrapper !== wrapperView,
+              self.modalContentWrapper?.reactTag != wrapperView.reactTag
+        else { return };
+        
+        if let oldModalContentWrapper = self.modalContentWrapper {
           
           oldModalContentWrapper.cleanup();
           self.modalContentWrapper = nil;
