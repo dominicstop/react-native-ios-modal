@@ -726,7 +726,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-  modalContentContainer: {},
+  modalContentContainer: {
+    flex: 1,
+  },
 });
 
 class ModalViewHelpers {
