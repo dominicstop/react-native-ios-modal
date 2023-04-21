@@ -28,22 +28,32 @@ RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTBubblingEventBl
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTBubblingEventBlock);
 
+// MARK: - Value Props - General
+// -----------------------------
 
-// MARK: - Props - RN Component Props
-// ----------------------------------
+RCT_EXPORT_VIEW_PROPERTY(modalID, NSString);
 
-RCT_EXPORT_VIEW_PROPERTY(presentViaMount       , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(isModalBGBlurred      , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(enableSwipeGesture    , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(hideNonVisibleModals  , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(isModalBGTransparent  , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(isModalInPresentation , BOOL);
-RCT_EXPORT_VIEW_PROPERTY(allowModalForceDismiss, BOOL);
+// MARK: - Value Props - BG-Related
+// --------------------------------
 
-RCT_EXPORT_VIEW_PROPERTY(modalID               , NSString);
-RCT_EXPORT_VIEW_PROPERTY(modalTransitionStyle  , NSString);
+RCT_EXPORT_VIEW_PROPERTY(isModalBGBlurred, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(isModalBGTransparent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(modalBGBlurEffectStyle, NSString);
+
+// MARK: - Value Props - Presentation/Transition
+// ---------------------------------------------
+
 RCT_EXPORT_VIEW_PROPERTY(modalPresentationStyle, NSString);
+RCT_EXPORT_VIEW_PROPERTY(modalTransitionStyle, NSString);
+
+RCT_EXPORT_VIEW_PROPERTY(hideNonVisibleModals, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(presentViaMount, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(enableSwipeGesture, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(allowModalForceDismiss, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(isModalInPresentation, BOOL);
+
+// MARK: - Value Props - Sheet-Related
+// -----------------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(modalSheetDetents, NSArray);
 

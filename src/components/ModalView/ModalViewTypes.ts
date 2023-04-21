@@ -14,22 +14,24 @@ import type {
 export type ModalViewBaseProps = Partial<
   Pick<
     RNIModalViewProps,
-    // props - flags
-    | 'presentViaMount'
-    | 'isModalBGBlurred'
-    | 'enableSwipeGesture'
-    | 'hideNonVisibleModals'
-    | 'isModalBGTransparent'
-    | 'isModalInPresentation'
-    | 'allowModalForceDismiss'
-
-    // props - string
+    // Props - General
     | 'modalID'
-    | 'modalTransitionStyle'
-    | 'modalBGBlurEffectStyle'
-    | 'modalPresentationStyle'
 
-    // props - object/arrays
+    // Props - BG-Related
+    | 'isModalBGBlurred'
+    | 'isModalBGTransparent'
+    | 'modalBGBlurEffectStyle'
+
+    // Props - Presentation/Transition
+    | 'modalPresentationStyle'
+    | 'modalTransitionStyle'
+    | 'hideNonVisibleModals'
+    | 'presentViaMount'
+    | 'enableSwipeGesture'
+    | 'allowModalForceDismiss'
+    | 'isModalInPresentation'
+
+    // Props - Sheet-Related
     | 'modalSheetDetents'
 
     // props - events

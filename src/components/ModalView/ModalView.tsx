@@ -89,26 +89,28 @@ export class ModalView extends
 
   private getProps = (propOverride: ModalViewProps | null = null) => {
     const {
-      // native props - flags
-      presentViaMount,
-      isModalBGBlurred,
-      enableSwipeGesture,
-      hideNonVisibleModals,
-      isModalBGTransparent,
-      isModalInPresentation,
-      allowModalForceDismiss,
+      // Native Props - General
+      modalID,
       shouldEnableAggressiveCleanup,
 
-      // native props - string
-      modalID,
-      modalTransitionStyle,
+      // Native Props - BG-Related
+      isModalBGBlurred,
+      isModalBGTransparent,
       modalBGBlurEffectStyle,
-      modalPresentationStyle,
 
-      // native props - objects/arrays
+      // Native Props - Presentation/Transition
+      modalPresentationStyle,
+      modalTransitionStyle,
+      hideNonVisibleModals,
+      presentViaMount,
+      enableSwipeGesture,
+      allowModalForceDismiss,
+      isModalInPresentation,
+
+      // Native Props - Sheet-Related
       modalSheetDetents,
 
-      // native props - events
+      // Native Props - Events
       onModalWillPresent,
       onModalDidPresent,
       onModalWillDismiss,
@@ -125,7 +127,7 @@ export class ModalView extends
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
 
-      // component props
+      // Component Props
       autoCloseOnUnmount,
       setEnableSwipeGestureFromProps,
       setModalInPresentationFromProps,

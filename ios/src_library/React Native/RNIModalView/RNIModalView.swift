@@ -87,9 +87,15 @@ public class RNIModalView:
   @objc var onPresentationControllerWillDismiss: RCTBubblingEventBlock?;
   @objc var onPresentationControllerDidDismiss: RCTBubblingEventBlock?;
   @objc var onPresentationControllerDidAttemptToDismiss: RCTBubblingEventBlock?;
- 
-  // MARK: - Properties: React Props - Value
-  // ---------------------------------------
+  
+  // MARK: - Properties: React Props - General
+  // -----------------------------------------
+    
+  /// user-provided identifier for this modal
+  @objc var modalID: NSString? = nil;
+  
+  // MARK: - Properties: React Props - BG-Related
+  // --------------------------------------------
   
   @objc var isModalBGBlurred: Bool = true {
     didSet {
@@ -114,22 +120,12 @@ public class RNIModalView:
     }
   };
   
+  // MARK: - Properties: React Props - Presentation/Transition
+  // ---------------------------------------------------------
+  
   @objc var modalPresentationStyle: NSString = "";
   
   @objc var modalTransitionStyle: NSString = "";
-  
-  /// user-provided identifier for this modal
-  @objc var modalID: NSString? = nil;
-  
-  /// disable swipe gesture recognizer for this modal
-  @objc var enableSwipeGesture: Bool = true {
-    didSet {
-      let newValue = self.enableSwipeGesture;
-      guard newValue != oldValue else { return };
-      
-      self.enableSwipeGesture(newValue);
-    }
-  };
   
   @objc var hideNonVisibleModals: Bool = false;
   
@@ -141,6 +137,16 @@ public class RNIModalView:
   ///    js/react
   ///
   @objc var presentViaMount: Bool = false;
+  
+  /// disable swipe gesture recognizer for this modal
+  @objc var enableSwipeGesture: Bool = true {
+    didSet {
+      let newValue = self.enableSwipeGesture;
+      guard newValue != oldValue else { return };
+      
+      self.enableSwipeGesture(newValue);
+    }
+  };
   
   /// allow modal to be programmatically closed even when not current focused
   /// * `true`: the modal can be dismissed even when it's not the topmost
@@ -160,7 +166,9 @@ public class RNIModalView:
       vc.isModalInPresentation = newValue
     }
   };
-  
+ 
+  // MARK: - Properties: React Props - Sheet-Related
+  // -----------------------------------------------
   
   @objc var modalSheetDetents: NSArray?;
   

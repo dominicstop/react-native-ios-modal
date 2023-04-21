@@ -29,27 +29,32 @@ import type {
 } from './RNIModalViewEvents';
 
 export type RNIModalViewBaseProps = {
-  // Props - Flags
-  // --------------
-
-  presentViaMount?: boolean;
-  isModalBGBlurred?: boolean;
-  enableSwipeGesture?: boolean;
-  hideNonVisibleModals?: boolean;
-  isModalBGTransparent?: boolean;
-  isModalInPresentation?: boolean;
-  allowModalForceDismiss?: boolean;
-
-  // Props - Strings
-  // --------------
+  // Props - General
+  // ---------------
 
   modalID?: string;
-  modalTransitionStyle?: TUIModalTransitionStyle;
+
+  // Props - BG-Related
+  // ------------------
+
+  isModalBGBlurred?: boolean;
+  isModalBGTransparent?: boolean;
   modalBGBlurEffectStyle?: TUIBlurEffectStyles;
+
+  // Props - Presentation/Transition
+  // -------------------------------
+
+  modalTransitionStyle?: TUIModalTransitionStyle;
   modalPresentationStyle?: TUIModalPresentationStyle;
 
-  // Props - Objects/Arrays
-  // ----------------------
+  hideNonVisibleModals?: boolean;
+  presentViaMount?: boolean;
+  enableSwipeGesture?: boolean;
+  allowModalForceDismiss?: boolean;
+  isModalInPresentation?: boolean;
+
+  // Props - Sheet-Related
+  // ---------------------
 
   modalSheetDetents?: Array<
     TUISheetPresentationControllerDetents | RNIModalCustomSheetDetent
@@ -58,11 +63,6 @@ export type RNIModalViewBaseProps = {
   // Props - Events
   // --------------
 
-  // TODO: TODO:2023-03-04-13-15-11 - Refactor: Use Will/Did
-  // Prefix for RNIModalView Events
-  //
-  // * Rename - Add `will/did` prefix and deprecate prev. props
-  //
   onModalWillPresent: OnModalWillPresentEvent;
   onModalDidPresent: OnModalDidPresentEvent;
 
