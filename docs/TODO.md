@@ -8,6 +8,17 @@
 
 <br>
 
+- [ ] `TODO:2023-04-21-23-27-27` - Gloss: Re-Organize/Re-group props based on their relationship, not their type.
+- [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
+- [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
+	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
+
+<br>
+
+- [ ] `TODO:2023-04-22-00-01-50` - Optimization - Add flag for caching the view-controller tree
+
+<br>
+
 - [ ] `TODO:2023-04-20-23-58-24` - Impl. sheets + detents.
 
 	* Research
@@ -69,6 +80,15 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateSelectedDetentIdentifierChanges`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetSmallestUndimmedDetentIdentifier`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`
+	- [ ] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`
+	- [ ] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
 	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl.  `modalPreferredContentSize`
 		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
 		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
