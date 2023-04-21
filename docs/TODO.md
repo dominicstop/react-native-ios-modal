@@ -73,11 +73,11 @@
 	- [x] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
 	- [x] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
 	- [x] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
-	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetSmallestUndimmedDetentIdentifier`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetLargestUndimmedDetentIdentifier`.
 	- [ ] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`.
 	- [ ] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
 
-	- [ ] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateSelectedDetentIdentifierChanges`.
+	- [ ] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateChanges`.
 	- [ ] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
 	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl. modal content prop  `modalPreferredContentSize`.
 		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
@@ -127,6 +127,7 @@
 - [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
 - [ ] `TODO:` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
 - [ ] `TODO:` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
+- [ ] `TODO:` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
 - [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
 	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
 
