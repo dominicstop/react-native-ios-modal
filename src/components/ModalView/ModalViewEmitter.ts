@@ -23,9 +23,9 @@ import type {
 
 import type { KeyMapType } from '../../types/UtilityTypes';
 
-import type { 
+import type {
   ModalViewEmitterEventMapDeprecated,
-  ModalViewEmitterEventsDeprecated
+  ModalViewEmitterEventsDeprecated,
 } from './ModalViewEmitterDeprecated';
 
 export enum ModalViewEmitterEvents {

@@ -165,7 +165,6 @@ export type OnModalWillBlurEvent = (event: OnModalWillBlurEventObject) => void;
 
 export type OnModalDidBlurEvent = (event: OnModalDidBlurEventObject) => void;
 
-
 export type OnModalDetentDidComputeEvent = (
   event: OnModalDetentDidComputeEventObject
 ) => void;

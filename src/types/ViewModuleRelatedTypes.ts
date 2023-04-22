@@ -1,4 +1,4 @@
-// TODO: TODO:2023-03-04-13-22-34 - Refactor: Remove 
+// TODO: TODO:2023-03-04-13-22-34 - Refactor: Remove
 // `ViewModuleRelatedTypes`
 //
 // * Move this file (i.e. `ViewModuleRelatedTypes`) to
