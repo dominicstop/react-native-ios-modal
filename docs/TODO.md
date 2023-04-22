@@ -95,7 +95,10 @@
 
 <br>
 
-- [ ] `TODO:2023-03-27-23-55-09` **Refactor: Re-write `RNIModalView` error creation and handling. 
+- [ ] `TODO:2023-03-27-23-55-09` Refactor: Re-write `RNIModalView` error creation and handling. 
+* **Desc**: Streamline error creation and error codes.
+
+<br>
 
 - [ ] `TODO:20230-03-04-12-58-40` Refactor: Types - Remove `KeyMapType` Usage.
 
@@ -105,7 +108,7 @@
 
 - [ ] `TODO:2023-03-04-12-50-04` Fix: `isModalContentLazy` Prop 
 
-	* **Desc: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be.
+	* **Desc**: Setting `ModalView.isModalContentLazy` to `false` triggers a bug w/  `setVisibility` that causes it to throw an error stating that the modal cannot be opened be.
 
 	<br>
 
