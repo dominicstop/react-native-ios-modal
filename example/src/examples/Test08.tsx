@@ -8,33 +8,58 @@ import { ExampleCard } from '../components/ExampleCard';
 import { CardBody, CardButton, CardTitle } from '../components/Card';
 
 import { ModalView } from 'react-native-ios-modal';
+import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
 export function Test08(props: ExampleProps) {
   const modalRef = React.useRef<ModalView>(null);
 
-  const [counter, setCounter] = React.useState(0);
+  const [shouldUseMediumDetent, setShouldUseMediumDetent] =
+    React.useState(true);
+
+  const [debugObject, setDebugObject] = React.useState({
+    detentCurrent: null,
+    detentPrev: null,
+  });
 
   return (
     <ExampleCard
       style={props.style}
       index={props.index}
       title={'Test08'}
-      subtitle={'test - TBA'}
-      description={['desc - TBA']}
+      subtitle={'System Sheet Detent Test'}
+      description={['Test for using the system-defined detents']}
     >
       <ModalView
-        // TBA
         ref={modalRef}
         containerStyle={styles.modalContainer}
+        modalSheetDetents={['medium', 'large']}
+        sheetPreferredCornerRadius={30}
+        sheetShouldAnimateChanges={true}
+        sheetSelectedDetentIdentifier={
+          shouldUseMediumDetent ? 'medium' : 'large'
+        }
+        onModalDidChangeSelectedDetentIdentifier={({ nativeEvent }) => {
+          setDebugObject((prev) => ({
+            ...prev,
+            detentCurrent: nativeEvent.sheetDetentStringCurrent,
+            detentPrev: nativeEvent.sheetDetentStringPrevious,
+          }));
+        }}
       >
         <React.Fragment>
           <CardBody style={styles.modalCard}>
-            <CardTitle title={'Title - TBA'} />
+            <CardTitle title={'System Detents Test'} />
+            <ObjectPropertyDisplay
+              object={{
+                shouldUseMediumDetent,
+                ...debugObject,
+              }}
+            />
           </CardBody>
           <CardButton
-            title={'🌼 TBA'}
+            title={'🌼 Change Current Detent'}
             onPress={() => {
-              // TBA
+              setShouldUseMediumDetent((prevValue) => !prevValue);
             }}
           />
         </React.Fragment>
