@@ -43,7 +43,7 @@ import {
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
 
-import type { ModalViewProps, ModalViewState } from './ModalViewTypes';
+import type { ModalViewProps, ModalViewState } from './ModalViewProps';
 
 import {
   ModalViewEmitterEvents,
