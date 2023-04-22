@@ -402,7 +402,8 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     presentedModalList.forEach {
       guard $0 !== sender,
-            $0.modalFocusState.state.isFocusedOrFocusing
+            $0.modalFocusState.state.isFocusedOrFocusing ||
+              $0.modalFocusState.state.isBlurring
       else { return };
       
       #if DEBUG
