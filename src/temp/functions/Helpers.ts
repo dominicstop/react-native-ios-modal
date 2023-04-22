@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { findNodeHandle } from 'react-native';
 
 /** wrapper func for setState that returns a promise */

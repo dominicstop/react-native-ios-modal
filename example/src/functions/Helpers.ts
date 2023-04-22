@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import * as React from 'react';
 
 /** wrapper func for setState that returns a promise */
