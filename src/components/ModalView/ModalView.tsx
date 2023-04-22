@@ -78,6 +78,7 @@ export class ModalView extends
       enableSwipeGesture: defaultProps.enableSwipeGesture,
       isModalInPresentation: defaultProps.isModalInPresentation,
       isModalInFocus: false,
+      focusState: 'INITIAL',
     };
   }
 
@@ -483,6 +484,10 @@ export class ModalView extends
       ModalViewEmitterEvents.onModalWillFocus,
       event.nativeEvent
     );
+
+    this.setState({
+      focusState: event.nativeEvent.modalFocusState,
+    });
   };
 
   private _handleOnModalDidFocus: OnModalDidFocusEvent = (event) => {
@@ -509,6 +514,7 @@ export class ModalView extends
 
     this.setState({
       isModalInFocus: true,
+      focusState: event.nativeEvent.modalFocusState,
     });
   };
 
@@ -522,6 +528,10 @@ export class ModalView extends
       ModalViewEmitterEvents.onModalWillBlur,
       event.nativeEvent
     );
+
+    this.setState({
+      focusState: event.nativeEvent.modalFocusState,
+    });
   };
 
   private _handleOnModalDidBlur: OnModalDidBlurEvent = (event) => {
@@ -548,6 +558,7 @@ export class ModalView extends
 
     this.setState({
       isModalInFocus: false,
+      focusState: event.nativeEvent.modalFocusState,
     });
   };
 
@@ -620,7 +631,7 @@ export class ModalView extends
     );
   };
 
-  private _handleOnModalDetentDidCompute: 
+  private _handleOnModalDetentDidCompute:
     OnModalDetentDidComputeEvent = (event) => {
 
     const props = this.props;
@@ -736,6 +747,7 @@ export class ModalView extends
         value={{
           isModalInFocus: state.isModalInFocus,
           isModalVisible: state.isModalVisible,
+          focusState: state.focusState,
 
           // pass down function to get modal refs
           getModalRef: this._handleGetModalRef,

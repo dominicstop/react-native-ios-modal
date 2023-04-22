@@ -16,6 +16,7 @@ export type ModalContextType = Partial<
       ModalViewState,
       | 'isModalInFocus'
       | 'isModalVisible'
+      | 'focusState'
     >
   // `ModalView` Methods #2
   & {

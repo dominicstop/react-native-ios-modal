@@ -10,3 +10,10 @@ export type RNIModalCustomSheetDetent = {
   key: string;
   sizeConstant: number;
 };
+
+export type RNIModalFocusState =
+  | 'INITIAL'
+  | 'FOCUSING'
+  | 'FOCUSED'
+  | 'BLURRING'
+  | 'BLURRED';
