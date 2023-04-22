@@ -227,7 +227,7 @@ public class RNIModalView:
   @objc var sheetShouldAnimateChanges: Bool = true;
   
   @objc var sheetLargestUndimmedDetentIdentifier: String? {
-    willSet {
+    didSet {
       guard #available(iOS 15.0, *),
             let sheetController = self.sheetPresentationController
       else { return };
@@ -240,8 +240,11 @@ public class RNIModalView:
   };
   
   @objc var sheetPreferredCornerRadius: NSNumber? {
-    willSet {
+    didSet {
+      let newValue = self.sheetPreferredCornerRadius;
+      
       guard #available(iOS 15.0, *),
+            oldValue != newValue,
             let sheetController = self.sheetPresentationController,
             let cornerRadius = newValue?.doubleValue
       else { return };
@@ -253,8 +256,8 @@ public class RNIModalView:
   };
   
   @objc var sheetSelectedDetentIdentifier: String? {
-    willSet {
-      let oldValue = self.sheetSelectedDetentIdentifier;
+    didSet {
+      let newValue = self.sheetSelectedDetentIdentifier;
       
       guard oldValue != newValue,
             #available(iOS 15.0, *),
