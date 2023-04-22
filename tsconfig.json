@@ -33,7 +33,7 @@
 
     // temporarily disable strict
     // temporary until migration is finished
-    "allowJs": true,
+    "allowJs": false,
 
     // need while "allowJs" option is set to true
     "outDir": "./lib/typescript",
