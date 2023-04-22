@@ -26,40 +26,40 @@ export function ModalGroupItemContent(props: {
   React.useEffect(() => {
     const modalEmitter = modalContext.getEmitterRef();
 
-    const listenerHandleOnModalShow = modalEmitter.addListener(
-      'onModalShow',
+    const listenerOnModalWillFocus = modalEmitter.addListener(
+      'onModalWillFocus',
       () => {
-        logDisplayRef.current?.log('onModalShow');
+        logDisplayRef.current?.log('onModalWillFocus');
       }
     );
 
-    const listenerHandleOnModalDidDismiss = modalEmitter.addListener(
-      'onModalDidDismiss',
+    const listenerOnModalDidFocus = modalEmitter.addListener(
+      'onModalDidFocus',
       () => {
-        logDisplayRef.current?.log('onModalDidDismiss');
+        logDisplayRef.current?.log('onModalDidFocus');
       }
     );
 
-    const listenerHandleOnModalFocus = modalEmitter.addListener(
-      'onModalFocus',
+    const listenerOnModalWillBlur = modalEmitter.addListener(
+      'onModalWillBlur',
       () => {
-        logDisplayRef.current?.log('onModalFocus');
+        logDisplayRef.current?.log('onModalWillBlur');
       }
     );
 
-    const listenerHandleOnModalBlur = modalEmitter.addListener(
-      'onModalBlur',
+    const listenerOnModalDidBlur = modalEmitter.addListener(
+      'onModalDidBlur',
       () => {
-        logDisplayRef.current?.log('onModalBlur');
+        logDisplayRef.current?.log('onModalDidBlur');
       }
     );
 
     return () => {
       // Lifecycle: componentWillUnmount
-      listenerHandleOnModalShow.unsubscribe();
-      listenerHandleOnModalDidDismiss.unsubscribe();
-      listenerHandleOnModalFocus.unsubscribe();
-      listenerHandleOnModalBlur.unsubscribe();
+      listenerOnModalWillFocus.unsubscribe();
+      listenerOnModalDidFocus.unsubscribe();
+      listenerOnModalWillBlur.unsubscribe();
+      listenerOnModalDidBlur.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

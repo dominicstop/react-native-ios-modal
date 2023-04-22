@@ -6,24 +6,26 @@ import { ModalContext } from 'react-native-ios-modal';
 import * as Colors from '../../constants/Colors';
 
 export function ModalFocusIndicatorPill() {
-  const { isModalInFocus } = React.useContext(ModalContext);
+  const { focusState } = React.useContext(ModalContext);
 
   const pillContainerStyle: ViewStyle = {
-    backgroundColor: isModalInFocus
-      ? /* True  */ Colors.PURPLE.A700
-      : /* False */ Colors.RED.A700,
+    // prettier-ignore
+    backgroundColor: (
+      focusState === 'INITIAL'  ? Colors.GREY[900]   :
+      focusState === 'FOCUSING' ? Colors.BLUE.A700   :
+      focusState === 'FOCUSED'  ? Colors.PURPLE.A700 :
+      focusState === 'BLURRING' ? Colors.PINK.A700  :
+      focusState === 'BLURRED'  ? Colors.RED.A700
+      // default
+      : ''
+    ),
   };
-
-  // prettier-ignore
-  const pillText = isModalInFocus
-    ? /* True  */ 'IN FOCUS'
-    : /* False */ 'BLURRED';
 
   return (
     <View style={[styles.modalFocusIndicatorPillContainer, pillContainerStyle]}>
       <Text style={styles.modalFocusIndicatorPillText}>
         {/* Focus Pill Label: Focus/Blur */}
-        {pillText}
+        {focusState}
       </Text>
     </View>
   );
