@@ -17,6 +17,7 @@ import { Test05 } from '../examples/Test05';
 import { Test06 } from '../examples/Test06';
 import { Test07 } from '../examples/Test07';
 import { Test08 } from '../examples/Test08';
+import { Test09 } from '../examples/Test09';
 
 import { Example01 } from '../examples/Example01';
 
@@ -49,6 +50,7 @@ const EXAMPLE_COMPONENTS: Array<ExampleComponentItem> = [
   Test06,
   Test07,
   Test08,
+  Test09,
   Example01,
   SHARED_ENV.enableReactNavigation && DebugControls,
 ];
