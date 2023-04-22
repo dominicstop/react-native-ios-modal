@@ -90,3 +90,7 @@ export function promiseWithTimeout<T>(ms: number, promise: Promise<T>) {
 export function pad(num: number | string, places = 2) {
   return String(num).padStart(places, '0');
 }
+
+export function getNextItemInCyclicArray<T>(index: number, array: Array<T>): T {
+  return array[index % array.length];
+}
