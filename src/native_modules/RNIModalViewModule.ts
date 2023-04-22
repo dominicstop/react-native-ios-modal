@@ -1,5 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import type { RNIModalViewInfo } from 'src/native_components/RNIModalView';
+import type { RNIModalBaseEvent } from 'src/native_components/RNIModalView';
 
 const MODULE_NAME = 'RNIModalViewModule';
 
@@ -26,12 +26,12 @@ interface RNIModalViewModule {
   setModalVisibility(
     node: number,
     visibility: boolean
-  ): Promise<RNIModalViewInfo>;
+  ): Promise<RNIModalBaseEvent>;
 
   // prettier-ignore
   requestModalInfo(
     node: number,
-  ): Promise<RNIModalViewInfo>;
+  ): Promise<RNIModalBaseEvent>;
 }
 
 export const RNIModalViewModule: RNIModalViewModule =
