@@ -27,7 +27,7 @@ export function Test08(props: ExampleProps) {
       index={props.index}
       title={'Test08'}
       subtitle={'System Sheet Detent Test'}
-      description={['Test for using the system-defined detents']}
+      description={['Test for using the system-defined detents iOS 15 API']}
     >
       <ModalView
         ref={modalRef}
