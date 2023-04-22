@@ -42,3 +42,12 @@ public struct RNIOnModalFocusEventData: RNIDictionarySynthesizable {
   
   public let isInitial: Bool;
 };
+
+public struct RNIModalDidChangeSelectedDetentIdentifierEventData: RNIDictionarySynthesizable {
+  public let sheetDetentStringPrevious: String?;
+  public let sheetDetentStringCurrent: String?;
+};
+
+public struct RNIModalDetentDidComputeEventData: RNIDictionarySynthesizable {
+  public let maximumDetentValue: CGFloat;
+};

@@ -31,6 +31,10 @@ public class RNIModalView:
   var modalContentWrapper: RNIWrapperView?;
   public var modalVC: RNIModalViewController?;
   
+
+  public var sheetDetentStringCurrent: String?;
+  public var sheetDetentStringPrevious: String?;
+  
   // MARK: - Properties - RNIModalPresentationNotifying
   // --------------------------------------------------
   
@@ -87,6 +91,9 @@ public class RNIModalView:
   @objc var onPresentationControllerWillDismiss: RCTBubblingEventBlock?;
   @objc var onPresentationControllerDidDismiss: RCTBubblingEventBlock?;
   @objc var onPresentationControllerDidAttemptToDismiss: RCTBubblingEventBlock?;
+  
+  @objc var onModalDetentDidCompute: RCTBubblingEventBlock?;
+  @objc var onModalDidChangeSelectedDetentIdentifier: RCTBubblingEventBlock?;
   
   // MARK: - Properties: React Props - General
   // -----------------------------------------
@@ -247,14 +254,25 @@ public class RNIModalView:
   
   @objc var sheetSelectedDetentIdentifier: String? {
     willSet {
-      guard #available(iOS 15.0, *),
+      let oldValue = self.sheetSelectedDetentIdentifier;
+      
+      guard oldValue != newValue,
+            #available(iOS 15.0, *),
             let sheetController = self.sheetPresentationController
       else { return };
       
+      let nextDetentID = self.synthesizedSheetSelectedDetentIdentifier;
+      
       self.sheetAnimateChangesIfNeeded {
-        sheetController.selectedDetentIdentifier =
-          self.synthesizedSheetSelectedDetentIdentifier;
+        sheetController.selectedDetentIdentifier = nextDetentID;
       };
+      
+      /// Delegate function does not get called when detent is changed via
+      /// setting `selectedDetentIdentifier`, so invoke manually...
+      ///
+      self.sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+        sheetController
+      );
     }
   };
   
@@ -355,13 +373,26 @@ public class RNIModalView:
   @available(iOS 15.0, *)
   public var synthesizedModalSheetDetents: [UISheetPresentationController.Detent]? {
     self.modalSheetDetents?.compactMap {
-      if let string = $0 as? String {
-        return UISheetPresentationController.Detent.fromString(string);
+      if let string = $0 as? String,
+         let detent = UISheetPresentationController.Detent.fromString(string) {
+        
+        return detent;
         
       } else if #available(iOS 16.0, *),
                 let dict = $0 as? Dictionary<String, Any> {
         
-        let customDetent = RNIModalCustomSheetDetent(forDict: dict);
+        let customDetent = RNIModalCustomSheetDetent(forDict: dict) {
+          _, maximumDetentValue in
+          
+          let eventData = RNIModalDetentDidComputeEventData(
+            maximumDetentValue: maximumDetentValue
+          );
+          
+          self.onModalDetentDidCompute?(
+            eventData.synthesizedJSDictionary
+          );
+        };
+        
         return customDetent?.synthesizedDetent;
       };
       
@@ -407,6 +438,7 @@ public class RNIModalView:
   // MARK: - Properties: Computed
   // ----------------------------
   
+  // TODO: Move to `RNIModal+Helpers`
   @available(iOS 15.0, *)
   var sheetPresentationController: UISheetPresentationController? {
     guard let presentedVC = self.modalViewController else { return nil };
@@ -424,6 +456,27 @@ public class RNIModalView:
       default:
         return nil;
     };
+  };
+  
+  @available(iOS 15.0, *)
+  var currentSheetDetentID: UISheetPresentationController.Detent.Identifier? {
+    guard let sheetController = self.sheetPresentationController
+    else { return nil };
+    
+    let detents = sheetController.detents;
+    
+    if let selectedDetent = sheetController.selectedDetentIdentifier {
+      return selectedDetent;
+      
+    } else if #available(iOS 16.0, *),
+              let firstDetent = detents.first {
+      
+      ///  The default value of `selectedDetentIdentifier` is nil, which means
+      ///  the sheet displays at the smallest detent you specify in detents.
+      return firstDetent.identifier;
+    };
+    
+    return nil;
   };
   
   // MARK: - Init
@@ -687,6 +740,7 @@ public class RNIModalView:
     if #available(iOS 15.0, *),
        let sheetController = self.sheetPresentationController {
       
+      sheetController.delegate = self;
       self.applyModalSheetProps(to: sheetController);
     };
 
@@ -726,6 +780,16 @@ public class RNIModalView:
       
       completion?(true, nil);
       
+      // let panGesture = self.modalVC?
+      //   .presentationController?
+      //   .presentedView?
+      //   .gestureRecognizers?
+      //   .first {
+      //     $0 is UIPanGestureRecognizer
+      //   };
+      //
+      // panGesture?.addTarget(self, action: #selector(Self.handleGestureRecognizer(_:)))
+      
       #if DEBUG
       print(
           "Log - RNIModalView.presentModal - Present modal finished"
@@ -736,6 +800,12 @@ public class RNIModalView:
       #endif
     };
   };
+  
+  // @objc func handleGestureRecognizer(_ sender: UIPanGestureRecognizer) {
+  //   print(
+  //     "Test - handleGestureRecognizer - \(sender.state.description)"
+  //   );
+  // };
   
   public func dismissModal(completion: CompletionHandler? = nil) {
     guard self.computedIsModalPresented else {
@@ -942,6 +1012,48 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
       + " - self.modalIndex: \(self.modalIndex!)"
     );
     #endif
+  };
+};
+
+@available(iOS 15.0, *)
+extension RNIModalView: UISheetPresentationControllerDelegate {
+  
+  /// `Note:2023-04-22-03-50-59`
+  ///
+  /// * This function gets invoked when the sheet has snapped into a detent
+  ///
+  /// * However, we don't get notified whenever the user is currently dragging
+  ///   the sheet.
+  ///
+  /// * The `presentedViewController.transitionCoordinator` is only available
+  ///   during modal presentation and dismissal.
+  ///
+  ///
+  public func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+    _ sheetPresentationController: UISheetPresentationController
+  ) {
+    let currentDetentID = self.currentSheetDetentID;
+    
+    self.sheetDetentStringPrevious = self.sheetDetentStringCurrent;
+    self.sheetDetentStringCurrent = currentDetentID?.description;
+    
+    #if DEBUG
+    print(
+        "Log - RNIModalView+UISheetPresentationControllerDelegate"
+      + " - sheetPresentationControllerDidChangeSelectedDetentIdentifier"
+      + " - sheetDetentStringPrevious: \(self.sheetDetentStringPrevious ?? "N/A")"
+      + " - sheetDetentStringCurrent: \(self.sheetDetentStringCurrent ?? "N/A")"
+    );
+    #endif
+    
+    let eventData = RNIModalDidChangeSelectedDetentIdentifierEventData(
+      sheetDetentStringPrevious: self.sheetDetentStringPrevious,
+      sheetDetentStringCurrent: self.sheetDetentStringCurrent
+    );
+    
+    self.onModalDidChangeSelectedDetentIdentifier?(
+      eventData.synthesizedJSDictionary
+    );
   };
 };
 

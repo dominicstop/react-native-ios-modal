@@ -28,6 +28,9 @@ RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerWillDismiss, RCTBubblingEventBl
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidDismiss, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onModalDetentDidCompute, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onModalDidChangeSelectedDetentIdentifier, RCTBubblingEventBlock);
+
 // MARK: - Value Props - General
 // -----------------------------
 

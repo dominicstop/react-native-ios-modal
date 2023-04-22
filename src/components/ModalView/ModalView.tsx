@@ -37,6 +37,8 @@ import {
   RNIModalView,
   RNIModalBaseEvent,
   RNIModalDeprecatedBaseEvent,
+  OnModalDetentDidComputeEvent,
+  OnModalDidChangeSelectedDetentIdentifierEvent,
 } from '../../native_components/RNIModalView';
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
@@ -134,6 +136,8 @@ export class ModalView extends
       onPresentationControllerWillDismiss,
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
+      onModalDetentDidCompute,
+      onModalDidChangeSelectedDetentIdentifier,
 
       // Component Props
       autoCloseOnUnmount,
@@ -217,6 +221,8 @@ export class ModalView extends
       onPresentationControllerWillDismiss,
       onPresentationControllerDidDismiss,
       onPresentationControllerDidAttemptToDismiss,
+      onModalDetentDidCompute,
+      onModalDidChangeSelectedDetentIdentifier,
 
       // C - View-Related Props
       children,
@@ -613,6 +619,34 @@ export class ModalView extends
     );
   };
 
+  private _handleOnModalDetentDidCompute: 
+    OnModalDetentDidComputeEvent = (event) => {
+
+    const props = this.props;
+
+    props.onModalDetentDidCompute?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDetentDidCompute,
+      event.nativeEvent
+    );
+  };
+
+  private _handleOnModalDidChangeSelectedDetentIdentifier:
+    OnModalDidChangeSelectedDetentIdentifierEvent = (event) => {
+
+    const props = this.props;
+
+    props.onModalDidChangeSelectedDetentIdentifier?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidChangeSelectedDetentIdentifier,
+      event.nativeEvent
+    );
+  };
+
  private _renderModal() {
     const { viewProps, ...props } = this.getProps();
     const state = this.state;
@@ -657,6 +691,8 @@ export class ModalView extends
         onPresentationControllerWillDismiss={this._handleOnPresentationControllerWillDismiss}
         onPresentationControllerDidDismiss={this._handleOnPresentationControllerDidDismiss}
         onPresentationControllerDidAttemptToDismiss={this._handleOnPresentationControllerDidAttemptToDismiss}
+        onModalDetentDidCompute={this._handleOnModalDetentDidCompute}
+        onModalDidChangeSelectedDetentIdentifier={this._handleOnModalDidChangeSelectedDetentIdentifier}
         {...overrideProps}
         {...viewProps}
       >

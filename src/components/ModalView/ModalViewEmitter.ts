@@ -17,6 +17,8 @@ import type {
   OnPresentationControllerWillDismissEventObject,
   OnPresentationControllerDidDismissEventObject,
   OnPresentationControllerDidAttemptToDismissEventObject,
+  OnModalDetentDidComputeEventObject,
+  OnModalDidChangeSelectedDetentIdentifierEventObject,
 } from 'src/native_components/RNIModalView';
 
 import type { KeyMapType } from '../../types/UtilityTypes';
@@ -43,6 +45,8 @@ export enum ModalViewEmitterEvents {
   onPresentationControllerWillDismiss = 'onPresentationControllerWillDismiss',
   onPresentationControllerDidDismiss = 'onPresentationControllerDidDismiss',
   onPresentationControllerDidAttemptToDismiss = 'onPresentationControllerDidAttemptToDismiss',
+  onModalDetentDidCompute = 'onModalDetentDidCompute',
+  onModalDidChangeSelectedDetentIdentifier = 'onModalDidChangeSelectedDetentIdentifier',
 
   onLayoutModalContentContainer = 'onLayoutModalContentContainer',
 }
@@ -69,6 +73,8 @@ export type ModalViewEmitterEventMap =
     onPresentationControllerWillDismiss: OnPresentationControllerWillDismissEventObject['nativeEvent'];
     onPresentationControllerDidDismiss: OnPresentationControllerDidDismissEventObject['nativeEvent'];
     onPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEventObject['nativeEvent'];
+    onModalDetentDidCompute: OnModalDetentDidComputeEventObject['nativeEvent'];
+    onModalDidChangeSelectedDetentIdentifier: OnModalDidChangeSelectedDetentIdentifierEventObject['nativeEvent'];
 
     onLayoutModalContentContainer: LayoutChangeEvent['nativeEvent'];
   }

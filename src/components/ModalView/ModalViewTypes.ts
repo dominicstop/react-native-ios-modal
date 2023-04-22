@@ -58,6 +58,8 @@ export type ModalViewBaseProps = Partial<
     | 'onPresentationControllerWillDismiss'
     | 'onPresentationControllerDidDismiss'
     | 'onPresentationControllerDidAttemptToDismiss'
+    | 'onModalDetentDidCompute'
+    | 'onModalDidChangeSelectedDetentIdentifier'
   >
 > & {
   // TODO: See TODO:2023-03-04-13-02-45 - Refactor: Rename to

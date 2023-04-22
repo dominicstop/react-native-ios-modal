@@ -26,6 +26,8 @@ import type {
   OnPresentationControllerWillDismissEvent,
   OnPresentationControllerDidDismissEvent,
   OnPresentationControllerDidAttemptToDismissEvent,
+  OnModalDetentDidComputeEvent,
+  OnModalDidChangeSelectedDetentIdentifierEvent,
 } from './RNIModalViewEvents';
 import type { UnionWithAutoComplete } from 'src/types/UtilityTypes';
 
@@ -103,6 +105,9 @@ export type RNIModalViewBaseProps = {
   onPresentationControllerWillDismiss: OnPresentationControllerWillDismissEvent;
   onPresentationControllerDidDismiss: OnPresentationControllerDidDismissEvent;
   onPresentationControllerDidAttemptToDismiss: OnPresentationControllerDidAttemptToDismissEvent;
+
+  onModalDetentDidCompute: OnModalDetentDidComputeEvent;
+  onModalDidChangeSelectedDetentIdentifier: OnModalDidChangeSelectedDetentIdentifierEvent;
 };
 
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;

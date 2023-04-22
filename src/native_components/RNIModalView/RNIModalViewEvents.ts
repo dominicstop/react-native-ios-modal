@@ -99,6 +99,16 @@ export type OnModalDidFocusEventObject = NativeSyntheticEvent<
   RNIOnModalFocusEvent & {}
 >;
 
+export type OnModalDetentDidComputeEventObject = NativeSyntheticEvent<{
+  maximumDetentValue: number;
+}>;
+
+export type OnModalDidChangeSelectedDetentIdentifierEventObject =
+  NativeSyntheticEvent<{
+    sheetDetentStringPrevious?: string;
+    sheetDetentStringCurrent?: string;
+  }>;
+
 export type OnModalWillBlurEventObject = NativeSyntheticEvent<
   RNIOnModalFocusEvent & {}
 >;
@@ -154,3 +164,12 @@ export type OnModalDidFocusEvent = (event: OnModalDidFocusEventObject) => void;
 export type OnModalWillBlurEvent = (event: OnModalWillBlurEventObject) => void;
 
 export type OnModalDidBlurEvent = (event: OnModalDidBlurEventObject) => void;
+
+
+export type OnModalDetentDidComputeEvent = (
+  event: OnModalDetentDidComputeEventObject
+) => void;
+
+export type OnModalDidChangeSelectedDetentIdentifierEvent = (
+  event: OnModalDidChangeSelectedDetentIdentifierEventObject
+) => void;
