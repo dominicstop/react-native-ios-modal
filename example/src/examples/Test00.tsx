@@ -84,7 +84,7 @@ export function Test00(props: ExampleProps) {
           />
           <CardToggleButton
             title={'Toggle isModalBGBlurred'}
-            value={isModalBGTransparent}
+            value={isModalBGBlurred}
             onPress={(value) => {
               setIsModalBGBlurred(value);
             }}
