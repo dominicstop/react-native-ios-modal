@@ -7,27 +7,6 @@
 
 import Foundation
 
-// TODO: Move to `RNIUtilities`
-extension RNIUtilities {
-  static func swizzleExchangeMethods(
-    defaultSelector: Selector,
-    newSelector: Selector,
-    forClass class: AnyClass
-  ) {
-    let defaultInstace =
-      class_getInstanceMethod(`class`.self, defaultSelector);
-    
-    let newInstance =
-      class_getInstanceMethod(`class`.self, newSelector);
-    
-    guard let defaultInstance = defaultInstace,
-          let newInstance = newInstance
-    else { return };
-          
-    method_exchangeImplementations(defaultInstance, newInstance);
-  };
-};
-
 
 fileprivate class RNIModalWrapperMap {
   static let instanceMap = NSMapTable<
