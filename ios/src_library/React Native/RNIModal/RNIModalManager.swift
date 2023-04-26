@@ -9,79 +9,10 @@ import Foundation
 
 public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
-/// `Note:2023-04-07-03-22-48` - Archived/Old
-///
-/// * Manually incrementing and decrementing the `modalIndex` is fragile.
-///
-/// * For example:
-///   * 1 -If multiple blur/focus events were to fire consecutively, the
-///     `modalIndex` might be wrong.
-///
-///   * 2 - If a modal presented/dismissed w/o notifying `RNIModalManager`,
-///     the `modalIndex` will be stale.
-///
-///   * 3 - If a modal was about to be blurred (i.e. "will blur"), but was
-///     cancelled halfway (i.e. "did blur" not invoked), and the modal regained
-///     focus again (i.e. invoking "will focus" + "did focus").
-///
-///   * 4 - Invoking "will blur", or "will focus" but not invoking the invoking
-///     the corresponding "did blur", and "did focus" methods.
-///
-///  * When a modal is hidden, it will trigger a "focus" event for the new
-///    topmost modal; subsequently, when a modal is shown, it will trigger a
-///    "blur" event for the previous topmost modal.
-///
-///    * This assumes that the "modal manager" can only be notified of a pair of
-///      "focus", or "blur" at a given time, per window instance...
-///
-///    * E.g. "will focus" -> "did focus", "will blur" -> "did blur".
-///
-///    * However, there might be an instance where multiple modals may be
-///      hidden at the same time...
-///
-///    * E.g. "will blur 1", "will blur 2", "did blur 1", "did blur 2", etc.
-///
-///    * When multiple "blur" events are firing, the modal with the lowest
-///      index should take priority.
-///
-///    * Subsequently, when multiple "focus" events are firing, the modal with
-///      the highest modal index should take priority.
-///
-///    * Additionally, when a "blur", or "focus" event is firing at the same
-///      time...
-///
-///    * E.g. "will blur 1", "will focus 2", "did blur 1", "did focus 2", etc.
-///
-///    * The "focus" event should take priority, (assuming that the "focus"
-///      event was fired for the topmost modal).
-///
-///
-/// `Note:2023-03-30-19-36-33` - Archived/Old
-///
-/// * This assumes that the app is using a single window, and all the modals are
-///   being presented on that window, as a chain of view controllers.
-///
-/// * E.g. "window 1" presents a modal, and "window 2" presents a modal
-///
-///   * Those 2 modals are not related to one another, and their respective
-///     modal index should both be 1, since they are the 1st modal presented on
-///     their respective window instances.
-///
-///   * Instead their modal indexes are 1, and 2, respectively.
-///
-///   * This also means the internal `currentModalIndex` state, and any other
-///     logic that relies on it will be wrong too.
-///
-/// * And since there is no distinction on which modal belongs to a particular
-///   window, all the modal instances in the app will get notified when a event
-///   occurs.
-///
-/// * This can be fixed by keeping a separate `currentModalIndex` for each
-///   window instance, and only updating it based on the modal's associated
-///   window instance.
-///
-/// * This can also be fixed by programmatically determining the modal's
-///   `modalIndex`.
+
+/// Archived/Old Notes
+/// * `Note:2023-04-07-03-22-48`
+/// * `Note:2023-03-30-19-36-33`
 ///
 public class RNIModalManager {
   
