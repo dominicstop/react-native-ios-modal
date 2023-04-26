@@ -1,5 +1,5 @@
 //
-//  RNIModalViewControllerRegistry.swift
+//  RNIModalViewControllerWrapperRegistry.swift
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 4/27/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RNIModalViewControllerRegistry {
+class RNIModalViewControllerWrapperRegistry {
   static let instanceMap = NSMapTable<
     UIViewController,
     RNIModalViewControllerWrapper

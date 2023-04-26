@@ -15,7 +15,7 @@ extension UIViewController {
   static var isSwizzled = false;
   
   fileprivate var modalWrapper: RNIModalViewControllerWrapper? {
-    RNIModalViewControllerRegistry.get(forViewController: self);
+    RNIModalViewControllerWrapperRegistry.get(forViewController: self);
   };
   
   @discardableResult
@@ -35,8 +35,9 @@ extension UIViewController {
       /// A - Wrapper already exists for `viewControllerToPresent`,
       ///     return matching instance.
       ///
-      if let modalWrapper =
-        RNIModalViewControllerRegistry.get(forViewController: viewControllerToPresent) {
+      if let modalWrapper = RNIModalViewControllerWrapperRegistry.get(
+        forViewController: viewControllerToPresent
+      ) {
         
         return modalWrapper;
       };
@@ -46,7 +47,7 @@ extension UIViewController {
       //
       let newModalWrapper = RNIModalViewControllerWrapper();
         
-      RNIModalViewControllerRegistry.set(
+      RNIModalViewControllerWrapperRegistry.set(
         forViewController: self,
         newModalWrapper
       );
@@ -82,7 +83,7 @@ extension UIViewController {
       
     } else if let presentedVC = viewControllerToPresent,
               let presentedModalWrapper =
-                RNIModalViewControllerRegistry.get(forViewController: presentedVC) {
+                RNIModalViewControllerWrapperRegistry.get(forViewController: presentedVC) {
       
       /// C - `viewControllerToPresent` has a corresponding
       ///     `RNIModalViewControllerWrapper` instance associated to it.
@@ -91,7 +92,7 @@ extension UIViewController {
     } else if let presentingModalWrapper = self.modalWrapper,
               let presentedVC = presentingModalWrapper.modalViewController,
               let presentedModalWrapper =
-                RNIModalViewControllerRegistry.get(forViewController: presentedVC) {
+                RNIModalViewControllerWrapperRegistry.get(forViewController: presentedVC) {
       
       /// D - Current vc instance has a `RNIModalViewControllerWrapper`
       ///     instance associated to it.
