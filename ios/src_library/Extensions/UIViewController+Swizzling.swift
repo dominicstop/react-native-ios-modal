@@ -8,7 +8,7 @@
 import Foundation
 
 
-class RNIModalWrapperMap {
+class RNIModalViewControllerRegistry {
   static let instanceMap = NSMapTable<
     UIViewController,
     RNIModalViewControllerWrapper
@@ -45,7 +45,7 @@ extension UIViewController {
   static var isSwizzled = false;
   
   fileprivate var modalWrapper: RNIModalViewControllerWrapper? {
-    RNIModalWrapperMap.get(forViewController: self);
+    RNIModalViewControllerRegistry.get(forViewController: self);
   };
   
   @discardableResult
@@ -66,7 +66,7 @@ extension UIViewController {
       ///     return matching instance.
       ///
       if let modalWrapper =
-        RNIModalWrapperMap.get(forViewController: viewControllerToPresent) {
+        RNIModalViewControllerRegistry.get(forViewController: viewControllerToPresent) {
         
         return modalWrapper;
       };
@@ -76,7 +76,7 @@ extension UIViewController {
       //
       let newModalWrapper = RNIModalViewControllerWrapper();
         
-      RNIModalWrapperMap.set(
+      RNIModalViewControllerRegistry.set(
         forViewController: self,
         newModalWrapper
       );
@@ -112,7 +112,7 @@ extension UIViewController {
       
     } else if let presentedVC = viewControllerToPresent,
               let presentedModalWrapper =
-                RNIModalWrapperMap.get(forViewController: presentedVC) {
+                RNIModalViewControllerRegistry.get(forViewController: presentedVC) {
       
       /// C - `viewControllerToPresent` has a corresponding
       ///     `RNIModalViewControllerWrapper` instance associated to it.
@@ -121,7 +121,7 @@ extension UIViewController {
     } else if let presentingModalWrapper = self.modalWrapper,
               let presentedVC = presentingModalWrapper.modalViewController,
               let presentedModalWrapper =
-                RNIModalWrapperMap.get(forViewController: presentedVC) {
+                RNIModalViewControllerRegistry.get(forViewController: presentedVC) {
       
       /// D - Current vc instance has a `RNIModalViewControllerWrapper`
       ///     instance associated to it.
