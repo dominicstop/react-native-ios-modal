@@ -34,6 +34,26 @@ extension RNIDictionarySynthesizable {
     [];
   };
   
+  fileprivate static func recursivelyParseValue(
+    _ value: Any,
+    isJSDict: Bool
+  ) -> Any {
+  
+    if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
+      return synthesizableDict.synthesizedDictionary(isJSDict: isJSDict);
+      
+    } else if isJSDict, let rawValue = value as? any RawRepresentable {
+      return rawValue.rawValue;
+      
+    } else if isJSDict, let array = value as? Array<Any> {
+      return array.map {
+        return Self.recursivelyParseValue($0, isJSDict: isJSDict);
+      };
+    };
+    
+    return value;
+  };
+  
   public func synthesizedDictionary(
     isJSDict: Bool
   ) -> Dictionary<String, Any> {
@@ -60,22 +80,8 @@ extension RNIDictionarySynthesizable {
             !Self.synthesizedDictionaryIgnore.contains(propertyKey)
       else { return nil };
       
-      let parseValue: Any = {
-        if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
-          return synthesizableDict.synthesizedDictionary(isJSDict: isJSDict);
-          
-        } else if isJSDict,
-                  let rawValue = value as? any RawRepresentable {
-          
-          return rawValue.rawValue;
-        };
-        
-        return value;
-      }();
-      
-      
-      
-      return (propertyKey, parseValue)
+      let parsedValue = Self.recursivelyParseValue(value, isJSDict: isJSDict);
+      return (propertyKey, parsedValue)
     };
     
     var baseDict = Dictionary(
@@ -86,8 +92,8 @@ extension RNIDictionarySynthesizable {
       guard let value = self[keyPath: $0] as? (any RNIDictionarySynthesizable)
       else { return };
       
-      let inlindedDict = value.synthesizedDictionary(isJSDict: isJSDict);
-      baseDict = baseDict.merging(inlindedDict){ old, _ in old };
+      let inlinedDict = value.synthesizedDictionary(isJSDict: isJSDict);
+      baseDict = baseDict.merging(inlinedDict){ old, _ in old };
     };
     
     return baseDict;
