@@ -24,7 +24,10 @@ public class RNIModalManager {
   // MARK: - Static Functions
   // ------------------------
   
-  static func getPresentedModals(forWindow window: UIWindow) -> [any RNIModal] {
+  static func getPresentedModals(
+    forWindow window: UIWindow
+  ) -> [any RNIModal] {
+  
     let vcItems = RNIUtilities.getPresentedViewControllers(for: window);
     
     return vcItems.compactMap {
@@ -71,6 +74,56 @@ public class RNIModalManager {
       forWindow: window,
       forViewController: viewController
     );
+  };
+  
+  static func getPresentedModal(
+    forPresentingViewController presentingVC: UIViewController
+  ) -> (any RNIModal)? {
+    
+    let presentedVC = presentingVC.presentedViewController;
+    
+    /// A - `presentedVC` is a `RNIModalViewController`.
+    ///
+    if let presentedModalVC = presentedVC as? RNIModalViewController {
+      return presentedModalVC.modalViewRef;
+    };
+    
+    /// B - `presentedVC` is a `RNIModalViewController` (and was presented by a
+    ///     `RNIModalView`).
+    ///
+    if let presentingModalVC = presentedVC as? RNIModalViewController,
+       let presentingModal = presentingModalVC.modalViewRef,
+       let presentedModalVC = presentingModal.modalVC {
+      
+      return presentedModalVC.modalViewRef;
+    };
+    
+    /// C - `presentedVC` has a corresponding `RNIModalViewControllerWrapper`
+    ///     instance associated to it.
+    ///
+    if let presentedVC = presentedVC,
+       let presentedModalWrapper = RNIModalViewControllerWrapperRegistry.get(
+         forViewController: presentedVC
+       ) {
+      
+      return presentedModalWrapper;
+    };
+    
+    /// D - `presentingVC` has a `RNIModalViewControllerWrapper` instance
+    ///     associated to it.
+    ///
+    if let presentingModalWrapper = RNIModalViewControllerWrapperRegistry.get(
+         forViewController: presentingVC
+       ),
+       let presentedVC = presentingModalWrapper.modalViewController,
+       let presentedModalWrapper = RNIModalViewControllerWrapperRegistry.get(
+         forViewController: presentedVC
+       ) {
+      
+      return presentedModalWrapper;
+    };
+    
+    return nil;
   };
   
   // MARK: - Properties
