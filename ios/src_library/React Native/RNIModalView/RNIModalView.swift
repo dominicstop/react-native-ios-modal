@@ -1018,6 +1018,9 @@ extension RNIModalView: UIAdaptivePresentationControllerDelegate {
   };
 };
 
+// MARK: - UISheetPresentationControllerDelegate
+// ---------------------------------------------
+
 @available(iOS 15.0, *)
 extension RNIModalView: UISheetPresentationControllerDelegate {
   
@@ -1083,6 +1086,9 @@ extension RNIModalView: RNIModalRequestable {
     /// No-op - TBA
   };
 };
+
+// MARK: - RNIViewControllerLifeCycleNotifiable
+// --------------------------------------------
 
 extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
   
