@@ -50,9 +50,8 @@ public class RNIModalViewControllerWrapper:
     self.presentingViewController?.view.window
   };
   
-  // MARK: -
-  // ------------------
-  
+  // MARK: - Functions
+  // -----------------
   
   public init(){
     RNIModalManagerShared.register(modal: self);
@@ -86,19 +85,31 @@ extension RNIModalViewControllerWrapper: RNIModalRequestable {
 
 extension RNIModalViewControllerWrapper: RNIModalFocusNotifiable {
   public func onModalWillFocusNotification(sender: any RNIModal) {
-    // no-op
-  }
+    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
+    else { return };
+    
+    delegate.onModalWillFocusNotification(sender: sender);
+  };
   
   public func onModalDidFocusNotification(sender: any RNIModal) {
-    // no-op
+    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
+    else { return };
+    
+    delegate.onModalDidFocusNotification(sender: sender);
   }
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
-    // no-op
+    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
+    else { return };
+    
+    delegate.onModalWillBlurNotification(sender: sender);
   }
   
   public func onModalDidBlurNotification(sender: any RNIModal) {
-    // no-op
+    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
+    else { return };
+    
+    delegate.onModalDidBlurNotification(sender: sender);
   }
 };
 
