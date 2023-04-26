@@ -605,7 +605,7 @@ public class RNIModalView:
   /// helper func to hide/show the other modals that are below level
   private func setIsHiddenForViewBelowLevel(_ level: Int, isHidden: Bool){
     let presentedVCList =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+      RNIUtilities.getPresentedViewControllers(for: self.window);
     
     for (index, vc) in presentedVCList.enumerated() {
       if index < level {
@@ -689,7 +689,7 @@ public class RNIModalView:
     };
     
     let presentedViewControllers =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+      RNIUtilities.getPresentedViewControllers(for: self.window);
     
     guard let topMostPresentedVC = presentedViewControllers.last else {
       #if DEBUG

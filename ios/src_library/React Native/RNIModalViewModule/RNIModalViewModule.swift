@@ -59,7 +59,7 @@ class RNIModalViewModule: RCTEventEmitter {
     callback: @escaping RCTResponseSenderBlock
   ) {
     DispatchQueue.main.async {
-      let listPresentedVC = RNIModalManager.getPresentedViewControllers();
+      let listPresentedVC = RNIUtilities.getPresentedViewControllers();
       
       guard listPresentedVC.count > 0 else {
         #if DEBUG

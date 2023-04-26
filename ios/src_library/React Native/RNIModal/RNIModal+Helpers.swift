@@ -23,7 +23,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// Programmatically check if this instance is presented
   public var computedIsModalPresented: Bool {
     let listPresentedVC =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+      RNIUtilities.getPresentedViewControllers(for: self.window);
     
     return listPresentedVC.contains {
       $0 === self.modalViewController;
@@ -33,7 +33,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// Programmatically check if this instance is in focus
   public var computedIsModalInFocus: Bool {
     let listPresentedVC =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+      RNIUtilities.getPresentedViewControllers(for: self.window);
     
     guard let topmostVC = listPresentedVC.last
     else { return self.synthesizedIsModalInFocus };
@@ -48,7 +48,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   ///
   public var computedViewControllerIndex: Int {
     let listPresentedVC =
-      RNIModalManager.getPresentedViewControllers(for: self.window);
+      RNIUtilities.getPresentedViewControllers(for: self.window);
     
     for (index, vc) in listPresentedVC.enumerated() {
       guard vc === self.modalViewController else { continue };

@@ -7,24 +7,9 @@
 
 import Foundation
 
-public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 
-
-/// Archived/Old Notes
-/// * `Note:2023-04-07-03-22-48`
-/// * `Note:2023-03-30-19-36-33`
-///
-public class RNIModalManager {
-  
-  // MARK: - Static Properties
-  // -------------------------
-  
-  public static let sharedInstance = RNIModalManager();
-  
-  // MARK: - Static Functions
-  // ------------------------
-  
-  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
+/// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
+extension RNIUtilities {
   public static func getWindows() -> [UIWindow] {
     var windows: [UIWindow] = [];
     
@@ -84,7 +69,6 @@ public class RNIModalManager {
     return windows;
   };
   
-  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
   public static func getRootViewController(
     for window: UIWindow? = nil
   ) -> UIViewController? {
@@ -96,7 +80,6 @@ public class RNIModalManager {
     return Self.getWindows().first?.rootViewController;
   };
   
-  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
   public static func getPresentedViewControllers(
     for window: UIWindow? = nil
   ) -> [UIViewController] {
@@ -125,15 +108,32 @@ public class RNIModalManager {
     return presentedVCList;
   };
   
-  /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
   public static func getTopmostPresentedViewController(
     for window: UIWindow? = nil
   ) -> UIViewController? {
     return Self.getPresentedViewControllers(for: window).last;
   };
+};
+
+public let RNIModalManagerShared = RNIModalManager.sharedInstance;
+
+
+/// Archived/Old Notes
+/// * `Note:2023-04-07-03-22-48`
+/// * `Note:2023-03-30-19-36-33`
+///
+public class RNIModalManager {
+  
+  // MARK: - Static Properties
+  // -------------------------
+  
+  public static let sharedInstance = RNIModalManager();
+  
+  // MARK: - Static Functions
+  // ------------------------
   
   static func getPresentedModals(forWindow window: UIWindow) -> [any RNIModal] {
-    let vcItems = Self.getPresentedViewControllers(for: window);
+    let vcItems = RNIUtilities.getPresentedViewControllers(for: window);
     
     return vcItems.compactMap {
       guard let modalVC = $0 as? RNIModalViewController else { return nil };
@@ -147,7 +147,7 @@ public class RNIModalManager {
   ) -> Int {
     
     let listPresentedVC =
-      RNIModalManager.getPresentedViewControllers(for: window);
+      RNIUtilities.getPresentedViewControllers(for: window);
     
     var index = -1;
     
