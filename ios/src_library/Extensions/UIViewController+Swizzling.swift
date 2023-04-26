@@ -8,7 +8,7 @@
 import Foundation
 
 
-fileprivate class RNIModalWrapperMap {
+class RNIModalWrapperMap {
   static let instanceMap = NSMapTable<
     UIViewController,
     RNIModalViewControllerWrapper
@@ -52,23 +52,36 @@ extension UIViewController {
   fileprivate func registerIfNeeded(
     viewControllerToPresent: UIViewController
   ) -> RNIModalViewControllerWrapper? {
+  
+    /// If `viewControllerToPresent` is being presented by a
+    /// `RNIModalViewController` instance, then we don't need to wrap the
+    /// current instance inside a `RNIModalViewControllerWrapper` since it
+    /// will already notify `RNIModalManager` of modal-related events...
+    ///
     guard !(self is RNIModalViewController) else { return nil };
     
     let modalWrapper: RNIModalViewControllerWrapper = {
-      guard let modalWrapper = RNIModalWrapperMap.get(
-        forViewController: viewControllerToPresent
-      ) else {
-        let newModalWrapper = RNIModalViewControllerWrapper();
+    
+      /// A - Wrapper already exists for `viewControllerToPresent`,
+      ///     return matching instance.
+      ///
+      if let modalWrapper =
+        RNIModalWrapperMap.get(forViewController: viewControllerToPresent) {
         
-        RNIModalWrapperMap.set(
-          forViewController: self,
-          newModalWrapper
-        );
-        
-        return newModalWrapper;
+        return modalWrapper;
       };
       
-      return modalWrapper;
+      // B - Wrapper does not exists for `viewControllerToPresent`,
+      //     so create new instance.
+      //
+      let newModalWrapper = RNIModalViewControllerWrapper();
+        
+      RNIModalWrapperMap.set(
+        forViewController: self,
+        newModalWrapper
+      );
+      
+      return newModalWrapper;
     }();
  
     modalWrapper.presentingViewController = self;
@@ -77,7 +90,7 @@ extension UIViewController {
     return modalWrapper;
   };
   
-  func getPresentedModal(
+  fileprivate func getPresentedModal(
     viewControllerToPresent: UIViewController? = nil
   ) -> (any RNIModal)? {
     if let presentedModalVC = viewControllerToPresent as? RNIModalViewController {
