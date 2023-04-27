@@ -185,7 +185,7 @@ extension UIViewController {
   };
   
   internal static func swizzleMethods() {
-    guard RNIModalSwizzling.shouldEnableSwizzling else { return };
+    guard RNIModalFlagsShared.shouldSwizzleViewControllers else { return };
     
     #if DEBUG
     print(

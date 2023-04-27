@@ -482,6 +482,10 @@ public class RNIModalView:
     return nil;
   };
   
+  var isModalViewPresentationNotificationEnabled: Bool {
+    RNIModalFlagsShared.isModalViewPresentationNotificationEnabled
+  };
+  
   // MARK: - Init
   // ------------
   
@@ -1102,8 +1106,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       );
     };
     
-    self.modalPresentationNotificationDelegate
-      .notifyOnModalWillShow(sender: self);
+    if self.isModalViewPresentationNotificationEnabled {
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalWillShow(sender: self);
+    };
   };
   
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
@@ -1116,9 +1122,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       );
     };
     
-    self.modalPresentationNotificationDelegate
-      .notifyOnModalDidShow(sender: self);
-    
+    if self.isModalViewPresentationNotificationEnabled {
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalDidShow(sender: self);
+    };
   };
   
   public func viewWillDisappear(sender: UIViewController, animated: Bool) {
@@ -1131,9 +1138,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       );
     };
     
-    self.modalPresentationNotificationDelegate
-      .notifyOnModalWillHide(sender: self);
-    
+    if self.isModalViewPresentationNotificationEnabled {
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalWillHide(sender: self);
+    };
   };
   
   public func viewDidDisappear(sender: UIViewController, animated: Bool) {
@@ -1146,8 +1154,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       );
     };
     
-    self.modalPresentationNotificationDelegate
-      .notifyOnModalDidHide(sender: self);
+    if self.isModalViewPresentationNotificationEnabled {
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalDidHide(sender: self);
+    };
     
     self.deinitControllers();
   };
