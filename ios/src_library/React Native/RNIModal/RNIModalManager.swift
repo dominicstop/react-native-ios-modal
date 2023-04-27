@@ -77,30 +77,28 @@ public class RNIModalManager {
   };
   
   static func getPresentedModal(
-    forPresentingViewController presentingVC: UIViewController
+    forPresentingViewController presentingVC: UIViewController,
+    presentedViewController presentedVC: UIViewController? = nil
   ) -> (any RNIModal)? {
     
-    let presentedVC = presentingVC.presentedViewController;
+    let presentedVC = presentedVC ?? presentingVC.presentedViewController;
     
     /// A - `presentedVC` is a `RNIModalViewController`.
-    ///
     if let presentedModalVC = presentedVC as? RNIModalViewController {
       return presentedModalVC.modalViewRef;
     };
     
-    /// B - `presentedVC` is a `RNIModalViewController` (and was presented by a
-    ///     `RNIModalView`).
-    ///
-    if let presentingModalVC = presentedVC as? RNIModalViewController,
+    /// B - `presentingVC` is a `RNIModalViewController`.
+    if let presentingModalVC = presentingVC as? RNIModalViewController,
        let presentingModal = presentingModalVC.modalViewRef,
-       let presentedModalVC = presentingModal.modalVC {
-      
-      return presentedModalVC.modalViewRef;
+       let presentedModalVC = presentingModal.modalVC,
+       let presentedModal = presentedModalVC.modalViewRef  {
+       
+      return presentedModal;
     };
-    
+        
     /// C - `presentedVC` has a corresponding `RNIModalViewControllerWrapper`
     ///     instance associated to it.
-    ///
     if let presentedVC = presentedVC,
        let presentedModalWrapper = RNIModalViewControllerWrapperRegistry.get(
          forViewController: presentedVC
@@ -111,7 +109,6 @@ public class RNIModalManager {
     
     /// D - `presentingVC` has a `RNIModalViewControllerWrapper` instance
     ///     associated to it.
-    ///
     if let presentingModalWrapper = RNIModalViewControllerWrapperRegistry.get(
          forViewController: presentingVC
        ),
@@ -121,6 +118,16 @@ public class RNIModalManager {
        ) {
       
       return presentedModalWrapper;
+    };
+    
+    let topmostVC = RNIUtilities.getTopmostPresentedViewController(
+      for: presentingVC.view.window
+    );
+    
+    if let topmostModalVC = topmostVC as? RNIModalViewController,
+       let topmostModal = topmostModalVC.modalViewRef {
+    
+      return topmostModal;
     };
     
     return nil;
@@ -314,7 +321,9 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     
     let windowData = RNIModalWindowMapShared.get(forWindow: senderWindow);
-    guard let nextModalToFocus = windowData.nextModalToFocus else {
+    let nextModalToFocus = windowData.nextModalToFocus
+    
+    if nextModalToFocus == nil {
       #if DEBUG
       print(
           "Error - RNIModalManager.notifyOnModalDidShow"
@@ -323,7 +332,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
         + " - possible notifyOnModalWillShow not invoked for sender"
       );
       #endif
-      return;
     };
     
     #if DEBUG
@@ -331,7 +339,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       print(
           "Warning - RNIModalManager.notifyOnModalDidShow"
         + " - arg sender.modalNativeID: \(sender.modalNativeID)"
-        + " - nextModalToFocus.modalNativeID: \(nextModalToFocus.modalNativeID)"
+        + " - nextModalToFocus.modalNativeID: \(nextModalToFocus?.modalNativeID ?? "N/A")"
         + " - nextModalToFocus !== sender"
         + " - a different modal is about to focused"
       );
