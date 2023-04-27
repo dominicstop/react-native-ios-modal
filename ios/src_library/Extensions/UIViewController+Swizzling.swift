@@ -7,182 +7,12 @@
 
 import Foundation
 
-
-
-
 extension UIViewController {
+
+  // MARK: - Static - Swizzling-Related
+  // ----------------------------------
   
   static var isSwizzled = false;
-  
-  fileprivate var modalWrapper: RNIModalViewControllerWrapper? {
-    RNIModalViewControllerWrapperRegistry.get(forViewController: self);
-  };
-  
-  @discardableResult
-  fileprivate func registerIfNeeded(
-    viewControllerToPresent: UIViewController
-  ) -> RNIModalViewControllerWrapper? {
-  
-    /// If `viewControllerToPresent` is being presented by a
-    /// `RNIModalViewController` instance, then we don't need to wrap the
-    /// current instance inside a `RNIModalViewControllerWrapper` since it
-    /// will already notify `RNIModalManager` of modal-related events...
-    ///
-    guard !(self is RNIModalViewController) else { return nil };
-    
-    let modalWrapper: RNIModalViewControllerWrapper = {
-    
-      /// A - Wrapper already exists for `viewControllerToPresent`,
-      ///     return matching instance.
-      ///
-      if let modalWrapper = RNIModalViewControllerWrapperRegistry.get(
-        forViewController: viewControllerToPresent
-      ) {
-        
-        return modalWrapper;
-      };
-      
-      // B - Wrapper does not exists for `viewControllerToPresent`,
-      //     so create new instance.
-      //
-      let newModalWrapper = RNIModalViewControllerWrapper();
-        
-      RNIModalViewControllerWrapperRegistry.set(
-        forViewController: self,
-        newModalWrapper
-      );
-      
-      return newModalWrapper;
-    }();
- 
-    modalWrapper.presentingViewController = self;
-    modalWrapper.modalViewController = viewControllerToPresent;
-    
-    return modalWrapper;
-  };
-  
-  fileprivate func getPresentedModal(
-    viewControllerToPresent: UIViewController? = nil
-  ) -> (any RNIModal)? {
-    if let presentedModalVC = viewControllerToPresent as? RNIModalViewController {
-      return presentedModalVC.modalViewRef;
-      
-    } else if let presentedVC = self.presentedViewController,
-              let presentedModalVC = presentedVC as? RNIModalViewController {
-      
-      /// A - Arg `viewControllerToPresent` is a `RNIModalViewController`
-      return presentedModalVC.modalViewRef;
-      
-    } else if let presentingModalVC = self as? RNIModalViewController,
-              let presentingModal = presentingModalVC.modalViewRef,
-              let presentedModalVC = presentingModal.modalVC {
-      
-      /// B - Current vc instance is a `RNIModalViewController` (and was
-      ///     presented by a `RNIModalView`).
-      return presentedModalVC.modalViewRef;
-      
-    } else if let presentedVC = viewControllerToPresent,
-              let presentedModalWrapper =
-                RNIModalViewControllerWrapperRegistry.get(forViewController: presentedVC) {
-      
-      /// C - `viewControllerToPresent` has a corresponding
-      ///     `RNIModalViewControllerWrapper` instance associated to it.
-      return presentedModalWrapper;
-      
-    } else if let presentingModalWrapper = self.modalWrapper,
-              let presentedVC = presentingModalWrapper.modalViewController,
-              let presentedModalWrapper =
-                RNIModalViewControllerWrapperRegistry.get(forViewController: presentedVC) {
-      
-      /// D - Current vc instance has a `RNIModalViewControllerWrapper`
-      ///     instance associated to it.
-      return presentedModalWrapper;
-    };
-    
-    return nil;
-  };
-  
-  @objc fileprivate func _swizzled_present(
-    _ viewControllerToPresent: UIViewController,
-    animated flag: Bool,
-    completion: (() -> Void)? = nil
-  ) {
-    #if DEBUG
-    print(
-        "Log - UIViewController+Swizzling"
-      + " - UIViewController._swizzled_present invoked"
-      + " - arg viewControllerToPresent: \(viewControllerToPresent)"
-      + " - arg animated: \(flag)"
-    );
-    #endif
-    
-    self.registerIfNeeded(viewControllerToPresent: viewControllerToPresent);
-    
-    let presentedModal =
-      self.getPresentedModal(viewControllerToPresent: viewControllerToPresent);
-    
-    if let presentedModal = presentedModal {
-      presentedModal.modalPresentationNotificationDelegate
-        .notifyOnModalWillShow(sender: presentedModal);
-    };
-    
-    // call original impl.
-    self._swizzled_present(viewControllerToPresent, animated: flag) {
-      #if DEBUG
-      print(
-          "Log - UIViewController+Swizzling"
-        + " - UIViewController._swizzled_present"
-        + " - completion invoked"
-      );
-      #endif
-      
-      if let presentedModal = presentedModal {
-        presentedModal.modalPresentationNotificationDelegate
-          .notifyOnModalDidShow(sender: presentedModal);
-      };
-      
-      completion?();
-    };
-  };
-  
-  @objc fileprivate func _swizzled_dismiss(
-    animated flag: Bool,
-    completion: (() -> Void)? = nil
-  ) {
-    #if DEBUG
-    print(
-        "Log - UIViewController+Swizzling"
-      + " - UIViewController._swizzled_dismiss invoked"
-      + " - arg animated: \(flag)"
-      + " - self.presentedViewController: \(String(describing: presentedViewController))"
-    );
-    #endif
-    
-    let presentedModal = self.getPresentedModal();
-    
-    if let presentedModal = presentedModal {
-      presentedModal.modalPresentationNotificationDelegate
-        .notifyOnModalWillHide(sender: presentedModal);
-    };
-    
-    // call original impl.
-    self._swizzled_dismiss(animated: flag) {
-      #if DEBUG
-      print(
-          "Log - UIViewController+Swizzling"
-        + " - UIViewController._swizzled_dismiss"
-        + " - completion invoked"
-      );
-      #endif
-      
-      if let presentedModal = presentedModal {
-        presentedModal.modalPresentationNotificationDelegate
-          .notifyOnModalDidHide(sender: presentedModal);
-      };
-      
-      completion?();
-    };
-  };
   
   internal static func swizzleMethods() {
     guard RNIModalFlagsShared.shouldSwizzleViewControllers else { return };
@@ -207,5 +37,199 @@ extension UIViewController {
     );
     
     self.isSwizzled.toggle();
+  };
+  
+  // MARK: - Helpers - Static
+  // ------------------------
+  
+  @discardableResult
+  static private func registerIfNeeded(
+    forViewController vc: UIViewController
+  ) -> RNIModalViewControllerWrapper? {
+  
+    let shouldWrapVC = vc is RNIModalViewController
+      ? RNIModalFlagsShared.shouldWrapAllViewControllers
+      : true;
+  
+    /// If the arg `vc` is a `RNIModalViewController` instance, then we don't
+    ///  need to wrap the current instance inside a
+    /// `RNIModalViewControllerWrapper` since it will already notify
+    /// `RNIModalManager` of modal-related events...
+    ///
+    guard shouldWrapVC else { return nil };
+    
+    let modalWrapper: RNIModalViewControllerWrapper = {
+      /// A - Wrapper already exists for arg `vc`, so return the matching
+      ///     wrapper instance.
+      ///
+      if let modalWrapper = RNIModalViewControllerWrapperRegistry.get(
+        forViewController: vc
+      ) {
+        return modalWrapper;
+      };
+      
+      /// B - Wrapper does not exists for arg `vc`, so create a new wrapper
+      ///     instance.
+      ///
+      let newModalWrapper = RNIModalViewControllerWrapper(viewController: vc);
+        
+      RNIModalViewControllerWrapperRegistry.set(
+        forViewController: vc,
+        newModalWrapper
+      );
+      return newModalWrapper;
+    }();
+
+    return modalWrapper;
+  };
+  
+  // MARK: - Helpers - Computed Properties
+  // -------------------------------------
+  
+  /// Get the associated `RNIModalViewControllerWrapper` instance for the
+  /// current view controller
+  ///
+  var modalWrapper: RNIModalViewControllerWrapper? {
+    RNIModalViewControllerWrapperRegistry.get(forViewController: self);
+  };
+  
+  // MARK: - Helpers - Functions
+  // ---------------------------
+  
+  private func getPresentedModalToNotify(
+    _ presentedVC: UIViewController? = nil
+  ) -> (any RNIModal)? {
+  
+    let presentedModal = RNIModalManager.getPresentedModal(
+      forPresentingViewController: self,
+      presentedViewController: presentedVC
+    );
+    
+    return RNIModalFlagsShared.shouldSwizzledViewControllerNotifyAll
+      ? presentedModal
+      : presentedModal as? RNIModalViewControllerWrapper;
+  };
+  
+  private func registerOrInitialize(
+    _ viewControllerToPresent: UIViewController
+  ){
+    let presentingWrapper = Self.registerIfNeeded(forViewController: self);
+    
+    presentingWrapper?.modalViewController = viewControllerToPresent;
+    presentingWrapper?.presentingViewController = self;
+    
+    let presentedWrapper =
+      Self.registerIfNeeded(forViewController: viewControllerToPresent);
+      
+    presentedWrapper?.presentingViewController = self;
+  };
+  
+  
+  private func notifyOnModalWillDismiss() -> (() -> Void)? {
+    guard let presentedModal = self.getPresentedModalToNotify()
+    else { return nil };
+    
+    presentedModal.notifyWillDismiss();
+    
+    return {
+      if presentedModal.computedIsModalInFocus {
+        presentedModal.notifyDidPresent();
+        
+      } else {
+        presentedModal.notifyDidDismiss();
+      };
+    };
+  };
+  
+  // MARK: - Swizzled Functions
+  // --------------------------
+  
+  @objc fileprivate func _swizzled_present(
+    _ viewControllerToPresent: UIViewController,
+    animated flag: Bool,
+    completion: (() -> Void)? = nil
+  ) {
+    #if DEBUG
+    print(
+        "Log - UIViewController+Swizzling"
+      + " - UIViewController._swizzled_present invoked"
+      + " - arg viewControllerToPresent: \(viewControllerToPresent)"
+      + " - arg animated: \(flag)"
+    );
+    #endif
+    
+    self.registerOrInitialize(viewControllerToPresent);
+    
+    let presentedModal = self.getPresentedModalToNotify(viewControllerToPresent);
+    presentedModal?.notifyWillPresent();
+    
+    // call original impl.
+    self._swizzled_present(viewControllerToPresent, animated: flag) {
+      #if DEBUG
+      print(
+          "Log - UIViewController+Swizzling"
+        + " - UIViewController._swizzled_present"
+        + " - completion invoked"
+      );
+      #endif
+      
+      presentedModal?.notifyDidPresent();
+      completion?();
+    };
+  };
+  
+  @objc fileprivate func _swizzled_dismiss(
+    animated flag: Bool,
+    completion: (() -> Void)? = nil
+  ) {
+    #if DEBUG
+    print(
+        "Log - UIViewController+Swizzling"
+      + " - UIViewController._swizzled_dismiss invoked"
+      + " - arg animated: \(flag)"
+      + " - self.presentedViewController: \(String(describing: presentedViewController))"
+    );
+    #endif
+    
+    let notifyOnModalDidDismiss = self.notifyOnModalWillDismiss();
+    
+    // call original impl.
+    self._swizzled_dismiss(animated: flag) {
+      #if DEBUG
+      print(
+          "Log - UIViewController+Swizzling"
+        + " - UIViewController._swizzled_dismiss"
+        + " - completion invoked"
+      );
+      #endif
+      
+      notifyOnModalDidDismiss?();
+      completion?();
+    };
+  };
+};
+
+// MARK: - Extensions - Helpers
+// ----------------------------
+
+fileprivate extension RNIModalPresentationNotifying where Self: RNIModal {
+  func notifyWillPresent() {
+    guard let delegate = modalPresentationNotificationDelegate else { return };
+    delegate.notifyOnModalWillShow(sender: self);
+  };
+  
+  func notifyDidPresent(){
+    guard let delegate = modalPresentationNotificationDelegate else { return };
+    delegate.notifyOnModalDidShow(sender: self);
+  };
+  
+  func notifyWillDismiss(){
+    guard let delegate = modalPresentationNotificationDelegate else { return };
+    delegate.notifyOnModalWillHide(sender: self);
+  };
+  
+  func notifyDidDismiss(){
+    guard let delegate = modalPresentationNotificationDelegate else { return };
+    delegate.notifyOnModalDidHide(sender: self);
   };
 };
