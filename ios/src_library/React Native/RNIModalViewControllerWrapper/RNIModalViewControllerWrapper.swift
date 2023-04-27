@@ -18,6 +18,12 @@ public class RNIModalViewControllerWrapper:
   
   public static var synthesizedIdPrefix: String = "modal-wrapper-";
   
+  // MARK: - Properties
+  // ------------------
+  
+  /// The view controller that this instance is wrapping/managing
+  public var viewController: UIViewController;
+  
   // MARK: - Properties - RNIModalPresentationNotifying
   // --------------------------------------------------
   
@@ -42,18 +48,24 @@ public class RNIModalViewControllerWrapper:
   public weak var modalViewController: UIViewController?;
   
   /// The view controller that presented the modal (i.e.
-  /// `modalViewController` or `UIViewController.presentingViewController`)
+  /// `UIViewController.presentingViewController`
   ///
   public weak var presentingViewController: UIViewController?;
   
   public var window: UIWindow? {
-    self.presentingViewController?.view.window
+    self.viewController.view.window ??
+      self.presentingViewController?.view.window
+  };
+  
+  var focusDelegate: RNIModalFocusNotifiable? {
+    return self.viewController as? RNIModalFocusNotifiable
   };
   
   // MARK: - Functions
   // -----------------
   
-  public init(){
+  public init(viewController: UIViewController){
+    self.viewController = viewController;
     RNIModalManagerShared.register(modal: self);
   };
 };
@@ -85,32 +97,24 @@ extension RNIModalViewControllerWrapper: RNIModalRequestable {
 
 extension RNIModalViewControllerWrapper: RNIModalFocusNotifiable {
   public func onModalWillFocusNotification(sender: any RNIModal) {
-    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
-    else { return };
-    
-    delegate.onModalWillFocusNotification(sender: sender);
+    guard let focusDelegate = self.focusDelegate else { return };
+    focusDelegate.onModalWillFocusNotification(sender: sender);
   };
   
   public func onModalDidFocusNotification(sender: any RNIModal) {
-    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
-    else { return };
-    
-    delegate.onModalDidFocusNotification(sender: sender);
-  }
+    guard let focusDelegate = self.focusDelegate else { return };
+    focusDelegate.onModalDidFocusNotification(sender: sender);
+  };
   
   public func onModalWillBlurNotification(sender: any RNIModal) {
-    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
-    else { return };
-    
-    delegate.onModalWillBlurNotification(sender: sender);
-  }
+    guard let focusDelegate = self.focusDelegate else { return };
+    focusDelegate.onModalWillBlurNotification(sender: sender);
+  };
   
   public func onModalDidBlurNotification(sender: any RNIModal) {
-    guard let delegate = self.modalViewController as? RNIModalFocusNotifiable
-    else { return };
-    
-    delegate.onModalDidBlurNotification(sender: sender);
-  }
+    guard let focusDelegate = self.focusDelegate else { return };
+    focusDelegate.onModalDidBlurNotification(sender: sender);
+  };
 };
 
 
