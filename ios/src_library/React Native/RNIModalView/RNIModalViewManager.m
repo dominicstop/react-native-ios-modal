@@ -35,6 +35,7 @@ RCT_EXPORT_VIEW_PROPERTY(onModalDidChangeSelectedDetentIdentifier, RCTBubblingEv
 // -----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(modalID, NSString);
+RCT_EXPORT_VIEW_PROPERTY(modalContentPreferredContentSize, NSDictionary);
 
 // MARK: - Value Props - BG-Related
 // --------------------------------

@@ -11,6 +11,8 @@ import type {
   DeprecatedOnModalDidDismissEvent,
 } from 'src/native_components/RNIModalView';
 
+import type { RNIComputableSize } from '../../types/RNIComputable';
+
 export type ModalViewBaseProps = Partial<
   Pick<
     RNIModalViewProps,
@@ -62,6 +64,8 @@ export type ModalViewBaseProps = Partial<
     | 'onModalDidChangeSelectedDetentIdentifier'
   >
 > & {
+  modalContentPreferredContentSize?: RNIComputableSize;
+
   // TODO: See TODO:2023-03-04-13-02-45 - Refactor: Rename to
   // shouldAutoCloseOnUnmount
   autoCloseOnUnmount?: boolean;

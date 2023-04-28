@@ -29,13 +29,16 @@ import type {
   OnModalDetentDidComputeEvent,
   OnModalDidChangeSelectedDetentIdentifierEvent,
 } from './RNIModalViewEvents';
+
 import type { UnionWithAutoComplete } from 'src/types/UtilityTypes';
+import type { RNIComputableSizeNative } from 'src/types/RNIComputable';
 
 export type RNIModalViewBaseProps = {
   // Props - General
   // ---------------
 
   modalID?: string;
+  modalContentPreferredContentSize?: RNIComputableSizeNative;
 
   // Props - BG-Related
   // ------------------

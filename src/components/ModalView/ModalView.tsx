@@ -56,7 +56,9 @@ import {
   NATIVE_ID_KEYS,
   VirtualizedListContext,
 } from './ModalViewConstants';
+
 import { ModalViewEmitterEventsDeprecated } from './ModalViewEmitterDeprecated';
+import { parseRNIComputableSize } from '../../types/RNIComputable';
 
 // prettier-ignore
 export class ModalView extends
@@ -95,6 +97,7 @@ export class ModalView extends
     const {
       // Native Props - General
       modalID,
+      modalContentPreferredContentSize,
       shouldEnableAggressiveCleanup,
 
       // Native Props - BG-Related
@@ -192,6 +195,9 @@ export class ModalView extends
       ),
       shouldEnableAggressiveCleanup: (
         shouldEnableAggressiveCleanup ?? true
+      ),
+      modalContentPreferredContentSize: (
+        parseRNIComputableSize(modalContentPreferredContentSize)
       ),
 
       // B - Pass down...

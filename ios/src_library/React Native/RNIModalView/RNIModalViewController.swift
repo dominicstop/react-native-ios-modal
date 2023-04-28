@@ -13,11 +13,8 @@ public class RNIModalViewController: UIViewController {
   // MARK: - Properties
   // ------------------
   
-  private(set) public var prevBounds: CGRect?;
-  
-  weak var lifecycleDelegate: RNIViewControllerLifeCycleNotifiable?;
-  
   weak var modalViewRef: RNIModalView?;
+  weak var lifecycleDelegate: RNIViewControllerLifeCycleNotifiable?;
   
   var isBGTransparent: Bool = true {
     didSet {
@@ -26,13 +23,16 @@ public class RNIModalViewController: UIViewController {
       self.updateBackgroundBlur();
     }
   };
-  
   var isBGBlurred: Bool = true {
     didSet {
       guard oldValue != self.isBGBlurred else { return };
       self.updateBackgroundBlur();
     }
   };
+  
+  private(set) public var prevBounds: CGRect?;
+
+  public lazy var computableSizeEvaluator = RNIComputableSizeEvaluator();
   
   // MARK: - Properties - Computed
   // -----------------------------
@@ -43,6 +43,18 @@ public class RNIModalViewController: UIViewController {
   
   var modalContentWrapper: RNIWrapperView? {
     self.modalViewRef?.modalContentWrapper;
+  };
+  
+  var computablePreferredContentSize: RNIComputableSize? {
+    self.modalViewRef?.synthesizedModalContentPreferredContentSize;
+  };
+  
+  var shouldUpdateContentSize: Bool {
+    guard let computableSize = self.computablePreferredContentSize,
+          case .current = computableSize.mode
+    else { return true };
+    
+    return false;
   };
   
   // MARK: - Properties
@@ -106,7 +118,7 @@ public class RNIModalViewController: UIViewController {
     guard didChangeBounds,
           let modalContentWrapper = self.modalContentWrapper
     else { return };
-    
+ 
     let nextBounds = self.view.bounds;
     
     let prevBounds = self.prevBounds;
@@ -120,10 +132,12 @@ public class RNIModalViewController: UIViewController {
       + " - nextBounds: \(nextBounds)"
     );
     #endif
-        
-    modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
-    modalContentWrapper.center = self.view.center;
     
+    if self.shouldUpdateContentSize {
+      modalContentWrapper.notifyForBoundsChange(size: nextBounds.size);
+      modalContentWrapper.center = self.view.center;
+    };
+
     self.lifecycleDelegate?.viewDidLayoutSubviews(sender: self);
   };
   
@@ -132,7 +146,9 @@ public class RNIModalViewController: UIViewController {
     
     self.lifecycleDelegate?
       .viewWillAppear(sender: self, animated: animated);
-    
+      
+    self.setPreferredContentSize();
+      
     #if DEBUG
     print(
       "Log - RNIModalViewController.viewWillAppear"
@@ -223,6 +239,40 @@ public class RNIModalViewController: UIViewController {
       + " - self.isMovingToParent: \(self.isMovingToParent)"
     );
     #endif
+  };
+  
+  // MARK: - Functions
+  // -----------------
+  
+  func setPreferredContentSize(){
+    guard let computableSize = self.computablePreferredContentSize
+    else { return };
+      
+    switch computableSize.mode {
+      case .unspecified:
+        return;
+      
+      case .current:
+        guard let modalContentWrapper = self.modalContentWrapper
+        else { return };
+        
+        self.preferredContentSize = self.view.systemLayoutSizeFitting(
+          modalContentWrapper.bounds.size
+        );
+        
+      default:
+        self.computableSizeEvaluator.computableSize = computableSize;
+          
+        let computedSize = self.computableSizeEvaluator.evaluate(
+          withTargetSize: self.view.bounds.size,
+          currentSize: self.modalContentWrapper?.bounds.size,
+          rootView: self.view.window?.rootViewController?.view,
+          targetView: self.view
+        );
+        
+        guard let computedSize = computedSize else { return };
+        self.preferredContentSize = computedSize;
+    };
   };
   
   // MARK: - Private Functions

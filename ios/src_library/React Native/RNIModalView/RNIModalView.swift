@@ -31,7 +31,6 @@ public class RNIModalView:
   var modalContentWrapper: RNIWrapperView?;
   public var modalVC: RNIModalViewController?;
   
-
   public var sheetDetentStringCurrent: String?;
   public var sheetDetentStringPrevious: String?;
   
@@ -100,6 +99,12 @@ public class RNIModalView:
     
   /// user-provided identifier for this modal
   @objc var modalID: NSString? = nil;
+  
+  @objc var modalContentPreferredContentSize: NSDictionary? {
+    didSet {
+      self.modalVC?.setPreferredContentSize();
+    }
+  };
   
   // MARK: - Properties: React Props - BG-Related
   // --------------------------------------------
@@ -281,6 +286,16 @@ public class RNIModalView:
   
   // MARK: - Properties: Synthesized From Props
   // ------------------------------------------
+  
+  public var synthesizedModalContentPreferredContentSize: RNIComputableSize {
+    guard let dict = self.modalContentPreferredContentSize,
+          let computableSize = RNIComputableSize(fromDict: dict)
+    else {
+      return RNIComputableSize(mode: .unspecified)
+    };
+    
+    return computableSize;
+  };
   
   public var synthesizedModalPresentationStyle: UIModalPresentationStyle {
     let defaultStyle: UIModalPresentationStyle = {
@@ -736,7 +751,8 @@ public class RNIModalView:
     ///
     switch self.synthesizedModalPresentationStyle {
       case .overFullScreen,
-           .fullScreen:
+           .fullScreen,
+           .formSheet:
         break;
         
       default:
@@ -748,7 +764,7 @@ public class RNIModalView:
     
     if #available(iOS 15.0, *),
        let sheetController = self.sheetPresentationController {
-      
+       
       sheetController.delegate = self;
       self.applyModalSheetProps(to: sheetController);
     };
