@@ -16,9 +16,13 @@ public final class RNIViewMetadata: RNIDictionarySynthesizable {
   public let nativeID: String?;
   
   public let parentView: RNIViewMetadata?;
-  public let subviews: [RNIViewMetadata];
+  public let subviews: [RNIViewMetadata]?;
   
-  public required init(fromView view: UIView){
+  public required init(
+    fromView view: UIView,
+    setParentView: Bool = true,
+    setSubViews: Bool = true
+  ){
     self.tag = view.tag;
     
     self.reactTag = {
@@ -32,12 +36,27 @@ public final class RNIViewMetadata: RNIDictionarySynthesizable {
     }();
     
     self.parentView = {
-      guard let parentView = view.superview else { return nil };
-      return  Self.init(fromView: parentView);
+      guard setParentView,
+            let parentView = view.superview
+      else { return nil };
+      
+      return Self.init(
+        fromView: parentView,
+        setParentView: false,
+        setSubViews: false
+      );
     }();
     
-    self.subviews = view.subviews.map {
-      return Self.init(fromView: $0);
-    };
+    self.subviews = {
+      guard setSubViews else { return nil };
+      
+      return view.subviews.map {
+        return Self.init(
+          fromView: $0,
+          setParentView: false,
+          setSubViews: false
+        );
+      };
+    }();
   };
 };

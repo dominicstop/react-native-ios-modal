@@ -22,6 +22,9 @@ public class RNIComputableSizeEvaluator {
   ) -> CGSize? {
     let computedSize: CGSize? = {
       switch self.computableSize.mode {
+        case .unspecified:
+          return nil;
+
         case .current:
           return currentSize;
           

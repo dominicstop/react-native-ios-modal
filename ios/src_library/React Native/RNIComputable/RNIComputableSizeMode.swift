@@ -8,6 +8,7 @@
 import Foundation
 
 public enum RNIComputableSizeMode {
+  case unspecified;
   case current;
   case stretch;
   case constant(constantWidth: Double, constantHeight: Double);

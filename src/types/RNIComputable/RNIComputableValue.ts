@@ -45,6 +45,6 @@ export type RNIComputableValueNative = {
 };
 
 export type RNIComputableValue<FunctionArgs, FunctionReturn> = {
-  valueFunction: (args: FunctionArgs) => FunctionReturn;
+  valueFunction: string | ((args: FunctionArgs) => FunctionReturn);
   extraData?: object;
 };

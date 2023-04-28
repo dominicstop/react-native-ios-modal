@@ -77,15 +77,7 @@ class RNIComputableValueEvaluator {
     }
   };
   
-  public var jsString: String = "" {
-    willSet {
-      self.initializeJSContextIfNeeded();
-      self.jsContext?.setObject(
-        newValue,
-        forKeyedSubscript: JSObjectKeys.valueFunction.string
-      );
-    }
-  };
+  public var jsString: String = "";
   
   // MARK: - Properties - Computed
   // ------------------------------
@@ -95,7 +87,22 @@ class RNIComputableValueEvaluator {
     self.initializeJSContextIfNeeded();
 
     let result = jsContext.evaluateScript(
-      "valueFunction(getEnvObject())"
+      "(\(self.jsString))(\(JSObjectKeys.getEnvObject)()"
+      //"JSON.stringify(\(JSObjectKeys.getEnvObject)())"
+    );
+    
+    jsContext.exceptionHandler = { context, exception in
+      print(
+          "RNIComputableValueEvaluator - computedValue"
+        + " - exceptionHandler "
+        + " - arg exception: \(exception.debugDescription)"
+      );
+    };
+    
+    print(
+        "RNIComputableValueEvaluator - computedValue"
+      + " - jsString: \(self.jsString)"
+      + " - result: \(result)"
     );
     
     return result;
@@ -161,6 +168,16 @@ class RNIComputableValueEvaluator {
       ]
     };
     
+    let getEnvObject: @convention(block)
+      () -> [AnyHashable: Any] = { [unowned self] in
+      
+      return [
+        JSObjectKeys.getView: getView,
+        JSObjectKeys.getWindowSize: getWindowSize,
+        JSObjectKeys.getScreenSize: getScreenSize,
+      ];
+    };
+    
     jsContext.setObject(
       getView,
       forKeyedSubscript: JSObjectKeys.getView.string
@@ -176,15 +193,10 @@ class RNIComputableValueEvaluator {
       forKeyedSubscript: JSObjectKeys.getScreenSize.string
     );
     
-    jsContext.evaluateScript("""
-      function \(JSObjectKeys.getEnvObject)(){
-        \(JSObjectKeys.getView),
-        getWindowSize: null,
-        getScreenSize: null,
-        
-        \(JSObjectKeys.parentView),
-      };
-    """);
+    jsContext.setObject(
+      getEnvObject,
+      forKeyedSubscript: JSObjectKeys.getEnvObject.string
+    );
   };
   
   // MARK: - Functions - Called from JS-Side
