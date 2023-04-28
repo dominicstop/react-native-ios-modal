@@ -8,10 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-04-26-07-30-15` - Impl. `RNIComputableValue`
-
-<br>
-
 - [ ] `TODO:2023-04-20-23-58-24` - Impl. sheet-related props.
 	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
 	- [x] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
@@ -143,6 +139,10 @@
 <br><br>
 
 ## TODO - Completed
+
+<br>
+
+- [x] `TODO:2023-04-26-07-30-15` - Impl. `RNIComputable`
 
 <br>
 
