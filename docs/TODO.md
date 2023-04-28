@@ -8,25 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-04-20-23-58-24` - Impl. sheet-related props.
-	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetLargestUndimmedDetentIdentifier`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
-	- [x] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateChanges`.
-	- [x] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
-	- [x] **Subtask**: `TODO:2023-04-22-06-24-51` - Impl. modal event `onModalDidChangeSelectedDetentIdentifier`
-	- [ ] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl. modal content prop  `modalContentPreferredContentSize`.
-		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
-		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
-		* This will also be used when `sheet.widthFollowsPreferredContentSizeWhenEdgeAttached` is set to `true`.
-
-<br>
-
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
@@ -142,7 +123,26 @@
 
 <br>
 
-- [x] `TODO:2023-04-26-07-30-15` - Impl. `RNIComputable`
+- [x] `TODO:2023-04-20-23-58-24` - Impl. sheet-related props.
+	- [x] **Subtask** - `TODO:2023-04-21-00-43-59` - Impl. prop `sheetDetents`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-23-32` - Impl. prop `sheetPrefersScrollingExpandsWhenScrolledToEdge`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-25-35` - Impl. prop `sheetPrefersEdgeAttachedInCompactHeight`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-25-47` - Impl. prop `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-26-03` - Impl. prop `sheetPrefersGrabberVisible`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-24-47` - Impl. prop `sheetLargestUndimmedDetentIdentifier`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-26-13` - Impl. prop `sheetPreferredCornerRadius`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-24-03` - Impl. prop `sheetSelectedDetentIdentifier`.
+	- [x] **Subtask** - `TODO:2023-04-21-23-24-39` - Impl. prop `sheetShouldAnimateChanges`.
+	- [x] **Subtask**: `TODO:2023-04-21-23-26-13` - Impl. modal event `onModalDetentDidCompute`.
+	- [x] **Subtask**: `TODO:2023-04-22-06-24-51` - Impl. modal event `onModalDidChangeSelectedDetentIdentifier`
+	- [x] **Subtask** - `TODO:2023-04-21-00-31-46` - Impl. modal content prop  `modalContentPreferredContentSize`.
+		* For example, `UIModalPresentationStyle.pageSheet` uses an explicit size that the system provides. 
+		* By contrast, `UIModalPresentationStyle.formSheet` uses the view controller’s `preferredContentSize` property, which you can set.
+		* This will also be used when `sheet.widthFollowsPreferredContentSizeWhenEdgeAttached` is set to `true`.
+
+<br>
+
+- [x] `TODO:2023-04-26-07-30-15` - Impl. `RNIComputableValue`
 
 <br>
 
