@@ -23,12 +23,10 @@ public class RNIComputableSizeEvaluator {
     let computedSize: CGSize? = {
       switch self.computableSize.mode {
         case .current:
-          guard let targetSize = targetSize else { return nil };
-          return targetSize;
+          return currentSize;
           
         case .stretch:
-          guard let currentSize = targetSize else { return nil };
-          return currentSize;
+          return targetSize;
           
         case let .constant(constantWidth, constantHeight):
           return CGSize(

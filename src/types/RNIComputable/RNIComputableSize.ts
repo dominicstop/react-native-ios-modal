@@ -50,10 +50,10 @@ export type RNIComputableSizeNative =
   & RNIComputableSizeShared;
 
 export function parseRNIComputableSize(
-  value: RNIComputableSize
-): RNIComputableSizeNative {
+  value?: RNIComputableSize
+): RNIComputableSizeNative | undefined {
 
-  if (value.mode === 'function'){
+  if (value?.mode === 'function'){
     return {
       ...value,
       valueFunction: value.valueFunction?.toString(),

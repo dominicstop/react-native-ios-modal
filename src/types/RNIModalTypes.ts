@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import type { RNIComputableOffset } from "./RNIComputable";
+import type { RNIComputableOffset } from './RNIComputable';
 
 /** Maps to `RNIModalCustomSheetDetent` */
 export type RNIModalCustomSheetDetent = Partial<RNIComputableOffset> & {
