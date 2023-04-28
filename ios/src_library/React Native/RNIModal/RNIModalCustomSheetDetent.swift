@@ -24,7 +24,9 @@ struct RNIModalCustomSheetDetent {
   
   typealias OnDetentDidCreate = (
     _ containerTraitCollection: UITraitCollection,
-    _ maximumDetentValue: CGFloat
+    _ maximumDetentValue: CGFloat,
+    _ computedDetentValue: CGFloat,
+    _ sender: RNIModalCustomSheetDetent
   ) -> Void;
   
   let mode: RNIModalCustomSheetDetentMode;
@@ -81,7 +83,6 @@ struct RNIModalCustomSheetDetent {
   var synthesizedDetent: UISheetPresentationController.Detent {
     return .custom(identifier: self.synthesizedDetentIdentifier) { context in
       
-      
       let computedValueBase: Double = {
         switch self.mode {
           case let .relative(value):
@@ -98,8 +99,10 @@ struct RNIModalCustomSheetDetent {
       let computedValue = computedValueWithOffset ?? computedValueBase;
         
       self.onDetentDidCreate?(
-        $0.containerTraitCollection,
-        $0.maximumDetentValue
+        context.containerTraitCollection,
+        context.maximumDetentValue,
+        computedValue,
+        self
       );
         
       return computedValue;

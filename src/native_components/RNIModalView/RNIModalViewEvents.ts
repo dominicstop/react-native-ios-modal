@@ -101,6 +101,8 @@ export type OnModalDidFocusEventObject = NativeSyntheticEvent<
 
 export type OnModalDetentDidComputeEventObject = NativeSyntheticEvent<{
   maximumDetentValue: number;
+  computedDetentValue: number;
+  key: string;
 }>;
 
 export type OnModalDidChangeSelectedDetentIdentifierEventObject =

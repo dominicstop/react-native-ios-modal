@@ -50,4 +50,6 @@ public struct RNIModalDidChangeSelectedDetentIdentifierEventData: RNIDictionaryS
 
 public struct RNIModalDetentDidComputeEventData: RNIDictionarySynthesizable {
   public let maximumDetentValue: CGFloat;
+  public let computedDetentValue: CGFloat;
+  public let key: String;
 };

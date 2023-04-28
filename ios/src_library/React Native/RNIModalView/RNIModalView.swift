@@ -385,10 +385,12 @@ public class RNIModalView:
                 let dict = $0 as? Dictionary<String, Any> {
         
         let customDetent = RNIModalCustomSheetDetent(forDict: dict) {
-          _, maximumDetentValue in
+          _, maximumDetentValue, computedDetentValue, sender in
           
           let eventData = RNIModalDetentDidComputeEventData(
-            maximumDetentValue: maximumDetentValue
+            maximumDetentValue: maximumDetentValue,
+            computedDetentValue: computedDetentValue,
+            key: sender.key
           );
           
           self.onModalDetentDidCompute?(
