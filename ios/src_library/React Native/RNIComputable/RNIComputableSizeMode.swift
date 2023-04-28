@@ -8,12 +8,10 @@
 import Foundation
 
 public enum RNIComputableSizeMode {
-  case unspecified;
   case current;
   case stretch;
   case constant(constantWidth: Double, constantHeight: Double);
   case percent(percentWidth: Double, percentHeight: Double);
-  case function(valueFunction: String);
 };
 
 extension RNIComputableSizeMode {
@@ -47,10 +45,6 @@ extension RNIComputableSizeMode {
           percentHeight: height.doubleValue
         );
         
-      case "function":
-        guard let value = dict["valueFunction"] as? String else { return nil };
-        self = .function(valueFunction: value);
-      
       default:
         return nil;
     };

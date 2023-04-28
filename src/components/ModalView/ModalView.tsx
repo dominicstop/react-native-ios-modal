@@ -58,7 +58,6 @@ import {
 } from './ModalViewConstants';
 
 import { ModalViewEmitterEventsDeprecated } from './ModalViewEmitterDeprecated';
-import { parseRNIComputableSize } from '../../types/RNIComputable';
 
 // prettier-ignore
 export class ModalView extends
@@ -196,13 +195,11 @@ export class ModalView extends
       shouldEnableAggressiveCleanup: (
         shouldEnableAggressiveCleanup ?? true
       ),
-      modalContentPreferredContentSize: (
-        parseRNIComputableSize(modalContentPreferredContentSize)
-      ),
 
       // B - Pass down...
       containerStyle,
       modalID,
+      modalContentPreferredContentSize,
       allowModalForceDismiss,
       modalBGBlurEffectStyle,
       modalSheetDetents,

@@ -27,6 +27,40 @@ public struct RNIComputableSize {
       height: offsetHeight ?? size.height
     );
   };
+  
+  func compute(
+    withTargetSize targetSize: CGSize,
+    currentSize: CGSize
+  ) -> CGSize {
+    switch self.mode {
+      case .current:
+        return currentSize;
+        
+      case .stretch:
+        return targetSize;
+        
+      case let .constant(constantWidth, constantHeight):
+        return CGSize(width: constantWidth, height: constantHeight);
+        
+      case let .percent(percentWidth, percentHeight):
+        return CGSize(
+          width: percentWidth * targetSize.width,
+          height: percentHeight * targetSize.height
+        );
+    };
+  };
+    
+  func computeWithOffsets(
+    withTargetSize targetSize: CGSize,
+    currentSize: CGSize
+  ) -> CGSize {
+    let computedSize = self.compute(
+      withTargetSize: targetSize,
+      currentSize: currentSize
+    );
+    
+    return self.computeOffsets(withSize: computedSize);
+  };
 };
 
 extension RNIComputableSize {

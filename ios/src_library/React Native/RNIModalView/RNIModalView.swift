@@ -102,7 +102,7 @@ public class RNIModalView:
   
   @objc var modalContentPreferredContentSize: NSDictionary? {
     didSet {
-      self.modalVC?.setPreferredContentSize();
+      self.modalVC?.setPreferredContentSize(withWindow: self.window);
     }
   };
   
@@ -287,12 +287,10 @@ public class RNIModalView:
   // MARK: - Properties: Synthesized From Props
   // ------------------------------------------
   
-  public var synthesizedModalContentPreferredContentSize: RNIComputableSize {
+  public var synthesizedModalContentPreferredContentSize: RNIComputableSize? {
     guard let dict = self.modalContentPreferredContentSize,
           let computableSize = RNIComputableSize(fromDict: dict)
-    else {
-      return RNIComputableSize(mode: .unspecified)
-    };
+    else { return nil };
     
     return computableSize;
   };

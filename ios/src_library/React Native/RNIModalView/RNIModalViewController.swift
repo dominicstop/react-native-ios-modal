@@ -31,9 +31,9 @@ public class RNIModalViewController: UIViewController {
   };
   
   private(set) public var prevBounds: CGRect?;
-
-  public lazy var computableSizeEvaluator = RNIComputableSizeEvaluator();
   
+  private var initialSize: CGSize?;
+
   // MARK: - Properties - Computed
   // -----------------------------
   
@@ -244,14 +244,23 @@ public class RNIModalViewController: UIViewController {
   // MARK: - Functions
   // -----------------
   
-  func setPreferredContentSize(){
+  func setPreferredContentSize(withWindow window: UIWindow? = nil){
     guard let computableSize = self.computablePreferredContentSize
     else { return };
+    
+    if self.initialSize == nil || self.initialSize!.isZero {
+      self.initialSize = self.view.bounds.size;
+    };
+    
+    let targetSize: CGSize = {
+      let viewSize = self.initialSize!;
+      let screenSize = window?.bounds.size;
+      
+      let size = viewSize.isZero ? screenSize : viewSize;
+      return size ?? viewSize;
+    }();
       
     switch computableSize.mode {
-      case .unspecified:
-        return;
-      
       case .current:
         guard let modalContentWrapper = self.modalContentWrapper
         else { return };
@@ -261,17 +270,9 @@ public class RNIModalViewController: UIViewController {
         );
         
       default:
-        self.computableSizeEvaluator.computableSize = computableSize;
-          
-        let computedSize = self.computableSizeEvaluator.evaluate(
-          withTargetSize: self.view.bounds.size,
-          currentSize: self.modalContentWrapper?.bounds.size,
-          rootView: self.view.window?.rootViewController?.view,
-          targetView: self.view
+        self.preferredContentSize = computableSize.computeWithOffsets(
+          withTargetSize: targetSize, currentSize: .zero
         );
-        
-        guard let computedSize = computedSize else { return };
-        self.preferredContentSize = computedSize;
     };
   };
   
