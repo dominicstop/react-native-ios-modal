@@ -17,14 +17,14 @@ public struct RNIComputableSize {
   
   func computeOffsets(withSize size: CGSize) -> CGSize {
     let offsetWidth =
-      self.offsetWidth?.compute(withValue: size.width) ?? 0;
+      self.offsetWidth?.compute(withValue: size.width);
       
     let offsetHeight =
-      self.offsetHeight?.compute(withValue: size.height) ?? 0;
+      self.offsetHeight?.compute(withValue: size.height);
     
     return CGSize(
-      width: size.width + offsetWidth,
-      height: size.height + offsetHeight
+      width: offsetWidth ?? size.width,
+      height: offsetHeight ?? size.height
     );
   };
 };
