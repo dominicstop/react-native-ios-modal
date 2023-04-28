@@ -22,6 +22,7 @@ const CUSTOM_DETENTS: RNIModalCustomSheetDetent[] = [
     key: 'custom_75%',
     mode: 'relative',
     sizeMultiplier: 0.75,
+    offset: 20,
   },
   {
     key: 'custom_100%',
@@ -69,10 +70,12 @@ export function Test09(props: ExampleProps) {
           }));
         }}
         onModalDetentDidCompute={({ nativeEvent }) => {
-          setEventData((prev) => ({
-            ...prev,
-            detentHeight: nativeEvent.maximumDetentValue,
-          }));
+          console.log(
+              "onModalDetentDidCompute",
+            + ` - key: ${nativeEvent.key}`,
+            + ` - maximumDetentValue: ${nativeEvent.maximumDetentValue}`
+            + ` - computedDetentValue: ${nativeEvent.computedDetentValue}`
+          );
         }}
       >
         <React.Fragment>
