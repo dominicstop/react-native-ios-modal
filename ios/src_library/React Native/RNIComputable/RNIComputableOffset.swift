@@ -40,12 +40,15 @@ public struct RNIComputableOffset {
 extension RNIComputableOffset {
 
   init?(fromDict dict: NSDictionary){
-    guard let offset = dict["offset"] as? NSNumber,
-          let offsetOperationRaw = dict["offsetOperation"] as? String,
-          let offsetOperation = OffsetOperation(rawValue: offsetOperationRaw)
-    else { return nil };
-    
+    guard let offset = dict["offset"] as? NSNumber else { return nil };
     self.offset = offset.doubleValue;
-    self.offsetOperation = offsetOperation;
+    
+    self.offsetOperation = {
+      guard let offsetOperationRaw = dict["offsetOperation"] as? String,
+            let offsetOperation = OffsetOperation(rawValue: offsetOperationRaw)
+      else { return .add };
+      
+      return offsetOperation;
+    }();
   };
 };
