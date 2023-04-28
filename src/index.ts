@@ -12,3 +12,4 @@ export * from './types/UIModalTypes';
 export * from './types/UIBlurEffectStyles';
 export * from './types/RNIModalViewRelatedTypes';
 export * from './types/RNIModalTypes';
+export * from './types/RNIComputable';
