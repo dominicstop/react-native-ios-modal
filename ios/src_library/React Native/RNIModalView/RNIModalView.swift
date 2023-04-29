@@ -156,7 +156,7 @@ public class RNIModalView:
       let newValue = self.enableSwipeGesture;
       guard newValue != oldValue else { return };
       
-      self.enableSwipeGesture(newValue);
+      self.modalGestureRecognizer?.isEnabled = newValue;
     }
   };
   
@@ -501,6 +501,15 @@ public class RNIModalView:
     RNIModalFlagsShared.isModalViewPresentationNotificationEnabled
   };
   
+  var modalGestureRecognizer: UIGestureRecognizer? {
+    guard let modalVC = self.modalVC,
+          let controller = modalVC.presentationController,
+          let gestureRecognizers = controller.presentedView?.gestureRecognizers
+    else { return nil };
+    
+    return gestureRecognizers.first;
+  };
+  
   // MARK: - Init
   // ------------
   
@@ -610,12 +619,46 @@ public class RNIModalView:
     self.presentingViewController = nil;
   };
   
-  private func enableSwipeGesture(_ flag: Bool? = nil){
-    self.modalVC?
-        .presentationController?
-        .presentedView?
-        .gestureRecognizers?[0]
-        .isEnabled = flag ?? self.enableSwipeGesture;
+  
+  private func notifyIfModalDismissCancelled(){
+    guard let modalVC = self.modalVC,
+          let transitionCoordinator = modalVC.transitionCoordinator
+    else { return };
+  
+    transitionCoordinator.notifyWhenInteractionChanges {
+      guard $0.isCancelled else { return };
+      
+      self.modalPresentationState.set(state: .DISMISS_GESTURE_CANCELLING);
+      self.modalPresentationState.wasCancelledDismissViaGesture = true;
+      
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalWillShow(sender: self);
+    };
+    
+    self.modalVC?.transitionCoordinator?.animate(alongsideTransition: nil) {
+      guard $0.isCancelled else { return };
+      
+      self.modalPresentationNotificationDelegate
+        .notifyOnModalDidShow(sender: self);
+    };
+  };
+  
+  @objc private func handleGestureRecognizer(_ sender: UIPanGestureRecognizer) {
+    print(
+      "Test - handleGestureRecognizer - \(sender.state.description)"
+    );
+    
+    if case .ended = sender.state {
+      self.modalVC?.transitionCoordinator?.animate(alongsideTransition: {_ in}) {
+        print(
+            "Test - handleGestureRecognizer"
+          + " - transitionCoordinator.animate"
+          + " - isCancelled: \($0.isCancelled)"
+          + " - percentComplete: \($0.percentComplete)"
+          + " - isInteractive: \($0.isInteractive)"
+        );
+      };
+    };
   };
   
   /// `TODO:2023-03-22-12-07-54`
@@ -734,16 +777,6 @@ public class RNIModalView:
       return;
     };
     
-    switch self.synthesizedModalPresentationStyle {
-      case .overFullScreen,
-           .fullScreen,
-           .formSheet:
-        break;
-        
-      default:
-        modalVC.presentationController?.delegate = self;
-    };
-    
     modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
     modalVC.modalPresentationStyle = self.synthesizedModalPresentationStyle;
     
@@ -767,7 +800,7 @@ public class RNIModalView:
     #endif
     
     // Temporarily disable swipe gesture while it's being presented
-    self.enableSwipeGesture(false);
+    self.modalGestureRecognizer?.isEnabled = false;
     
     self.presentingViewController = topMostPresentedVC;
     
@@ -779,8 +812,13 @@ public class RNIModalView:
     );
     
     topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
+      
+      // Become the modal's presentation delegate after it has been presented
+      // in order to not override system-defined default modal behavior
+      modalVC.presentationController?.delegate = self;
+      
       // Reset swipe gesture before it was temporarily disabled
-      self.enableSwipeGesture();
+      self.modalGestureRecognizer?.isEnabled = self.enableSwipeGesture;
       
       self.modalPresentationState.set(state: .PRESENTED);
       
@@ -877,7 +915,7 @@ public class RNIModalView:
     );
     #endif
 
-    self.enableSwipeGesture(false);
+    self.modalGestureRecognizer?.isEnabled = false;
     
     /// set specific "dismissing" state
     self.modalPresentationState.set(state: .DISMISSING_PROGRAMMATIC);
@@ -1113,6 +1151,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       self.modalPresentationNotificationDelegate
         .notifyOnModalWillShow(sender: self);
     };
+    
+    if self.modalPresentationState.isInitialPresent {
+      self.setupOnModalInitialPresent();
+    };
   };
   
   public func viewDidAppear(sender: UIViewController, animated: Bool) {
@@ -1145,6 +1187,8 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
       self.modalPresentationNotificationDelegate
         .notifyOnModalWillHide(sender: self);
     };
+    
+    self.notifyIfModalDismissCancelled();
   };
   
   public func viewDidDisappear(sender: UIViewController, animated: Bool) {
