@@ -281,7 +281,7 @@ public struct RNIModalPresentationStateMachine {
     } else if self.state == .DISMISSED {
       // reset
       self.wasCancelledDismissViaGesture = false;
-      self._isInitialPresent = false;
+      self._isInitialPresent = nil;
       self._wasCancelledDismiss = false;
     };
   };
