@@ -734,19 +734,6 @@ public class RNIModalView:
       return;
     };
     
-    /// `Note:2023-03-30-15-20-27`
-    ///
-    /// * Weird bug where you cannot set the modal to present in fullscreen
-    ///   if `presentationController` delegate is set.
-    ///
-    /// * So don't set the delegate when we are using a "fullscreen-like"
-    ///   presentation
-    ///
-    /// * Removing the delegate means that the methods in
-    ///   `UIAdaptivePresentationControllerDelegate` will not be called,
-    ///   meaning we will no longer get notified of "blur/focus" related
-    ///   events.
-    ///
     switch self.synthesizedModalPresentationStyle {
       case .overFullScreen,
            .fullScreen,
@@ -1184,76 +1171,6 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
 // ----------------------------------------
 
 /// `Note:2023-03-31-17-51-56`
-///
-/// * There are a couple of different ways we can get notified whenever a modal
-///   is about to be dismissed.
-///
-///   * **Method:A** - `RNIModalViewController.viewWillDisappear`, and
-///     `RNIModalViewController.viewWillDisappear`.
-///
-///     * **Method:A** gets invoked alongside
-///       `RNIModalView.presentationControllerWillDismiss`.
-///
-///     * As such, **Method:A** has the same problem as
-///       `Note:2023-03-31-17-01-57` (i.e. the event fires regardless if the
-///       swipe down gesture to close the modal was cancelled mid-way).
-///
-///     * Using `Method:A`, it's also possible to distinguish if
-///       `viewWillAppear` was invoked due to a modal being dismissed (see
-///       `Note:2023-04-01-14-39-23`).
-///
-///     * Using `Method:A`, we can use the `transitionCoordinator` to get
-///       notified when the exit transition is finished.
-///
-///   * **Method:B** - `UIAdaptivePresentationControllerDelegate`
-///
-///     * **Method:B** only gets invoked in response to user-initiated
-///       gestures (i.e. See `Note:2023-03-31-16-48-10`).
-///
-///     * Additionally, with **Method:B**, the "will blur"-like event gets
-///       fired multiple times whenever the dismiss gesture is cancelled
-///       half-way (i.e. see: `Note:2023-03-31-17-01-57`).
-///
-///       * However, `UIViewController.viewWillAppear` and
-///         `UIViewController.viewDidAppear` get called immediately when the
-///         swipe to close gesture is cancelled.
-///
-///     * **Method:B** also invokes `RNIModalViewController.viewWillDisappear`
-///       + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
-///
-///       * 1 - `RNIModalView.presentationControllerWillDismiss`
-///       * 2 - `RNIModalViewController.viewWillDisappear`
-///       * 3 - `RNIModalViewController.viewDidDisappear`
-///       * 4 - `RNIModalView.presentationControllerDidDismiss`
-///
-///   * **Method:C** - Programmatically/manually, via the  `present` and
-///     `dismiss` methods.
-///
-///     * **Method:C** only invokes the "blur/focus" events whenever the
-///       `present` + `dismiss` methods are being invoked.
-///
-///     * As such, **Method:C** does not account for whenever the modal is being
-///       dismissed via a swipe gesture.
-///
-///     * **Method:C** also invokes `RNIModalViewController.viewWillDisappear`
-///       + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
-///
-///       * 1 - `RNIModalView.dismissModal`
-///       * 2 - `RNIModalViewController.viewWillDisappear`
-///       * 3 - `RNIModalView.dismissModal - completion`
-///
-///   * **Method:D** - Overriding the `RNIModalViewController.dismiss` method
-///     and notifying `RNIModalView` when the method gets invoked.
-///
-///     * **Method:D** Works regardless of the method in which the modal was
-///       dismissed (i.e. swipe gesture, or programmatic).
-///
-///     * In addition, **Method:D** coupled with swizzling `UIViewController`,
-///       means that we can detect whenever a modal is about to be dismissed
-///       or presented via replacing the default `UIViewController.present`,
-///       and `UIViewController.dismiss` methods w/ our own implementation.
-///
-///
 extension RNIModalView: RNIModalFocusNotifiable {
   
   public func onModalWillFocusNotification(sender: any RNIModal) {

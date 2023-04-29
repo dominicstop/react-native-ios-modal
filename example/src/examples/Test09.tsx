@@ -66,10 +66,10 @@ export function Test09(props: ExampleProps) {
         sheetWidthFollowsPreferredContentSizeWhenEdgeAttached={true}
         // Needed for `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached` 
         // to take work on iphone's w/o notches
-        modalPresentationStyle={'formSheet'}
+        modalPresentationStyle={'pageSheet'}
         modalContentPreferredContentSize={{
           mode: 'percent',
-          percentWidth: 1,
+          percentWidth: 0.5,
           percentHeight: 1,
         }}
         onModalDidChangeSelectedDetentIdentifier={({ nativeEvent }) => {
