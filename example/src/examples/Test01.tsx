@@ -51,6 +51,11 @@ export function Test01(props: ExampleProps) {
         ref={modalRef}
         containerStyle={styles.modalContainer}
         modalPresentationStyle={currentPresentationStyle}
+        modalContentPreferredContentSize={{
+          mode: 'percent',
+          percentWidth: 0.8,
+          percentHeight: 0.8,
+        }}
       >
         <React.Fragment>
           <CardBody style={styles.modalCard}>

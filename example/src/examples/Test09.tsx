@@ -62,6 +62,16 @@ export function Test09(props: ExampleProps) {
         containerStyle={styles.modalContainer}
         modalSheetDetents={CUSTOM_DETENTS}
         sheetSelectedDetentIdentifier={currentDetent.key}
+        sheetPrefersEdgeAttachedInCompactHeight={true}
+        sheetWidthFollowsPreferredContentSizeWhenEdgeAttached={true}
+        // Needed for `sheetWidthFollowsPreferredContentSizeWhenEdgeAttached` 
+        // to take work on iphone's w/o notches
+        modalPresentationStyle={'formSheet'}
+        modalContentPreferredContentSize={{
+          mode: 'percent',
+          percentWidth: 1,
+          percentHeight: 1,
+        }}
         onModalDidChangeSelectedDetentIdentifier={({ nativeEvent }) => {
           setEventData((prev) => ({
             ...prev,
