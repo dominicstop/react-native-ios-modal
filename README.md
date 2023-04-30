@@ -1,4 +1,11 @@
 # react-native-ios-modal
+
+## 🚧⚠️ Re-Write in Progress ⚠️🚧
+
+Hi, this library is being re-written — please check the `wip` branch + [`TODO.md`](./docs/TODO.md) file for progress ✨
+
+<br><br>
+
 A react-native component for displaying a modal on iOS by natively wrapping a react-native view inside a `UIViewController` and presenting it.
 * Since this is just using a `UIViewController`, this component also supports setting the`UIModalPresentationStyle` and `UIModalTransitionStyle`.
 * Supports setting `isModalInPresentation` and separately disabling the native swipe down gesture when the modal is using `pageSheet` `modalPresentationStyle`.
