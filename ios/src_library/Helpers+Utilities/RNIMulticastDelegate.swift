@@ -8,7 +8,7 @@
 import Foundation
 
 
-public class MulticastDelegate<T: AnyObject> {
+public class RNIMulticastDelegate<T: AnyObject> {
   private let delegates: NSHashTable<T> = NSHashTable.weakObjects();
   
   public func add(_ delegate: T) {
