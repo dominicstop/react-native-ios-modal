@@ -619,7 +619,6 @@ public class RNIModalView:
     self.presentingViewController = nil;
   };
   
-  
   private func notifyIfModalDismissCancelled(){
     guard let modalVC = self.modalVC,
           let transitionCoordinator = modalVC.transitionCoordinator
@@ -640,24 +639,6 @@ public class RNIModalView:
       
       self.modalPresentationNotificationDelegate
         .notifyOnModalDidShow(sender: self);
-    };
-  };
-  
-  @objc private func handleGestureRecognizer(_ sender: UIPanGestureRecognizer) {
-    print(
-      "Test - handleGestureRecognizer - \(sender.state.description)"
-    );
-    
-    if case .ended = sender.state {
-      self.modalVC?.transitionCoordinator?.animate(alongsideTransition: {_ in}) {
-        print(
-            "Test - handleGestureRecognizer"
-          + " - transitionCoordinator.animate"
-          + " - isCancelled: \($0.isCancelled)"
-          + " - percentComplete: \($0.percentComplete)"
-          + " - isInteractive: \($0.isInteractive)"
-        );
-      };
     };
   };
   
@@ -1150,10 +1131,6 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     if self.isModalViewPresentationNotificationEnabled {
       self.modalPresentationNotificationDelegate
         .notifyOnModalWillShow(sender: self);
-    };
-    
-    if self.modalPresentationState.isInitialPresent {
-      self.setupOnModalInitialPresent();
     };
   };
   
