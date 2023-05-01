@@ -81,8 +81,8 @@ export function Test09(props: ExampleProps) {
         }}
         onModalDetentDidCompute={({ nativeEvent }) => {
           console.log(
-              "onModalDetentDidCompute",
-            + ` - key: ${nativeEvent.key}`,
+              "onModalDetentDidCompute"
+            + ` - key: ${nativeEvent.key}`
             + ` - maximumDetentValue: ${nativeEvent.maximumDetentValue}`
             + ` - computedDetentValue: ${nativeEvent.computedDetentValue}`
           );
