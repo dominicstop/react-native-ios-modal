@@ -8,6 +8,14 @@
 
 <br>
 
+- [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events
+	- [ ] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
+	- [ ] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureDidBegin` + `onModalSwipeGestureDidEnd`
+	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
+	- [ ] **Subtask** - `TODO:2023-05-01-19-19-20` - Update `RNIModalView` event objects.
+
+<br>
+
 - [ ] `TODO:2023-03-04-13-15-11` - Refactor: Update Modal Events
 
 	* **Desc**: Refactor `RNIModalView` events to use "will/did" prefix, update the modal event objects, and deprecate old event names (for backwards compatibility).
@@ -30,7 +38,6 @@
 	- [x] **Subtask** - `TODO:2023-03-30-15-54-06` - Impl. new `RNIModalView` native events.
 	- [x] **Subtask** - `TODO:2023-03-30-16-36-50` - Update `ModalView` to use the new events.
 	- [x] **Subtask** - `TODO:2023-03-30-15-55-12` - Add invocation for deprecated events: `onModalFocus`, `onModalShow`, `onModalAttemptDismiss`, `onModalDismiss`, `onModalBlur`
-	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples.
 
 <br>
@@ -52,10 +59,6 @@
 - [ ] `TODO:2023-04-22-05-29-50` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
 - [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
 	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
-
-<br>
-
-- [ ] `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureDidBegin` + `onModalSwipeGestureDidEnd`
 
 <br>
 
@@ -105,13 +108,13 @@
 ## TODO - Non-Priority
 
 - [ ] `TODO:2023-03-09-17-36-51` - Impl: Close preceding modals non-destructively
-  * Desc: Implement a way to close proceeding modals w/o permanently closing the succeeding/topmost modals. 
+  * **Desc**: Implement a way to close proceeding modals w/o permanently closing the succeeding/topmost modals. 
   	* When trying to close a modal that is "not in focus" (i.e. a modal that isn't at the very top; e.g. a modal that has a `modalIndex` that is lower than the topmost modal), will throw an error: "`ModalView`, `setVisibility` failed: Cannot dismiss modal because it's not in focus. Enable `allowModalForceDismiss` to dismiss".
 
 <br>
 
 - [ ] `TODO:2023-03-08-03-51-37` Impl: `ModalEventListener` Component
-  * **Desc: Implement `ModalEventListener` dummy component.
+  * **Desc**: Implement `ModalEventListener` dummy component.
   	* A dummy component that render nothing.
   	* Used to listen to modal events via the modal context + modal event emitter ref.
   	* Complete this after refactor + rename of modal events.
