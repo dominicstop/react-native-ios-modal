@@ -30,23 +30,46 @@ extension RNIDictionarySynthesizable {
   
     if let synthesizableDict = value as? (any RNIDictionarySynthesizable) {
       return synthesizableDict.synthesizedDictionary(isJSDict: isJSDict);
+    };
       
-    } else if isJSDict, let rawValue = value as? any RawRepresentable {
+    if isJSDict, let rawValue = value as? any RawRepresentable {
       return rawValue.rawValue;
-      
-    } else if isJSDict, let array = value as? Array<Any> {
+    };
+    
+    if isJSDict, let array = value as? Array<Any> {
       return array.map {
         return Self.recursivelyParseValue($0, isJSDict: isJSDict);
       };
     };
     
+    if let encodable = value as? Encodable,
+       let dict = encodable.asDictionary {
+       
+       return dict;
+    };
+    
     return value;
   };
   
-  // MARK: - Public Functions
-  // ------------------------
+  private func mergeInlinedProperties(
+    withDict baseDict: Dictionary<String, Any>,
+    isJSDict: Bool
+  ) -> Dictionary<String, Any> {
   
-  public func synthesizedDictionary(
+    var baseDict = baseDict;
+  
+    Self.synthesizedDictionaryInlinedProperties.forEach {
+      guard let value = self[keyPath: $0] as? (any RNIDictionarySynthesizable)
+      else { return };
+      
+      let inlinedDict = value.synthesizedDictionary(isJSDict: isJSDict);
+      baseDict = baseDict.merging(inlinedDict){ old, _ in old };
+    };
+    
+    return baseDict;
+  };
+  
+  private func synthesizedDictionaryUsingDictIgnore(
     isJSDict: Bool
   ) -> Dictionary<String, Any> {
     
@@ -77,20 +100,26 @@ extension RNIDictionarySynthesizable {
       return (propertyKey, parsedValue);
     };
     
-    var baseDict = Dictionary(
+    let baseDict = Dictionary(
       uniqueKeysWithValues: propertyValueMap.compactMap { $0 }
     );
-    
-    Self.synthesizedDictionaryInlinedProperties.forEach {
-      guard let value = self[keyPath: $0] as? (any RNIDictionarySynthesizable)
-      else { return };
-      
-      let inlinedDict = value.synthesizedDictionary(isJSDict: isJSDict);
-      baseDict = baseDict.merging(inlinedDict){ old, _ in old };
-    };
-    
-    return baseDict;
+
+    return self.mergeInlinedProperties(
+      withDict: baseDict,
+      isJSDict: isJSDict
+    );
   };
+  
+  // MARK: - Public Functions
+  // ------------------------
+  
+  public func synthesizedDictionary(
+    isJSDict: Bool
+  ) -> Dictionary<String, Any> {
+  
+    return self.synthesizedDictionaryUsingDictIgnore(isJSDict: isJSDict);
+  };
+  
   
   public var synthesizedJSDictionary: Dictionary<String, Any> {
     self.synthesizedDictionary(isJSDict: true);
