@@ -13,7 +13,8 @@ public class RNIModalUtilities {
     forWindow window: UIWindow
   ) -> [any RNIModal] {
   
-    let vcItems = RNIUtilities.getPresentedViewControllers(for: window);
+    let vcItems =
+      RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     return vcItems.compactMap {
       guard let modalVC = $0 as? RNIModalViewController else { return nil };
@@ -27,7 +28,7 @@ public class RNIModalUtilities {
   ) -> Int {
     
     let listPresentedVC =
-      RNIUtilities.getPresentedViewControllers(for: window);
+      RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     var index = -1;
     

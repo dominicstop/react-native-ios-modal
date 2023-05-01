@@ -135,13 +135,15 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
       return;
     };
     
+    let purgeCache =
+      RNIPresentedVCListCache.beginCaching(forWindow: senderWindow);
+    
     /// `Note:2023-04-10-20-47-52`
     /// * The sender will already be in `presentedModalList` despite it being
     ///   not fully presented yet.
     ///
-    let presentedModalList = RNIModalUtilities.getPresentedModals(
-      forWindow: senderWindow
-    );
+    let presentedModalList =
+      RNIModalUtilities.getPresentedModals(forWindow: senderWindow);
     
     #if DEBUG
     if windowData.nextModalToFocus != nil {
@@ -196,6 +198,8 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     if let modalToBlur = presentedModalList.secondToLast {
       windowData.nextModalToBlur = modalToBlur;
     };
+    
+    purgeCache();
   };
   
   public func notifyOnModalDidShow(sender: any RNIModal) {
@@ -236,9 +240,11 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let presentedModalList = RNIModalUtilities.getPresentedModals(
-      forWindow: senderWindow
-    );
+    let purgeCache =
+      RNIPresentedVCListCache.beginCaching(forWindow: senderWindow);
+    
+    let presentedModalList =
+      RNIModalUtilities.getPresentedModals(forWindow: senderWindow);
   
     windowData.apply(forFocusedModal: sender);
     
@@ -277,6 +283,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     // Reset
     windowData.nextModalToBlur = nil;
+    purgeCache();
   };
   
   public func notifyOnModalWillHide(sender: any RNIModal) {
@@ -317,9 +324,11 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
-    let presentedModalList = RNIModalUtilities.getPresentedModals(
-      forWindow: senderWindow
-    );
+    let purgeCache =
+      RNIPresentedVCListCache.beginCaching(forWindow: senderWindow);
+    
+    let presentedModalList =
+      RNIModalUtilities.getPresentedModals(forWindow: senderWindow);
     
     windowData.set(nextModalToBlur: sender);
     
@@ -339,7 +348,10 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
   
     sender.onModalWillBlurNotification(sender: sender);
     
-    guard let modalToFocus = presentedModalList.secondToLast else { return };
+    guard let modalToFocus = presentedModalList.secondToLast else {
+      purgeCache();
+      return;
+    };
     
     #if DEBUG
     print(
@@ -355,6 +367,7 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     modalToFocus.onModalWillFocusNotification(sender: sender);
     
     windowData.nextModalToFocus = modalToFocus;
+    purgeCache();
   };
   
   public func notifyOnModalDidHide(sender: any RNIModal) {
@@ -394,6 +407,9 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     };
     #endif
     
+    let purgeCache =
+      RNIPresentedVCListCache.beginCaching(forWindow: senderWindow);
+    
     windowData.apply(forBlurredModal: sender);
     
     #if DEBUG
@@ -427,5 +443,6 @@ extension RNIModalManager: RNIModalPresentationNotifiable {
     
     // reset
     windowData.nextModalToFocus = nil;
+    purgeCache();
   };
 };

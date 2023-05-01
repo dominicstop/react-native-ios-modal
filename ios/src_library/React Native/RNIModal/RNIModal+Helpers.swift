@@ -23,7 +23,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// Programmatically check if this instance is presented
   public var computedIsModalPresented: Bool {
     let listPresentedVC =
-      RNIUtilities.getPresentedViewControllers(for: self.window);
+      RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     return listPresentedVC.contains {
       $0 === self.modalViewController;
@@ -33,7 +33,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   /// Programmatically check if this instance is in focus
   public var computedIsModalInFocus: Bool {
     let listPresentedVC =
-      RNIUtilities.getPresentedViewControllers(for: self.window);
+      RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     guard let topmostVC = listPresentedVC.last
     else { return self.synthesizedIsModalInFocus };
@@ -48,7 +48,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   ///
   public var computedViewControllerIndex: Int {
     let listPresentedVC =
-      RNIUtilities.getPresentedViewControllers(for: self.window);
+      RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     for (index, vc) in listPresentedVC.enumerated() {
       guard vc === self.modalViewController else { continue };
@@ -87,7 +87,10 @@ extension RNIModalState where Self: RNIModalPresentation {
 extension RNIModalState where Self: RNIModal {
   
   public var synthesizedModalData: RNIModalData {
-    return RNIModalData(
+    let purgeCache =
+      RNIPresentedVCListCache.beginCaching(forWindow: self.window);
+  
+    let modalData = RNIModalData(
       modalNativeID: self.modalNativeID,
       
       modalIndex: self.modalIndex,
@@ -122,5 +125,8 @@ extension RNIModalState where Self: RNIModal {
       
       synthesizedWindowID: self.window?.synthesizedStringID
     );
+    
+    purgeCache();
+    return modalData;
   };
 };
