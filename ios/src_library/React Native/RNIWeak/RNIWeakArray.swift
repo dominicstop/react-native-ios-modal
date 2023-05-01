@@ -18,11 +18,13 @@ public class RNIWeakArray<T> {
     };
   };
   
-  public var array: [RNIWeakRef<T>] {
+  public var array: [T] {
     let purgedArray = self.purgedArray;
     self.rawArray = purgedArray;
     
-    return purgedArray;
+    return purgedArray.compactMap {
+      $0.synthesizedRef;
+    };
   };
   
   public init(initialItems: [T] = []){
