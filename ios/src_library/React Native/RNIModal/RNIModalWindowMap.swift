@@ -39,7 +39,7 @@ internal class RNIWindowMapData {
     self.nextModalToFocus = modalToFocus;
     
     let modalIndexCurrent =
-      RNIModalManager.computeModalIndex(forWindow: modalToFocus.window);
+      RNIModalUtilities.computeModalIndex(forWindow: modalToFocus.window);
     
     let modalIndexPrev = self.modalIndexCurrent;
     
@@ -52,7 +52,7 @@ internal class RNIWindowMapData {
     self.nextModalToFocus = nil;
     
     let modalIndexCurrent =
-      RNIModalManager.computeModalIndex(forWindow: focusedModal.window);
+      RNIModalUtilities.computeModalIndex(forWindow: focusedModal.window);
     
     let modalIndexPrev = self.modalIndexCurrent;
     
@@ -68,7 +68,7 @@ internal class RNIWindowMapData {
     self.nextModalToBlur = modalToBlur;
     
     let modalIndexCurrent =
-      RNIModalManager.computeModalIndex(forWindow: modalToBlur.window);
+      RNIModalUtilities.computeModalIndex(forWindow: modalToBlur.window);
     
     let modalIndexPrev = self.modalIndexCurrent;
     
@@ -81,7 +81,7 @@ internal class RNIWindowMapData {
     self.nextModalToBlur = nil;
     
     let modalIndexCurrent =
-      RNIModalManager.computeModalIndex(forWindow: blurredModal.window);
+      RNIModalUtilities.computeModalIndex(forWindow: blurredModal.window);
     
     let modalIndexPrev = self.modalIndexCurrent;
     

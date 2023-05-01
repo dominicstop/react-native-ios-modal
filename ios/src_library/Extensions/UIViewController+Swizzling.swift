@@ -100,7 +100,7 @@ extension UIViewController {
     _ presentedVC: UIViewController? = nil
   ) -> (any RNIModal)? {
   
-    let presentedModal = RNIModalManager.getPresentedModal(
+    let presentedModal = RNIModalUtilities.getPresentedModal(
       forPresentingViewController: self,
       presentedViewController: presentedVC
     );

@@ -64,7 +64,7 @@ extension RNIModalState where Self: RNIModalPresentation {
           let modalVC = self.modalViewController
     else { return -1 };
     
-    return RNIModalManager.computeModalIndex(
+    return RNIModalUtilities.computeModalIndex(
       forWindow: window,
       forViewController: modalVC
     );
@@ -75,7 +75,7 @@ extension RNIModalState where Self: RNIModalPresentation {
   };
   
   public var computedCurrentModalIndex: Int {
-    RNIModalManager.computeModalIndex(forWindow: self.window);
+    RNIModalUtilities.computeModalIndex(forWindow: self.window);
   };
   
   public var synthesizedIsModalInFocus: Bool {
