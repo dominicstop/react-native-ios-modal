@@ -1,145 +1,27 @@
-import type { NativeSyntheticEvent } from 'react-native';
-import type { CGPoint, CGSize } from 'src/types/NativeTypes';
+/* eslint-disable prettier/prettier */
 
 import type {
-  ModalFocusState,
-  ModalPresentationState,
-} from 'src/types/RNIModalViewRelatedTypes';
-
-// Event Object Types
-// ------------------
-
-/** Based on `RNIModalData` */
-export type RNIModalData = {
-  modalNativeID: string;
-  modalIndex: number;
-  modalIndexPrev: number;
-  currentModalIndex: number;
-  modalFocusState: ModalFocusState;
-  modalFocusStatePref: ModalFocusState;
-  wasBlurCancelled: boolean;
-  wasFocusCancelled: boolean;
-  modalPresentationState: ModalPresentationState;
-  modalPresentationStatePrev: ModalPresentationState;
-  isInitialPresent: boolean;
-  wasCancelledPresent: boolean;
-  wasCancelledDismiss: boolean;
-  wasCancelledDismissViaGesture: boolean;
-  isModalPresented: boolean;
-  isModalInFocus: boolean;
-  computedIsModalInFocus: boolean;
-  computedIsModalPresented: boolean;
-  computedModalIndex: number;
-  computedViewControllerIndex: number;
-  computedCurrentModalIndex: number;
-  synthesizedWindowID?: string;
-};
-
-/** Based on `RNIModalBaseEventData` */
-export type RNIModalBaseEventData = RNIModalData & {
-  reactTag: number;
-  modalID?: string;
-};
-
-/** Based on `RNIOnModalFocusEventData` */
-export type RNIOnModalFocusEventData = RNIModalBaseEventData & {
-  senderInfo: RNIModalData;
-  isInitial: boolean;
-};
-
-/** Based on `RNIModalSwipeGestureEventData` */
-export type RNIModalSwipeGestureEventData = {
-  position: CGPoint;
-};
-
-/** Based on `RNIModalDidSnapEventData` */
-export type RNIModalDidSnapEventData = {
-  selectedDetentIdentifier?: string;
-  modalContentSize: CGSize;
-};
-
-/** Based on RNIModalDidChangeSelectedDetentIdentifierEventData */
-export type RNIModalDidChangeSelectedDetentIdentifierEventData = {
-  sheetDetentStringPrevious?: string;
-  sheetDetentStringCurrent?: string;
-};
-
-/** Based on RNIModalDetentDidComputeEventData */
-export type RNIModalDetentDidComputeEventData = {
-  maximumDetentValue: number;
-  computedDetentValue: number;
-  key: string;
-};
-
-// Native Event Object
-// -------------------
-
-export type OnModalWillPresentEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-export type OnModalDidPresentEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-
-export type OnModalWillDismissEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-export type OnModalDidDismissEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-
-export type OnModalWillShowEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-export type OnModalDidShowEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-
-export type OnModalWillHideEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-export type OnModalDidHideEventObject = NativeSyntheticEvent<
-  RNIModalBaseEventData & {}
->;
-
-export type OnPresentationControllerWillDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
-
-export type OnPresentationControllerDidDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
-
-export type OnPresentationControllerDidAttemptToDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
-
-export type OnModalWillFocusEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEventData & {}
->;
-
-export type OnModalDidFocusEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEventData & {}
->;
-
-export type OnModalDetentDidComputeEventObject =
-  NativeSyntheticEvent<RNIModalDetentDidComputeEventData>;
-
-export type OnModalDidChangeSelectedDetentIdentifierEventObject =
-  NativeSyntheticEvent<RNIModalDidChangeSelectedDetentIdentifierEventData>;
-
-export type OnModalWillBlurEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEventData & {}
->;
-export type OnModalDidBlurEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEventData & {}
->;
-
-export type OnModalDidSnapEventObject =
-  NativeSyntheticEvent<RNIModalDidSnapEventData>;
-
-export type OnModalSwipeGestureStartEventObject =
-  NativeSyntheticEvent<RNIModalSwipeGestureEventData>;
-
-export type OnModalSwipeGestureDidEndEventObject =
-  NativeSyntheticEvent<RNIModalSwipeGestureEventData>;
+  OnModalWillPresentEventObject,
+  OnModalDidPresentEventObject,
+  OnModalWillDismissEventObject,
+  OnModalDidDismissEventObject,
+  OnModalWillShowEventObject,
+  OnModalDidShowEventObject,
+  OnModalWillHideEventObject,
+  OnModalDidHideEventObject,
+  OnPresentationControllerWillDismissEventObject,
+  OnPresentationControllerDidDismissEventObject,
+  OnPresentationControllerDidAttemptToDismissEventObject,
+  OnModalWillFocusEventObject,
+  OnModalDidFocusEventObject,
+  OnModalWillBlurEventObject,
+  OnModalDidBlurEventObject,
+  OnModalDetentDidComputeEventObject,
+  OnModalDidChangeSelectedDetentIdentifierEventObject,
+  OnModalDidSnapEventObject,
+  OnModalSwipeGestureStartEventObject,
+  OnModalSwipeGestureDidEndEventObject,
+} from './RNIModalViewEventObjects';
 
 // Event Handler Types
 // -------------------
@@ -160,13 +42,21 @@ export type OnModalDidDismissEvent = (
   event: OnModalDidDismissEventObject
 ) => void;
 
-export type OnModalWillShowEvent = (event: OnModalWillShowEventObject) => void;
+export type OnModalWillShowEvent = (
+  event: OnModalWillShowEventObject
+) => void;
 
-export type OnModalDidShowEvent = (event: OnModalDidShowEventObject) => void;
+export type OnModalDidShowEvent = (
+  event: OnModalDidShowEventObject
+) => void;
 
-export type OnModalWillHideEvent = (event: OnModalWillHideEventObject) => void;
+export type OnModalWillHideEvent = (
+  event: OnModalWillHideEventObject
+) => void;
 
-export type OnModalDidHideEvent = (event: OnModalDidHideEventObject) => void;
+export type OnModalDidHideEvent = (
+  event: OnModalDidHideEventObject
+) => void;
 
 export type OnPresentationControllerWillDismissEvent = (
   event: OnPresentationControllerWillDismissEventObject
@@ -184,11 +74,17 @@ export type OnModalWillFocusEvent = (
   event: OnModalWillFocusEventObject
 ) => void;
 
-export type OnModalDidFocusEvent = (event: OnModalDidFocusEventObject) => void;
+export type OnModalDidFocusEvent = (
+  event: OnModalDidFocusEventObject
+) => void;
 
-export type OnModalWillBlurEvent = (event: OnModalWillBlurEventObject) => void;
+export type OnModalWillBlurEvent = (
+  event: OnModalWillBlurEventObject
+) => void;
 
-export type OnModalDidBlurEvent = (event: OnModalDidBlurEventObject) => void;
+export type OnModalDidBlurEvent = (
+  event: OnModalDidBlurEventObject
+) => void;
 
 export type OnModalDetentDidComputeEvent = (
   event: OnModalDetentDidComputeEventObject
@@ -198,7 +94,9 @@ export type OnModalDidChangeSelectedDetentIdentifierEvent = (
   event: OnModalDidChangeSelectedDetentIdentifierEventObject
 ) => void;
 
-export type OnModalDidSnapEvent = (event: OnModalDidSnapEventObject) => void;
+export type OnModalDidSnapEvent = (
+  event: OnModalDidSnapEventObject
+) => void;
 
 export type OnModalSwipeGestureStartEvent = (
   event: OnModalSwipeGestureStartEventObject
