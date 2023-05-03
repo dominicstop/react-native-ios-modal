@@ -13,8 +13,8 @@
 <br>
 
 - [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events
-	- [ ] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
-	- [ ] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`
+	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
+	- [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
 	- [ ] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`
 	- [ ] **Subtask** - `TODO:2023-05-01-19-19-20` - Update `RNIModalView` event objects.
 	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples - Replace deprecated events usage.
