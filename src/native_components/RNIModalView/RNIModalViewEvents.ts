@@ -36,103 +36,110 @@ export type RNIModalData = {
 };
 
 /** Based on `RNIModalBaseEventData` */
-export type RNIModalBaseEvent = RNIModalData & {
+export type RNIModalBaseEventData = RNIModalData & {
   reactTag: number;
   modalID?: string;
 };
 
 /** Based on `RNIOnModalFocusEventData` */
-export type RNIOnModalFocusEvent = RNIModalBaseEvent & {
+export type RNIOnModalFocusEventData = RNIModalBaseEventData & {
   senderInfo: RNIModalData;
   isInitial: boolean;
 };
 
 /** Based on `RNIModalSwipeGestureEventData` */
-export type RNIModalSwipeGestureEvent = {
+export type RNIModalSwipeGestureEventData = {
   position: CGPoint;
 };
 
 /** Based on `RNIModalDidSnapEventData` */
-export type RNIModalDidSnapEvent = {
+export type RNIModalDidSnapEventData = {
   selectedDetentIdentifier?: string;
   modalContentSize: CGSize;
+};
+
+/** Based on RNIModalDidChangeSelectedDetentIdentifierEventData */
+export type RNIModalDidChangeSelectedDetentIdentifierEventData = {
+  sheetDetentStringPrevious?: string;
+  sheetDetentStringCurrent?: string;
+};
+
+/** Based on RNIModalDetentDidComputeEventData */
+export type RNIModalDetentDidComputeEventData = {
+  maximumDetentValue: number;
+  computedDetentValue: number;
+  key: string;
 };
 
 // Native Event Object
 // -------------------
 
 export type OnModalWillPresentEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 export type OnModalDidPresentEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 
 export type OnModalWillDismissEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 export type OnModalDidDismissEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 
 export type OnModalWillShowEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 export type OnModalDidShowEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 
 export type OnModalWillHideEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 export type OnModalDidHideEventObject = NativeSyntheticEvent<
-  RNIModalBaseEvent & {}
+  RNIModalBaseEventData & {}
 >;
 
 export type OnPresentationControllerWillDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
 
 export type OnPresentationControllerDidDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
 
 export type OnPresentationControllerDidAttemptToDismissEventObject =
-  NativeSyntheticEvent<RNIModalBaseEvent & {}>;
+  NativeSyntheticEvent<RNIModalBaseEventData & {}>;
 
 export type OnModalWillFocusEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEvent & {}
+  RNIOnModalFocusEventData & {}
 >;
 
 export type OnModalDidFocusEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEvent & {}
+  RNIOnModalFocusEventData & {}
 >;
 
-export type OnModalDetentDidComputeEventObject = NativeSyntheticEvent<{
-  maximumDetentValue: number;
-  computedDetentValue: number;
-  key: string;
-}>;
+export type OnModalDetentDidComputeEventObject =
+  NativeSyntheticEvent<RNIModalDetentDidComputeEventData>;
 
 export type OnModalDidChangeSelectedDetentIdentifierEventObject =
-  NativeSyntheticEvent<{
-    sheetDetentStringPrevious?: string;
-    sheetDetentStringCurrent?: string;
-  }>;
+  NativeSyntheticEvent<RNIModalDidChangeSelectedDetentIdentifierEventData>;
 
 export type OnModalWillBlurEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEvent & {}
+  RNIOnModalFocusEventData & {}
 >;
 export type OnModalDidBlurEventObject = NativeSyntheticEvent<
-  RNIOnModalFocusEvent & {}
+  RNIOnModalFocusEventData & {}
 >;
 
 export type OnModalDidSnapEventObject =
-  NativeSyntheticEvent<RNIModalDidSnapEvent>;
+  NativeSyntheticEvent<RNIModalDidSnapEventData>;
 
 export type OnModalSwipeGestureStartEventObject =
-  NativeSyntheticEvent<RNIModalSwipeGestureEvent>;
+  NativeSyntheticEvent<RNIModalSwipeGestureEventData>;
 
 export type OnModalSwipeGestureDidEndEventObject =
-  NativeSyntheticEvent<RNIModalSwipeGestureEvent>;
+  NativeSyntheticEvent<RNIModalSwipeGestureEventData>;
 
 // Event Handler Types
 // -------------------

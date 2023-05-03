@@ -35,7 +35,7 @@ import {
   OnPresentationControllerDidDismissEvent,
   OnPresentationControllerDidAttemptToDismissEvent,
   RNIModalView,
-  RNIModalBaseEvent,
+  RNIModalBaseEventData,
   RNIModalDeprecatedBaseEvent,
   OnModalDetentDidComputeEvent,
   OnModalDidChangeSelectedDetentIdentifierEvent,
@@ -853,7 +853,7 @@ const styles = StyleSheet.create({
 
 class ModalViewHelpers {
   static createDeprecatedEventObject(
-    event: RNIModalBaseEvent
+    event: RNIModalBaseEventData
   ): RNIModalDeprecatedBaseEvent {
     return {
       modalUUID: event.modalNativeID,
@@ -867,7 +867,7 @@ class ModalViewHelpers {
   }
 
   static createDeprecatedBaseEventObject(
-    event: NativeSyntheticEvent<RNIModalBaseEvent>
+    event: NativeSyntheticEvent<RNIModalBaseEventData>
   ): NativeSyntheticEvent<RNIModalDeprecatedBaseEvent> {
     return {
       ...event,
