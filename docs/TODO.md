@@ -8,10 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-05-03-20-17-56` - Refactor: Types - Typescript type names should match native type names that they are representing.
-
-<br>
-
 - [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events
 	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
 	- [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
@@ -102,6 +98,10 @@
 <br><br>
 
 ## TODO - Completed
+
+<br>
+
+- [x] `TODO:2023-05-03-20-17-56` - Refactor: Types - Typescript type names should match native type names that they are representing.
 
 <br>
 
