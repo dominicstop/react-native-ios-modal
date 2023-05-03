@@ -42,6 +42,10 @@ extension RNIDictionarySynthesizable {
       };
     };
     
+    if let dictRepresentable = value as? RNIDictionaryRepresentable {
+      return dictRepresentable.asDictionary;
+    };
+    
     if let encodable = value as? Encodable,
        let dict = encodable.asDictionary {
        
