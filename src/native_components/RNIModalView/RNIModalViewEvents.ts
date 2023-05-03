@@ -191,9 +191,7 @@ export type OnModalDidChangeSelectedDetentIdentifierEvent = (
   event: OnModalDidChangeSelectedDetentIdentifierEventObject
 ) => void;
 
-export type OnModalDidSnapEvent = (
-  event: OnModalDidSnapEventObject
-) => void;
+export type OnModalDidSnapEvent = (event: OnModalDidSnapEventObject) => void;
 
 export type OnModalSwipeGestureStartEvent = (
   event: OnModalSwipeGestureStartEventObject

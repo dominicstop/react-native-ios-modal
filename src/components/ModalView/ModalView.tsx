@@ -697,7 +697,7 @@ export class ModalView extends
     );
   };
 
-  private _handleOnModalSwipeGestureDidEnd: 
+  private _handleOnModalSwipeGestureDidEnd:
     OnModalSwipeGestureDidEndEvent = (event) => {
 
     const props = this.props;
