@@ -94,6 +94,11 @@ public class RNIModalView:
   @objc var onModalDetentDidCompute: RCTBubblingEventBlock?;
   @objc var onModalDidChangeSelectedDetentIdentifier: RCTBubblingEventBlock?;
   
+  @objc var onModalDidSnap: RCTBubblingEventBlock?;
+  
+  @objc var onModalSwipeGestureStart: RCTBubblingEventBlock?;
+  @objc var onModalSwipeGestureDidEnd: RCTBubblingEventBlock?;
+  
   // MARK: - Properties: React Props - General
   // -----------------------------------------
     
@@ -497,6 +502,11 @@ public class RNIModalView:
     return nil;
   };
   
+  var currentSheetDetentString: String? {
+    guard #available(iOS 15.0, *) else { return nil };
+    return currentSheetDetentID?.rawValue;
+  };
+  
   var isModalViewPresentationNotificationEnabled: Bool {
     RNIModalFlagsShared.isModalViewPresentationNotificationEnabled
   };
@@ -619,6 +629,14 @@ public class RNIModalView:
     self.presentingViewController = nil;
   };
   
+  private func setupOnModalInitialPresent(){
+    guard let panGesture = self.modalGestureRecognizer else { return };
+    
+    panGesture.addTarget(self,
+      action: #selector(Self.handleGestureRecognizer(_:))
+    );
+  };
+  
   private func notifyIfModalDismissCancelled(){
     guard let modalVC = self.modalVC,
           let transitionCoordinator = modalVC.transitionCoordinator
@@ -639,6 +657,49 @@ public class RNIModalView:
       
       self.modalPresentationNotificationDelegate
         .notifyOnModalDidShow(sender: self);
+    };
+  };
+  
+  @objc private func handleGestureRecognizer(_ sender: UIGestureRecognizer) {
+    guard let window = self.window else { return };
+    
+    switch sender.state {
+      case .began:
+        let gestureEventData = RNIModalSwipeGestureEventData(
+          position: sender.location(in: window)
+        );
+        
+        self.onModalSwipeGestureStart?(
+          gestureEventData.synthesizedJSDictionary
+        );
+        
+      case .ended:
+        let gestureEventData = RNIModalSwipeGestureEventData(
+          position: sender.location(in: window)
+        );
+        
+        self.onModalSwipeGestureDidEnd?(
+          gestureEventData.synthesizedJSDictionary
+        );
+      
+        guard let presentationController = self.modalVC?.presentationController,
+              let presentedView = presentationController.presentedView,
+              let positionAnimation =
+                presentedView.layer.animation(forKey: "position")
+        else { break };
+        
+        positionAnimation.waitUntiEnd {
+          let eventData = RNIModalDidSnapEventData(
+            selectedDetentIdentifier: self.currentSheetDetentString,
+            modalContentSize: presentedView.bounds.size
+          );
+          
+          self.onModalDidSnap?(
+            eventData.synthesizedJSDictionary
+          );
+       };
+       
+      default: break;
     };
   };
   
@@ -808,17 +869,7 @@ public class RNIModalView:
       );
       
       completion?(true, nil);
-      
-      // let panGesture = self.modalVC?
-      //   .presentationController?
-      //   .presentedView?
-      //   .gestureRecognizers?
-      //   .first {
-      //     $0 is UIPanGestureRecognizer
-      //   };
-      //
-      // panGesture?.addTarget(self, action: #selector(Self.handleGestureRecognizer(_:)))
-      
+
       #if DEBUG
       print(
           "Log - RNIModalView.presentModal - Present modal finished"
@@ -829,12 +880,6 @@ public class RNIModalView:
       #endif
     };
   };
-  
-  // @objc func handleGestureRecognizer(_ sender: UIPanGestureRecognizer) {
-  //   print(
-  //     "Test - handleGestureRecognizer - \(sender.state.description)"
-  //   );
-  // };
   
   public func dismissModal(completion: CompletionHandler? = nil) {
     guard self.computedIsModalPresented else {
@@ -1131,6 +1176,10 @@ extension RNIModalView: RNIViewControllerLifeCycleNotifiable {
     if self.isModalViewPresentationNotificationEnabled {
       self.modalPresentationNotificationDelegate
         .notifyOnModalWillShow(sender: self);
+    };
+    
+    if self.modalPresentationState.isInitialPresent {
+      self.setupOnModalInitialPresent();
     };
   };
   

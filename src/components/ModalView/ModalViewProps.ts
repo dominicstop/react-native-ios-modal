@@ -62,6 +62,9 @@ export type ModalViewBaseProps = Partial<
     | 'onPresentationControllerDidAttemptToDismiss'
     | 'onModalDetentDidCompute'
     | 'onModalDidChangeSelectedDetentIdentifier'
+    | 'onModalDidSnap'
+    | 'onModalSwipeGestureStart'
+    | 'onModalSwipeGestureDidEnd'
   >
 > & {
   modalContentPreferredContentSize?: RNIComputableSize;

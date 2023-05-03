@@ -31,6 +31,11 @@ RCT_EXPORT_VIEW_PROPERTY(onPresentationControllerDidAttemptToDismiss, RCTBubblin
 RCT_EXPORT_VIEW_PROPERTY(onModalDetentDidCompute, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onModalDidChangeSelectedDetentIdentifier, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onModalDidSnap, RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onModalSwipeGestureStart, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalSwipeGestureDidEnd, RCTBubblingEventBlock);
+
 // MARK: - Value Props - General
 // -----------------------------
 

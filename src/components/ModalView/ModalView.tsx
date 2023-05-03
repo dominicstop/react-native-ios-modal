@@ -39,6 +39,9 @@ import {
   RNIModalDeprecatedBaseEvent,
   OnModalDetentDidComputeEvent,
   OnModalDidChangeSelectedDetentIdentifierEvent,
+  OnModalDidSnapEvent,
+  OnModalSwipeGestureStartEvent,
+  OnModalSwipeGestureDidEndEvent,
 } from '../../native_components/RNIModalView';
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
@@ -142,6 +145,9 @@ export class ModalView extends
       onPresentationControllerDidAttemptToDismiss,
       onModalDetentDidCompute,
       onModalDidChangeSelectedDetentIdentifier,
+      onModalDidSnap,
+      onModalSwipeGestureStart,
+      onModalSwipeGestureDidEnd,
 
       // Component Props
       autoCloseOnUnmount,
@@ -228,6 +234,9 @@ export class ModalView extends
       onPresentationControllerDidAttemptToDismiss,
       onModalDetentDidCompute,
       onModalDidChangeSelectedDetentIdentifier,
+      onModalDidSnap,
+      onModalSwipeGestureStart,
+      onModalSwipeGestureDidEnd,
 
       // C - View-Related Props
       children,
@@ -662,6 +671,46 @@ export class ModalView extends
     );
   };
 
+  private _handleOnModalDidSnap: OnModalDidSnapEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDidSnap?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDidSnap,
+      event.nativeEvent
+    );
+  };
+
+  private _handleOnModalSwipeGestureStart:
+    OnModalSwipeGestureStartEvent = (event) => {
+
+    const props = this.props;
+
+    props.onModalSwipeGestureStart?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalSwipeGestureStart,
+      event.nativeEvent
+    );
+  };
+
+  private _handleOnModalSwipeGestureDidEnd: 
+    OnModalSwipeGestureDidEndEvent = (event) => {
+
+    const props = this.props;
+
+    props.onModalSwipeGestureDidEnd?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalSwipeGestureDidEnd,
+      event.nativeEvent
+    );
+  };
+
  private _renderModal() {
     const { viewProps, ...props } = this.getProps();
     const state = this.state;
@@ -708,6 +757,9 @@ export class ModalView extends
         onPresentationControllerDidAttemptToDismiss={this._handleOnPresentationControllerDidAttemptToDismiss}
         onModalDetentDidCompute={this._handleOnModalDetentDidCompute}
         onModalDidChangeSelectedDetentIdentifier={this._handleOnModalDidChangeSelectedDetentIdentifier}
+        onModalDidSnap={this._handleOnModalDidSnap}
+        onModalSwipeGestureStart={this._handleOnModalSwipeGestureStart}
+        onModalSwipeGestureDidEnd={this._handleOnModalSwipeGestureDidEnd}
         {...overrideProps}
         {...viewProps}
       >

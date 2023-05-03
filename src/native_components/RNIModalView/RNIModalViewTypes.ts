@@ -28,6 +28,9 @@ import type {
   OnPresentationControllerDidAttemptToDismissEvent,
   OnModalDetentDidComputeEvent,
   OnModalDidChangeSelectedDetentIdentifierEvent,
+  OnModalDidSnapEvent,
+  OnModalSwipeGestureStartEvent,
+  OnModalSwipeGestureDidEndEvent,
 } from './RNIModalViewEvents';
 
 import type { UnionWithAutoComplete } from 'src/types/UtilityTypes';
@@ -111,6 +114,11 @@ export type RNIModalViewBaseProps = {
 
   onModalDetentDidCompute: OnModalDetentDidComputeEvent;
   onModalDidChangeSelectedDetentIdentifier: OnModalDidChangeSelectedDetentIdentifierEvent;
+
+  onModalDidSnap: OnModalDidSnapEvent;
+
+  onModalSwipeGestureStart: OnModalSwipeGestureStartEvent;
+  onModalSwipeGestureDidEnd: OnModalSwipeGestureDidEndEvent;
 };
 
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;

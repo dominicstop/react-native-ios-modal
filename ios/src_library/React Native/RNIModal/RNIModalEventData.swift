@@ -53,3 +53,12 @@ public struct RNIModalDetentDidComputeEventData: RNIDictionarySynthesizable {
   public let computedDetentValue: CGFloat;
   public let key: String;
 };
+
+public struct RNIModalSwipeGestureEventData: RNIDictionarySynthesizable {
+  public let position: CGPoint;
+};
+
+public struct RNIModalDidSnapEventData: RNIDictionarySynthesizable {
+  public let selectedDetentIdentifier: String?;
+  public let modalContentSize: CGSize;
+};
