@@ -1,10 +1,10 @@
 import type { ViewProps } from 'react-native';
 
 import type {
-  TUIModalPresentationStyle,
-  TUIModalTransitionStyle,
-  TUISheetPresentationControllerDetents,
-  TUIBlurEffectStyles,
+  UIModalPresentationStyle,
+  UIModalTransitionStyle,
+  UISheetPresentationControllerDetents,
+  UIBlurEffectStyle,
 } from 'src/types/NativeTypes';
 
 import type { RNIModalCustomSheetDetent } from 'src/types/RNIModalTypes';
@@ -48,13 +48,13 @@ export type RNIModalViewBaseProps = {
 
   isModalBGBlurred?: boolean;
   isModalBGTransparent?: boolean;
-  modalBGBlurEffectStyle?: TUIBlurEffectStyles;
+  modalBGBlurEffectStyle?: UIBlurEffectStyle;
 
   // Props - Presentation/Transition
   // -------------------------------
 
-  modalTransitionStyle?: TUIModalTransitionStyle;
-  modalPresentationStyle?: TUIModalPresentationStyle;
+  modalTransitionStyle?: UIModalTransitionStyle;
+  modalPresentationStyle?: UIModalPresentationStyle;
 
   hideNonVisibleModals?: boolean;
   presentViaMount?: boolean;
@@ -66,7 +66,7 @@ export type RNIModalViewBaseProps = {
   // ---------------------
 
   modalSheetDetents?: Array<
-    TUISheetPresentationControllerDetents | RNIModalCustomSheetDetent
+    UISheetPresentationControllerDetents | RNIModalCustomSheetDetent
   >;
 
   sheetPrefersScrollingExpandsWhenScrolledToEdge?: boolean;
@@ -78,12 +78,12 @@ export type RNIModalViewBaseProps = {
   sheetPreferredCornerRadius?: number;
 
   sheetLargestUndimmedDetentIdentifier?: UnionWithAutoComplete<
-    TUISheetPresentationControllerDetents,
+    UISheetPresentationControllerDetents,
     string
   >;
 
   sheetSelectedDetentIdentifier?: UnionWithAutoComplete<
-    TUISheetPresentationControllerDetents,
+    UISheetPresentationControllerDetents,
     string
   >;
 
@@ -124,6 +124,6 @@ export type RNIModalViewBaseProps = {
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;
 
 export type RNIModalViewConstantMap = ViewManagerConstantMap<{
-  availableBlurEffectStyles: TUIBlurEffectStyles[];
-  availablePresentationStyles: TUIModalPresentationStyle[];
+  availableBlurEffectStyles: UIBlurEffectStyle[];
+  availablePresentationStyles: UIModalPresentationStyle[];
 }>;

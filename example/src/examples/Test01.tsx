@@ -11,7 +11,7 @@ import { CardBody, CardButton, CardTitle } from '../components/Card';
 
 import {
   ModalView,
-  TUIModalPresentationStyle,
+  UIModalPresentationStyle,
   UIModalPresentationStyles,
 } from 'react-native-ios-modal';
 
@@ -19,7 +19,7 @@ import { ObjectPropertyDisplay } from '../components/ObjectPropertyDisplay';
 
 const availablePresentationStyles = Object.keys(
   UIModalPresentationStyles
-) as Array<TUIModalPresentationStyle>;
+) as Array<UIModalPresentationStyle>;
 
 const totalPresentationStylesCount = availablePresentationStyles.length ?? 0;
 

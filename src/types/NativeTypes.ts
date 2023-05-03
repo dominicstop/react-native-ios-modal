@@ -10,13 +10,13 @@ export type CGPoint = {
   y: number;
 };
 
-export type TUIModalTransitionStyle =
+export type UIModalTransitionStyle =
   | 'coverVertical'
   | 'flipHorizontal'
   | 'crossDissolve'
   | 'partialCurl';
 
-export type TUIModalPresentationStyle =
+export type UIModalPresentationStyle =
   | 'automatic'
   | 'none'
   | 'fullScreen'
@@ -30,12 +30,12 @@ export type TUIModalPresentationStyle =
   | 'blurOverFullScreen';
 
 /** Maps to `UISheetPresentationController.Detents` */
-export type TUISheetPresentationControllerDetents =
+export type UISheetPresentationControllerDetents =
   | 'medium'
   | 'large';
 
 /** Maps to `UIBlurEffect.Style` */
-export type TUIBlurEffectStyles =
+export type UIBlurEffectStyle =
   | 'systemUltraThinMaterial'
   | 'systemThinMaterial'
   | 'systemMaterial'

@@ -1,12 +1,12 @@
-import type { TUIBlurEffectStyles } from 'src/types/NativeTypes';
+import type { UIBlurEffectStyle } from 'src/types/NativeTypes';
 
 import type {
-  TUIModalPresentationStyle,
-  TUIModalTransitionStyle,
+  UIModalPresentationStyle,
+  UIModalTransitionStyle,
 } from 'src/types/NativeTypes';
 
 export const UIBlurEffectStyles: {
-  [T in TUIBlurEffectStyles]: T;
+  [T in UIBlurEffectStyle]: T;
 } = {
   // Adaptable Styles
   systemUltraThinMaterial: 'systemUltraThinMaterial',
@@ -39,7 +39,7 @@ export const UIBlurEffectStyles: {
 };
 
 export const UIModalPresentationStyles: {
-  [T in TUIModalPresentationStyle]: T;
+  [T in UIModalPresentationStyle]: T;
 } = {
   automatic: 'automatic',
   fullScreen: 'fullScreen',
@@ -59,7 +59,7 @@ export const UIModalPresentationStyles: {
 };
 
 export const UIModalTransitionStyles: {
-  [T in TUIModalTransitionStyle]: T;
+  [T in UIModalTransitionStyle]: T;
 } = {
   coverVertical: 'coverVertical',
   crossDissolve: 'crossDissolve',
