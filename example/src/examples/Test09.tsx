@@ -81,10 +81,29 @@ export function Test09(props: ExampleProps) {
         }}
         onModalDetentDidCompute={({ nativeEvent }) => {
           console.log(
-              "onModalDetentDidCompute"
+            "onModalDetentDidCompute"
             + ` - key: ${nativeEvent.key}`
             + ` - maximumDetentValue: ${nativeEvent.maximumDetentValue}`
             + ` - computedDetentValue: ${nativeEvent.computedDetentValue}`
+          );
+        }}
+        onModalSwipeGestureStart={({ nativeEvent }) => {
+          console.log(
+            "onModalSwipeGestureStart"
+            + ` - position: ${JSON.stringify(nativeEvent.position)}`
+          );
+        }}
+        onModalSwipeGestureDidEnd={({ nativeEvent }) => {
+          console.log(
+            "onModalSwipeGestureDidEnd"
+            + ` - position: ${JSON.stringify(nativeEvent.position)}`
+          );
+        }}
+        onModalDidSnap={({ nativeEvent }) => {
+          console.log(
+            "onModalDidSnap"
+            + ` - modalContentSize: ${JSON.stringify(nativeEvent.modalContentSize)}`
+            + ` - selectedDetentIdentifier: ${nativeEvent.selectedDetentIdentifier}`
           );
         }}
       >
