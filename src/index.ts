@@ -8,8 +8,7 @@ export * from './context/ModalContext';
 export * from './native_components/RNIModalView';
 export * from './native_modules/RNIModalViewModule';
 
-export * from './types/UIModalTypes';
-export * from './types/UIBlurEffectStyles';
+export * from './types/NativeTypes';
 export * from './types/RNIModalViewRelatedTypes';
 export * from './types/RNIModalTypes';
 export * from './types/RNIComputable';

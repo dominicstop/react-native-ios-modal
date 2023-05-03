@@ -1,9 +1,9 @@
-import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
+import type { TUIBlurEffectStyles } from 'src/types/NativeTypes';
 
 import type {
   TUIModalPresentationStyle,
   TUIModalTransitionStyle,
-} from 'src/types/UIModalTypes';
+} from 'src/types/NativeTypes';
 
 export const UIBlurEffectStyles: {
   [T in TUIBlurEffectStyles]: T;

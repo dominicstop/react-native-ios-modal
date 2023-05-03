@@ -4,9 +4,9 @@ import type {
   TUIModalPresentationStyle,
   TUIModalTransitionStyle,
   TUISheetPresentationControllerDetents,
-} from 'src/types/UIModalTypes';
+  TUIBlurEffectStyles,
+} from 'src/types/NativeTypes';
 
-import type { TUIBlurEffectStyles } from 'src/types/UIBlurEffectStyles';
 import type { RNIModalCustomSheetDetent } from 'src/types/RNIModalTypes';
 import type { ViewManagerConstantMap } from 'src/types/ViewModuleRelatedTypes';
 
