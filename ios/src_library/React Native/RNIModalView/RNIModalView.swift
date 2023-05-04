@@ -47,11 +47,18 @@ public class RNIModalView:
   public var modalIndexPrev: Int!;
   
   public lazy var modalPresentationState = RNIModalPresentationStateMachine(
-    onDismissWillCancel: { [weak self] in
-      // no-op - TBA
+    onDismissWillCancel: { [unowned self] in
+      let eventData = self.synthesizedBaseEventData;
+      self.onModalDismissWillCancel?(
+        eventData.synthesizedJSDictionary
+      );
     },
-    onDismissDidCancel: { [weak self] in
-      // no-op - TBA
+
+    onDismissDidCancel: { [unowned self] in
+      let eventData = self.synthesizedBaseEventData;
+      self.onModalDismissDidCancel?(
+        eventData.synthesizedJSDictionary
+      );
     }
   );
   
@@ -98,6 +105,9 @@ public class RNIModalView:
   
   @objc var onModalSwipeGestureStart: RCTBubblingEventBlock?;
   @objc var onModalSwipeGestureDidEnd: RCTBubblingEventBlock?;
+  
+  @objc var onModalDismissWillCancel: RCTBubblingEventBlock?;
+  @objc var onModalDismissDidCancel: RCTBubblingEventBlock?;
   
   // MARK: - Properties: React Props - General
   // -----------------------------------------

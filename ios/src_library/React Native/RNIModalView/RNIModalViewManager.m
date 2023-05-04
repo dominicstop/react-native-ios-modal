@@ -36,6 +36,9 @@ RCT_EXPORT_VIEW_PROPERTY(onModalDidSnap, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onModalSwipeGestureStart, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onModalSwipeGestureDidEnd, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onModalDismissWillCancel, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onModalDismissDidCancel, RCTBubblingEventBlock);
+
 // MARK: - Value Props - General
 // -----------------------------
 

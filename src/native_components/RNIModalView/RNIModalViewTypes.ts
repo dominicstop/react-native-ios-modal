@@ -31,6 +31,8 @@ import type {
   OnModalDidSnapEvent,
   OnModalSwipeGestureStartEvent,
   OnModalSwipeGestureDidEndEvent,
+  OnModalDismissWillCancelEvent,
+  OnModalDismissDidCancelEvent,
 } from './RNIModalViewEvents';
 
 import type { UnionWithAutoComplete } from 'src/types/UtilityTypes';
@@ -119,6 +121,9 @@ export type RNIModalViewBaseProps = {
 
   onModalSwipeGestureStart: OnModalSwipeGestureStartEvent;
   onModalSwipeGestureDidEnd: OnModalSwipeGestureDidEndEvent;
+
+  onModalDismissWillCancel: OnModalDismissWillCancelEvent;
+  onModalDismissDidCancel: OnModalDismissDidCancelEvent;
 };
 
 export type RNIModalViewProps = Partial<ViewProps> & RNIModalViewBaseProps;

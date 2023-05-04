@@ -22,6 +22,8 @@ import type {
   OnModalDidSnapEventObject,
   OnModalSwipeGestureStartEventObject,
   OnModalSwipeGestureDidEndEventObject,
+  OnModalDismissWillCancelEventObject,
+  OnModalDismissDidCancelEventObject,
 } from 'src/native_components/RNIModalView';
 
 import type { KeyMapType } from '../../types/UtilityTypes';
@@ -53,6 +55,8 @@ export enum ModalViewEmitterEvents {
   onModalDidSnap = 'onModalDidSnap',
   onModalSwipeGestureStart = 'onModalSwipeGestureStart',
   onModalSwipeGestureDidEnd = 'onModalSwipeGestureDidEnd',
+  onModalDismissWillCancel = 'onModalDismissWillCancel',
+  onModalDismissDidCancel = 'onModalDismissDidCancel',
 
   onLayoutModalContentContainer = 'onLayoutModalContentContainer',
 }
@@ -84,6 +88,8 @@ export type ModalViewEmitterEventMap =
     onModalDidSnap: OnModalDidSnapEventObject['nativeEvent'];
     onModalSwipeGestureStart: OnModalSwipeGestureStartEventObject['nativeEvent'];
     onModalSwipeGestureDidEnd: OnModalSwipeGestureDidEndEventObject['nativeEvent'];
+    onModalDismissWillCancel: OnModalDismissWillCancelEventObject['nativeEvent'];
+    onModalDismissDidCancel: OnModalDismissDidCancelEventObject['nativeEvent'];
 
     onLayoutModalContentContainer: LayoutChangeEvent['nativeEvent'];
   }

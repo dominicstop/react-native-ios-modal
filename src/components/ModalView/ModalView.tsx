@@ -42,6 +42,8 @@ import {
   OnModalDidSnapEvent,
   OnModalSwipeGestureStartEvent,
   OnModalSwipeGestureDidEndEvent,
+  OnModalDismissWillCancelEvent,
+  OnModalDismissDidCancelEvent,
 } from '../../native_components/RNIModalView';
 
 import { RNIModalViewModule } from '../../native_modules/RNIModalViewModule';
@@ -711,7 +713,31 @@ export class ModalView extends
     );
   };
 
- private _renderModal() {
+  private _handleOnModalDismissWillCancel: OnModalDismissWillCancelEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDismissWillCancel?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDismissWillCancel,
+      event.nativeEvent
+    );
+  };
+
+  private _handleOnModalDismissDidCancel: OnModalDismissDidCancelEvent = (event) => {
+    const props = this.props;
+
+    props.onModalDismissDidCancel?.(event);
+    event.stopPropagation();
+
+    this.emitter.emit(
+      ModalViewEmitterEvents.onModalDismissDidCancel,
+      event.nativeEvent
+    );
+  };
+
+  private _renderModal() {
     const { viewProps, ...props } = this.getProps();
     const state = this.state;
 
@@ -760,6 +786,8 @@ export class ModalView extends
         onModalDidSnap={this._handleOnModalDidSnap}
         onModalSwipeGestureStart={this._handleOnModalSwipeGestureStart}
         onModalSwipeGestureDidEnd={this._handleOnModalSwipeGestureDidEnd}
+        onModalDismissWillCancel={this._handleOnModalDismissWillCancel}
+        onModalDismissDidCancel={this._handleOnModalDismissDidCancel}
         {...overrideProps}
         {...viewProps}
       >

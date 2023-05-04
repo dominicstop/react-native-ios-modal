@@ -21,6 +21,8 @@ import type {
   OnModalDidSnapEventObject,
   OnModalSwipeGestureStartEventObject,
   OnModalSwipeGestureDidEndEventObject,
+  OnModalDismissWillCancelEventObject,
+  OnModalDismissDidCancelEventObject,
 } from './RNIModalViewEventObjects';
 
 // Event Handler Types
@@ -105,3 +107,12 @@ export type OnModalSwipeGestureStartEvent = (
 export type OnModalSwipeGestureDidEndEvent = (
   event: OnModalSwipeGestureDidEndEventObject
 ) => void;
+
+export type OnModalDismissWillCancelEvent = (
+  event: OnModalDismissWillCancelEventObject
+) => void;
+
+export type OnModalDismissDidCancelEvent = (
+  event: OnModalDismissDidCancelEventObject
+) => void;
+

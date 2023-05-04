@@ -71,3 +71,9 @@ export type OnModalSwipeGestureStartEventObject =
 
 export type OnModalSwipeGestureDidEndEventObject =
   NativeSyntheticEvent<RNIModalSwipeGestureEventData>;
+
+export type OnModalDismissWillCancelEventObject =
+  NativeSyntheticEvent<RNIModalBaseEventData>;
+
+export type OnModalDismissDidCancelEventObject =
+  NativeSyntheticEvent<RNIModalBaseEventData>;

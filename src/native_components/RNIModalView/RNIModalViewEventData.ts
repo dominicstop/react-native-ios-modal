@@ -3,7 +3,7 @@ import type { CGPoint, CGSize } from 'src/types/NativeTypes';
 import type {
   ModalFocusState,
   ModalPresentationState,
-} from 'src/types/RNIModalViewRelatedTypes';
+} from 'src/types/RNIModalTypes';
 
 // Event Object Types
 // ------------------
