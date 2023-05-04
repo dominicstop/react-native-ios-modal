@@ -8,6 +8,10 @@
 
 <br>
 
+- [ ] `TODO:2023-05-05-07-05-20` - Impl: Update `RNIComputableSize` - Add `minSize`, and `maxSize`. 
+
+<br>
+
 - [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events
 	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
 	- [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
