@@ -106,6 +106,12 @@ export function Test09(props: ExampleProps) {
             + ` - selectedDetentIdentifier: ${nativeEvent.selectedDetentIdentifier}`
           );
         }}
+        onModalDismissWillCancel={({nativeEvent}) => {
+          console.log('onModalDismissWillCancel - ', nativeEvent);
+        }}
+        onModalDismissDidCancel={({nativeEvent}) => {
+          console.log('onModalDismissDidCancel - ', nativeEvent);
+        }}
       >
         <React.Fragment>
           <CardBody style={styles.modalCard}>
