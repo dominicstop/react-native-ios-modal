@@ -42,8 +42,17 @@ extension RNIDictionarySynthesizable {
       };
     };
     
+    if isJSDict, let dict = value as? Dictionary<AnyHashable, Any> {
+      return dict.mapValues {
+        return Self.recursivelyParseValue($0, isJSDict: isJSDict);
+      };
+    };
+    
     if let dictRepresentable = value as? RNIDictionaryRepresentable {
-      return dictRepresentable.asDictionary;
+      let dict = dictRepresentable.asDictionary;
+      
+      guard isJSDict else { return dict };
+      return Self.recursivelyParseValue(dict, isJSDict: isJSDict);
     };
     
     if let encodable = value as? Encodable,
