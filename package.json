@@ -1,6 +1,6 @@
 {
   "name": "react-native-ios-modal",
-  "version": "2.0.0-2",
+  "version": "2.0.0-1",
   "description": "A react-native component for displaying a modal on iOS by natively wrapping a react-native view inside a UIViewController and presenting it.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -30,6 +30,7 @@
     "test": "jest",
     "typescript": "tsc --noEmit --project tsconfig.build.json",
     "typescript-example": "cd example && tsc --noEmit --project tsconfig.json",
+    "typescript-all": "yarn run typescript ; yarn run typescript-example",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
     "release": "release-it",
