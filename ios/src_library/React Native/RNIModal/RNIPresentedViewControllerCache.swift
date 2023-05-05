@@ -13,25 +13,14 @@ class RNIPresentedViewControllerCache {
   class Cache {
     weak var targetWindow: UIWindow? = nil;
     
-    var cacheRequestCount = 0 {
-      willSet {
-        guard newValue <= 0 else { return };
-        self._cache = nil;
-      }
-    }
+    var cacheRequestCount = 0;
     
     // note: this retains the vc instances...
-    private var _cache: [UIViewController]?;
+    var cache: [UIViewController]?;
     
-    var cache: [UIViewController]? {
-      get {
-        guard self.cacheRequestCount > 0 else { return nil };
-        return self._cache;
-      }
-      set {
-        self._cache = newValue;
-        self.targetWindow = nil;
-      }
+    func clear(){
+      self.targetWindow = nil;
+      self.cache = nil;
     };
   };
 
@@ -62,6 +51,8 @@ class RNIPresentedViewControllerCache {
       cache.cacheRequestCount -= 1;
       
       guard cache.cacheRequestCount <= 0 else { return };
+
+      cache.clear();
       self.map.removeValue(forKey: windowID);
     };
   };
@@ -69,7 +60,6 @@ class RNIPresentedViewControllerCache {
   func getPresentedViewControllers(
     forWindow window: UIWindow?
   ) -> [UIViewController] {
-    return RNIUtilities.getPresentedViewControllers(for: window);
     guard let windowID = window?.synthesizedStringID,
           let cacheContainer = self.map[windowID],
           let vcItemsCached = cacheContainer.cache
