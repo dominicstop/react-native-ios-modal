@@ -69,7 +69,7 @@ class RNIPresentedViewControllerCache {
   func getPresentedViewControllers(
     forWindow window: UIWindow?
   ) -> [UIViewController] {
-  
+    return RNIUtilities.getPresentedViewControllers(for: window);
     guard let windowID = window?.synthesizedStringID,
           let cacheContainer = self.map[windowID],
           let vcItemsCached = cacheContainer.cache
