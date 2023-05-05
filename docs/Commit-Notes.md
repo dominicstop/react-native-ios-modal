@@ -21,45 +21,38 @@
 
 			* Using `Method:A`, we can use the `transitionCoordinator` to get notified when the exit transition is finished.
 
-			<br>
-
+		
+		<br>
+		
 		* **Method:B** - `UIAdaptivePresentationControllerDelegate`
-
-
-		 * **Method:B** only gets invoked in response to user-initiated gestures (i.e. See `Note:2023-03-31-16-48-10`).
-
-			* Additionally, with **Method:B**, the "will blur"-like event gets fired multiple times whenever the dismiss gesture is cancelled half-way (i.e. see: `Note:2023-03-31-17-01-57`).
-
-			* However, `UIViewController.viewWillAppear` and `UIViewController.viewDidAppear` get called immediately when the swipe to close gesture is cancelled.
-
-			* **Method:B** also invokes `RNIModalViewController.viewWillDisappear` + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
-
-				* 1 - `RNIModalView.presentationControllerWillDismiss`
-				* 2 - `RNIModalViewController.viewWillDisappear`
-				* 3 - `RNIModalViewController.viewDidDisappear`
-				* 4 - `RNIModalView.presentationControllerDidDismiss`
-
-				<br>
-
-
+		  * **Method:B** only gets invoked in response to user-initiated gestures (i.e. See `Note:2023-03-31-16-48-10`).
+		  * Additionally, with **Method:B**, the "will blur"-like event gets fired multiple times whenever the dismiss gesture is cancelled half-way (i.e. see: `Note:2023-03-31-17-01-57`).
+		  * However, `UIViewController.viewWillAppear` and `UIViewController.viewDidAppear` get called immediately when the swipe to close gesture is cancelled.
+         * **Method:B** also invokes `RNIModalViewController.viewWillDisappear` + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
+         	* 1 - `RNIModalView.presentationControllerWillDismiss`
+         	* 2 - `RNIModalViewController.viewWillDisappear`
+         	* 3 - `RNIModalViewController.viewDidDisappear`
+		  	* 4 - `RNIModalView.presentationControllerDidDismiss`
+		
+		<br>
+		
 		 * **Method:C** - Programmatically/manually, via the`present` and `dismiss` methods.
-
+		
 			* **Method:C** only invokes the "blur/focus" events whenever the `present` + `dismiss` methods are being invoked.
-
+		
 			* As such, **Method:C** does not account for whenever the modal is being dismissed via a swipe gesture.
-
+		
 			* **Method:C** also invokes `RNIModalViewController.viewWillDisappear` + `RNIModalViewController.viewDidDisappear` (i.e. `Method:A`).
-
+		
 				* 1 - `RNIModalView.dismissModal`
 				* 2 - `RNIModalViewController.viewWillDisappear`
 				* 3 - `RNIModalView.dismissModal - completion`
-
-				<br>
-
-
-	 * **Method:D** - Overriding the `RNIModalViewController.dismiss` method and notifying `RNIModalView` when the method gets invoked.
-		* **Method:D** Works regardless of the method in which the modal was dismissed (i.e. swipe gesture, or programmatic).
-			* In addition, **Method:D** coupled with swizzling `UIViewController`, means that we can detect whenever a modal is about to be dismissed or presented via replacing the default `UIViewController.present`, and `UIViewController.dismiss` methods w/ our own implementation.
+		
+		<br>
+		
+		* **Method:D** - Overriding the `RNIModalViewController.dismiss` method and notifying `RNIModalView` when the method gets invoked.
+			* **Method:D** Works regardless of the method in which the modal was dismissed (i.e. swipe gesture, or programmatic).
+				* In addition, **Method:D** coupled with swizzling `UIViewController`, means that we can detect whenever a modal is about to be dismissed or presented via replacing the default `UIViewController.present`, and `UIViewController.dismiss` methods w/ our own implementation.
 
 
 <br>
@@ -123,11 +116,14 @@
 	* For example:
 		1. If multiple blur/focus events were to fire consecutively, the `modalIndex` might be wrong.
 		2. If a modal presented/dismissed w/o notifying `RNIModalManager`,
+		
 			the `modalIndex` will be stale.
 		3. If a modal was about to be blurred (i.e. "will blur"), but was
+		
 			cancelled halfway (i.e. "did blur" not invoked), and the modal regained
 			focus again (i.e. invoking "will focus" + "did focus").
 		4. Invoking "will blur", or "will focus" but not invoking the invoking
+		
 			the corresponding "did blur", and "did focus" methods.
 	* When a modal is hidden, it will trigger a "focus" event for the new topmost modal; subsequently, when a modal is shown, it will trigger a "blur" event for the previous topmost modal.
 	* This assumes that the "modal manager" can only be notified of a pair of "focus", or "blur" at a given time, per window instance...
