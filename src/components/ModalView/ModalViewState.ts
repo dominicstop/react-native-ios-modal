@@ -1,4 +1,4 @@
-import type { RNIModalFocusState } from 'src/types/RNIModalTypes';
+import type { ModalFocusState } from 'src/types/RNIModalTypes';
 
 export type ModalViewState = {
   isModalVisible: boolean;
@@ -7,5 +7,5 @@ export type ModalViewState = {
   isModalInPresentation: boolean;
   isModalInFocus: boolean;
 
-  focusState: RNIModalFocusState;
+  focusState: ModalFocusState;
 };
