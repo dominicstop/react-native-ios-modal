@@ -15,5 +15,5 @@ Hi, this library is being re-written — please check the `wip` branch, the [exa
 Try out the wip version of the library:
 
 ```
-npm install react-native-ios-modal@2.0.0-1
+npm install react-native-ios-modal@2.0.0-2
 ```
