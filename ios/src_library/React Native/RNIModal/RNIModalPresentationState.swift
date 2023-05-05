@@ -139,7 +139,7 @@ public enum RNIModalPresentationState: String, CaseIterable {
   };
 };
 
-public struct RNIModalPresentationStateMachine {
+public struct RNIModalPresentationStateMachine: RNIDictionaryRepresentable {
   
   // MARK: - Properties
   // ------------------
@@ -180,6 +180,20 @@ public struct RNIModalPresentationStateMachine {
   public var didChange: Bool {
     self.statePrev != self.state;
   };
+  
+  // MARK: RNIDictionaryRepresentable
+  // --------------------------------
+  
+  public var asDictionary: [String : Any] {[
+    "state": self.state,
+    "statePrev": self.statePrev,
+    "isInitialPresent": self.isInitialPresent,
+    "isPresented": self.isPresented,
+    "isDismissed": self.state.isDismissed,
+    "wasCancelledDismiss": self.wasCancelledDismiss,
+    "wasCancelledPresent": self.wasCancelledPresent,
+    "wasCancelledDismissViaGesture": self.wasCancelledDismissViaGesture,
+  ]};
   
   // MARK: - Functions
   // -----------------

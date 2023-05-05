@@ -500,7 +500,7 @@ export class ModalView extends
     );
 
     this.setState({
-      focusState: event.nativeEvent.modalFocusState,
+      focusState: event.nativeEvent.modalFocusState.state,
     });
   };
 
@@ -528,7 +528,7 @@ export class ModalView extends
 
     this.setState({
       isModalInFocus: true,
-      focusState: event.nativeEvent.modalFocusState,
+      focusState: event.nativeEvent.modalFocusState.state,
     });
   };
 
@@ -544,7 +544,7 @@ export class ModalView extends
     );
 
     this.setState({
-      focusState: event.nativeEvent.modalFocusState,
+      focusState: event.nativeEvent.modalFocusState.state,
     });
   };
 
@@ -572,7 +572,7 @@ export class ModalView extends
 
     this.setState({
       isModalInFocus: false,
-      focusState: event.nativeEvent.modalFocusState,
+      focusState: event.nativeEvent.modalFocusState.state,
     });
   };
 
@@ -887,10 +887,10 @@ class ModalViewHelpers {
       modalUUID: event.modalNativeID,
       modalID: event.modalID,
       reactTag: event.reactTag,
-      isInFocus: event.isModalInFocus,
+      isInFocus: event.modalFocusState.isFocused,
       modalLevel: event.modalIndex,
       modalLevelPrev: event.modalIndexPrev,
-      isPresented: event.isModalPresented,
+      isPresented: event.modalPresentationState.isPresented,
     };
   }
 

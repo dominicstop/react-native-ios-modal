@@ -53,7 +53,7 @@ public enum RNIModalFocusState: String {
   };
 };
 
-public struct RNIModalFocusStateMachine {
+public struct RNIModalFocusStateMachine: RNIDictionaryRepresentable {
   
   // MARK: - Properties
   // ------------------
@@ -67,6 +67,19 @@ public struct RNIModalFocusStateMachine {
   public var didChange: Bool {
     self.statePrev != self.state;
   };
+  
+  // MARK: - RNIDictionaryRepresentable
+  // ----------------------------------
+  
+  public var asDictionary: [String : Any] {[
+    "state": self.state,
+    "statePrev": self.statePrev,
+    "isFocused": self.state.isFocused,
+    "isBlurred": self.state.isBlurred,
+    "isTransitioning": self.state.isTransitioning,
+    "wasBlurCancelled": self.wasBlurCancelled,
+    "wasFocusCancelled": self.wasFocusCancelled,
+  ]};
   
   // MARK: - Functions
   // ------------------

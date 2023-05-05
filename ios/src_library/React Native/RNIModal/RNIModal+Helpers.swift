@@ -97,24 +97,8 @@ extension RNIModalState where Self: RNIModal {
       modalIndexPrev: self.modalIndexPrev,
       currentModalIndex: self.currentModalIndex,
       
-      modalFocusState: self.modalFocusState.state,
-      modalFocusStatePref: self.modalFocusState.statePrev,
-      
-      wasBlurCancelled: self.modalFocusState.wasBlurCancelled,
-      wasFocusCancelled: self.modalFocusState.wasFocusCancelled,
-      
-      modalPresentationState: self.modalPresentationState.state,
-      modalPresentationStatePrev: self.modalPresentationState.statePrev,
-      
-      isInitialPresent: self.modalPresentationState.isInitialPresent,
-      wasCancelledPresent: self.modalPresentationState.wasCancelledPresent,
-      wasCancelledDismiss: self.modalPresentationState.wasCancelledDismiss,
-  
-      wasCancelledDismissViaGesture:
-        self.modalPresentationState.wasCancelledDismissViaGesture,
-      
-      isModalPresented: self.modalPresentationState.isPresented,
-      isModalInFocus: self.synthesizedIsModalInFocus,
+      modalFocusState: self.modalFocusState,
+      modalPresentationState: self.modalPresentationState,
       
       computedIsModalInFocus: self.computedIsModalInFocus,
       computedIsModalPresented: self.computedIsModalPresented,

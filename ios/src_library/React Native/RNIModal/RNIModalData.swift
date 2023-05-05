@@ -14,22 +14,8 @@ public struct RNIModalData: RNIDictionarySynthesizable {
   public let modalIndexPrev: Int;
   public let currentModalIndex: Int;
   
-  public let modalFocusState: RNIModalFocusState;
-  public let modalFocusStatePref: RNIModalFocusState;
-  
-  public let wasBlurCancelled: Bool;
-  public let wasFocusCancelled: Bool;
-  
-  public let modalPresentationState: RNIModalPresentationState;
-  public let modalPresentationStatePrev: RNIModalPresentationState;
-
-  public let isInitialPresent: Bool;
-  public let wasCancelledPresent: Bool;
-  public let wasCancelledDismiss: Bool;
-  public let wasCancelledDismissViaGesture: Bool;
-  
-  public let isModalPresented: Bool;
-  public let isModalInFocus: Bool;
+  public let modalFocusState: RNIModalFocusStateMachine;
+  public let modalPresentationState: RNIModalPresentationStateMachine;
 
   public let computedIsModalInFocus: Bool;
   public let computedIsModalPresented: Bool;
