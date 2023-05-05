@@ -1,38 +1,8 @@
 import type { CGPoint, CGSize } from 'src/types/NativeTypes';
-
-import type {
-  ModalFocusState,
-  ModalPresentationState,
-} from 'src/types/RNIModalTypes';
+import type { RNIModalData } from 'src/types/RNIModalTypes';
 
 // Event Object Types
 // ------------------
-
-/** Based on `RNIModalData` */
-export type RNIModalData = {
-  modalNativeID: string;
-  modalIndex: number;
-  modalIndexPrev: number;
-  currentModalIndex: number;
-  modalFocusState: ModalFocusState;
-  modalFocusStatePref: ModalFocusState;
-  wasBlurCancelled: boolean;
-  wasFocusCancelled: boolean;
-  modalPresentationState: ModalPresentationState;
-  modalPresentationStatePrev: ModalPresentationState;
-  isInitialPresent: boolean;
-  wasCancelledPresent: boolean;
-  wasCancelledDismiss: boolean;
-  wasCancelledDismissViaGesture: boolean;
-  isModalPresented: boolean;
-  isModalInFocus: boolean;
-  computedIsModalInFocus: boolean;
-  computedIsModalPresented: boolean;
-  computedModalIndex: number;
-  computedViewControllerIndex: number;
-  computedCurrentModalIndex: number;
-  synthesizedWindowID?: string;
-};
 
 /** Based on `RNIModalBaseEventData` */
 export type RNIModalBaseEventData = RNIModalData & {
