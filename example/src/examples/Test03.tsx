@@ -24,7 +24,7 @@ import {
   CardLogDisplayHandle,
 } from '../components/Card/CardLogDisplay';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-ignore
 function getEventMessageForEventKey(event: ModalViewEmitterEventsDeprecated) {
   switch (event) {
     case 'onModalBlur':
