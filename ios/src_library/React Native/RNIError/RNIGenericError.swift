@@ -8,7 +8,7 @@
 import Foundation
 
 
-internal class RNIGenericError: RNIBaseError<RNIGenericErrorCode> {
+public class RNIGenericError: RNIBaseError<RNIGenericErrorCode> {
   
   init(
     code: RNIGenericErrorCode,

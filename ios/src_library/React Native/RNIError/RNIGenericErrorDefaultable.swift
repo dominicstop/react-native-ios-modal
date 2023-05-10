@@ -8,7 +8,7 @@
 import Foundation
 
 
-internal protocol RNIGenericErrorDefaultable {
+public protocol RNIGenericErrorDefaultable {
   static var runtimeError   : Self { get };
   static var libraryError   : Self { get };
   static var reactError     : Self { get };

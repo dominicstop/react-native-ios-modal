@@ -7,16 +7,18 @@
 
 import Foundation
 
+/// TODO - Move to `react-native-ios-utilities`
+/// * Replace older impl. of `RNIError` with this version
 
-internal class RNIBaseError<E: RawRepresentable>: Error where E.RawValue == String  {
+public class RNIBaseError<E: RawRepresentable>: Error where E.RawValue == String  {
   
-  internal var code: E;
-  internal let domain: String;
+  public var code: E;
+  public let domain: String;
   
-  internal let message: String?;
-  internal let debug: String?;
+  public let message: String?;
+  public let debug: String?;
   
-  internal init(
+  public init(
     code: E,
     domain: String,
     message: String? = nil,
@@ -28,7 +30,7 @@ internal class RNIBaseError<E: RawRepresentable>: Error where E.RawValue == Stri
     self.debug = debug;
   };
   
-  internal func createJSONString() -> String? {
+  public func createJSONString() -> String? {
     let encoder = JSONEncoder();
     
     guard let data = try? encoder.encode(self),
@@ -48,7 +50,7 @@ extension RNIBaseError: Encodable {
     case code, domain, message, debug;
   };
   
-  internal func encode(to encoder: Encoder) throws {
+  public func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self);
         
     try container.encode(self.code.rawValue, forKey: .code);
