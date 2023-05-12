@@ -180,8 +180,12 @@ class RNIModalViewModule: RCTEventEmitter {
         error.invokePromiseRejectBlock(reject)
         
       } catch {
-        let error = RNIModalError(code: .unknownError);
-        error.invokePromiseRejectBlock(reject);
+        let errorWrapper = RNIModalError(
+          code: .unknownError,
+          error: error
+        );
+        
+        errorWrapper.invokePromiseRejectBlock(reject);
       };
     };
   };
