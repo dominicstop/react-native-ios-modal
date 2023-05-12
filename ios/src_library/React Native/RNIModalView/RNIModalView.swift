@@ -12,7 +12,7 @@ public class RNIModalView:
   UIView, RNIIdentifiable, RNIModalPresentationNotifying, RNIModalState,
   RNIModalPresentation {
   
-  public typealias CompletionHandler = (_ isSuccess: Bool, _ error: RNIModalViewError?) -> Void;
+  public typealias CompletionHandler = () -> Void;
   
   enum NativeIDKey: String {
     case modalViewContent;
@@ -530,6 +530,10 @@ public class RNIModalView:
     return gestureRecognizers.first;
   };
   
+  var debugData: Dictionary<String, Any> {
+    self.synthesizedModalData.synthesizedJSDictionary
+  };
+  
   // MARK: - Init
   // ------------
   
@@ -550,15 +554,17 @@ public class RNIModalView:
   
   public override func didMoveToWindow() {
     super.didMoveToWindow();
+
     if self.presentViaMount {
-      self.dismissModal();
+      try? self.dismissModal();
     };
   };
   
   public override func didMoveToSuperview() {
     super.didMoveToSuperview();
+
     if self.presentViaMount {
-      self.presentModal();
+      try? self.presentModal();
     };
   };
   
@@ -777,56 +783,40 @@ public class RNIModalView:
   // MARK: - Functions - Public
   // --------------------------
   
-  public func presentModal(completion: CompletionHandler? = nil) {
+  public func presentModal(completion: CompletionHandler? = nil) throws {
     guard self.window != nil else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.presentModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: no window"
+      throw RNIModalError(
+        code: .runtimeError,
+        message: "Guard check failed, window is nil",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, nil);
-      return;
     };
     
     guard !self.computedIsModalPresented else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.presentModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: modal already presented"
+      throw RNIModalError(
+        code: .modalAlreadyVisible,
+        message: "Guard check failed, modal already presented",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, .modalAlreadyPresented);
-      return;
     };
     
     let presentedViewControllers =
       RNIPresentedVCListCache.getPresentedViewControllers(forWindow: window);
     
     guard let topMostPresentedVC = presentedViewControllers.last else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.presentModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: could not get topMostPresentedVC"
+      throw RNIModalError(
+        code: .runtimeError,
+        message: "Guard check failed, could not get topMostPresentedVC",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, nil);
-      return;
     };
     
     guard let modalVC = self.modalVC else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.presentModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: Could not get modalVC"
+      throw RNIModalError(
+        code: .runtimeError,
+        message: "Guard check failed, could not get modalVC",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, nil);
-      return;
     };
     
     modalVC.modalTransitionStyle = self.synthesizedModalTransitionStyle;
@@ -878,7 +868,7 @@ public class RNIModalView:
         self.synthesizedBaseEventData.synthesizedJSDictionary
       );
       
-      completion?(true, nil);
+      completion?();
 
       #if DEBUG
       print(
@@ -891,30 +881,21 @@ public class RNIModalView:
     };
   };
   
-  public func dismissModal(completion: CompletionHandler? = nil) {
+  public func dismissModal(completion: CompletionHandler? = nil) throws {
     guard self.computedIsModalPresented else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.dismissModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - self.modalIndex: \(self.modalIndex!)"
-        + " - Guard check failed: Modal presented state unknown"
+      throw RNIModalError(
+        code: .modalAlreadyHidden,
+        message: "Guard check failed, modal already dismissed",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, .modalAlreadyDismissed);
-      return;
     };
     
     guard let modalVC = self.modalVC else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.dismissModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: Unable to get modalVC"
+      throw RNIModalError(
+        code: .runtimeError,
+        message: "Guard check failed, Unable to get modalVC",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, .none);
-      return;
     };
     
     let isModalInFocus = self.computedIsModalInFocus;
@@ -924,17 +905,11 @@ public class RNIModalView:
       : self.allowModalForceDismiss;
     
     guard shouldDismiss else {
-      #if DEBUG
-      print(
-          "Error - RNIModalView.dismissModal"
-        + " - self.modalNativeID: \(self.modalNativeID)"
-        + " - Guard check failed: Unable to dismiss"
-        + " - shouldDismiss: \(shouldDismiss)"
-        + " - isModalInFocus: \(computedIsModalInFocus)"
+      throw RNIModalError(
+        code: .dismissRejected,
+        message: "Guard check failed, shouldDismiss prop is false",
+        debugData: self.debugData
       );
-      #endif
-      completion?(false, .modalDismissFailedNotInFocus);
-      return;
     };
     
     /// TODO:2023-03-22-12-12-05 - Remove?
@@ -967,7 +942,7 @@ public class RNIModalView:
         self.synthesizedBaseEventData.synthesizedJSDictionary
       );
       
-      completion?(true, nil);
+      completion?();
       
       #if DEBUG
       print(
@@ -976,40 +951,6 @@ public class RNIModalView:
         + " - Dismiss modal finished"
       );
       #endif
-    };
-  };
-  
-  // MARK: - Functions - Module-Related
-  // ----------------------------------
-  
-  public func setModalVisibility(
-    visibility: Bool,
-    completion: CompletionHandler? = nil
-  ){
-    var params: Dictionary<AnyHashable, Any> = [
-      "visibility": visibility,
-    ];
-    
-    let baseEventDataDict =
-      self.synthesizedBaseEventData.synthesizedJSDictionary;
-    
-    baseEventDataDict.forEach { (key, value) in
-      params[key] = value
-    };
-    
-    let modalAction = visibility
-      ? self.presentModal
-      : self.dismissModal;
-    
-    modalAction() { (success, error) in
-      params["success"] = success;
-      
-      if let errorCode = error {
-        params["errorCode"] = errorCode.rawValue;
-        params["errorMessage"] = RNIModalViewError.getErrorMessage(for: errorCode);
-      };
-      
-      completion?(success, error);
     };
   };
 };
@@ -1150,7 +1091,7 @@ extension RNIModalView: UISheetPresentationControllerDelegate {
 extension RNIModalView: RNIModalRequestable {
   
   public func requestModalToShow(
-    sender:any RNIModal,
+    sender: any RNIModal,
     onRequestApprovedBlock: () -> Void,
     onRequestDeniedBlock: (String) -> Void
   ) {

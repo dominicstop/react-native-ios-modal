@@ -53,7 +53,9 @@ class RNIModalViewModule: RCTEventEmitter {
   
   // MARK: - Module Functions
   // ------------------------
-
+  
+  // TODO: `TODO:2023-05-12-14-11-25`
+  // TODO: `TODO:2023-05-12-14-40-46`
   @objc func dismissModalByID(
     _ modalID: NSString,
     callback: @escaping RCTResponseSenderBlock
@@ -62,13 +64,18 @@ class RNIModalViewModule: RCTEventEmitter {
       let listPresentedVC = RNIUtilities.getPresentedViewControllers();
       
       guard listPresentedVC.count > 0 else {
-        #if DEBUG
-        print(
-            "Error - RNIModalViewModule.dismissModalByID"
-          + " - arg modalID: \(modalID)"
-          + " - listPresentedVC is empty"
+        let errorMessage =
+            "The list of presented view controllers is empty"
+          + " modalID: \(modalID)";
+      
+        let _ = RNIModalError(
+          code: .runtimeError,
+          message: errorMessage,
+          debugData: [
+            "modalID": modalID
+          ]
         );
-        #endif
+        
         callback([false]);
         return;
       };
@@ -82,33 +89,27 @@ class RNIModalViewModule: RCTEventEmitter {
       };
       
       guard let targetModalView = targetModalVC?.modalViewRef else {
-        #if DEBUG
-        print(
-            "Error - RNIModalViewModule.dismissModalByID"
-          + " - arg modalID: \(modalID)"
-          + " - Could not get matching 'RNIModalView' instance."
+        let errorMessage =
+            "Unable to get the matching RNIModalView instance for"
+          + " modalID: \(modalID)";
+      
+        let _ = RNIModalError(
+          code: .runtimeError,
+          message: errorMessage,
+          debugData: [
+            "modalID": modalID
+          ]
         );
-        #endif
+      
         callback([false]);
         return;
       };
       
-      targetModalView.dismissModal { isSuccess, error in
-        guard isSuccess else {
-          #if DEBUG
-          print(
-              "Error - RNIModalViewModule.dismissModalByID"
-            + " - arg modalID: \(modalID)"
-            + " - Invoke: RNIModalView.dismissModal"
-            + " - Error: \(error?.errorMessage ?? "N/A")"
-          );
-          #endif
-          callback([false]);
-          return;
+      do {
+        try targetModalView.dismissModal {
+          // modal dismissed
+          callback([true]);
         };
-        
-        // modal dismissed
-        callback([true]);
         
         #if DEBUG
         print(
@@ -116,10 +117,18 @@ class RNIModalViewModule: RCTEventEmitter {
           + " - target modalID: '\(targetModalView.modalID!)'"
         );
         #endif
+      
+      // } catch let error as RNIModalError {
+      //  callback([false]);
+      
+      } catch {
+        let _ = RNIModalError(code: .unknownError);
+        callback([false]);
       };
     };
   };
   
+  // TODO: `TODO:2023-05-12-14-40-46`
   @objc func dismissAllModals(
     _ animated: Bool,
     callback: @escaping RCTResponseSenderBlock
@@ -145,23 +154,34 @@ class RNIModalViewModule: RCTEventEmitter {
   ){
     DispatchQueue.main.async {
       guard let modalView = self.getModalViewInstance(for: node) else {
-        let message =
-            "RNIModalViewModule.setModalVisibility - Unable to get the "
-          + "corresponding 'RNIModalView' instance for node: \(node)"
-        
-        reject(nil, message, nil);
+        let error = RNIModalError(
+          code: .runtimeError,
+          message: "Unable to get the matching RNIModalView instance for node",
+          debugData: [
+            "node": node,
+            "visibility": visibility
+          ]
+        );
+      
+        error.invokePromiseRejectBlock(reject);
         return;
       };
       
-      modalView.setModalVisibility(visibility: visibility) { isSuccess, error in
-        if isSuccess {
-          resolve(
-            modalView.synthesizedBaseEventData.synthesizedJSDictionary
-          );
-          
-        } else {
-          reject(nil, error?.errorMessage, nil);
+      let modalAction = visibility
+        ? modalView.presentModal
+        : modalView.dismissModal;
+        
+      do {
+        try modalAction() {
+          resolve([:]);
         };
+      
+      } catch let error as RNIModalError {
+        error.invokePromiseRejectBlock(reject)
+        
+      } catch {
+        let error = RNIModalError(code: .unknownError);
+        error.invokePromiseRejectBlock(reject);
       };
     };
   };
@@ -174,11 +194,12 @@ class RNIModalViewModule: RCTEventEmitter {
   ){
     DispatchQueue.main.async {
       guard let modalView = self.getModalViewInstance(for: node) else {
-        let message =
-            "RNIModalViewModule.requestModalInfo - Unable to get the "
-          + "corresponding 'RNIModalView' instance for node: \(node)"
-        
-        reject(nil, message, nil);
+        let errorMessage =
+            "Unable to get the corresponding RNIModalView instance"
+          + " for node: \(node)"
+          
+        let error = RNIModalError(code: .runtimeError, message: errorMessage);
+        error.invokePromiseRejectBlock(reject);
         return;
       };
       
