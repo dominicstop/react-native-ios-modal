@@ -1,4 +1,4 @@
-import { RNIModalViewModule } from 'src/native_modules/RNIModalViewModule';
+import { RNIModalViewModule } from '../native_modules/RNIModalViewModule';
 import * as Helpers from '../functions/helpers';
 
 export class ModalViewModule {
