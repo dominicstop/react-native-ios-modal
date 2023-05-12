@@ -53,17 +53,13 @@
   <br>
 
   - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
+  - [ ] **Subtask** - `TODO:2023-05-12-14-50-57` - Replace impl. of `RNIError` in `react-native-utilities`.
   - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` Refactor: Remove/Replace `UIWindow.key` extension.
   - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove native iOS code in `ios/src_library/Temp` that was copied over from `react-native-ios-utilities` + update usage.
   - [ ] **Subtask** - `TODO:2023-03-29-04-54-56` - Remove JS/TS code in `src/temp` that was copied over from `react-native-ios-utilities` + update usage.
   - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Refactor: Move `RNIModalManager` helper functions to `RNIUtilities`.
   - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - Refactor: Remove `ViewModuleRelatedTypes`
     * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
-
-<br>
-
-- [ ] `TODO:2023-03-27-23-55-09` Refactor: Re-write `RNIModalView` error creation and handling. 
-	* **Desc**: Streamline error creation and error codes.
 
 
 <br>
@@ -109,6 +105,9 @@
 ## TODO - Completed
 
 <br>
+
+- [x] `TODO:2023-03-27-23-55-09` Refactor: Re-write `RNIModalView` error creation and handling. 
+	* **Desc**: Streamline error creation and error codes.
 
 - [x] `TODO:2023-05-03-20-17-56` - Refactor: Types - Typescript type names should match native type names that they are representing.
 
