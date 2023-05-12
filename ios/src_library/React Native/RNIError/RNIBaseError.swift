@@ -10,9 +10,9 @@ import Foundation
 /// TODO - Move to `react-native-ios-utilities`
 /// * Replace older impl. of `RNIError` with this version
 
-public protocol RNIBaseError: Error where ErrorCode == any RNIErrorCode {
+public protocol RNIBaseError: Error {
   
-  associatedtype ErrorCode;
+  associatedtype ErrorCode: RNIErrorCode;
   
   static var domain: String { get };
   
