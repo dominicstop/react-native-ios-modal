@@ -8,6 +8,11 @@
 
 <br>
 
+- [ ] `TODO:2023-05-12-14-11-25` - Refactor: Replace `RNIModalViewModule.dismissModalByID` w/ `setModalVisibilityByID`.
+- [ ] `TODO:2023-05-12-14-40-46` - Refactor: Update  `RNIModalViewModule` functions to use promises.
+
+<br>
+
 - [ ] `TODO:2023-05-05-07-05-20` - Impl: Update `RNIComputableSize` - Add `minSize`, and `maxSize`. 
 
 <br>
