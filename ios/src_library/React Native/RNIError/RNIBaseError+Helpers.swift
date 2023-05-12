@@ -50,6 +50,26 @@ extension RNIBaseError {
     self.functionName = functionName;
     self.lineNumber = lineNumber;
   };
+  
+  public init(
+    code: ErrorCode,
+    error: Error,
+    debugMessage: String? = nil,
+    debugData: Dictionary<String, Any>? = nil,
+    fileID: String? = #fileID,
+    functionName: String? = #function,
+    lineNumber: Int? = #line
+  ) {
+    self.init(
+      code: code,
+      message: error.localizedDescription,
+      debugMessage: debugMessage
+    );
+    
+    self.fileID = fileID;
+    self.functionName = functionName;
+    self.lineNumber = lineNumber;
+  };
 
   public mutating func setDebugValues(
     fileID: String = #fileID,
