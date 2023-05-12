@@ -10,52 +10,25 @@ import Foundation
 /// TODO - Move to `react-native-ios-utilities`
 /// * Replace older impl. of `RNIError` with this version
 
-public class RNIBaseError<E: RawRepresentable>: Error where E.RawValue == String  {
+public protocol RNIBaseError: Error where ErrorCode == any RNIErrorCode {
   
-  public var code: E;
-  public let domain: String;
+  associatedtype ErrorCode;
   
-  public let message: String?;
-  public let debug: String?;
+  static var domain: String { get };
   
-  public init(
-    code: E,
-    domain: String,
-    message: String? = nil,
-    debug: String? = nil
-  ) {
-    self.code = code;
-    self.domain = domain;
-    self.message = message;
-    self.debug = debug;
-  };
+  var code: ErrorCode { get };
+  var message: String? { get };
   
-  public func createJSONString() -> String? {
-    let encoder = JSONEncoder();
-    
-    guard let data = try? encoder.encode(self),
-          let jsonString = String(data: data, encoding: .utf8)
-    else { return nil };
-    
-    return jsonString;
-  };
-};
-
-// ----------------
-// MARK:- Encodable
-// ----------------
-
-extension RNIBaseError: Encodable {
-  enum CodingKeys: String, CodingKey {
-    case code, domain, message, debug;
-  };
+  var debugMessage: String? { get };
+  var debugData: Dictionary<String, Any>? { get set }
   
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self);
-        
-    try container.encode(self.code.rawValue, forKey: .code);
-    try container.encode(self.domain, forKey: .domain);
-    try container.encode(self.message, forKey: .message);
-    try container.encode(self.debug, forKey: .debug);
-  };
+  var fileID      : String? { get set };
+  var functionName: String? { get set };
+  var lineNumber  : Int?    { get set };
+  
+  init(
+    code: ErrorCode,
+    message: String?,
+    debugMessage: String?
+  );
 };

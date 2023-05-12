@@ -1,16 +1,15 @@
 //
 //  RNIGenericErrorCode.swift
-//  react-native-ios-utilities
+//  react-native-ios-modal
 //
-//  Created by Dominic Go on 4/21/22.
+//  Created by Dominic Go on 5/12/23.
 //
 
 import Foundation
 
 
-public enum RNIGenericErrorCode:
-  String, Codable, CaseIterable, RNIGenericErrorDefaultable {
+enum RNIGenericErrorCode:
+  String, CaseIterable, RNIErrorCodeDefaultable, RNIErrorCodeSynthesizable {
   
-  // placeholder
   case unspecified;
 };
