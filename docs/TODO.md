@@ -8,7 +8,6 @@
 
 <br>
 
-- [ ] `TODO:2023-05-12-14-11-25` - Refactor: Replace `RNIModalViewModule.dismissModalByID` w/ `setModalVisibilityByID`.
 - [ ] `TODO:2023-05-12-14-40-46` - Refactor: Update  `RNIModalViewModule` functions to use promises.
 
 <br>
@@ -105,6 +104,8 @@
 ## TODO - Completed
 
 <br>
+
+- [x] `TODO:2023-05-12-14-11-25` - Refactor: Replace `RNIModalViewModule.dismissModalByID` w/ `setModalVisibilityByID`.
 
 - [x] `TODO:2023-03-27-23-55-09` Refactor: Re-write `RNIModalView` error creation and handling. 
 	* **Desc**: Streamline error creation and error codes.
