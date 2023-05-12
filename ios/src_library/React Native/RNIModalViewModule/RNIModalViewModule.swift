@@ -54,76 +54,70 @@ class RNIModalViewModule: RCTEventEmitter {
   // MARK: - Module Functions
   // ------------------------
   
-  // TODO: `TODO:2023-05-12-14-11-25`
-  // TODO: `TODO:2023-05-12-14-40-46`
-  @objc func dismissModalByID(
+  @objc func setModalVisibilityByID(
     _ modalID: NSString,
-    callback: @escaping RCTResponseSenderBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ) {
     DispatchQueue.main.async {
       let listPresentedVC = RNIUtilities.getPresentedViewControllers();
       
-      guard listPresentedVC.count > 0 else {
-        let errorMessage =
-            "The list of presented view controllers is empty"
-          + " modalID: \(modalID)";
-      
-        let _ = RNIModalError(
-          code: .runtimeError,
-          message: errorMessage,
-          debugData: [
-            "modalID": modalID
-          ]
-        );
-        
-        callback([false]);
-        return;
-      };
-      
-      let listPresentedModalVC =
-        listPresentedVC.compactMap { $0 as? RNIModalViewController };
-      
-      let targetModalVC = listPresentedModalVC.first {
-        guard let modalID = $0.modalID else { return false };
-        return modalID == modalID;
-      };
-      
-      guard let targetModalView = targetModalVC?.modalViewRef else {
-        let errorMessage =
-            "Unable to get the matching RNIModalView instance for"
-          + " modalID: \(modalID)";
-      
-        let _ = RNIModalError(
-          code: .runtimeError,
-          message: errorMessage,
-          debugData: [
-            "modalID": modalID
-          ]
-        );
-      
-        callback([false]);
-        return;
-      };
-      
       do {
+        guard listPresentedVC.count > 0 else {
+          throw RNIModalError(
+            code: .runtimeError,
+            message: "The list of presented view controllers is empty",
+            debugData: [
+              "modalID": modalID
+            ]
+          );
+        };
+        
+        let listPresentedModalVC =
+          listPresentedVC.compactMap { $0 as? RNIModalViewController };
+        
+        let targetModalVC = listPresentedModalVC.first {
+          guard let modalID = $0.modalID else { return false };
+          return modalID == modalID;
+        };
+        
+        guard let targetModalView = targetModalVC?.modalViewRef else {
+          let errorMessage =
+              "Unable to get the matching RNIModalView instance for"
+            + " modalID: \(modalID)";
+        
+          throw RNIModalError(
+            code: .runtimeError,
+            message: errorMessage,
+            debugData: [
+              "modalID": modalID
+            ]
+          );
+        };
+        
         try targetModalView.dismissModal {
           // modal dismissed
-          callback([true]);
+          resolve([:]);
         };
         
         #if DEBUG
         print(
-            "Log - RNIModalViewModule.dismissModalByID - Dismissing modal"
+            "Log - RNIModalViewModule.setModalVisibilityByID - Dismissing modal"
           + " - target modalID: '\(targetModalView.modalID!)'"
         );
         #endif
       
-      // } catch let error as RNIModalError {
-      //  callback([false]);
+      } catch let error as RNIModalError {
+        error.invokePromiseRejectBlock(reject);
       
       } catch {
-        let _ = RNIModalError(code: .unknownError);
-        callback([false]);
+        let errorWrapper = RNIModalError(
+          code: .unknownError,
+          error: error
+        );
+        
+        errorWrapper.invokePromiseRejectBlock(reject);
       };
     };
   };

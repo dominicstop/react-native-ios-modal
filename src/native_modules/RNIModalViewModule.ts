@@ -8,10 +8,9 @@ interface RNIModalViewModule {
   // --------------------
 
   // prettier-ignore
-  dismissModalByID(
+  setModalVisibilityByID(
     modalID: string,
-    callback: (success: boolean) => void
-  ): void;
+  ): Promise<void>;
 
   // prettier-ignore
   dismissAllModals(

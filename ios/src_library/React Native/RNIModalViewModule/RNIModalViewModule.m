@@ -14,9 +14,10 @@
 // MARK: - Standalone Functions
 // ----------------------------
 
-RCT_EXTERN_METHOD(dismissModalByID: (NSString)modalID
-                  callback: (RCTResponseSenderBlock)callback
-);
+RCT_EXTERN_METHOD(setModalVisibilityByID: (NSString)modalID
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock *)resolve
+                  reject : (RCTPromiseRejectBlock *)reject);
 
 RCT_EXTERN_METHOD(dismissAllModals: (BOOL)animated
                   callback: (RCTResponseSenderBlock)callback
