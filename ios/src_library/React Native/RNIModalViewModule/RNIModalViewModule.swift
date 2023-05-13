@@ -56,6 +56,7 @@ class RNIModalViewModule: RCTEventEmitter {
   
   @objc func setModalVisibilityByID(
     _ modalID: NSString,
+    visibility: Bool,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
     reject : @escaping RCTPromiseRejectBlock
@@ -63,14 +64,17 @@ class RNIModalViewModule: RCTEventEmitter {
     DispatchQueue.main.async {
       let listPresentedVC = RNIUtilities.getPresentedViewControllers();
       
+      let debugData: Dictionary<String, Any> = [
+        "modalID": modalID,
+        "visibility": visibility,
+      ];
+      
       do {
         guard listPresentedVC.count > 0 else {
           throw RNIModalError(
             code: .runtimeError,
             message: "The list of presented view controllers is empty",
-            debugData: [
-              "modalID": modalID
-            ]
+            debugData: debugData
           );
         };
         
@@ -90,13 +94,15 @@ class RNIModalViewModule: RCTEventEmitter {
           throw RNIModalError(
             code: .runtimeError,
             message: errorMessage,
-            debugData: [
-              "modalID": modalID
-            ]
+            debugData: debugData
           );
         };
         
-        try targetModalView.dismissModal {
+        let modalAction = visibility
+          ? targetModalView.presentModal
+          : targetModalView.dismissModal;
+        
+        try modalAction {
           // modal dismissed
           resolve([:]);
         };
@@ -112,11 +118,12 @@ class RNIModalViewModule: RCTEventEmitter {
         error.invokePromiseRejectBlock(reject);
       
       } catch {
-        let errorWrapper = RNIModalError(
+        var errorWrapper = RNIModalError(
           code: .unknownError,
           error: error
         );
         
+        errorWrapper.addDebugData(debugData);
         errorWrapper.invokePromiseRejectBlock(reject);
       };
     };

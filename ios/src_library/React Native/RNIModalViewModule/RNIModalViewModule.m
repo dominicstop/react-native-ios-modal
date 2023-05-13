@@ -15,6 +15,7 @@
 // ----------------------------
 
 RCT_EXTERN_METHOD(setModalVisibilityByID: (NSString)modalID
+                  visibility: (BOOL)visibility
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock *)reject);

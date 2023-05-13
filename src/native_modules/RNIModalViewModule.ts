@@ -10,6 +10,7 @@ interface RNIModalViewModule {
   // prettier-ignore
   setModalVisibilityByID(
     modalID: string,
+    visibility: boolean,
   ): Promise<void>;
 
   // prettier-ignore
