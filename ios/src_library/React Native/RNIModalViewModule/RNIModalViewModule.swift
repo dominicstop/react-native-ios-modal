@@ -180,7 +180,7 @@ class RNIModalViewModule: RCTEventEmitter {
         : modalView.dismissModal;
         
       do {
-        try modalAction() {
+        try modalAction(true) {
           resolve([:]);
         };
       

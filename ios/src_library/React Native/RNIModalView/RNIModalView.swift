@@ -790,7 +790,10 @@ public class RNIModalView:
   // MARK: - Functions - Public
   // --------------------------
   
-  public func presentModal(completion: CompletionHandler? = nil) throws {
+  public func presentModal(
+    animated: Bool = true,
+    completion: CompletionHandler? = nil
+  ) throws {
     guard self.window != nil else {
       throw RNIModalError(
         code: .runtimeError,
@@ -860,7 +863,7 @@ public class RNIModalView:
       self.synthesizedBaseEventData.synthesizedJSDictionary
     );
     
-    topMostPresentedVC.present(modalVC, animated: true) { [unowned self] in
+    topMostPresentedVC.present(modalVC, animated: animated) { [unowned self] in
       
       // Become the modal's presentation delegate after it has been presented
       // in order to not override system-defined default modal behavior
@@ -888,7 +891,10 @@ public class RNIModalView:
     };
   };
   
-  public func dismissModal(completion: CompletionHandler? = nil) throws {
+  public func dismissModal(
+    animated: Bool = true,
+    completion: CompletionHandler? = nil
+  ) throws {
     guard self.computedIsModalPresented else {
       throw RNIModalError(
         code: .modalAlreadyHidden,
@@ -942,7 +948,7 @@ public class RNIModalView:
       self.synthesizedBaseEventData.synthesizedJSDictionary
     );
     
-    presentedVC.dismiss(animated: true){
+    presentedVC.dismiss(animated: animated){
       self.modalPresentationState.set(state: .DISMISSED);
       
       self.onModalDidDismiss?(
@@ -1102,7 +1108,7 @@ extension RNIModalView: RNIModalRequestable {
     animated: Bool,
     completion: @escaping () -> Void
   ) throws {
-    try self.presentModal(completion: completion);
+    try self.presentModal(animated: animated, completion: completion);
   };
   
   public func requestModalToHide(
@@ -1110,7 +1116,7 @@ extension RNIModalView: RNIModalRequestable {
     animated: Bool,
     completion: @escaping () -> Void
   ) throws {
-    try self.dismissModal(completion: completion);
+    try self.dismissModal(animated: animated, completion: completion);
   };
 };
 
