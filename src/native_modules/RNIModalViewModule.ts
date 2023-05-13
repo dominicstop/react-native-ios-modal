@@ -15,8 +15,7 @@ interface RNIModalViewModule {
   // prettier-ignore
   dismissAllModals(
     animated: boolean,
-    callback: (success: boolean) => void
-  ): void;
+  ): Promise<void>;
 
   // View-Related Functions
   // ----------------------

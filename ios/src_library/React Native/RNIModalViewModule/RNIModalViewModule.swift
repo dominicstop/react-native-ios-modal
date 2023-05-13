@@ -122,17 +122,34 @@ class RNIModalViewModule: RCTEventEmitter {
     };
   };
   
-  // TODO: `TODO:2023-05-12-14-40-46`
   @objc func dismissAllModals(
     _ animated: Bool,
-    callback: @escaping RCTResponseSenderBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ) {
     DispatchQueue.main.async {
-      let success: Void? = UIWindow.key?
-        .rootViewController?
-        .dismiss(animated: animated, completion: nil);
+      let windows = RNIUtilities.getWindows();
+      let rootViewControllers = windows.map { $0.rootViewController };
       
-      callback([success != nil]);
+      guard rootViewControllers.isEmpty else {
+        let error = RNIModalError(
+          code: .runtimeError,
+          message: "Could not get root view controllers"
+        );
+        
+        error.invokePromiseRejectBlock(reject);
+        return;
+      };
+      
+      rootViewControllers.enumerated().forEach {
+        let isLast = $0.offset == rootViewControllers.count - 1;
+        
+        $0.element?.dismiss(animated: animated) {
+          guard isLast else { return };
+          resolve([:]);
+        };
+      };
     };
   };
 
