@@ -55,14 +55,15 @@ class RNIModalViewModule: RCTEventEmitter {
   // ------------------------
   
   @objc func setModalVisibilityByID(
-    _ modalID: NSString,
+    _ modalID: String,
     visibility: Bool,
+    animated: Bool,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
     reject : @escaping RCTPromiseRejectBlock
   ) {
     DispatchQueue.main.async {
-      let listPresentedVC = RNIUtilities.getPresentedViewControllers();
+      let modalInstances = RNIModalManagerShared.modalInstances;
       
       let debugData: Dictionary<String, Any> = [
         "modalID": modalID,
@@ -70,23 +71,19 @@ class RNIModalViewModule: RCTEventEmitter {
       ];
       
       do {
-        guard listPresentedVC.count > 0 else {
+        guard modalInstances.count > 0 else {
           throw RNIModalError(
             code: .runtimeError,
-            message: "The list of presented view controllers is empty",
+            message: "The list of modalInstances is empty",
             debugData: debugData
           );
         };
-        
-        let listPresentedModalVC =
-          listPresentedVC.compactMap { $0 as? RNIModalViewController };
-        
-        let targetModalVC = listPresentedModalVC.first {
-          guard let modalID = $0.modalID else { return false };
-          return modalID == modalID;
+
+        let targetModal = modalInstances.first {
+          $0.modalUserID == modalID || $0.modalNativeID == modalID
         };
         
-        guard let targetModalView = targetModalVC?.modalViewRef else {
+        guard let targetModal = targetModal else {
           let errorMessage =
               "Unable to get the matching RNIModalView instance for"
             + " modalID: \(modalID)";
@@ -99,20 +96,13 @@ class RNIModalViewModule: RCTEventEmitter {
         };
         
         let modalAction = visibility
-          ? targetModalView.presentModal
-          : targetModalView.dismissModal;
+          ? targetModal.requestModalToShow
+          : targetModal.requestModalToHide;
         
-        try modalAction {
+        try modalAction(animated, visibility) {
           // modal dismissed
           resolve([:]);
         };
-        
-        #if DEBUG
-        print(
-            "Log - RNIModalViewModule.setModalVisibilityByID - Dismissing modal"
-          + " - target modalID: '\(targetModalView.modalID!)'"
-        );
-        #endif
       
       } catch let error as RNIModalError {
         error.invokePromiseRejectBlock(reject);
