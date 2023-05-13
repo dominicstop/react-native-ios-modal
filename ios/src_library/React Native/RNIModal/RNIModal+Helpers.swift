@@ -7,9 +7,15 @@
 
 import Foundation
 
-extension RNIModalState where Self: RNIIdentifiable {
+extension RNIModalIdentifiable where Self: RNIIdentifiable {
   public var modalNativeID: String {
     self.synthesizedStringID
+  };
+};
+
+extension RNIModalIdentifiable {
+  public var modalUserID: String? {
+    nil
   };
 };
 

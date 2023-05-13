@@ -10,8 +10,8 @@ import Foundation
 /// Wraps a `UIViewController` so it can be used w/ `RNIModalManager`
 ///
 public class RNIModalViewControllerWrapper:
-  RNIIdentifiable, RNIModalPresentationNotifying, RNIModalState,
-  RNIModalPresentation {
+  RNIIdentifiable, RNIModalIdentifiable, RNIModalPresentationNotifying,
+  RNIModalState, RNIModalPresentation {
   
   // MARK: - Properties - RNIIdentifiable
   // ------------------------------------

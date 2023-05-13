@@ -9,8 +9,8 @@
 import Foundation
 
 public class RNIModalView:
-  UIView, RNIIdentifiable, RNIModalPresentationNotifying, RNIModalState,
-  RNIModalPresentation {
+  UIView, RNIIdentifiable, RNIModalIdentifiable, RNIModalPresentationNotifying,
+  RNIModalState, RNIModalPresentation {
   
   public typealias CompletionHandler = () -> Void;
   
@@ -39,6 +39,13 @@ public class RNIModalView:
   
   public weak var modalPresentationNotificationDelegate:
     RNIModalPresentationNotifiable!;
+    
+  // MARK: - Properties - RNIModalIdentifiable
+  // -----------------------------------------
+  
+  public var modalUserID: String? {
+    self.modalID as? String
+  };
   
   // MARK: - Properties - RNIModalState
   // ----------------------------------

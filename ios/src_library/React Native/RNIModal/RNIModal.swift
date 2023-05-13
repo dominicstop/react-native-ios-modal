@@ -12,11 +12,26 @@ import Foundation
 ///
 public typealias RNIModal =
     RNIIdentifiable
+  & RNIModalIdentifiable
   & RNIModalState
   & RNIModalRequestable
   & RNIModalFocusNotifiable
   & RNIModalPresentationNotifying
   & RNIModalPresentation;
+  
+  
+/// Contains modal-related properties for identifying a specific modal instance
+///
+/// Specifies that the "adoptee/delegate" that conforms to this protocol must
+/// have the specified modal-related properties so that it can be uniquely
+/// identified amongst different modal instances.
+///
+public protocol RNIModalIdentifiable: AnyObject {
+
+  var modalNativeID: String { get };
+  
+  var modalUserID: String? { get };
+};
 
 /// Contains modal-related properties for keeping track of the state of the
 /// modal.
