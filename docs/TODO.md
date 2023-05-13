@@ -8,16 +8,12 @@
 
 <br>
 
-- [ ] `TODO:2023-05-12-14-40-46` - Refactor: Update  `RNIModalViewModule` functions to use promises.
-
-<br>
-
 - [ ] `TODO:2023-05-05-07-05-20` - Impl: Update `RNIComputableSize` - Add `minSize`, and `maxSize`. 
 
 <br>
 
 - [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events.
-	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalVie.onModalDidSnap` event.
+	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalView.onModalDidSnap` event.
 	- [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
 	- [x] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`.
 	- [x] **Subtask** - `TODO:2023-05-01-19-19-20` - Update `RNIModalView` event objects.
@@ -104,6 +100,8 @@
 ## TODO - Completed
 
 <br>
+
+- [x] `TODO:2023-05-12-14-40-46` - Refactor: Update  `RNIModalViewModule` functions to use promises.
 
 - [x] `TODO:2023-05-12-14-11-25` - Refactor: Replace `RNIModalViewModule.dismissModalByID` w/ `setModalVisibilityByID`.
 
@@ -201,17 +199,17 @@
 
 - [x] `TODO:2023-03-04-06-34-28` - Library Native Cleanup
 
-	* **Desc: Rewrite native to be more readable/consistent.
+	* **Desc**: Rewrite native to be more readable/consistent.
 
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-24-09-41-16` - Remove `modalLevel`
-		* **Desc: Remove `RNIModalView.modalLevel`
+		* **Desc**: Remove `RNIModalView.modalLevel`
 
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-18-09-22-15` - Re-write Modal Focus Checking Logic
-		* **Desc: Re-write modal "focus checking"
+		* **Desc**: Re-write modal "focus checking"
 			* instead of manually keeping track of focus per modal instance (potentially becoming stale over time), check focus via climbing the presented view controller hierarchy.
 			* ` getPresentedViewControllers().last === self.modalNVC: true`
 			* ``getPresentedViewControllers.last === self.modalVC false`
@@ -226,7 +224,7 @@
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-22-12-09-34` - Move to `get` property called  `synthesizedNativeEventBase`
-		* **Desc: Refactor `createModalNativeEventDict`.
+		* **Desc**: Refactor `createModalNativeEventDict`.
 
 	<br>
 
@@ -239,7 +237,7 @@
 	<br>
 
 	* [x] **Subtask** - `TODO:2023-03-04-15-39-46` Impl: `RNIModalManager`
-		* **Desc: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
+		* **Desc**: Implement `RNIModalManager` singleton for handling modal focus/blur logic.
 			* Modal focus/blur re-write.
 			* Consolidate focus/blur related logic to this class, This class will be notified whenever a new modal is presented or dismissed.
 			* It will then be responsible to notify/"hand out" blur/focus events to other modals.
@@ -254,12 +252,12 @@
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-03-24-09-56-09` - Remove temporary changes to `RNIModalManager`.
-		* **Desc: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
+		* **Desc**: Temporarily add changes to `RNIModalManager` so that `RNIModalView` can partially use it while it hasn't finished conforming to all the protocols in `RNIModal`.
 
 	<br>
 
 	- [x] **Subtask** - `TODO:2023-03-05-00-32-43` Fix: Edge Case - Modal Focus/Blur Bug
-		* **Desc: Add code to manually propagate modal blur/focus events.
+		* **Desc**: Add code to manually propagate modal blur/focus events.
 			* The modal is being dismissed via calling the modal view controller's dismiss method. As such, the focus/blur event is not being propagated.
 
 	<br>
@@ -282,26 +280,26 @@
 
 - [x] `TODO:2023-03-04-03-59-43` - Re-Write Examples in Typescript
 
-	* **Desc: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
+	* **Desc**: Re-write prev/existing `react-native-ios-modal` examples/tests, and other related code in typescript.
 
 	- [x] **Subtask** - `TODO:2023-03-04-04-39-44` - Import + Re–write Example Components
-		* **Desc: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
+		* **Desc**: Import example-related components/utilities from `react-native-ios-context-menu` (i.e. `example/src`) and retrofit it to work in  `react-native-ios-modal`'s example project.
 
 <br>
 
 - [x] `TODO:2023-03-04-04-20-46` - Library Typescript Re-Write
-	* **Desc: Re-write `react-native-ios-modal` to support typescript.
+	* **Desc**: Re-write `react-native-ios-modal` to support typescript.
 
 <br>
 
 - [x]  `TODO:2023-03-04-05-25-44` - Library Cleanup
 
-	* **Desc: Cleanup library's code to be more understandable.
+	* **Desc**: Cleanup library's code to be more understandable.
 
 	<br>
 	
 	- [x] **Subtask** - `TODO:2023-03-04-04-20-46` - Library Native Cleanup
-		* **Desc: Cleanup library's native code - Initial preparation for library overhaul to use `react-native-ios-utilities` as a peer dependency.
+		* **Desc**: Cleanup library's native code - Initial preparation for library overhaul to use `react-native-ios-utilities` as a peer dependency.
 
 <br><br>
 
