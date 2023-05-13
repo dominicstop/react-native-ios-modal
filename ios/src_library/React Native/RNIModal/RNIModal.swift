@@ -46,16 +46,16 @@ public protocol RNIModalState: AnyObject {
 public protocol RNIModalRequestable: AnyObject {
   
   func requestModalToShow(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (_ reason: String) -> Void
-  );
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
+  ) throws;
   
   func requestModalToHide(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (_ reason: String) -> Void
-  );
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
+  ) throws;
 };
 
 /// Contains functions that get called whenever a modal-related event occurs.

@@ -76,17 +76,17 @@ public class RNIModalViewControllerWrapper:
 extension RNIModalViewControllerWrapper: RNIModalRequestable {
   
   public func requestModalToShow(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (String) -> Void
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
   ) {
     // TBA - no-op
   };
   
   public func requestModalToHide(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (String) -> Void
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
   ) {
     // TBA - no-op
   };

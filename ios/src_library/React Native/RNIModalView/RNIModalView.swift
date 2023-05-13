@@ -1091,21 +1091,19 @@ extension RNIModalView: UISheetPresentationControllerDelegate {
 extension RNIModalView: RNIModalRequestable {
   
   public func requestModalToShow(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (String) -> Void
-  ) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-    /// No-op - TBA
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
+  ) throws {
+    try self.presentModal(completion: completion);
   };
   
   public func requestModalToHide(
-    sender: any RNIModal,
-    onRequestApprovedBlock: () -> Void,
-    onRequestDeniedBlock: (String) -> Void
-  ) {
-    /// `TODO:2023-03-24-09-58-50` - Refactor `RNIModalView` to use `RNIModalManager`.
-    /// No-op - TBA
+    sender: Any,
+    animated: Bool,
+    completion: @escaping () -> Void
+  ) throws {
+    try self.dismissModal(completion: completion);
   };
 };
 
