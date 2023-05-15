@@ -79,16 +79,28 @@ extension RNIModalViewControllerWrapper: RNIModalRequestable {
     sender: Any,
     animated: Bool,
     completion: @escaping () -> Void
-  ) {
-    // TBA - no-op
+  ) throws {
+    throw RNIModalError(
+      code: .runtimeError,
+      message: "presenting is not supported"
+    );
   };
   
   public func requestModalToHide(
     sender: Any,
     animated: Bool,
     completion: @escaping () -> Void
-  ) {
-    // TBA - no-op
+  ) throws {
+    guard let modalVC = self.modalViewController else {
+      throw RNIModalError(
+        code: .runtimeError,
+        message: "Guard check failed, modalViewController is nil"
+      );
+    };
+  
+    modalVC.dismiss(animated: animated) {
+      completion();
+    };
   };
 };
 
