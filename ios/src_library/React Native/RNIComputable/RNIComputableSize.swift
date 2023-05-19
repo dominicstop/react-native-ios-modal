@@ -10,12 +10,12 @@ import JavaScriptCore
 
 
 public struct RNIComputableSize {
-  let mode: RNIComputableSizeMode;
+  public let mode: RNIComputableSizeMode;
   
-  let offsetWidth: RNIComputableOffset?;
-  let offsetHeight: RNIComputableOffset?;
+  public let offsetWidth: RNIComputableOffset?;
+  public let offsetHeight: RNIComputableOffset?;
   
-  func computeOffsets(withSize size: CGSize) -> CGSize {
+  public func computeOffsets(withSize size: CGSize) -> CGSize {
     let offsetWidth =
       self.offsetWidth?.compute(withValue: size.width);
       
@@ -28,7 +28,7 @@ public struct RNIComputableSize {
     );
   };
   
-  func compute(
+  public func compute(
     withTargetSize targetSize: CGSize,
     currentSize: CGSize
   ) -> CGSize {
@@ -50,7 +50,7 @@ public struct RNIComputableSize {
     };
   };
     
-  func computeWithOffsets(
+  public func computeWithOffsets(
     withTargetSize targetSize: CGSize,
     currentSize: CGSize
   ) -> CGSize {
@@ -64,7 +64,7 @@ public struct RNIComputableSize {
 };
 
 extension RNIComputableSize {
-  init?(fromDict dict: NSDictionary){
+  public init?(fromDict dict: NSDictionary){
     guard let mode = RNIComputableSizeMode(fromDict: dict)
     else { return nil };
     
@@ -87,7 +87,7 @@ extension RNIComputableSize {
     }();
   };
   
-  init(mode: RNIComputableSizeMode){
+  public init(mode: RNIComputableSizeMode){
     self.mode = mode;
     self.offsetWidth = nil;
     self.offsetHeight = nil;

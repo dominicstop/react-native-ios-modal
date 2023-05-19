@@ -32,14 +32,14 @@ public struct RNIComputableOffset {
   public var offset: Double;
   public var offsetOperation: OffsetOperation;
   
-  func compute(withValue value: Double) -> Double {
+  public func compute(withValue value: Double) -> Double {
     return self.offsetOperation.compute(a: self.offset, b: value);
   };
 };
 
 extension RNIComputableOffset {
 
-  init?(fromDict dict: NSDictionary){
+  public init?(fromDict dict: NSDictionary){
     guard let offset = dict["offset"] as? NSNumber else { return nil };
     self.offset = offset.doubleValue;
     

@@ -15,7 +15,7 @@ public enum RNIComputableSizeMode {
 };
 
 extension RNIComputableSizeMode {
-  init?(fromDict dict: NSDictionary){
+  public init?(fromDict dict: NSDictionary){
     guard let mode = dict["mode"] as? String else { return nil };
     
     switch mode {
