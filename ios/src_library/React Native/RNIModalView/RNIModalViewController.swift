@@ -270,7 +270,7 @@ public class RNIModalViewController: UIViewController {
         );
         
       default:
-        self.preferredContentSize = computableSize.computeWithOffsets(
+        self.preferredContentSize = computableSize.compute(
           withTargetSize: targetSize, currentSize: .zero
         );
     };
