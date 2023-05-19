@@ -10,8 +10,16 @@ import Foundation
 public enum RNIComputableSizeMode {
   case current;
   case stretch;
-  case constant(constantWidth: Double, constantHeight: Double);
-  case percent(percentWidth: Double, percentHeight: Double);
+  
+  case constant(
+    constantWidth: Double,
+    constantHeight: Double
+  );
+  
+  case percent(
+    percentWidth: Double,
+    percentHeight: Double
+  );
 };
 
 extension RNIComputableSizeMode {

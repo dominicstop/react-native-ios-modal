@@ -6,16 +6,27 @@
 //
 
 import Foundation
-import JavaScriptCore
-
 
 public struct RNIComputableSize {
+  
+  // MARK: - Properties
+  // ------------------
+  
   public let mode: RNIComputableSizeMode;
   
   public let offsetWidth: RNIComputableOffset?;
   public let offsetHeight: RNIComputableOffset?;
   
-  public func computeOffsets(withSize size: CGSize) -> CGSize {
+  public let minWidth: CGFloat?;
+  public let minHeight: CGFloat?;
+  
+  public let maxWidth: CGFloat?;
+  public let maxHeight: CGFloat?;
+  
+  // MARK: - Internal Functions
+  // --------------------------
+  
+  func sizeWithOffsets(forSize size: CGSize) -> CGSize {
     let offsetWidth =
       self.offsetWidth?.compute(withValue: size.width);
       
@@ -28,7 +39,23 @@ public struct RNIComputableSize {
     );
   };
   
-  public func compute(
+  func sizeWithClamp(forSize size: CGSize) -> CGSize {
+    return CGSize(
+      width: size.width.clamped(
+        min: self.minWidth,
+        max: self.maxWidth
+      ),
+      height: size.height.clamped(
+        min: self.minHeight,
+        max: self.maxHeight
+      )
+    );
+  };
+
+  // MARK: - Functions
+  // -----------------
+    
+  public func computeRaw(
     withTargetSize targetSize: CGSize,
     currentSize: CGSize
   ) -> CGSize {
@@ -50,16 +77,17 @@ public struct RNIComputableSize {
     };
   };
     
-  public func computeWithOffsets(
+  public func compute(
     withTargetSize targetSize: CGSize,
     currentSize: CGSize
   ) -> CGSize {
-    let computedSize = self.compute(
+    let rawSize = self.computeRaw(
       withTargetSize: targetSize,
       currentSize: currentSize
     );
     
-    return self.computeOffsets(withSize: computedSize);
+    let clampedSize = self.sizeWithClamp(forSize: rawSize);
+    return self.sizeWithOffsets(forSize: clampedSize);
   };
 };
 
@@ -85,11 +113,36 @@ extension RNIComputableSize {
       
       return offset;
     }();
+    
+    self.minWidth =
+      Self.getDoubleValue(forDict: dict, withKey: "minWidth");
+      
+    self.minHeight =
+      Self.getDoubleValue(forDict: dict, withKey: "minHeight");
+      
+    self.maxWidth =
+      Self.getDoubleValue(forDict: dict, withKey: "maxWidth");
+      
+    self.maxHeight =
+      Self.getDoubleValue(forDict: dict, withKey: "maxHeight");
   };
   
   public init(mode: RNIComputableSizeMode){
     self.mode = mode;
+    
     self.offsetWidth = nil;
     self.offsetHeight = nil;
+    self.minWidth = nil;
+    self.minHeight = nil;
+    self.maxWidth = nil;
+    self.maxHeight = nil;
+  };
+  
+  static private func getDoubleValue(
+    forDict dict: NSDictionary,
+    withKey key: String
+  ) -> CGFloat? {
+    guard let number = dict[key] as? NSNumber else { return nil };
+    return number.doubleValue;
   };
 };

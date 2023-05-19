@@ -6,6 +6,12 @@ import type { RNIComputableOffset } from './RNIComputableOffset';
 type RNIComputableSizeShared = {
   offsetWidth?: RNIComputableOffset;
   offsetHeight?: RNIComputableOffset;
+
+  minWidth?: number;
+  minHeight?: number;
+
+  maxWidth?: number;
+  maxHeight?: number;
 };
 
 type RNIComputableSizeModeBase = {
