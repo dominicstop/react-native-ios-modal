@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 1/9/21.
 //
 
-import Foundation;
+import UIKit;
 
 
 internal class RNIUtilities {

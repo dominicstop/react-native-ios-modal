@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/27/23.
 //
 
-import Foundation
+import UIKit
 
 fileprivate class Counter {
   static var typeToCounterMap: Dictionary<String, Int> = [:];

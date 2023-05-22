@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/31/23.
 //
 
-import Foundation
+import UIKit
 
 public protocol RNIObjectMetadata: AnyObject {
   associatedtype T: AnyObject;

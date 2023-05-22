@@ -1,3 +1,4 @@
+import UIKit
 
 /// TODO:2023-03-24-01-14-26 - Move `UIView+Helpers` extension to
 /// `react-native-utilities`

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/8/23.
 //
 
-import Foundation
+import UIKit
 
 
 public enum RNIModalFocusState: String {

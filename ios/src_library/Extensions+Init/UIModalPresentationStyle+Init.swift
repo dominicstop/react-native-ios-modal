@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/24/23.
 //
 
-import Foundation
+import UIKit
 
 extension UIModalPresentationStyle: CaseIterable, CustomStringConvertible {
   

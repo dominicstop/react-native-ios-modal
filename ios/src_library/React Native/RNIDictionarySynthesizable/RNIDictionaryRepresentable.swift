@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/3/23.
 //
 
-import Foundation
+import UIKit
 
 public protocol RNIDictionaryRepresentable {
   var asDictionary: [String: Any] { get };

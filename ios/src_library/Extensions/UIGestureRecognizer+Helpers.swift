@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/22/23.
 //
 
-import Foundation
+import UIKit
 
 extension UIGestureRecognizer.State: CustomStringConvertible {
   public var description: String {

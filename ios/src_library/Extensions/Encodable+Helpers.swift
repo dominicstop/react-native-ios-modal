@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/2/23.
 //
 
-import Foundation
+import UIKit
 
 
 public extension Encodable {

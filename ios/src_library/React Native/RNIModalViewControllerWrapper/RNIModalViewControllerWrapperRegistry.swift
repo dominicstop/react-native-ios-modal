@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/27/23.
 //
 
-import Foundation
+import UIKit
 
 class RNIModalViewControllerWrapperRegistry {
   static let instanceMap = NSMapTable<

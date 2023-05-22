@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/28/23.
 //
 
-import Foundation
+import UIKit
 
 public enum RNIComputableSizeMode {
   case current;

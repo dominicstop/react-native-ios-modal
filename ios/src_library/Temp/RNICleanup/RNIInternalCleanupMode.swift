@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 10/29/22.
 //
 
-import Foundation
+import UIKit
 
 
 internal protocol RNIInternalCleanupMode {

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/15/23.
 //
 
-import Foundation
+import UIKit
 
 
 public class RNIWeakDictionary<K: Hashable, T> {

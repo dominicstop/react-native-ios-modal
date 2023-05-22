@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/12/21.
 //
 
-import Foundation
+import UIKit
 
 internal extension CAGradientLayerType {
   init?(string: String){

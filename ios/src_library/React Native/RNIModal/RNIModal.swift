@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/16/23.
 //
 
-import Foundation
+import UIKit
 
 /// A collection of protocols that the "adoptee" needs to implement in order to
 /// be considered a "modal".

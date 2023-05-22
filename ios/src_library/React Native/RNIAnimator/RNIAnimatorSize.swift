@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/19/23.
 //
 
-import Foundation
+import UIKit
 
 fileprivate extension CGSize {
   init(array: [CGFloat]) {

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 8/26/22.
 //
 
-import Foundation
+import UIKit
 
 internal extension UIViewController {
   func attachChildVC(_ child: UIViewController) {

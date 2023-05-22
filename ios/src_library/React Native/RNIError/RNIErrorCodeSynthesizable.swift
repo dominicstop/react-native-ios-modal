@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/12/23.
 //
 
-import Foundation
+import UIKit
 
 public protocol RNIErrorCodeSynthesizable {
   var errorCode: Int? { get };

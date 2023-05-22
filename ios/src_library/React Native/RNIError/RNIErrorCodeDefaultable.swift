@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 8/28/22.
 //
 
-import Foundation
+import UIKit
 
 public protocol RNIErrorCodeDefaultable {
 

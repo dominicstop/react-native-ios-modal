@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 9/27/22.
 //
 
-import Foundation
+import UIKit
 
 
 @objc(RNIUtilitiesModule)

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/23/23.
 //
 
-import Foundation
+import UIKit
 
 extension UIBlurEffect.Style: CaseIterable, CustomStringConvertible {
   

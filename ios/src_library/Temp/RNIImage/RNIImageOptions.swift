@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 9/28/22.
 //
 
-import Foundation
+import UIKit
 
 
 internal struct RNIImageOptions {

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/18/23.
 //
 
-import Foundation
+import UIKit
 
 extension RNIModalIdentifiable where Self: RNIIdentifiable {
   public var modalNativeID: String {

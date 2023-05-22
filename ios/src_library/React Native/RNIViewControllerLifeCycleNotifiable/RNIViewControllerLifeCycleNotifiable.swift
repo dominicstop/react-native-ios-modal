@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/1/23.
 //
 
-import Foundation
+import UIKit
 
 public protocol RNIViewControllerLifeCycleNotifiable: AnyObject {
   

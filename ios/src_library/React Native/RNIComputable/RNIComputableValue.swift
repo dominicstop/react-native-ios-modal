@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/19/23.
 //
 
-import Foundation
+import UIKit
 
 public struct RNIComputableValue {
   
@@ -22,7 +22,6 @@ public struct RNIComputableValue {
   
   // MARK: - Internal Functions
   // --------------------------
-  
   
   func valueWithOffsets(forValue value: CGFloat) -> CGFloat {
     return self.offset?.compute(withValue: value) ?? value;
@@ -69,6 +68,18 @@ public struct RNIComputableValue {
     let clampedValue = self.valueWithClamp(forValue: rawValue);
     return self.valueWithOffsets(forValue: clampedValue);
   };
+  
+  public init(
+    mode: RNIComputableValueMode,
+    offset: RNIComputableOffset? = nil,
+    minValue: CGFloat? = nil,
+    maxValue: CGFloat? = nil
+  ) {
+    self.mode = mode;
+    self.offset = offset;
+    self.minValue = minValue;
+    self.maxValue = maxValue;
+  };
 };
 
 extension RNIComputableValue {
@@ -93,13 +104,7 @@ extension RNIComputableValue {
       Self.getDoubleValue(forDict: dict, withKey: "maxValue");
   };
   
-  public init(mode: RNIComputableValueMode){
-    self.mode = mode;
-    
-    self.offset = nil;
-    self.minValue = nil;
-    self.maxValue = nil;
-  };
+  
   
   static private func getDoubleValue(
     forDict dict: NSDictionary,

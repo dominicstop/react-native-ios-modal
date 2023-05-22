@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 6/29/20.
 //
 
-import Foundation
+import UIKit
 
 extension UIModalTransitionStyle: CaseIterable {
   public static var allCases: [UIModalTransitionStyle] {

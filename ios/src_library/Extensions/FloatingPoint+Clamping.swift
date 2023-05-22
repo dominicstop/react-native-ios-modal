@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/19/23.
 //
 
-import Foundation
+import UIKit
 
 extension FloatingPoint {
   public func clamped(min lowerBound: Self?, max upperBound: Self?) -> Self {

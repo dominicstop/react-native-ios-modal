@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/10/23.
 //
 
-import Foundation
+import UIKit
 
 public enum RNIModalErrorCode: String, RNIErrorCode {
   case modalAlreadyVisible,

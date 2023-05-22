@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 10/2/21.
 //
 
-import Foundation
+import UIKit
 import UIKit
 
 internal extension UIImage.RenderingMode {

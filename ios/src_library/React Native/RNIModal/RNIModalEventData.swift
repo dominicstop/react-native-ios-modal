@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/26/23.
 //
 
-import Foundation
+import UIKit
 
 public struct RNIModalBaseEventData: RNIDictionarySynthesizable {
   

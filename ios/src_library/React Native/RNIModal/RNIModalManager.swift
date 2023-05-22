@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/9/23.
 //
 
-import Foundation
+import UIKit
 
 public let RNIModalManagerShared = RNIModalManager.sharedInstance;
 

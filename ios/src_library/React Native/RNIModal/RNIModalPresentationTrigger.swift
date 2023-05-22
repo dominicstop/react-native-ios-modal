@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/7/23.
 //
 
-import Foundation
+import UIKit
 
 public enum RNIModalPresentationTrigger: String {
   case programmatic;

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 9/11/21.
 //
 
-import Foundation
+import UIKit
 
 /// TODO - Move to `react-native-ios-utilities`
 /// * Replace older impl. of `RNIError` with this version

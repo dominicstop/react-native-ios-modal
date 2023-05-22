@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/26/23.
 //
 
-import Foundation
+import UIKit
 
 /// Any type that conforms to this protocol will be able to create a dictionary
 /// representing the keys and values inside that type

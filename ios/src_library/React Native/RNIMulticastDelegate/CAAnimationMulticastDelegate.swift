@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/1/23.
 //
 
-import Foundation
+import UIKit
 
 
 public class CAAnimationMulticastDelegate: NSObject, CAAnimationDelegate {

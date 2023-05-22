@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/13/23.
 //
 
-import Foundation
+import UIKit
 
 /// Wraps a `UIViewController` so it can be used w/ `RNIModalManager`
 ///

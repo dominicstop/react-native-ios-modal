@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/27/23.
 //
 
-import Foundation
+import UIKit
 
 /// TODO:2023-03-20-21-29-36 - Move to `RNIUtilities`
 extension RNIUtilities {

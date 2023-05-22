@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/30/23.
 //
 
-import Foundation
+import UIKit
 
 extension UIWindow: RNIObjectMetadata, RNIIdentifiable {
   public static var synthesizedIdPrefix = "window-id-";

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/13/22.
 //
 
-import Foundation
+import UIKit
 
 ///
 /// When a class implements this protocol, it means that the class has "clean-up" related code.

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 8/15/20.
 //
 
-import Foundation
+import UIKit
 
 
 public class RNIMulticastDelegate<T: AnyObject> {

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 4/29/23.
 //
 
-import Foundation
+import UIKit
 
 public extension CGSize {
   var isZero: Bool {

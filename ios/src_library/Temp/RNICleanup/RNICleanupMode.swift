@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 9/20/22.
 //
 
-import Foundation
+import UIKit
 
 
 /// If a class conforms to `RNICleanable`, this enum determines how the cleanup routine is triggered.

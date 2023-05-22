@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 10/4/22.
 //
 
-import Foundation
+import UIKit
 
 
 internal class RNIImageRequireMaker {

@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 3/11/23.
 //
 
-import Foundation
+import UIKit
 
 
 public class RNIWeakRef<T> {
