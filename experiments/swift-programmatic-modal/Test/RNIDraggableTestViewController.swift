@@ -8,307 +8,102 @@
 
 import UIKit
 
-struct AdaptiveModalConfig {
-  enum Mode {
-    case horizontal, vertical, floating;
+
+class AdaptiveModalManager {
+  
+  let snapPoints: [RNILayout] = [
+    RNILayout(
+      horizontalAlignment: .center,
+      verticalAlignment: .bottom,
+      width: RNIComputableValue(
+        mode: .stretch
+      ),
+      height: RNIComputableValue(
+        mode: .percent(percentValue: 0.3)
+      )
+    ),
+    RNILayout(
+      horizontalAlignment: .center,
+      verticalAlignment: .bottom,
+      width: RNIComputableValue(
+        mode: .stretch
+      ),
+      height: RNIComputableValue(
+        mode: .percent(percentValue: 0.7)
+      )
+    ),
+  ];
+  
+  var currentSnapPointIndex = 0;
+  
+  var currentSnapPoint: RNILayout {
+    return self.snapPoints[self.currentSnapPointIndex];
   };
 
-  let mode: Mode;
-  
+  func getNextSnapPoint(
+    forRect currentRect: CGRect,
+    isIncreasing: Bool,
+    withTargetRect targetRect: CGRect,
+    withCurrentSize currentSize: CGSize
+  ) -> (
+    nextSnapPointIndex: Int,
+    nextSnapPoint: RNILayout,
+    computedRect: CGRect
+  ) {
+    let snapPointRects = self.snapPoints.map {
+      $0.computeRect(
+        withTargetRect: targetRect,
+        currentSize: currentSize
+      );
+    };
+    
+    let diffY = snapPointRects.map {
+      $0.origin.y - currentRect.origin.y
+    };
+    
+    let closestSnapPoint = diffY.enumerated().first { item in
+      diffY.allSatisfy {
+        abs(item.element) <= abs($0)
+      };
+    };
+    
+    let closestSnapPointIndex = closestSnapPoint!.offset;
+    let nextSnapPoint = self.snapPoints[closestSnapPointIndex];
+    
+    print("forRect", currentRect);
+    print("withTargetRect", targetRect);
+    print("snapPointRects", snapPointRects);
+    print("diffY", diffY);
+    print("closestSnapPoint", closestSnapPoint, "\n");
+    
+    return (
+      nextSnapPointIndex: closestSnapPointIndex,
+      nextSnapPoint: nextSnapPoint,
+      computedRect: snapPointRects[closestSnapPointIndex]
+    );
+  };
 };
-
 
 class RNIDraggableTestViewController : UIViewController {
   
-  let layoutConfigs: [RNILayout] = [
-    // 0 A
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      )
-    ),
-    // 1 B
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      )
-    ),
-    // 2 C
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      )
-    ),
-    // 3 D
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      )
-    ),
-    // 4 E
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.5)
-      ),
-      height: RNIComputableValue(
-        mode: .stretch
-      )
-    ),
-    // 5 F
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.5)
-      ),
-      height: RNIComputableValue(
-        mode: .stretch
-      )
-    ),
-    // 6 G
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      )
-    ),
-    // 7 H
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      )
-    ),
-    // 8 I
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.7),
-        maxValue: ScreenSize.iPhone8.size.width
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.7),
-        maxValue: ScreenSize.iPhone8.size.height
-      )
-    ),
-    // 9 J
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      ),
-      marginLeft: 20,
-      marginRight: 20
-    ),
-    // 10 K
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      ),
-      marginLeft: 20,
-      marginRight: 20
-    ),
-    // 11 L
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.5)
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.6),
-        maxValue: ScreenSize.iPhone8.size.height
-      )
-    ),
-    // 12 M
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.5)
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.6),
-        maxValue: ScreenSize.iPhone8.size.height
-      )
-    ),
-    // N
-    // O = 13
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.4)
-      ),
-      height: RNIComputableValue(
-        mode: .stretch,
-        maxValue: ScreenSize.iPhone8.size.height
-      ),
-      marginLeft: 20,
-      marginTop: 20,
-      marginBottom: 20
-    ),
-    // P
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .center,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.4)
-      ),
-      height: RNIComputableValue(
-        mode: .stretch,
-        maxValue: ScreenSize.iPhone8.size.height
-      ),
-      marginRight: 20,
-      marginTop: 20,
-      marginBottom: 20
-    ),
-    // Q = 15
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.4)
-      ),
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 15
-    ),
-    // R - 16
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.4)
-      ),
-      marginLeft: 20,
-      marginRight: 20,
-      marginTop: 20
-    ),
-    // S
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
-      ),
-      marginLeft: 20,
-      marginTop: 20
-    ),
-    // T
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.35),
-        maxValue: ScreenSize.iPhone8.size.width * 0.6
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.25),
-        maxValue: ScreenSize.iPhone8.size.height * 0.5
-      ),
-      marginRight: 20,
-      marginTop: 20
-    ),
-    // U
-    RNILayout(
-      horizontalAlignment: .left,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.width * 0.7
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.height * 0.7
-      ),
-      marginLeft: 20,
-      marginBottom: 20
-    ),
-    // V
-    RNILayout(
-      horizontalAlignment: .right,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.width * 0.7
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.height * 0.7
-      ),
-      marginRight: 20,
-      marginBottom: 20
-    )
-  ];
+  var modalManager = AdaptiveModalManager();
   
-  var layoutConfigCount = 0;
-  
-  var layoutConfigIndex: Int {
-    self.layoutConfigCount % layoutConfigs.count;
-  };
-  
-  var layoutConfig: RNILayout {
-    return self.layoutConfigs[self.layoutConfigIndex];
-  };
-  
+  private var initialGesturePoint: CGPoint = .zero;
   private var floatingViewInitialCenter: CGPoint = .zero
   
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
     
-    label.text = "\(self.layoutConfigIndex)";
+    label.text = "\(self.modalManager.currentSnapPointIndex)";
     label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5);
     label.font = .boldSystemFont(ofSize: 22);
+    
+    label.addGestureRecognizer(
+      UITapGestureRecognizer(
+        target: self,
+        action: #selector(self.onPressFloatingViewLabel(_:))
+      )
+    );
     
     return label;
   }();
@@ -322,13 +117,6 @@ class RNIDraggableTestViewController : UIViewController {
       brightness: 100/100,
       alpha: 1.0
     );
-    
-    // view.addGestureRecognizer(
-    //   UITapGestureRecognizer(
-    //     target: self,
-    //     action: #selector(self.onPressFloatingView(_:))
-    //   )
-    // );
     
     view.addGestureRecognizer(
       UIPanGestureRecognizer(
@@ -350,49 +138,49 @@ class RNIDraggableTestViewController : UIViewController {
     return view;
   }();
 
-  override func loadView() {
-    let view = UIView()
-    view.backgroundColor = .white;
+  override func viewDidLoad() {
+    self.view.backgroundColor = .white;
     
     let floatingView = self.floatingView;
-    view.addSubview(floatingView);
+    self.view.addSubview(floatingView);
     
-    self.view = view;
-    self.updateFloatingView();
-  };
-  
-  func updateFloatingView(isAnimated: Bool = false){
-    let layoutConfig = self.layoutConfig;
+    let initialSnapPoint = self.modalManager.currentSnapPoint;
     
-    let computedRect = layoutConfig.computeRect(
+    let computedRect = initialSnapPoint.computeRect(
       withTargetRect: self.view.frame,
       currentSize: CGSize(width: 300, height: 300)
     );
     
+    self.floatingView.frame = computedRect;
+    self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
+  };
+  
+  func updateFloatingView(
+    nextFrame: CGRect,
+    isAnimated: Bool = false
+  ) {
+
     let animationBlock = {
-      self.floatingView.frame = computedRect;
-      self.floatingViewLabel.text = "\(self.layoutConfigIndex)";
+      self.floatingView.frame = nextFrame;
+      self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
     };
-    
+  
     if isAnimated {
       let animator = UIViewPropertyAnimator(
         duration:0.2,
         curve: .easeIn,
         animations: animationBlock
       );
-      
+  
       animator.startAnimation();
-      
+  
     } else {
       animationBlock();
     };
   };
+
   
-  func moveToClosetSnapPoint(){
-  
-  };
-  
-  @objc func onPressFloatingView(_ sender: UITapGestureRecognizer){
+  @objc func onPressFloatingViewLabel(_ sender: UITapGestureRecognizer){
     // self.layoutConfigCount += 1;
     // self.updateFloatingView(isAnimated: true);
   };
@@ -405,8 +193,25 @@ class RNIDraggableTestViewController : UIViewController {
     switch sender.state {
       case .began:
         self.floatingViewInitialCenter = floatingView.center;
+        self.initialGesturePoint = gesturePoint;
     
       case .cancelled, .ended:
+        let gesturePointDiff = self.initialGesturePoint.y - gesturePoint.y;
+        let isIncreasing = gesturePointDiff >= 0;
+      
+        let currentRect = self.floatingView.frame;
+        
+        let nextSnapPoint = self.modalManager.getNextSnapPoint(
+          forRect: currentRect,
+          isIncreasing: isIncreasing,
+          withTargetRect: self.view.frame,
+          withCurrentSize: .zero
+        );
+        
+        self.updateFloatingView(
+          nextFrame: nextSnapPoint.computedRect,
+          isAnimated: true
+        );
         break;
         
       case .changed:

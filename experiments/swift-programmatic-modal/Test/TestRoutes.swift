@@ -8,8 +8,11 @@
 import UIKit
 
 enum TestRoutes {
+  static let rootRouteKey: Self = .RNIDraggableTest;
+
   case RNILayoutTest;
   case RNIDraggableTest;
+  case BlurEffectTest;
   
   var viewController: UIViewController {
     switch self {
@@ -18,6 +21,9 @@ enum TestRoutes {
         
       case .RNIDraggableTest:
         return RNIDraggableTestViewController();
+        
+      case .BlurEffectTest:
+        return BlurEffectTestViewController();
     };
   };
 };

@@ -75,6 +75,12 @@
 		88D018792A1B3030004664D2 /* RNIComputableValueMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018122A1B302F004664D2 /* RNIComputableValueMode.swift */; };
 		88D0187A2A1B3030004664D2 /* RNIComputableOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018132A1B302F004664D2 /* RNIComputableOffset.swift */; };
 		88D0187C2A1B32E6004664D2 /* TestRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0187B2A1B32E6004664D2 /* TestRoutes.swift */; };
+		88D0187E2A1B6CB3004664D2 /* BlurEffectTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0187D2A1B6CB3004664D2 /* BlurEffectTestViewController.swift */; };
+		88D018822A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018812A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift */; };
+		88D018862A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018852A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift */; };
+		88D018882A1D0A36004664D2 /* AdaptiveModalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */; };
+		88D0188A2A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018892A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift */; };
+		88D0188C2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -150,6 +156,12 @@
 		88D018122A1B302F004664D2 /* RNIComputableValueMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIComputableValueMode.swift; sourceTree = "<group>"; };
 		88D018132A1B302F004664D2 /* RNIComputableOffset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIComputableOffset.swift; sourceTree = "<group>"; };
 		88D0187B2A1B32E6004664D2 /* TestRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRoutes.swift; sourceTree = "<group>"; };
+		88D0187D2A1B6CB3004664D2 /* BlurEffectTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectTestViewController.swift; sourceTree = "<group>"; };
+		88D018812A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalAnimationConfig.swift; sourceTree = "<group>"; };
+		88D018852A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalSnapPoint.swift; sourceTree = "<group>"; };
+		88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalConfig.swift; sourceTree = "<group>"; };
+		88D018892A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptiveModalSnapPointPreset.swift; sourceTree = "<group>"; };
+		88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalEntranceConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +187,7 @@
 		88B7D0E229C593F400490628 = {
 			isa = PBXGroup;
 			children = (
+				88D018802A1D06EA004664D2 /* AdaptiveModal */,
 				88D0178D2A1B302F004664D2 /* src_library */,
 				88D0168B2A173093004664D2 /* Test */,
 				88203DBF2A122AA10088C8E2 /* RNIDynamicModal */,
@@ -209,6 +222,7 @@
 				88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */,
 				88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */,
 				88D0187B2A1B32E6004664D2 /* TestRoutes.swift */,
+				88D0187D2A1B6CB3004664D2 /* BlurEffectTestViewController.swift */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -474,6 +488,18 @@
 			path = RNIUtilities;
 			sourceTree = "<group>";
 		};
+		88D018802A1D06EA004664D2 /* AdaptiveModal */ = {
+			isa = PBXGroup;
+			children = (
+				88D018812A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift */,
+				88D018892A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift */,
+				88D018852A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift */,
+				88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */,
+				88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */,
+			);
+			path = AdaptiveModal;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -550,6 +576,7 @@
 				88D0169E2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift in Sources */,
 				88D018452A1B3030004664D2 /* RNIDictionarySynthesizable.swift in Sources */,
 				88D018232A1B3030004664D2 /* RNINavigationEventsReportingViewController.swift in Sources */,
+				88D018822A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift in Sources */,
 				88D018342A1B3030004664D2 /* UIModalPresentationStyle+Init.swift in Sources */,
 				88D0186B2A1B3030004664D2 /* RNIModalPresentationNotifiable.swift in Sources */,
 				88D018552A1B3030004664D2 /* RNIWeakRef.swift in Sources */,
@@ -563,6 +590,7 @@
 				88D018352A1B3030004664D2 /* UIBlurEffect+Init.swift in Sources */,
 				88D0186C2A1B3030004664D2 /* RNIModal.swift in Sources */,
 				88D018682A1B3030004664D2 /* RNIModalPresentationTrigger.swift in Sources */,
+				88D0188A2A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift in Sources */,
 				88D018282A1B3030004664D2 /* RNICleanable.swift in Sources */,
 				88D018462A1B3030004664D2 /* RNIDictionaryRepresentable.swift in Sources */,
 				88D018712A1B3030004664D2 /* RNIModalPresentationState.swift in Sources */,
@@ -573,6 +601,7 @@
 				88D0184A2A1B3030004664D2 /* RNILayout.swift in Sources */,
 				88D018472A1B3030004664D2 /* RNIDictionarySynthesizable+Default.swift in Sources */,
 				88D0184B2A1B3030004664D2 /* RNIAnimatorSize.swift in Sources */,
+				88D0188C2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift in Sources */,
 				88D0183B2A1B3030004664D2 /* Collection+Helpers.swift in Sources */,
 				88D018772A1B3030004664D2 /* RNIComputableValue.swift in Sources */,
 				88D018292A1B3030004664D2 /* RNICleanupMode.swift in Sources */,
@@ -587,10 +616,12 @@
 				88D018222A1B3030004664D2 /* UIImage+Init.swift in Sources */,
 				88D018702A1B3030004664D2 /* RNIModalFlags.swift in Sources */,
 				88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */,
+				88D0187E2A1B6CB3004664D2 /* BlurEffectTestViewController.swift in Sources */,
 				88D018272A1B3030004664D2 /* RNIInternalCleanupMode.swift in Sources */,
 				88D018782A1B3030004664D2 /* RNIComputableSize.swift in Sources */,
 				88D018732A1B3030004664D2 /* RNIModalCustomSheetDetent.swift in Sources */,
 				88D018252A1B3030004664D2 /* UIViewController+Helpers.swift in Sources */,
+				88D018882A1D0A36004664D2 /* AdaptiveModalConfig.swift in Sources */,
 				88D018432A1B3030004664D2 /* UIGestureRecognizer+Helpers.swift in Sources */,
 				88D0185B2A1B3030004664D2 /* RNIIdentifiable+Default.swift in Sources */,
 				88D018762A1B3030004664D2 /* RNIComputableSizeMode.swift in Sources */,
@@ -601,6 +632,7 @@
 				88D018792A1B3030004664D2 /* RNIComputableValueMode.swift in Sources */,
 				88D018212A1B3030004664D2 /* CAGradientLayerType+Init.swift in Sources */,
 				88D0183C2A1B3030004664D2 /* UIWindow+Helpers.swift in Sources */,
+				88D018862A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift in Sources */,
 				88D018412A1B3030004664D2 /* KeyWindow+Helpers.swift in Sources */,
 				88D018672A1B3030004664D2 /* RNIModalEventData.swift in Sources */,
 				88D0183D2A1B3030004664D2 /* UIView+Helpers.swift in Sources */,

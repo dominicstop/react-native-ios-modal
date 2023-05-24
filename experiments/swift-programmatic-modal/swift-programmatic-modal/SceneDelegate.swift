@@ -101,7 +101,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let window = UIWindow(windowScene: windowScene);
     self.window = window;
     
-    let rootVC = TestRoutes.RNIDraggableTest.viewController;
+    let rootVC = TestRoutes.rootRouteKey.viewController;
     window.rootViewController = rootVC;
     window.makeKeyAndVisible();
     
