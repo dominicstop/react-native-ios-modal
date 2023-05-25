@@ -157,8 +157,7 @@ class RNIDraggableTestViewController : UIViewController {
         
       case .changed:
         let computedRect = self.modalManager.interpolateModalRect(
-          forGesturePointInTargetRect: gesturePoint,
-          gesturePointRelativeToModal: relativeGesturePoint
+          forGesturePoint: gesturePoint
         );
 
         floatingView.frame = computedRect;

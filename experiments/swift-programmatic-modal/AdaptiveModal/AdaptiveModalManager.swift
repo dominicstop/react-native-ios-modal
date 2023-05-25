@@ -125,6 +125,11 @@ class AdaptiveModalManager {
   
   var currentSnapPointIndex = 1;
   
+  /// Defines which axis of the gesture point to use to drive the interpolation
+  /// of the modal snap points
+  ///
+  var inputAxisKey: KeyPath<CGPoint, CGFloat> = \.y;
+  
   // MARK: - Computed Properties
   // ---------------------------
   
@@ -205,29 +210,32 @@ class AdaptiveModalManager {
   };
   
   func interpolateModalRect(
-    forGesturePointInTargetRect gesturePointInTargetRect: CGPoint,
-    gesturePointRelativeToModal: CGPoint
+    forGesturePoint gesturePoint: CGPoint
   ) -> CGRect {
+  
     guard let modalView = self.modalView else { return .zero };
     
     let targetRect = self.targetRectProvider();
     let modalRect = modalView.frame;
     
+    let gestureCoord = gesturePoint[keyPath: self.inputAxisKey];
     let snapRects = self.computedSnapRects.reversed();
     
-    let gestureOffset = self.gestureOffset ??
-      gesturePointInTargetRect.y - modalRect.origin.y;
+    let gestureOffset = self.gestureOffset ?? {
+      let modalCoord = modalRect.origin[keyPath: self.inputAxisKey];
+      return gestureCoord - modalCoord;
+    }();
+      
     
     if self.gestureOffset == nil {
       self.gestureOffset = gestureOffset;
     };
     
-    let gestureInput = gesturePointInTargetRect.y - gestureOffset;
+    let gestureInput = gestureCoord - gestureOffset;
     let rangeInputGesture = snapRects.map { $0.minY };
     
     print(
-        "gesturePoint: \(gesturePointInTargetRect)"
-      + "\n" + " - gesturePointRelativeToModal: \(gesturePointRelativeToModal)"
+        "gesturePoint: \(gesturePoint)"
       + "\n" + " - targetRect: \(targetRect)"
       + "\n" + " - gestureInput: \(gestureInput)"
       + "\n" + " - offset: \(gestureOffset)"
