@@ -9,84 +9,19 @@
 import UIKit
 
 
-class AdaptiveModalManager {
-  
-  let snapPoints: [RNILayout] = [
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      )
-    ),
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.7)
-      )
-    ),
-  ];
-  
-  var currentSnapPointIndex = 0;
-  
-  var currentSnapPoint: RNILayout {
-    return self.snapPoints[self.currentSnapPointIndex];
-  };
 
-  func getNextSnapPoint(
-    forRect currentRect: CGRect,
-    isIncreasing: Bool,
-    withTargetRect targetRect: CGRect,
-    withCurrentSize currentSize: CGSize
-  ) -> (
-    nextSnapPointIndex: Int,
-    nextSnapPoint: RNILayout,
-    computedRect: CGRect
-  ) {
-    let snapPointRects = self.snapPoints.map {
-      $0.computeRect(
-        withTargetRect: targetRect,
-        currentSize: currentSize
-      );
-    };
-    
-    let diffY = snapPointRects.map {
-      $0.origin.y - currentRect.origin.y
-    };
-    
-    let closestSnapPoint = diffY.enumerated().first { item in
-      diffY.allSatisfy {
-        abs(item.element) <= abs($0)
-      };
-    };
-    
-    let closestSnapPointIndex = closestSnapPoint!.offset;
-    let nextSnapPoint = self.snapPoints[closestSnapPointIndex];
-    
-    print("forRect", currentRect);
-    print("withTargetRect", targetRect);
-    print("snapPointRects", snapPointRects);
-    print("diffY", diffY);
-    print("closestSnapPoint", closestSnapPoint, "\n");
-    
-    return (
-      nextSnapPointIndex: closestSnapPointIndex,
-      nextSnapPoint: nextSnapPoint,
-      computedRect: snapPointRects[closestSnapPointIndex]
-    );
-  };
-};
 
 class RNIDraggableTestViewController : UIViewController {
   
-  var modalManager = AdaptiveModalManager();
+  lazy var modalManager = AdaptiveModalManager(
+    targetRectProvider: { [unowned self] in
+      self.view.frame;
+    },
+    currentSizeProvider: {
+      .zero
+    },
+    modalView: self.floatingView
+  );
   
   private var initialGesturePoint: CGPoint = .zero;
   private var floatingViewInitialCenter: CGPoint = .zero
@@ -94,7 +29,7 @@ class RNIDraggableTestViewController : UIViewController {
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
     
-    label.text = "\(self.modalManager.currentSnapPointIndex)";
+    // label.text = "\(self.modalManager.currentSnapPointIndex)";
     label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5);
     label.font = .boldSystemFont(ofSize: 22);
     
@@ -188,7 +123,15 @@ class RNIDraggableTestViewController : UIViewController {
   @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
     let floatingView = self.floatingView;
     
-    let gesturePoint = sender.translation(in: self.view);
+    let gesturePoint = sender.location(in: self.view);
+    let relativeGesturePoint = sender.translation(in: self.view);
+    
+    print(
+        "onDragPanGestureView"
+      + "\n" + " - sender.state: \(sender.state)"
+      + "\n" + " - gesturePoint: \(gesturePoint)"
+      + "\n"
+    );
     
     switch sender.state {
       case .began:
@@ -201,26 +144,22 @@ class RNIDraggableTestViewController : UIViewController {
       
         let currentRect = self.floatingView.frame;
         
-        let nextSnapPoint = self.modalManager.getNextSnapPoint(
-          forRect: currentRect,
-          isIncreasing: isIncreasing,
-          withTargetRect: self.view.frame,
-          withCurrentSize: .zero
-        );
-        
-        self.updateFloatingView(
-          nextFrame: nextSnapPoint.computedRect,
-          isAnimated: true
-        );
+        // let nextSnapPoint =
+        //   self.modalManager.getNextSnapPoint(forRect: currentRect);
+        //
+        // self.updateFloatingView(
+        //   nextFrame: nextSnapPoint.computedRect,
+        //   isAnimated: true
+        // );
         break;
         
       case .changed:
-        let newCenter = CGPoint(
-          x: floatingViewInitialCenter.x + gesturePoint.x,
-          y: floatingViewInitialCenter.y + gesturePoint.y
+        let computedRect = self.modalManager.computeFrame(
+          forGesturePointInTargetRect: gesturePoint,
+          gesturePointRelativeToModal: relativeGesturePoint
         );
-      
-        floatingView.center = newCenter;
+
+        floatingView.frame = computedRect;
 
       default:
         break;

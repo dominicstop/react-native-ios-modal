@@ -81,6 +81,7 @@
 		88D018882A1D0A36004664D2 /* AdaptiveModalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */; };
 		88D0188A2A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D018892A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift */; };
 		88D0188C2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */; };
+		88D0188E2A1DCA61004664D2 /* AdaptiveModalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0188D2A1DCA61004664D2 /* AdaptiveModalManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -162,6 +163,7 @@
 		88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalConfig.swift; sourceTree = "<group>"; };
 		88D018892A1DAEE6004664D2 /* AdaptiveModalSnapPointPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdaptiveModalSnapPointPreset.swift; sourceTree = "<group>"; };
 		88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalEntranceConfig.swift; sourceTree = "<group>"; };
+		88D0188D2A1DCA61004664D2 /* AdaptiveModalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +498,7 @@
 				88D018852A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift */,
 				88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */,
 				88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */,
+				88D0188D2A1DCA61004664D2 /* AdaptiveModalManager.swift */,
 			);
 			path = AdaptiveModal;
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				88D0184B2A1B3030004664D2 /* RNIAnimatorSize.swift in Sources */,
 				88D0188C2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift in Sources */,
 				88D0183B2A1B3030004664D2 /* Collection+Helpers.swift in Sources */,
+				88D0188E2A1DCA61004664D2 /* AdaptiveModalManager.swift in Sources */,
 				88D018772A1B3030004664D2 /* RNIComputableValue.swift in Sources */,
 				88D018292A1B3030004664D2 /* RNICleanupMode.swift in Sources */,
 				88D018532A1B3030004664D2 /* RNIMulticastDelegate.swift in Sources */,

@@ -14,7 +14,7 @@ extension Collection {
   };
 
   public func isOutOfBounds(forIndex index: Index) -> Bool {
-    return index < self.indices.startIndex || index > self.indices.endIndex;
+    return index < self.indices.startIndex || index >= self.indices.endIndex;
   };
   
   /// Returns the element at the specified index if it is within bounds,
