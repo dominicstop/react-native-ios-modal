@@ -229,14 +229,14 @@ class AdaptiveModalManager {
       targetCoordMax: targetRect.maxY
     );
     
-    let gestureInput = gestureInputInverted + offset;
+    let gestureInput = gesturePointInTargetRect.y + offset;
     
     let rangeInputGesture: [CGFloat] = {
       var range: [CGFloat] = [];
       
       // range.append(targetRect.minY);
       range += snapRects.reversed().map { $0.minY };
-      range.append(targetRect.maxY);
+      // range.append(targetRect.maxY);
       
       return range;
     }();
@@ -258,8 +258,8 @@ class AdaptiveModalManager {
         var range: [CGFloat] = [];
         
         // range.append(0);
-        range += snapRects.map { $0.height };
-        range.append(targetRect.height);
+        range += snapRects.reversed().map { $0.height };
+        // range.append(targetRect.height);
         
         print(" - nextHeight rangeOutput: \(range)");
             
@@ -277,7 +277,7 @@ class AdaptiveModalManager {
         
         // range.append(targetRect.width);
         range += snapRects.map { $0.width };
-        range.append(targetRect.width);
+        // range.append(targetRect.width);
         
         print(" - nextWidth rangeOutput: \(range)");
         
@@ -295,7 +295,7 @@ class AdaptiveModalManager {
         
         // range.append(targetRect.minX);
         range += snapRects.map { $0.minX };
-        range.append(targetRect.minX);
+        // range.append(targetRect.minX);
         
         print(" - nextX rangeOutput: \(range)");
         
@@ -313,7 +313,7 @@ class AdaptiveModalManager {
         
         // range.append(targetRect.minY);
         range += snapRects.reversed().map { $0.minY };
-        range.append(targetRect.maxY);
+        // range.append(targetRect.maxY);
         
         print(" - nextY rangeOutput: \(range)");
         
@@ -321,7 +321,7 @@ class AdaptiveModalManager {
       }()
     )!;
     
-    let nextY = invertCoord(coord: _nextY, targetCoordMax: targetRect.maxY)
+    let nextY = _nextY;// invertCoord(coord: _nextY, targetCoordMax: targetRect.maxY)
     
     print(" - nextY: \(nextY)");
     
