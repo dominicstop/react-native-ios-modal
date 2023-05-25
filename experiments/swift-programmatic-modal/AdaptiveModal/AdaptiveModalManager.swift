@@ -173,18 +173,22 @@ class AdaptiveModalManager {
     nextSnapPoint: RNILayout,
     computedRect: CGRect
   ) {
-    let targetRect = self.targetRectProvider();
-    let currentSize = self.currentSizeProvider();
+    return self.getClosestSnapPoint(
+      forGestureCoord: currentRect.origin[keyPath: self.inputAxisKey]
+    );
+  };
   
-    let snapPointRects = self.snapPoints.map {
-      $0.computeRect(
-        withTargetRect: targetRect,
-        currentSize: currentSize
-      );
-    };
+  func getClosestSnapPoint(
+    forGestureCoord: CGFloat
+  ) -> (
+    nextSnapPointIndex: Int,
+    nextSnapPoint: RNILayout,
+    computedRect: CGRect
+  ) {
+    let snapRects = self.computedSnapRects;
     
-    let diffY = snapPointRects.map {
-      $0.origin.y - currentRect.origin.y
+    let diffY = snapRects.map {
+      $0.origin[keyPath: self.inputAxisKey] - forGestureCoord;
     };
     
     let closestSnapPoint = diffY.enumerated().first { item in
@@ -193,19 +197,10 @@ class AdaptiveModalManager {
       };
     };
     
-    let closestSnapPointIndex = closestSnapPoint!.offset;
-    let nextSnapPoint = self.snapPoints[closestSnapPointIndex];
-    
-    print("forRect", currentRect);
-    print("withTargetRect", targetRect);
-    print("snapPointRects", snapPointRects);
-    print("diffY", diffY);
-    print("closestSnapPoint", closestSnapPoint, "\n");
-    
     return (
-      nextSnapPointIndex: closestSnapPointIndex,
-      nextSnapPoint: nextSnapPoint,
-      computedRect: snapPointRects[closestSnapPointIndex]
+      nextSnapPointIndex: closestSnapPoint!.offset,
+      nextSnapPoint: self.snapPoints[closestSnapPoint!.offset],
+      computedRect: snapRects[closestSnapPoint!.offset]
     );
   };
   
@@ -281,147 +276,6 @@ class AdaptiveModalManager {
       width: nextWidth!,
       height: nextHeight!
     );
-    
-    print(
-               " - modalRect: \(modalRect)"
-      + "\n" + " - nextRect: \(nextRect)"
-      + "\n"
-    );
-    
-    return nextRect;
-  };
-  
-  
-  func _computeFrame(
-    forGesturePointInTargetRect gesturePointInTargetRect: CGPoint,
-    gesturePointRelativeToModal: CGPoint
-  ) -> CGRect {
-    guard let modalView = self.modalView else { return .zero };
-    
-    let targetRect  = self.targetRectProvider();
-    // let currentSize = self.currentSizeProvider();
-    
-    let modalRect = modalView.frame;
-    let offset = 0.0;
-    
-    let snapRects = self.computedSnapRects;
-    
-    func invertCoord(coord: CGFloat, targetCoordMax: CGFloat) -> CGFloat {
-      let delta = targetCoordMax - coord;
-      
-      return delta < 0
-        ? abs(delta) + targetCoordMax
-        : delta;
-    };
-    
-    let gestureInputInverted = invertCoord(
-      coord: gesturePointInTargetRect.y,
-      targetCoordMax: targetRect.maxY
-    );
-    
-    let gestureInput = gesturePointInTargetRect.y + offset;
-    
-    let rangeInputGesture: [CGFloat] = {
-      var range: [CGFloat] = [];
-      
-      // range.append(targetRect.minY);
-      range += snapRects.reversed().map { $0.minY };
-      // range.append(targetRect.maxY);
-      
-      return range;
-    }();
-    
-    print(
-        "gesturePoint: \(gesturePointInTargetRect)"
-      + "\n" + " - gesturePointRelativeToModal: \(gesturePointRelativeToModal)"
-      + "\n" + " - targetRect: \(targetRect)"
-      + "\n" + " - gestureInput: \(gestureInput)"
-      + "\n" + " - offset: \(offset)"
-      + "\n" + " - snapRects: \(snapRects)"
-      + "\n" + " - rangeInputGesture: \(rangeInputGesture)"
-    );
-    
-    let nextHeight = Self.interpolate(
-      inputValue: gestureInput,
-      rangeInput: rangeInputGesture,
-      rangeOutput: {
-        var range: [CGFloat] = [];
-        
-        // range.append(0);
-        range += snapRects.reversed().map { $0.height };
-        // range.append(targetRect.height);
-        
-        print(" - nextHeight rangeOutput: \(range)");
-            
-        return range;
-      }()
-    );
-    
-    print(" - nextHeight: \(nextHeight!)");
-    
-    let nextWidth = Self.interpolate(
-      inputValue: gestureInput,
-      rangeInput: rangeInputGesture,
-      rangeOutput: {
-        var range: [CGFloat] = [];
-        
-        // range.append(targetRect.width);
-        range += snapRects.map { $0.width };
-        // range.append(targetRect.width);
-        
-        print(" - nextWidth rangeOutput: \(range)");
-        
-        return range;
-      }()
-    );
-    
-    print(" - nextWidth: \(nextWidth!)");
-    
-    let nextX = Self.interpolate(
-      inputValue: gestureInput,
-      rangeInput: rangeInputGesture,
-      rangeOutput: {
-        var range: [CGFloat] = [];
-        
-        // range.append(targetRect.minX);
-        range += snapRects.map { $0.minX };
-        // range.append(targetRect.minX);
-        
-        print(" - nextX rangeOutput: \(range)");
-        
-        return range;
-      }()
-    );
-    
-    print(" - nextX: \(nextX!)");
-    
-    let _nextY = Self.interpolate(
-      inputValue: gestureInput,
-      rangeInput: rangeInputGesture,
-      rangeOutput: {
-        var range: [CGFloat] = [];
-        
-        // range.append(targetRect.minY);
-        range += snapRects.reversed().map { $0.minY };
-        // range.append(targetRect.maxY);
-        
-        print(" - nextY rangeOutput: \(range)");
-        
-        return range;
-      }()
-    )!;
-    
-    let nextY = _nextY;// invertCoord(coord: _nextY, targetCoordMax: targetRect.maxY)
-    
-    print(" - nextY: \(nextY)");
-    
-    let nextRect = CGRect(
-      x: nextX!,
-      y: nextY,
-      width: nextWidth!,
-      height: nextHeight!
-    );
-    
     
     print(
                " - modalRect: \(modalRect)"

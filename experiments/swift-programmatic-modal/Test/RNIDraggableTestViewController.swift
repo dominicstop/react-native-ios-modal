@@ -140,19 +140,16 @@ class RNIDraggableTestViewController : UIViewController {
     
       case .cancelled, .ended:
         self.modalManager.gestureOffset = nil;
-        
-        let gesturePointDiff = self.initialGesturePoint.y - gesturePoint.y;
-        let isIncreasing = gesturePointDiff >= 0;
-      
+
         let currentRect = self.floatingView.frame;
         
-        // let nextSnapPoint =
-        //   self.modalManager.getNextSnapPoint(forRect: currentRect);
-        //
-        // self.updateFloatingView(
-        //   nextFrame: nextSnapPoint.computedRect,
-        //   isAnimated: true
-        // );
+        let nextSnapPoint =
+          self.modalManager.getNextSnapPoint(forRect: currentRect);
+        
+        self.updateFloatingView(
+          nextFrame: nextSnapPoint.computedRect,
+          isAnimated: true
+        );
         break;
         
       case .changed:
