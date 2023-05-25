@@ -139,6 +139,8 @@ class RNIDraggableTestViewController : UIViewController {
         self.initialGesturePoint = gesturePoint;
     
       case .cancelled, .ended:
+        self.modalManager.gestureOffset = nil;
+        
         let gesturePointDiff = self.initialGesturePoint.y - gesturePoint.y;
         let isIncreasing = gesturePointDiff >= 0;
       
@@ -154,7 +156,7 @@ class RNIDraggableTestViewController : UIViewController {
         break;
         
       case .changed:
-        let computedRect = self.modalManager.computeFrame(
+        let computedRect = self.modalManager.interpolateModalRect(
           forGesturePointInTargetRect: gesturePoint,
           gesturePointRelativeToModal: relativeGesturePoint
         );
