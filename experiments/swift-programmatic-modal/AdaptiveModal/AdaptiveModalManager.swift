@@ -70,8 +70,11 @@ class AdaptiveModalManager {
   var targetRectProvider: () -> CGRect;
   var currentSizeProvider: () -> CGSize;
   
-  var gestureOffset: CGFloat?;
+  weak var targetView: UIView?;
   weak var modalView: UIView?;
+  
+  var gestureOffset: CGFloat?;
+  var gestureVelocity: CGFloat?;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -107,18 +110,79 @@ class AdaptiveModalManager {
   // ------------
   
   init(
+    modalView: UIView,
+    targetView: UIView,
     targetRectProvider: @escaping () -> CGRect,
-    currentSizeProvider: @escaping () -> CGSize,
-    modalView: UIView
+    currentSizeProvider: @escaping () -> CGSize
   ){
     self.targetRectProvider = targetRectProvider;
     self.currentSizeProvider = currentSizeProvider;
+    
     self.modalView = modalView;
+    self.targetView = targetView;
   };
   
   // MARK: - Functions
   // -----------------
+  
+  func setFrameForModal(){
+    guard let modalView = self.modalView else { return };
+    
+    let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
+    
+    modalView.frame = currentSnapPoint.computeRect(
+      withTargetRect: self.targetRectProvider(),
+      currentSize: self.currentSizeProvider()
+    );
+  };
+  
+  func animateModal(toRect nextRect: CGRect) {
+    guard let modalView = self.modalView else { return };
+    
+    let animator = UIViewPropertyAnimator(
+      duration: 0.2,
+      curve: .easeIn
+    );
+    
+    animator.addAnimations {
+      modalView.frame = nextRect;
+    };
+  
+    animator.startAnimation();
+  };
+  
+  func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
+    guard let modalView = self.modalView else { return };
+    
+    let gesturePoint = gesture.location(in: self.targetView);
+    
+    switch gesture.state {
+      case .began:
+        break;
+    
+      case .cancelled, .ended:
+        self.gestureOffset = nil;
 
+        let nextSnapPoint = self.getNextSnapPoint(
+          forRect: modalView.frame
+        );
+        
+        self.animateModal(toRect: nextSnapPoint.computedRect);
+        self.currentSnapPointIndex = nextSnapPoint.nextSnapPointIndex;
+        break;
+        
+      case .changed:
+        let computedRect = self.interpolateModalRect(
+          forGesturePoint: gesturePoint
+        );
+
+        modalView.frame = computedRect;
+
+      default:
+        break;
+    };
+  };
+  
   func getNextSnapPoint(
     forRect currentRect: CGRect
   ) -> (

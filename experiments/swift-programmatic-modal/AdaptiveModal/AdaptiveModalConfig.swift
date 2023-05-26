@@ -17,4 +17,14 @@ struct AdaptiveModalConfig {
   let snapDirection: Direction;
   
   // let entranceConfig: AdaptiveModalEntranceConfig;
+  let snapSwipeVelocityThreshold: CGFloat = 0;
+  // let snappingAnimationConfig enum
+  
+  init(
+    snapPoints: [AdaptiveModalSnapPointConfig],
+    snapDirection: Direction
+  ) {
+    self.snapPoints = snapPoints
+    self.snapDirection = snapDirection
+  }
 };

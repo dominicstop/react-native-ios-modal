@@ -14,13 +14,14 @@ import UIKit
 class RNIDraggableTestViewController : UIViewController {
   
   lazy var modalManager = AdaptiveModalManager(
+    modalView: self.floatingView,
+    targetView: self.view,
     targetRectProvider: { [unowned self] in
       self.view.frame;
     },
     currentSizeProvider: {
       .zero
-    },
-    modalView: self.floatingView
+    }
   );
   
   private var initialGesturePoint: CGPoint = .zero;
@@ -79,42 +80,10 @@ class RNIDraggableTestViewController : UIViewController {
     let floatingView = self.floatingView;
     self.view.addSubview(floatingView);
     
-    let initialSnapPointConfig = self.modalManager.currentSnapPointConfig;
-    let initialSnapPoint = initialSnapPointConfig.snapPoint;
-    
-    let computedRect = initialSnapPoint.computeRect(
-      withTargetRect: self.view.frame,
-      currentSize: CGSize(width: 300, height: 300)
-    );
-    
-    self.floatingView.frame = computedRect;
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
+    
+    self.modalManager.setFrameForModal();
   };
-  
-  func updateFloatingView(
-    nextFrame: CGRect,
-    isAnimated: Bool = false
-  ) {
-
-    let animationBlock = {
-      self.floatingView.frame = nextFrame;
-      self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
-    };
-  
-    if isAnimated {
-      let animator = UIViewPropertyAnimator(
-        duration:0.2,
-        curve: .easeIn,
-        animations: animationBlock
-      );
-  
-      animator.startAnimation();
-  
-    } else {
-      animationBlock();
-    };
-  };
-
   
   @objc func onPressFloatingViewLabel(_ sender: UITapGestureRecognizer){
     // self.layoutConfigCount += 1;
@@ -122,46 +91,6 @@ class RNIDraggableTestViewController : UIViewController {
   };
   
   @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
-    let floatingView = self.floatingView;
-    
-    let gesturePoint = sender.location(in: self.view);
-    let relativeGesturePoint = sender.translation(in: self.view);
-    
-    print(
-        "onDragPanGestureView"
-      + "\n" + " - sender.state: \(sender.state)"
-      + "\n" + " - gesturePoint: \(gesturePoint)"
-      + "\n"
-    );
-    
-    switch sender.state {
-      case .began:
-        self.floatingViewInitialCenter = floatingView.center;
-        self.initialGesturePoint = gesturePoint;
-    
-      case .cancelled, .ended:
-        self.modalManager.gestureOffset = nil;
-
-        let currentRect = self.floatingView.frame;
-        
-        let nextSnapPoint =
-          self.modalManager.getNextSnapPoint(forRect: currentRect);
-        
-        self.updateFloatingView(
-          nextFrame: nextSnapPoint.computedRect,
-          isAnimated: true
-        );
-        break;
-        
-      case .changed:
-        let computedRect = self.modalManager.interpolateModalRect(
-          forGesturePoint: gesturePoint
-        );
-
-        floatingView.frame = computedRect;
-
-      default:
-        break;
-    };
+    self.modalManager.notifyOnDragPanGesture(sender);
   };
 };
