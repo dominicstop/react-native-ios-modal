@@ -7,148 +7,101 @@
 
 import UIKit
 
-
+enum AdaptiveModalConfigTestPresets {
+  case test01;
+  
+  var config: AdaptiveModalConfig {
+    switch self {
+      case .test01: return AdaptiveModalConfig(
+        snapPoints:  [
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+                horizontalAlignment: .center,
+                verticalAlignment: .bottom,
+                width: RNIComputableValue(
+                  mode: .stretch
+                ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.1)
+              )
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.3)
+              )
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.7)
+              )
+            )
+          ),
+        ],
+        snapDirection: .vertical
+      );
+    };
+  };
+};
 
 class AdaptiveModalManager {
 
- static func interpolate(
-  inputValue : CGFloat,
-  rangeInput : [CGFloat],
-  rangeOutput: [CGFloat]
-) -> CGFloat? {
-  guard rangeInput.count == rangeOutput.count,
-        rangeInput.count >= 2
-  else { return nil };
+  // MARK: -  Properties
+  // -------------------
   
-  // A - Extrapolate Left
-  if inputValue < rangeInput.first! {
-     
-    let rangeInputStart  = rangeInput.first!;
-    let rangeOutputStart = rangeOutput.first!;
-     
-    let delta1 = rangeInputStart - inputValue;
-    let percent = delta1 / rangeInputStart;
+  let modalConfig: AdaptiveModalConfig =
+    AdaptiveModalConfigTestPresets.test01.config;
     
-    // extrapolated "range output end"
-    let rangeOutputEnd = rangeOutputStart - (rangeOutput[1] - rangeOutputStart);
-    
-    let interpolatedValue = RNIAnimator.EasingFunctions.lerp(
-      valueStart: rangeOutputEnd,
-      valueEnd: rangeOutputStart,
-      percent: percent
-    );
-    
-    let delta2 = interpolatedValue - rangeOutputEnd;
-    return rangeOutputStart - delta2;
-  };
-  
-  let (rangeStartIndex, rangeEndIndex): (Int, Int) = {
-    let rangeInputEnumerated = rangeInput.enumerated();
-    
-    let match = rangeInputEnumerated.first {
-      guard let nextValue = rangeInput[safeIndex: $0.offset + 1]
-      else { return false };
-      
-      return inputValue >= $0.element && inputValue < nextValue;
-    };
-    
-    // B - Interpolate Between
-    if let match = match {
-      let rangeStartIndex = match.offset;
-      return (rangeStartIndex, rangeStartIndex + 1);
-    };
-      
-    let lastIndex         = rangeInput.count - 1;
-    let secondToLastIndex = rangeInput.count - 2;
-    
-    // C - Extrapolate Right
-    return (secondToLastIndex, lastIndex);
-  }();
-  
-  guard let rangeInputStart  = rangeInput [safeIndex: rangeStartIndex],
-        let rangeInputEnd    = rangeInput [safeIndex: rangeEndIndex  ],
-        let rangeOutputStart = rangeOutput[safeIndex: rangeStartIndex],
-        let rangeOutputEnd   = rangeOutput[safeIndex: rangeEndIndex  ]
-  else { return nil };
-  
-  let inputValueAdj    = inputValue    - rangeInputStart;
-  let rangeInputEndAdj = rangeInputEnd - rangeInputStart;
-
-  let progress = inputValueAdj / rangeInputEndAdj;
-        
-  return RNIAnimator.EasingFunctions.lerp(
-    valueStart: rangeOutputStart,
-    valueEnd  : rangeOutputEnd,
-    percent   : progress
-  );
-};
+  var currentSnapPointIndex = 1;
 
   var targetRectProvider: () -> CGRect;
   var currentSizeProvider: () -> CGSize;
   
   var gestureOffset: CGFloat?;
-  
   weak var modalView: UIView?;
-  
-  let snapPoints: [RNILayout] = [
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.1)
-      )
-    ),
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.3)
-      )
-    ),
-    RNILayout(
-      horizontalAlignment: .center,
-      verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .stretch
-      ),
-      height: RNIComputableValue(
-        mode: .percent(percentValue: 0.7)
-      )
-    ),
-  ];
-  
-  var currentSnapPointIndex = 1;
-  
-  /// Defines which axis of the gesture point to use to drive the interpolation
-  /// of the modal snap points
-  ///
-  var inputAxisKey: KeyPath<CGPoint, CGFloat> = \.y;
   
   // MARK: - Computed Properties
   // ---------------------------
   
+  /// Defines which axis of the gesture point to use to drive the interpolation
+  /// of the modal snap points
+  ///
+  var inputAxisKey: KeyPath<CGPoint, CGFloat> {
+    switch self.modalConfig.snapDirection {
+      case .vertical  : return \.y;
+      case .horizontal: return \.x;
+    };
+  };
+  
+  /// The computed frames of the modal based on the snap points
   var computedSnapRects: [CGRect] {
     let targetSize  = self.targetRectProvider();
     let currentSize = self.currentSizeProvider();
     
-    return self.snapPoints.map {
-      $0.computeRect(
+    return self.modalConfig.snapPoints.map {
+      $0.snapPoint.computeRect(
         withTargetRect: targetSize,
         currentSize: currentSize
       );
     };
   };
   
-  var currentSnapPoint: RNILayout {
-    return self.snapPoints[self.currentSnapPointIndex];
+  var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
+    self.modalConfig.snapPoints[self.currentSnapPointIndex];
   };
-  
   
   // MARK: - Init
   // ------------
@@ -170,7 +123,7 @@ class AdaptiveModalManager {
     forRect currentRect: CGRect
   ) -> (
     nextSnapPointIndex: Int,
-    nextSnapPoint: RNILayout,
+    nextSnapPoint: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
   ) {
     return self.getClosestSnapPoint(
@@ -182,7 +135,7 @@ class AdaptiveModalManager {
     forGestureCoord: CGFloat
   ) -> (
     nextSnapPointIndex: Int,
-    nextSnapPoint: RNILayout,
+    nextSnapPoint: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
   ) {
     let snapRects = self.computedSnapRects;
@@ -197,10 +150,12 @@ class AdaptiveModalManager {
       };
     };
     
+    let closestSnapPointIndex = closestSnapPoint!.offset;
+    
     return (
       nextSnapPointIndex: closestSnapPoint!.offset,
-      nextSnapPoint: self.snapPoints[closestSnapPoint!.offset],
-      computedRect: snapRects[closestSnapPoint!.offset]
+      nextSnapPoint: self.modalConfig.snapPoints[closestSnapPointIndex],
+      computedRect: snapRects[closestSnapPointIndex]
     );
   };
   
@@ -221,7 +176,6 @@ class AdaptiveModalManager {
       return gestureCoord - modalCoord;
     }();
       
-    
     if self.gestureOffset == nil {
       self.gestureOffset = gestureOffset;
     };

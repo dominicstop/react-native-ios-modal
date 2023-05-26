@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88075E272A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */; };
 		88203DC12A122AC20088C8E2 /* RNIDynamicModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88203DC02A122AC20088C8E2 /* RNIDynamicModal.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
 		88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0F029C593F400490628 /* SceneDelegate.swift */; };
@@ -85,6 +86,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdaptiveModalManager+Helpers.swift"; sourceTree = "<group>"; };
 		88203DC02A122AC20088C8E2 /* RNIDynamicModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNIDynamicModal.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B7D0EE29C593F400490628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 				88D0188B2A1DB02E004664D2 /* AdaptiveModalEntranceConfig.swift */,
 				88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */,
 				88D0188D2A1DCA61004664D2 /* AdaptiveModalManager.swift */,
+				88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */,
 			);
 			path = AdaptiveModal;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				88D018272A1B3030004664D2 /* RNIInternalCleanupMode.swift in Sources */,
 				88D018782A1B3030004664D2 /* RNIComputableSize.swift in Sources */,
 				88D018732A1B3030004664D2 /* RNIModalCustomSheetDetent.swift in Sources */,
+				88075E272A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift in Sources */,
 				88D018252A1B3030004664D2 /* UIViewController+Helpers.swift in Sources */,
 				88D018882A1D0A36004664D2 /* AdaptiveModalConfig.swift in Sources */,
 				88D018432A1B3030004664D2 /* UIGestureRecognizer+Helpers.swift in Sources */,

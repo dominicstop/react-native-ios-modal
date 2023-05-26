@@ -79,7 +79,8 @@ class RNIDraggableTestViewController : UIViewController {
     let floatingView = self.floatingView;
     self.view.addSubview(floatingView);
     
-    let initialSnapPoint = self.modalManager.currentSnapPoint;
+    let initialSnapPointConfig = self.modalManager.currentSnapPointConfig;
+    let initialSnapPoint = initialSnapPointConfig.snapPoint;
     
     let computedRect = initialSnapPoint.computeRect(
       withTargetRect: self.view.frame,

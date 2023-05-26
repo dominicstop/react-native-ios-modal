@@ -11,11 +11,10 @@ struct AdaptiveModalConfig {
   enum Direction {
     case horizontal;
     case vertical;
-    case floating;
   };
   
   let snapPoints: [AdaptiveModalSnapPointConfig];
   let snapDirection: Direction;
   
-  let entranceConfig: AdaptiveModalEntranceConfig;
+  // let entranceConfig: AdaptiveModalEntranceConfig;
 };
