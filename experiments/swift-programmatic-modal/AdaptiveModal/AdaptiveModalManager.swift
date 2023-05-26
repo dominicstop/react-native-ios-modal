@@ -151,43 +151,11 @@ class AdaptiveModalManager {
     animator.startAnimation();
   };
   
-  func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
-    guard let modalView = self.modalView else { return };
-    
-    let gesturePoint = gesture.location(in: self.targetView);
-    
-    switch gesture.state {
-      case .began:
-        break;
-    
-      case .cancelled, .ended:
-        self.gestureOffset = nil;
-
-        let nextSnapPoint = self.getNextSnapPoint(
-          forRect: modalView.frame
-        );
-        
-        self.animateModal(toRect: nextSnapPoint.computedRect);
-        self.currentSnapPointIndex = nextSnapPoint.nextSnapPointIndex;
-        break;
-        
-      case .changed:
-        let computedRect = self.interpolateModalRect(
-          forGesturePoint: gesturePoint
-        );
-
-        modalView.frame = computedRect;
-
-      default:
-        break;
-    };
-  };
-  
-  func getNextSnapPoint(
+  func getClosestSnapPoint(
     forRect currentRect: CGRect
   ) -> (
-    nextSnapPointIndex: Int,
-    nextSnapPoint: AdaptiveModalSnapPointConfig,
+    snapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
   ) {
     return self.getClosestSnapPoint(
@@ -198,8 +166,8 @@ class AdaptiveModalManager {
   func getClosestSnapPoint(
     forGestureCoord: CGFloat
   ) -> (
-    nextSnapPointIndex: Int,
-    nextSnapPoint: AdaptiveModalSnapPointConfig,
+    snapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
   ) {
     let snapRects = self.computedSnapRects;
@@ -217,8 +185,8 @@ class AdaptiveModalManager {
     let closestSnapPointIndex = closestSnapPoint!.offset;
     
     return (
-      nextSnapPointIndex: closestSnapPoint!.offset,
-      nextSnapPoint: self.modalConfig.snapPoints[closestSnapPointIndex],
+      snapPointIndex: closestSnapPoint!.offset,
+      snapPointConfig: self.modalConfig.snapPoints[closestSnapPointIndex],
       computedRect: snapRects[closestSnapPointIndex]
     );
   };
@@ -303,4 +271,61 @@ class AdaptiveModalManager {
     
     return nextRect;
   };
+  
+  func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
+    guard let modalView = self.modalView else { return };
+    
+    let gesturePoint    = gesture.location(in: self.targetView);
+    let gestureVelocity = gesture.velocity(in: self.targetView);
+    
+    let gestureVelocityCoord = gestureVelocity[keyPath: self.inputAxisKey];
+    
+    switch gesture.state {
+      case .began:
+        break;
+    
+      case .cancelled, .ended:
+        self.gestureOffset = nil;
+
+        let nextSnapPointIndex: Int = {
+          let closestSnapPoint = self.getClosestSnapPoint(
+            forRect: modalView.frame
+          );
+          
+          let lastIndex = self.modalConfig.snapPoints.count - 1;
+          
+          guard closestSnapPoint.snapPointIndex > 0,
+                closestSnapPoint.snapPointIndex < lastIndex,
+                abs(gestureVelocityCoord) > 10
+          else {
+            return closestSnapPoint.snapPointIndex;
+          };
+          
+          let indexOffset = gestureVelocityCoord >= 0 ? -1 : 1;
+          return closestSnapPoint.snapPointIndex + indexOffset;
+        }();
+        
+        let nextSnapConfig = self.modalConfig.snapPoints[nextSnapPointIndex];
+        
+        let nextRect = nextSnapConfig.snapPoint.computeRect(
+          withTargetRect: self.targetRectProvider(),
+          currentSize: self.currentSizeProvider()
+        );
+        
+        self.animateModal(toRect: nextRect);
+        self.currentSnapPointIndex = nextSnapPointIndex;
+        break;
+        
+      case .changed:
+        let computedRect = self.interpolateModalRect(
+          forGesturePoint: gesturePoint
+        );
+
+        modalView.frame = computedRect;
+
+      default:
+        break;
+    };
+  };
+  
 };
