@@ -70,11 +70,15 @@ class AdaptiveModalManager {
   var targetRectProvider: () -> CGRect;
   var currentSizeProvider: () -> CGSize;
   
+  let maxGestureVelocity: CGFloat = 20;
+  
   weak var targetView: UIView?;
   weak var modalView: UIView?;
   
   var gestureOffset: CGFloat?;
-  var gestureVelocity: CGFloat?;
+  var gestureVelocity: CGPoint?;
+  var gestureInitialPoint: CGPoint?;
+  var gesturePoint: CGPoint?;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -104,6 +108,58 @@ class AdaptiveModalManager {
   
   var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
     self.modalConfig.snapPoints[self.currentSnapPointIndex];
+  };
+  
+  var gestureInitialVelocity: CGVector? {
+    guard let gestureInitialPoint = self.gestureInitialPoint,
+          let gestureFinalPoint   = self.gesturePoint,
+          let gestureVelocity     = self.gestureVelocity
+    else { return nil };
+  
+    let gestureInitialCoord  = gestureInitialPoint[keyPath: self.inputAxisKey];
+    let gestureFinalCoord    = gestureFinalPoint  [keyPath: self.inputAxisKey];
+    let gestureVelocityCoord = gestureVelocity    [keyPath: self.inputAxisKey];
+    
+    var velocity: CGFloat = 0;
+    let distance = gestureFinalCoord - gestureInitialCoord;
+    
+    if distance != 0 {
+      velocity = gestureVelocityCoord / distance;
+    };
+    
+    velocity = velocity.clamped(
+      min: -self.maxGestureVelocity,
+      max:  self.maxGestureVelocity
+    );
+    
+    return CGVector(dx: velocity, dy: velocity);
+  };
+  
+  /// Based on the gesture's velocity and it's current position, estimate
+  /// where would it eventually "stop" (i.e. it's final position) if it were to
+  /// decelerate over time
+  ///
+  var gestureFinalPoint: CGPoint? {
+    guard let gesturePoint = self.gesturePoint,
+          let gestureVelocity = self.gestureVelocity
+    else { return nil };
+    
+    let gestureVelocityClamped = CGPoint(
+      x: gestureVelocity.x.clamped(minMax: self.maxGestureVelocity),
+      y: gestureVelocity.y.clamped(minMax: self.maxGestureVelocity)
+    );
+    
+    let nextX = Self.computeFinalPosition(
+      position: gesturePoint.x,
+      initialVelocity: gestureVelocityClamped.x
+    );
+    
+    let nextY = Self.computeFinalPosition(
+      position: gesturePoint.y,
+      initialVelocity: gestureVelocityClamped.y
+    );
+    
+    return CGPoint(x: nextX, y: nextY);
   };
   
   // MARK: - Init
@@ -139,10 +195,27 @@ class AdaptiveModalManager {
   func animateModal(toRect nextRect: CGRect) {
     guard let modalView = self.modalView else { return };
     
-    let animator = UIViewPropertyAnimator(
-      duration: 0.2,
-      curve: .easeIn
-    );
+    let animator: UIViewPropertyAnimator = {
+      if let gestureInitialVelocity = self.gestureInitialVelocity {
+        let springTiming = UISpringTimingParameters(
+          dampingRatio: 1,
+          initialVelocity: gestureInitialVelocity
+        );
+        
+        // Move to animation config
+        let springAnimationSettlingTime: CGFloat = 0.4;
+        
+        return UIViewPropertyAnimator(
+          duration: springAnimationSettlingTime,
+          timingParameters: springTiming
+        );
+      };
+      
+      return UIViewPropertyAnimator(
+        duration: 0.2,
+        curve: .easeIn
+      );
+    }();
     
     animator.addAnimations {
       modalView.frame = nextRect;
@@ -152,28 +225,17 @@ class AdaptiveModalManager {
   };
   
   func getClosestSnapPoint(
-    forRect currentRect: CGRect
-  ) -> (
-    snapPointIndex: Int,
-    snapPointConfig: AdaptiveModalSnapPointConfig,
-    computedRect: CGRect
-  ) {
-    return self.getClosestSnapPoint(
-      forGestureCoord: currentRect.origin[keyPath: self.inputAxisKey]
-    );
-  };
-  
-  func getClosestSnapPoint(
-    forGestureCoord: CGFloat
+    forGestureCoord gestureCoord: CGFloat
   ) -> (
     snapPointIndex: Int,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
   ) {
     let snapRects = self.computedSnapRects;
+    let gestureCoordAdj = gestureCoord + (self.gestureOffset ?? 0);
     
     let diffY = snapRects.map {
-      $0.origin[keyPath: self.inputAxisKey] - forGestureCoord;
+      $0.origin[keyPath: self.inputAxisKey] - gestureCoordAdj;
     };
     
     let closestSnapPoint = diffY.enumerated().first { item in
@@ -275,28 +337,32 @@ class AdaptiveModalManager {
   func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
     guard let modalView = self.modalView else { return };
     
-    let gesturePoint    = gesture.location(in: self.targetView);
+    let gesturePoint = gesture.location(in: self.targetView);
+    self.gesturePoint = gesturePoint;
+    
     let gestureVelocity = gesture.velocity(in: self.targetView);
+    self.gestureVelocity = gestureVelocity;
     
     let gestureVelocityCoord = gestureVelocity[keyPath: self.inputAxisKey];
     
     switch gesture.state {
       case .began:
+        self.gestureInitialPoint = gesturePoint;
         break;
     
       case .cancelled, .ended:
-        self.gestureOffset = nil;
-
         let nextSnapPointIndex: Int = {
+          let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
+        
           let closestSnapPoint = self.getClosestSnapPoint(
-            forRect: modalView.frame
+            forGestureCoord: gestureFinalPoint[keyPath: self.inputAxisKey]
           );
           
           let lastIndex = self.modalConfig.snapPoints.count - 1;
           
           guard closestSnapPoint.snapPointIndex > 0,
                 closestSnapPoint.snapPointIndex < lastIndex,
-                abs(gestureVelocityCoord) > 10
+                abs(gestureVelocityCoord) > 100
           else {
             return closestSnapPoint.snapPointIndex;
           };
@@ -314,6 +380,10 @@ class AdaptiveModalManager {
         
         self.animateModal(toRect: nextRect);
         self.currentSnapPointIndex = nextSnapPointIndex;
+        
+        self.gestureOffset = nil;
+        self.gestureInitialPoint = nil;
+        self.gestureVelocity = nil;
         break;
         
       case .changed:
@@ -327,5 +397,4 @@ class AdaptiveModalManager {
         break;
     };
   };
-  
 };

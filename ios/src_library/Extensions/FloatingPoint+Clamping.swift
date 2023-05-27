@@ -21,4 +21,8 @@ extension FloatingPoint {
     
     return clampedValue;
   };
+  
+  public func clamped(minMax: Self) -> Self {
+    self.clamped(min: -minMax, max: minMax);
+  };
 };

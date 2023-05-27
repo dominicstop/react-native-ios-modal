@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 5/27/23.
 //
 
-import Foundation
+import UIKit
 
 extension AdaptiveModalManager {
 
@@ -33,8 +33,8 @@ extension AdaptiveModalManager {
       
       let interpolatedValue = RNIAnimator.EasingFunctions.lerp(
         valueStart: rangeOutputEnd,
-        valueEnd: rangeOutputStart,
-        percent: percent
+        valueEnd  : rangeOutputStart,
+        percent   : percent
       );
       
       let delta2 = interpolatedValue - rangeOutputEnd;
@@ -80,5 +80,17 @@ extension AdaptiveModalManager {
       valueEnd  : rangeOutputEnd,
       percent   : progress
     );
+  };
+  
+  static func computeFinalPosition(
+    position: CGFloat,
+    initialVelocity: CGFloat,
+    decelerationRate: CGFloat = UIScrollView.DecelerationRate.normal.rawValue
+  ) -> CGFloat {
+    let pointPerSecond = initialVelocity / 1000.0;
+    let accelerationRate = 1 - decelerationRate;
+    
+    let displacement = (pointPerSecond * decelerationRate) / accelerationRate;
+    return position + displacement;
   };
 };

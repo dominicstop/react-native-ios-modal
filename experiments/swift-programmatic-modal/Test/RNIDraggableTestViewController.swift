@@ -8,9 +8,6 @@
 
 import UIKit
 
-
-
-
 class RNIDraggableTestViewController : UIViewController {
   
   lazy var modalManager = AdaptiveModalManager(
@@ -91,6 +88,8 @@ class RNIDraggableTestViewController : UIViewController {
   };
   
   @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
+    print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
+  
     self.modalManager.notifyOnDragPanGesture(sender);
   };
 };

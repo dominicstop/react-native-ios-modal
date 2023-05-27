@@ -7,6 +7,10 @@
 
 import UIKit
 
+enum AdaptiveModalSnapAnimationConfig {
+
+};
+
 struct AdaptiveModalConfig {
   enum Direction {
     case horizontal;
