@@ -144,9 +144,11 @@ class AdaptiveModalManager {
           let gestureVelocity = self.gestureVelocity
     else { return nil };
     
+    let maxVelocity: CGFloat = 300;
+    
     let gestureVelocityClamped = CGPoint(
-      x: gestureVelocity.x.clamped(minMax: self.maxGestureVelocity),
-      y: gestureVelocity.y.clamped(minMax: self.maxGestureVelocity)
+      x: (gestureVelocity.x / 2).clamped(minMax: maxVelocity),
+      y: (gestureVelocity.y / 2).clamped(minMax: maxVelocity)
     );
     
     let nextX = Self.computeFinalPosition(
@@ -234,20 +236,19 @@ class AdaptiveModalManager {
     let snapRects = self.computedSnapRects;
     let gestureCoordAdj = gestureCoord + (self.gestureOffset ?? 0);
     
-    let diffY = snapRects.map {
-      $0.origin[keyPath: self.inputAxisKey] - gestureCoordAdj;
+    let delta = snapRects.map {
+      abs($0.origin[keyPath: self.inputAxisKey] - gestureCoordAdj);
     };
     
-    let closestSnapPoint = diffY.enumerated().first { item in
-      diffY.allSatisfy {
-        abs(item.element) <= abs($0)
-      };
+    let deltaSorted = delta.enumerated().sorted {
+      $0.element < $1.element
     };
     
-    let closestSnapPointIndex = closestSnapPoint!.offset;
+    let closestSnapPoint = deltaSorted.first!;
+    let closestSnapPointIndex = closestSnapPoint.offset;
     
     return (
-      snapPointIndex: closestSnapPoint!.offset,
+      snapPointIndex: closestSnapPointIndex,
       snapPointConfig: self.modalConfig.snapPoints[closestSnapPointIndex],
       computedRect: snapRects[closestSnapPointIndex]
     );
@@ -351,35 +352,14 @@ class AdaptiveModalManager {
         break;
     
       case .cancelled, .ended:
-        let nextSnapPointIndex: Int = {
-          let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
+        let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
         
-          let closestSnapPoint = self.getClosestSnapPoint(
-            forGestureCoord: gestureFinalPoint[keyPath: self.inputAxisKey]
-          );
-          
-          let lastIndex = self.modalConfig.snapPoints.count - 1;
-          
-          guard closestSnapPoint.snapPointIndex > 0,
-                closestSnapPoint.snapPointIndex < lastIndex,
-                abs(gestureVelocityCoord) > 100
-          else {
-            return closestSnapPoint.snapPointIndex;
-          };
-          
-          let indexOffset = gestureVelocityCoord >= 0 ? -1 : 1;
-          return closestSnapPoint.snapPointIndex + indexOffset;
-        }();
-        
-        let nextSnapConfig = self.modalConfig.snapPoints[nextSnapPointIndex];
-        
-        let nextRect = nextSnapConfig.snapPoint.computeRect(
-          withTargetRect: self.targetRectProvider(),
-          currentSize: self.currentSizeProvider()
+        let closestSnapPoint = self.getClosestSnapPoint(
+          forGestureCoord: gestureFinalPoint[keyPath: self.inputAxisKey]
         );
         
-        self.animateModal(toRect: nextRect);
-        self.currentSnapPointIndex = nextSnapPointIndex;
+        self.animateModal(toRect: closestSnapPoint.computedRect);
+        self.currentSnapPointIndex = closestSnapPoint.snapPointIndex;
         
         self.gestureOffset = nil;
         self.gestureInitialPoint = nil;
