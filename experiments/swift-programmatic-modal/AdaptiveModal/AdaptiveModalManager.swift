@@ -7,66 +7,20 @@
 
 import UIKit
 
-enum AdaptiveModalConfigTestPresets {
-  case test01;
-  
-  var config: AdaptiveModalConfig {
-    switch self {
-      case .test01: return AdaptiveModalConfig(
-        snapPoints:  [
-          AdaptiveModalSnapPointConfig(
-            snapPoint: RNILayout(
-                horizontalAlignment: .center,
-                verticalAlignment: .bottom,
-                width: RNIComputableValue(
-                  mode: .stretch
-                ),
-              height: RNIComputableValue(
-                mode: .percent(percentValue: 0.1)
-              )
-            )
-          ),
-          AdaptiveModalSnapPointConfig(
-            snapPoint: RNILayout(
-              horizontalAlignment: .center,
-              verticalAlignment: .bottom,
-              width: RNIComputableValue(
-                mode: .stretch
-              ),
-              height: RNIComputableValue(
-                mode: .percent(percentValue: 0.3)
-              )
-            )
-          ),
-          AdaptiveModalSnapPointConfig(
-            snapPoint: RNILayout(
-              horizontalAlignment: .center,
-              verticalAlignment: .bottom,
-              width: RNIComputableValue(
-                mode: .stretch
-              ),
-              height: RNIComputableValue(
-                mode: .percent(percentValue: 0.7)
-              )
-            )
-          ),
-        ],
-        snapDirection: .vertical
-      );
-    };
-  };
-};
 
 class AdaptiveModalManager {
 
-  // MARK: -  Properties
-  // -------------------
+  // MARK: -  Properties - Config
+  // ----------------------------
   
-  let modalConfig: AdaptiveModalConfig =
-    AdaptiveModalConfigTestPresets.test01.config;
+  var modalConfig: AdaptiveModalConfig;
     
-  var currentSnapPointIndex = 1;
-
+  var currentSnapPointIndex = 0;
+  var enableSnapping = true;
+  
+  // MARK: -  Properties - Refs/Providers
+  // ------------------------------------
+  
   var targetRectProvider: () -> CGRect;
   var currentSizeProvider: () -> CGSize;
 
@@ -172,46 +126,47 @@ class AdaptiveModalManager {
   // ------------
   
   init(
+    modalConfig: AdaptiveModalConfig,
     modalView: UIView,
     targetView: UIView,
     targetRectProvider: @escaping () -> CGRect,
     currentSizeProvider: @escaping () -> CGSize
   ){
-    self.targetRectProvider = targetRectProvider;
-    self.currentSizeProvider = currentSizeProvider;
+    self.modalConfig = modalConfig;
     
     self.modalView = modalView;
     self.targetView = targetView;
+    
+    self.targetRectProvider = targetRectProvider;
+    self.currentSizeProvider = currentSizeProvider;
   };
   
   // MARK: - Functions
   // -----------------
   
-  func setFrameForModal(){
-    guard let modalView = self.modalView else { return };
-    
-    let computedRect: CGRect = {
-      if let gesturePoint = self.gesturePoint {
-        return self.interpolateModalRect(
-          forGesturePoint: gesturePoint
-        );
-      };
-      
-      let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
-      
-      return currentSnapPoint.computeRect(
-        withTargetRect: self.targetRectProvider(),
-        currentSize: self.currentSizeProvider()
-      );
-    }();
-    
-    modalView.frame = computedRect;
+  func clearGestureValues(){
+    self.gestureOffset = nil;
+    self.gestureInitialPoint = nil;
+    self.gestureVelocity = nil;
+    self.gesturePoint = nil;
   };
   
-  func animateModal(toRect nextRect: CGRect) {
+  func animateModal(
+    toRect nextRect: CGRect,
+    duration: CGFloat? = nil
+  ) {
     guard let modalView = self.modalView else { return };
     
     let animator: UIViewPropertyAnimator = {
+      // A - Animation based on duration
+      if let duration = duration {
+        return UIViewPropertyAnimator(
+          duration: duration,
+          curve: .easeInOut
+        );
+      };
+      
+      // B - Spring Animation, based on gesture velocity
       if let gestureInitialVelocity = self.gestureInitialVelocity {
         let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
         
@@ -226,9 +181,10 @@ class AdaptiveModalManager {
         );
       };
       
+      // C - Default
       return UIViewPropertyAnimator(
-        duration: 0.2,
-        curve: .easeIn
+        duration: 0.3,
+        curve: .easeInOut
       );
     }();
     
@@ -275,6 +231,44 @@ class AdaptiveModalManager {
       snapPointIndex: closestSnapPointIndex,
       snapPointConfig: self.modalConfig.snapPoints[closestSnapPointIndex],
       computedRect: snapRects[closestSnapPointIndex]
+    );
+  };
+  
+  func getClosestSnapPoint(
+    forRect currentRect: CGRect
+  ) -> (
+    snapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    computedRect: CGRect,
+    snapDistance: CGFloat
+  ) {
+    let snapRects = self.computedSnapRects;
+    
+    let delta = snapRects.map {
+      CGRect(
+        x: abs($0.origin.x - currentRect.origin.x),
+        y: abs($0.origin.y - currentRect.origin.y),
+        width : abs($0.size.height - currentRect.size.height),
+        height: abs($0.size.height - currentRect.size.height)
+      );
+    };
+    
+    let deltaAvg = delta.map {
+      ($0.origin.x + $0.origin.y + $0.width + $0.height) / 4;
+    };
+    
+    let deltaAvgSorted = deltaAvg.enumerated().sorted {
+      $0.element < $1.element;
+    };
+    
+    let closestSnapPoint = deltaAvgSorted.first!;
+    let closestSnapPointIndex = closestSnapPoint.offset;
+    
+    return (
+      snapPointIndex: closestSnapPointIndex,
+      snapPointConfig: self.modalConfig.snapPoints[closestSnapPointIndex],
+      computedRect: snapRects[closestSnapPointIndex],
+      snapDistance: deltaAvg[closestSnapPointIndex]
     );
   };
   
@@ -359,6 +353,9 @@ class AdaptiveModalManager {
     return nextRect;
   };
   
+  // MARK: - User-Invoked Functions
+  // ------------------------------
+  
   func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
     guard let modalView = self.modalView else { return };
     
@@ -371,9 +368,13 @@ class AdaptiveModalManager {
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
-        break;
     
       case .cancelled, .ended:
+        guard self.enableSnapping else {
+          self.clearGestureValues();
+          return;
+        };
+        
         let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
         
         let closestSnapPoint = self.getClosestSnapPoint(
@@ -389,10 +390,7 @@ class AdaptiveModalManager {
         self.animateModal(toRect: closestSnapPoint.computedRect);
         self.currentSnapPointIndex = closestSnapPoint.snapPointIndex;
         
-        self.gestureOffset = nil;
-        self.gestureInitialPoint = nil;
-        self.gestureVelocity = nil;
-        self.gesturePoint = nil;
+        self.clearGestureValues();
         break;
         
       case .changed:
@@ -405,5 +403,44 @@ class AdaptiveModalManager {
       default:
         break;
     };
+  };
+  
+  func setFrameForModal(){
+    guard let modalView = self.modalView else { return };
+    
+    let computedRect: CGRect = {
+      if let gesturePoint = self.gesturePoint {
+        return self.interpolateModalRect(
+          forGesturePoint: gesturePoint
+        );
+      };
+      
+      let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
+      
+      return currentSnapPoint.computeRect(
+        withTargetRect: self.targetRectProvider(),
+        currentSize: self.currentSizeProvider()
+      );
+    }();
+    
+    modalView.frame = computedRect;
+  };
+  
+  func snapToClosestSnapPoint(){
+    guard let modalView = self.modalView else { return };
+    let targetRect = self.targetRectProvider();
+    
+    let closestSnapPoint = self.getClosestSnapPoint(forRect: modalView.frame);
+    
+    let interpolatedDuration = Self.interpolate(
+      inputValue: closestSnapPoint.snapDistance,
+      rangeInput: [0, targetRect.height],
+      rangeOutput: [0.2, 0.7]
+    );
+    
+    self.animateModal(
+      toRect: closestSnapPoint.computedRect,
+      duration: interpolatedDuration
+    );
   };
 };

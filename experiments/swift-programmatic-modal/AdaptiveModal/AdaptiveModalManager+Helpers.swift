@@ -10,14 +10,24 @@ import UIKit
 extension AdaptiveModalManager {
 
   static func interpolate(
-    inputValue : CGFloat,
-    rangeInput : [CGFloat],
-    rangeOutput: [CGFloat]
+    inputValue    : CGFloat,
+    rangeInput    : [CGFloat],
+    rangeOutput   : [CGFloat],
+    shouldClampMin: Bool = false,
+    shouldClampMax: Bool = false
   ) -> CGFloat? {
   
     guard rangeInput.count == rangeOutput.count,
           rangeInput.count >= 2
     else { return nil };
+    
+    if shouldClampMin, inputValue <= rangeInput.first! {
+      return rangeOutput.first!;
+    };
+    
+    if shouldClampMax, inputValue >= rangeInput.last! {
+      return rangeOutput.last!;
+    };
     
     // A - Extrapolate Left
     if inputValue < rangeInput.first! {

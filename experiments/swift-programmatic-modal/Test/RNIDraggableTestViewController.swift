@@ -8,9 +8,61 @@
 
 import UIKit
 
+enum AdaptiveModalConfigTestPresets {
+  case test01;
+  
+  var config: AdaptiveModalConfig {
+    switch self {
+      case .test01: return AdaptiveModalConfig(
+        snapPoints:  [
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+                horizontalAlignment: .center,
+                verticalAlignment: .bottom,
+                width: RNIComputableValue(
+                  mode: .stretch
+                ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.1)
+              )
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.3)
+              )
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.7)
+              )
+            )
+          ),
+        ],
+        snapDirection: .vertical
+      );
+    };
+  };
+};
+
+
 class RNIDraggableTestViewController : UIViewController {
   
   lazy var modalManager = AdaptiveModalManager(
+    modalConfig: AdaptiveModalConfigTestPresets.test01.config,
     modalView: self.floatingView,
     targetView: self.view,
     targetRectProvider: { [unowned self] in
