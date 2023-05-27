@@ -69,9 +69,7 @@ class AdaptiveModalManager {
 
   var targetRectProvider: () -> CGRect;
   var currentSizeProvider: () -> CGSize;
-  
-  let maxGestureVelocity: CGFloat = 20;
-  
+
   weak var targetView: UIView?;
   weak var modalView: UIView?;
   
@@ -127,9 +125,11 @@ class AdaptiveModalManager {
       velocity = gestureVelocityCoord / distance;
     };
     
+    let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
+    
     velocity = velocity.clamped(
-      min: -self.maxGestureVelocity,
-      max:  self.maxGestureVelocity
+      min: -snapAnimationConfig.maxGestureVelocity,
+      max:  snapAnimationConfig.maxGestureVelocity
     );
     
     return CGVector(dx: velocity, dy: velocity);
@@ -199,16 +199,15 @@ class AdaptiveModalManager {
     
     let animator: UIViewPropertyAnimator = {
       if let gestureInitialVelocity = self.gestureInitialVelocity {
+        let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
+        
         let springTiming = UISpringTimingParameters(
-          dampingRatio: 1,
+          dampingRatio: snapAnimationConfig.springDampingRatio,
           initialVelocity: gestureInitialVelocity
         );
-        
-        // Move to animation config
-        let springAnimationSettlingTime: CGFloat = 0.4;
-        
+
         return UIViewPropertyAnimator(
-          duration: springAnimationSettlingTime,
+          duration: snapAnimationConfig.springAnimationSettlingTime,
           timingParameters: springTiming
         );
       };
@@ -234,11 +233,22 @@ class AdaptiveModalManager {
     computedRect: CGRect
   ) {
     let snapRects = self.computedSnapRects;
-    let gestureCoordAdj = gestureCoord + (self.gestureOffset ?? 0);
+    
+    let gestureOffset = self.gestureOffset ?? 0;
+    let gestureCoordAdj = gestureCoord - gestureOffset;
     
     let delta = snapRects.map {
       abs($0.origin[keyPath: self.inputAxisKey] - gestureCoordAdj);
     };
+    
+    print(
+        "snapRects: \(snapRects.map { $0.origin[keyPath: self.inputAxisKey] })"
+      + "\n - delta: \(delta)"
+      + "\n - gestureCoord: \(gestureCoord)"
+      + "\n - gestureOffset: \(gestureOffset)"
+      + "\n - gestureCoordAdj: \(gestureCoordAdj)"
+      + "\n"
+    );
     
     let deltaSorted = delta.enumerated().sorted {
       $0.element < $1.element
@@ -344,8 +354,6 @@ class AdaptiveModalManager {
     let gestureVelocity = gesture.velocity(in: self.targetView);
     self.gestureVelocity = gestureVelocity;
     
-    let gestureVelocityCoord = gestureVelocity[keyPath: self.inputAxisKey];
-    
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
@@ -356,6 +364,12 @@ class AdaptiveModalManager {
         
         let closestSnapPoint = self.getClosestSnapPoint(
           forGestureCoord: gestureFinalPoint[keyPath: self.inputAxisKey]
+        );
+        
+        print(
+          "closestSnapPoint: \(closestSnapPoint.computedRect)"
+          + "\n - gesturePoint: \(gesturePoint)"
+          + "\n - gestureFinalPoint: \(gestureFinalPoint)"
         );
         
         self.animateModal(toRect: closestSnapPoint.computedRect);

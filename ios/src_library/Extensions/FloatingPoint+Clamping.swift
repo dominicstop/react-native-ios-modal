@@ -8,7 +8,10 @@
 import UIKit
 
 extension FloatingPoint {
-  public func clamped(min lowerBound: Self?, max upperBound: Self?) -> Self {
+  public func clamped(
+    min lowerBound: Self? = nil,
+    max upperBound: Self? = nil
+  ) -> Self {
     var clampedValue = self;
     
     if let upperBound = upperBound {

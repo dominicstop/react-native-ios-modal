@@ -87,10 +87,13 @@ extension AdaptiveModalManager {
     initialVelocity: CGFloat,
     decelerationRate: CGFloat = UIScrollView.DecelerationRate.normal.rawValue
   ) -> CGFloat {
-    let pointPerSecond = initialVelocity / 1000.0;
+    let pointPerSecond = abs(initialVelocity) / 1000.0;
     let accelerationRate = 1 - decelerationRate;
     
     let displacement = (pointPerSecond * decelerationRate) / accelerationRate;
-    return position + displacement;
+    
+    return initialVelocity > 0
+      ? position + displacement
+      : position - displacement;
   };
 };

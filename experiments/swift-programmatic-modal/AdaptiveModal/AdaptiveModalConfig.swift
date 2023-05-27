@@ -7,9 +7,6 @@
 
 import UIKit
 
-enum AdaptiveModalSnapAnimationConfig {
-
-};
 
 struct AdaptiveModalConfig {
   enum Direction {
@@ -17,18 +14,35 @@ struct AdaptiveModalConfig {
     case vertical;
   };
   
+  // MARK: - Properties
+  // ------------------
+  
+  
   let snapPoints: [AdaptiveModalSnapPointConfig];
   let snapDirection: Direction;
   
+  private let _snapAnimationConfig: AdaptiveModalSnapAnimationConfig?;
+  
   // let entranceConfig: AdaptiveModalEntranceConfig;
-  let snapSwipeVelocityThreshold: CGFloat = 0;
-  // let snappingAnimationConfig enum
+  // let snapSwipeVelocityThreshold: CGFloat = 0;
+  
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  var snapAnimationConfig: AdaptiveModalSnapAnimationConfig {
+    self._snapAnimationConfig ?? .default;
+  };
+  
+  // MARK: - Init
+  // ------------
   
   init(
     snapPoints: [AdaptiveModalSnapPointConfig],
-    snapDirection: Direction
+    snapDirection: Direction,
+    snapAnimationConfig: AdaptiveModalSnapAnimationConfig? = nil
   ) {
-    self.snapPoints = snapPoints
-    self.snapDirection = snapDirection
-  }
+    self.snapPoints = snapPoints;
+    self.snapDirection = snapDirection;
+    self._snapAnimationConfig = snapAnimationConfig;
+  };
 };
