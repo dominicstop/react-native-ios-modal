@@ -81,6 +81,10 @@ class AdaptiveModalManager {
   // MARK: - Computed Properties
   // ---------------------------
   
+  var isSwiping: Bool {
+    self.gestureInitialPoint != nil
+  };
+  
   /// Defines which axis of the gesture point to use to drive the interpolation
   /// of the modal snap points
   ///
@@ -186,12 +190,22 @@ class AdaptiveModalManager {
   func setFrameForModal(){
     guard let modalView = self.modalView else { return };
     
-    let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
+    let computedRect: CGRect = {
+      if let gesturePoint = self.gesturePoint {
+        return self.interpolateModalRect(
+          forGesturePoint: gesturePoint
+        );
+      };
+      
+      let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
+      
+      return currentSnapPoint.computeRect(
+        withTargetRect: self.targetRectProvider(),
+        currentSize: self.currentSizeProvider()
+      );
+    }();
     
-    modalView.frame = currentSnapPoint.computeRect(
-      withTargetRect: self.targetRectProvider(),
-      currentSize: self.currentSizeProvider()
-    );
+    modalView.frame = computedRect;
   };
   
   func animateModal(toRect nextRect: CGRect) {
@@ -378,6 +392,7 @@ class AdaptiveModalManager {
         self.gestureOffset = nil;
         self.gestureInitialPoint = nil;
         self.gestureVelocity = nil;
+        self.gesturePoint = nil;
         break;
         
       case .changed:

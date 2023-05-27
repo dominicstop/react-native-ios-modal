@@ -82,6 +82,10 @@ class RNIDraggableTestViewController : UIViewController {
     self.modalManager.setFrameForModal();
   };
   
+  override func viewDidLayoutSubviews() {
+    self.modalManager.setFrameForModal();
+  };
+  
   @objc func onPressFloatingViewLabel(_ sender: UITapGestureRecognizer){
     // self.layoutConfigCount += 1;
     // self.updateFloatingView(isAnimated: true);
