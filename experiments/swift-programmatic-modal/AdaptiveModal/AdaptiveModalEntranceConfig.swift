@@ -7,7 +7,12 @@
 
 import Foundation
 
-struct AdaptiveModalEntranceConfig {
-  let initialSnapPoint: AdaptiveModalSnapPointPreset;
-  let initialAnimationKeyFrame: AdaptiveModalAnimationConfig;
+struct AdaptiveModalSnapPointPresetConfig {
+
+  let snapPoint: AdaptiveModalSnapPointPreset;
+  
+  // MARK: - Functions - Helpers
+  // ---------------------------
+  
+  
 };

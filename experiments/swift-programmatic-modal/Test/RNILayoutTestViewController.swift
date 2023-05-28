@@ -21,7 +21,7 @@ enum ScreenSize {
 
 class RNILayoutTestViewController : UIViewController {
   
-  let layoutConfigs: [RNILayout] = [
+  lazy var layoutConfigs: [RNILayout] = [
     // 0 A
     RNILayout(
       horizontalAlignment: .left,
@@ -289,7 +289,21 @@ class RNILayoutTestViewController : UIViewController {
       ),
       marginRight: 20,
       marginBottom: 20
-    )
+    ),
+    AdaptiveModalSnapPointPreset.offscreenTop.computeSnapPoint(
+      fromSnapPointConfig: RNILayout(
+        horizontalAlignment: .left,
+        verticalAlignment: .top,
+        width: RNIComputableValue(
+          mode: .constant(constantValue: 100)
+        ),
+        height: RNIComputableValue(
+          mode: .constant(constantValue: 100)
+        )
+      ),
+      withTargetRect: self.view.frame,
+      currentSize: .zero
+    ),
   ];
   
   var layoutConfigCount = 0;
@@ -342,12 +356,11 @@ class RNILayoutTestViewController : UIViewController {
     return view;
   }();
 
-  override func loadView() {
-    let view = UIView()
-    view.backgroundColor = .white;
+  override func viewDidLoad() {
+    self.view.backgroundColor = .white;
     
     let floatingView = self.floatingView;
-    view.addSubview(floatingView);
+    self.view.addSubview(floatingView);
     
     self.view = view;
     self.updateFloatingView();

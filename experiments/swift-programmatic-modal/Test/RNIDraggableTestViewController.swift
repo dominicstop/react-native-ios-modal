@@ -8,8 +8,12 @@
 
 import UIKit
 
-enum AdaptiveModalConfigTestPresets {
+enum AdaptiveModalConfigTestPresets: CaseIterable {
+  
+  static let `default`: Self = .test02;
+
   case test01;
+  case test02;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -54,6 +58,42 @@ enum AdaptiveModalConfigTestPresets {
         ],
         snapDirection: .vertical
       );
+      case .test02: return AdaptiveModalConfig(
+        snapPoints: [
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.3)
+              )
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: RNIComputableValue(
+                mode: .percent(percentValue: 0.7),
+                maxValue: ScreenSize.iPhone8.size.width
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.7),
+                maxValue: ScreenSize.iPhone8.size.height
+              )
+            )
+          ),
+        ],
+        snapDirection: .vertical,
+        interpolationClampingConfig: .init(
+          shouldClampModalLastHeight: true,
+          shouldClampModalLastWidth: true,
+          shouldClampModalLastX: true
+        )
+      );
     };
   };
 };
@@ -62,12 +102,9 @@ enum AdaptiveModalConfigTestPresets {
 class RNIDraggableTestViewController : UIViewController {
   
   lazy var modalManager = AdaptiveModalManager(
-    modalConfig: AdaptiveModalConfigTestPresets.test01.config,
+    modalConfig: AdaptiveModalConfigTestPresets.default.config,
     modalView: self.floatingView,
     targetView: self.view,
-    targetRectProvider: { [unowned self] in
-      self.view.frame;
-    },
     currentSizeProvider: {
       .zero
     }
@@ -131,10 +168,12 @@ class RNIDraggableTestViewController : UIViewController {
     
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
     
+    self.modalManager.computeSnapPoints();
     self.modalManager.setFrameForModal();
   };
   
   override func viewDidLayoutSubviews() {
+    self.modalManager.computeSnapPoints();
     self.modalManager.setFrameForModal();
   };
   

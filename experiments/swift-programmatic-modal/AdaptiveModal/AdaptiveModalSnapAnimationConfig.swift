@@ -11,7 +11,7 @@ struct AdaptiveModalSnapAnimationConfig {
   static let `default`: Self = .init(
     springDampingRatio: 0.9,
     springAnimationSettlingTime: 0.4,
-    maxGestureVelocity: 20
+    maxGestureVelocity: 15
   );
 
   let springDampingRatio: CGFloat;

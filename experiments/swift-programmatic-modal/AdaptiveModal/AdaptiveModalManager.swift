@@ -10,8 +10,8 @@ import UIKit
 
 class AdaptiveModalManager {
 
-  // MARK: -  Properties - Config
-  // ----------------------------
+  // MARK: -  Properties - Config-Related
+  // ------------------------------------
   
   var modalConfig: AdaptiveModalConfig;
     
@@ -20,8 +20,7 @@ class AdaptiveModalManager {
   
   // MARK: -  Properties - Refs/Providers
   // ------------------------------------
-  
-  var targetRectProvider: () -> CGRect;
+
   var currentSizeProvider: () -> CGSize;
 
   weak var targetView: UIView?;
@@ -31,6 +30,12 @@ class AdaptiveModalManager {
   var gestureVelocity: CGPoint?;
   var gestureInitialPoint: CGPoint?;
   var gesturePoint: CGPoint?;
+  
+  // MARK: -  Properties
+  // -------------------
+  
+  /// The computed frames of the modal based on the snap points
+  var computedSnapRects: [CGRect]?;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -46,19 +51,6 @@ class AdaptiveModalManager {
     switch self.modalConfig.snapDirection {
       case .vertical  : return \.y;
       case .horizontal: return \.x;
-    };
-  };
-  
-  /// The computed frames of the modal based on the snap points
-  var computedSnapRects: [CGRect] {
-    let targetSize  = self.targetRectProvider();
-    let currentSize = self.currentSizeProvider();
-    
-    return self.modalConfig.snapPoints.map {
-      $0.snapPoint.computeRect(
-        withTargetRect: targetSize,
-        currentSize: currentSize
-      );
     };
   };
   
@@ -129,15 +121,12 @@ class AdaptiveModalManager {
     modalConfig: AdaptiveModalConfig,
     modalView: UIView,
     targetView: UIView,
-    targetRectProvider: @escaping () -> CGRect,
     currentSizeProvider: @escaping () -> CGSize
   ){
     self.modalConfig = modalConfig;
     
     self.modalView = modalView;
     self.targetView = targetView;
-    
-    self.targetRectProvider = targetRectProvider;
     self.currentSizeProvider = currentSizeProvider;
   };
   
@@ -201,8 +190,8 @@ class AdaptiveModalManager {
     snapPointIndex: Int,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     computedRect: CGRect
-  ) {
-    let snapRects = self.computedSnapRects;
+  )? {
+    guard let snapRects = self.computedSnapRects else { return nil };
     
     let gestureOffset = self.gestureOffset ?? 0;
     let gestureCoordAdj = gestureCoord - gestureOffset;
@@ -241,8 +230,8 @@ class AdaptiveModalManager {
     snapPointConfig: AdaptiveModalSnapPointConfig,
     computedRect: CGRect,
     snapDistance: CGFloat
-  ) {
-    let snapRects = self.computedSnapRects;
+  )? {
+    guard let snapRects = self.computedSnapRects else { return nil };
     
     let delta = snapRects.map {
       CGRect(
@@ -276,13 +265,16 @@ class AdaptiveModalManager {
     forGesturePoint gesturePoint: CGPoint
   ) -> CGRect {
   
-    guard let modalView = self.modalView else { return .zero };
+    guard let modalView = self.modalView,
+          let targetView = self.targetView,
+          let computedSnapRects = self.computedSnapRects
+    else { return .zero };
     
-    let targetRect = self.targetRectProvider();
-    let modalRect = modalView.frame;
+    let targetRect = targetView.frame;
+    let modalRect  = modalView.frame;
     
     let gestureCoord = gesturePoint[keyPath: self.inputAxisKey];
-    let snapRects = self.computedSnapRects.reversed();
+    let snapRects = computedSnapRects.reversed();
     
     let gestureOffset = self.gestureOffset ?? {
       let modalCoord = modalRect.origin[keyPath: self.inputAxisKey];
@@ -296,6 +288,8 @@ class AdaptiveModalManager {
     let gestureInput = gestureCoord - gestureOffset;
     let rangeInputGesture = snapRects.map { $0.minY };
     
+    let clampConfig = modalConfig.interpolationClampingConfig;
+    
     print(
         "gesturePoint: \(gesturePoint)"
       + "\n" + " - targetRect: \(targetRect)"
@@ -308,7 +302,9 @@ class AdaptiveModalManager {
     let nextHeight = Self.interpolate(
       inputValue: gestureInput,
       rangeInput: rangeInputGesture,
-      rangeOutput: snapRects.map { $0.height }
+      rangeOutput: snapRects.map { $0.height },
+      shouldClampMin: clampConfig.shouldClampModalLastHeight,
+      shouldClampMax: clampConfig.shouldClampModalInitHeight
     );
     
     print(" - nextHeight: \(nextHeight!)");
@@ -316,7 +312,9 @@ class AdaptiveModalManager {
     let nextWidth = Self.interpolate(
       inputValue: gestureInput,
       rangeInput: rangeInputGesture,
-      rangeOutput: snapRects.map { $0.width }
+      rangeOutput: snapRects.map { $0.width },
+      shouldClampMin: clampConfig.shouldClampModalLastWidth,
+      shouldClampMax: clampConfig.shouldClampModalInitWidth
     );
     
     print(" - nextWidth: \(nextWidth!)");
@@ -324,7 +322,9 @@ class AdaptiveModalManager {
     let nextX = Self.interpolate(
       inputValue: gestureInput,
       rangeInput: rangeInputGesture,
-      rangeOutput: snapRects.map { $0.minX }
+      rangeOutput: snapRects.map { $0.minX },
+      shouldClampMin: clampConfig.shouldClampModalLastX,
+      shouldClampMax: clampConfig.shouldClampModalInitX
     );
     
     print(" - nextX: \(nextX!)");
@@ -332,7 +332,9 @@ class AdaptiveModalManager {
     let nextY = Self.interpolate(
       inputValue: gestureInput,
       rangeInput: rangeInputGesture,
-      rangeOutput: snapRects.map { $0.minY }
+      rangeOutput: snapRects.map { $0.minY },
+      shouldClampMin: clampConfig.shouldClampModalLastY,
+      shouldClampMax: clampConfig.shouldClampModalInitY
     )!;
 
     print(" - nextY: \(nextY)");
@@ -355,6 +357,17 @@ class AdaptiveModalManager {
   
   // MARK: - User-Invoked Functions
   // ------------------------------
+  func computeSnapPoints(){
+    guard let targetView = self.targetView else { return };
+    let currentSize = self.currentSizeProvider();
+    
+    self.computedSnapRects = self.modalConfig.snapPoints.map {
+      $0.snapPoint.computeRect(
+        withTargetRect: targetView.frame,
+        currentSize   : currentSize
+      );
+    };
+  };
   
   func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
     guard let modalView = self.modalView else { return };
@@ -376,13 +389,17 @@ class AdaptiveModalManager {
         };
         
         let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
+        let gestureFinalCoord = gestureFinalPoint[keyPath: self.inputAxisKey]
         
-        let closestSnapPoint = self.getClosestSnapPoint(
-          forGestureCoord: gestureFinalPoint[keyPath: self.inputAxisKey]
-        );
+        guard let closestSnapPoint =
+          self.getClosestSnapPoint(forGestureCoord: gestureFinalCoord)
+        else {
+          self.clearGestureValues();
+          return;
+        };
         
         print(
-          "closestSnapPoint: \(closestSnapPoint.computedRect)"
+            "closestSnapPoint: \(closestSnapPoint.computedRect)"
           + "\n - gesturePoint: \(gesturePoint)"
           + "\n - gestureFinalPoint: \(gestureFinalPoint)"
         );
@@ -406,7 +423,9 @@ class AdaptiveModalManager {
   };
   
   func setFrameForModal(){
-    guard let modalView = self.modalView else { return };
+    guard let modalView = self.modalView,
+          let targetView = self.targetView
+    else { return };
     
     let computedRect: CGRect = {
       if let gesturePoint = self.gesturePoint {
@@ -418,7 +437,7 @@ class AdaptiveModalManager {
       let currentSnapPoint = self.currentSnapPointConfig.snapPoint;
       
       return currentSnapPoint.computeRect(
-        withTargetRect: self.targetRectProvider(),
+        withTargetRect: targetView.frame,
         currentSize: self.currentSizeProvider()
       );
     }();
@@ -427,14 +446,15 @@ class AdaptiveModalManager {
   };
   
   func snapToClosestSnapPoint(){
-    guard let modalView = self.modalView else { return };
-    let targetRect = self.targetRectProvider();
-    
-    let closestSnapPoint = self.getClosestSnapPoint(forRect: modalView.frame);
+    guard let modalView = self.modalView,
+          let targetView = self.targetView,
+          let closestSnapPoint =
+            self.getClosestSnapPoint(forRect: modalView.frame)
+    else { return };
     
     let interpolatedDuration = Self.interpolate(
       inputValue: closestSnapPoint.snapDistance,
-      rangeInput: [0, targetRect.height],
+      rangeInput: [0, targetView.frame.height],
       rangeOutput: [0.2, 0.7]
     );
     

@@ -25,7 +25,7 @@ extension AdaptiveModalManager {
       return rangeOutput.first!;
     };
     
-    if shouldClampMax, inputValue >= rangeInput.last! {
+    if shouldClampMax, inputValue <= rangeInput.last! {
       return rangeOutput.last!;
     };
     

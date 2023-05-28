@@ -65,6 +65,29 @@ public struct RNILayout {
     self.marginBottom = marginBottom;
   };
   
+  init(
+    derivedFrom prev: Self,
+    horizontalAlignment: HorizontalAlignment? = nil,
+    verticalAlignment: VerticalAlignment? = nil,
+    width: RNIComputableValue? = nil,
+    height: RNIComputableValue? = nil,
+    marginLeft: CGFloat? = nil,
+    marginRight: CGFloat? = nil,
+    marginTop: CGFloat? = nil,
+    marginBottom: CGFloat? = nil
+  ){
+    self.horizontalAlignment = horizontalAlignment ?? prev.horizontalAlignment;
+    self.verticalAlignment   = verticalAlignment   ?? prev.verticalAlignment;
+    
+    self.width  = width  ?? prev.width;
+    self.height = height ?? prev.height;
+    
+    self.marginLeft   = marginLeft   ?? prev.marginLeft;
+    self.marginRight  = marginRight  ?? prev.marginRight;
+    self.marginTop    = marginTop    ?? prev.marginTop;
+    self.marginBottom = marginBottom ?? prev.marginBottom;
+  };
+  
   // MARK: - Intermediate Functions
   // ------------------------------
   
