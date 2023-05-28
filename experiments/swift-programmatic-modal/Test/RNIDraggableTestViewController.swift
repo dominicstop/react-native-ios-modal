@@ -56,7 +56,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             )
           ),
         ],
-        snapDirection: .vertical
+        snapDirection: .bottomToTop
       );
       case .test02: return AdaptiveModalConfig(
         snapPoints: [
@@ -87,7 +87,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             )
           ),
         ],
-        snapDirection: .vertical,
+        snapDirection: .bottomToTop,
         interpolationClampingConfig: .init(
           shouldClampModalLastHeight: true,
           shouldClampModalLastWidth: true,

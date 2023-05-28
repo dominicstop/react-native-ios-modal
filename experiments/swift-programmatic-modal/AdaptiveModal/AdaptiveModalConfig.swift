@@ -9,8 +9,10 @@ import UIKit
 
 struct AdaptiveModalConfig {
   enum Direction {
-    case horizontal;
-    case vertical;
+    case bottomToTop;
+    case topToBottom;
+    case leftToRight;
+    case rightToLeft;
   };
   
   // MARK: - Properties

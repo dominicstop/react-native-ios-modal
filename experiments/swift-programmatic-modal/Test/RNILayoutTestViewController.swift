@@ -366,6 +366,10 @@ class RNILayoutTestViewController : UIViewController {
     self.updateFloatingView();
   };
   
+  override func viewDidLayoutSubviews() {
+    self.applyRadiusMaskFor();
+  };
+  
   func updateFloatingView(){
     let layoutConfig = self.layoutConfig;
     
@@ -378,10 +382,26 @@ class RNILayoutTestViewController : UIViewController {
     floatingView.frame = computedRect;
     
     self.floatingViewLabel.text = "\(self.layoutConfigIndex)";
+    self.applyRadiusMaskFor();
   };
   
   @objc func onPressFloatingView(_ sender: UITapGestureRecognizer){
     self.layoutConfigCount += 1;
     self.updateFloatingView();
+  };
+  
+  func applyRadiusMaskFor() {
+    let path = UIBezierPath(
+      shouldRoundRect  : self.floatingView.bounds,
+      topLeftRadius    : 20,
+      topRightRadius   : 20,
+      bottomLeftRadius : 20,
+      bottomRightRadius: 20
+    );
+    
+    let shape = CAShapeLayer();
+    shape.path = path.cgPath;
+    
+    self.floatingView.layer.mask = shape;
   };
 };
