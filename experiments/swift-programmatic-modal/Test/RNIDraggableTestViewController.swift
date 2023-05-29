@@ -84,6 +84,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 mode: .percent(percentValue: 0.7),
                 maxValue: ScreenSize.iPhone8.size.height
               )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalRadiusTopLeft: 20,
+              modalRadiusTopRight: 20,
+              modalRadiusBottomLeft: 20,
+              modalRadiusBottomRight: 20
             )
           ),
         ],
@@ -169,12 +175,12 @@ class RNIDraggableTestViewController : UIViewController {
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
     
     self.modalManager.computeSnapPoints();
-    self.modalManager.setFrameForModal();
+    self.modalManager.updateModal();
   };
   
   override func viewDidLayoutSubviews() {
     self.modalManager.computeSnapPoints();
-    self.modalManager.setFrameForModal();
+    self.modalManager.updateModal();
   };
   
   @objc func onPressFloatingViewLabel(_ sender: UITapGestureRecognizer){
@@ -186,5 +192,6 @@ class RNIDraggableTestViewController : UIViewController {
     print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
   
     self.modalManager.notifyOnDragPanGesture(sender);
+    
   };
 };

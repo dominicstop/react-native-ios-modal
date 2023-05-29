@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		880492582A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880492572A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift */; };
 		88075E272A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */; };
 		88203DC12A122AC20088C8E2 /* RNIDynamicModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88203DC02A122AC20088C8E2 /* RNIDynamicModal.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
@@ -89,6 +90,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		880492572A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalInterpolationPoint.swift; sourceTree = "<group>"; };
 		88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdaptiveModalManager+Helpers.swift"; sourceTree = "<group>"; };
 		88203DC02A122AC20088C8E2 /* RNIDynamicModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNIDynamicModal.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -511,6 +513,7 @@
 				88E8C0172A224A8D008C2FF8 /* AdaptiveModalSnapAnimationConfig.swift */,
 				88E8C0192A228289008C2FF8 /* AdaptiveModalClampingConfig.swift */,
 				88E8C01D2A234B0A008C2FF8 /* UIBezierPath+VariadicCornerRadius.swift */,
+				880492572A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift */,
 			);
 			path = AdaptiveModal;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				88D018352A1B3030004664D2 /* UIBlurEffect+Init.swift in Sources */,
 				88D0186C2A1B3030004664D2 /* RNIModal.swift in Sources */,
 				88D018682A1B3030004664D2 /* RNIModalPresentationTrigger.swift in Sources */,
+				880492582A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift in Sources */,
 				88D018282A1B3030004664D2 /* RNICleanable.swift in Sources */,
 				88D018462A1B3030004664D2 /* RNIDictionaryRepresentable.swift in Sources */,
 				88D018712A1B3030004664D2 /* RNIModalPresentationState.swift in Sources */,
