@@ -37,9 +37,7 @@ class AdaptiveModalManager {
   // -------------------
   
   var animator: UIViewPropertyAnimator?;
-  
   var displayLink: CADisplayLink?;
-  var displayLinkTimestampStart: CFTimeInterval?;
   
   /// The computed frames of the modal based on the snap points
   var interpolationSteps: [AdaptiveModalInterpolationPoint]?;
@@ -145,14 +143,6 @@ class AdaptiveModalManager {
     self.interpolationStepsSorted?.map {
       $0.computedRect.origin[keyPath: self.inputAxisKey];
     };
-  };
-  
-  var animationEndTimestamp: CFTimeInterval? {
-    guard let startTimestamp = self.displayLinkTimestampStart,
-          let animator = self.animator
-    else { return nil };
-    
-    return startTimestamp + animator.duration;
   };
   
   // MARK: - Init
@@ -305,10 +295,14 @@ class AdaptiveModalManager {
   };
   
   func interpolateModal(forGesturePoint gesturePoint: CGPoint){
-    guard let modalView = self.modalView else { return };
+    guard let modalView = self.modalView,
+          let gestureInitialPoint = self.gestureInitialPoint
+    else { return };
+    
     let modalRect = modalView.frame;
     
-    let gestureCoord = gesturePoint[keyPath: self.inputAxisKey];
+    let gestureCoord        = gesturePoint       [keyPath: self.inputAxisKey];
+    let gestureCoordInitial = gestureInitialPoint[keyPath: self.inputAxisKey];
     
     let gestureOffset = self.gestureOffset ?? {
       let modalCoord = modalRect.origin[keyPath: self.inputAxisKey];
@@ -319,6 +313,9 @@ class AdaptiveModalManager {
     }();
       
     let gestureInput = gestureCoord - gestureOffset;
+    let gestureInputMin = gestureCoordInitial;
+    
+    
     
     if let nextModalRect = self.interpolateModalRect(
       forInputValue: gestureInput
@@ -392,9 +389,8 @@ class AdaptiveModalManager {
       animator.addCompletion(completion);
     };
     
-    animator.addCompletion{ _ in
+    animator.addCompletion { _ in
       self.animator = nil;
-      //self.modalFrame = interpolationPoint.computedRect;
     };
 
     animator.startAnimation();
@@ -485,12 +481,15 @@ class AdaptiveModalManager {
     );
     
     self.displayLink = displayLink;
-    displayLink.add(to: .current, forMode: .default);
+    
+    displayLink.preferredFrameRateRange =
+      CAFrameRateRange(minimum: 60, maximum: 120);
+    
+    displayLink.add(to: .current, forMode: .common);
   };
   
   func endDisplayLink() {
     self.displayLink?.invalidate();
-    self.displayLinkTimestampStart = nil;
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink){
@@ -517,88 +516,35 @@ class AdaptiveModalManager {
     ///     to drive the interpolation.
     ///
   
-    guard let modalView = self.modalView else { return };
+    guard let modalView = self.modalView,
+          let modalViewPresentationLayer = modalView.layer.presentation()
+    else { return };
     
-    if self.displayLinkTimestampStart == nil {
-      self.displayLinkTimestampStart = displayLink.timestamp;
+    if self.isSwiping {
+      self.endDisplayLink();
     };
     
-    /// Will be `nil` if using **Method-A**.
-    ///
-    /// The interpolation input range if using **Method-B**, i.e., the
-    /// timestamp of when the modal animation begins and ends.
-    ///
-    let rangeInput: [CGFloat]? = {
-      guard let timestampStart = self.displayLinkTimestampStart,
-            let timestampEnd   = self.animationEndTimestamp
-      else { return nil };
-      
-      return [timestampStart, timestampEnd];
-    }();
+    let prevModalFrame = self.prevModalFrame;
+    let nextModalFrame = modalViewPresentationLayer.frame;
     
-    let inputValue = rangeInput != nil
-      ? displayLink.timestamp
-      : modalView.frame.origin[keyPath: self.inputAxisKey];
+    let inputValueNext = nextModalFrame.origin[keyPath: self.inputAxisKey];
+    let inputValuePrev = prevModalFrame.origin[keyPath: self.inputAxisKey];
     
-    let nextModalBorderRadiusMask: CAShapeLayer? = {
+    guard inputValueNext != inputValuePrev else { return  };
+    self.prevModalFrame = nextModalFrame;
     
-      /// Will be `nil` if using **Method-A**
-      /// The interpolation output range if using **Method-B**.
-      ///
-      let rangeOutput: [AdaptiveModalInterpolationPoint]? = {
-        guard rangeInput != nil else { return nil };
-      
-        let indexNext = self.currentSnapPointIndex;
-        let indexPrev = indexNext - 1;
-      
-        guard let interpolationSteps = self.interpolationSteps,
-              let nextStep = interpolationSteps[safeIndex: indexNext],
-              let prevStep = interpolationSteps[safeIndex: indexPrev]
-        else { return nil };
-        
-        return [prevStep, nextStep];
-      }();
-      
-      if let rangeInput = rangeInput,
-         let rangeOutput = rangeOutput {
-        
-        let modalFrameRect = self.interpolateModalRect(
-          forInputValue: inputValue,
-          rangeInput: rangeInput,
-          rangeOutput: rangeOutput
-        );
-        
-        let modalBoundsRect = CGRect(
-          origin: .zero,
-          size: modalFrameRect!.size
-        );
-        
-        return self.interpolateModalBorderRadius(
-          forInputValue: inputValue,
-          modalBounds: modalBoundsRect,
-          rangeInput: rangeInput,
-          rangeOutput: rangeOutput
-        );
-      };
-    
-      return self.interpolateModalBorderRadius(
-        forInputValue: inputValue,
-        modalBounds: modalView.bounds
-      );
-    }();
-    
+    if let nextModalBorderRadiusMask = self.interpolateModalBorderRadius(
+      forInputValue: inputValueNext,
+      modalBounds: modalViewPresentationLayer.bounds
+    ) {
+      modalView.layer.mask = nextModalBorderRadiusMask;
+    };
+
     print(
       "onDisplayLinkTick"
       + "\n - displayLink.timestamp: \(displayLink.timestamp)"
-      + "\n - inputValue: \(inputValue)"
-      + "\n - rangeInput: \(rangeInput)"
+      + "\n - presentation frame: \(modalView.layer.presentation()?.frame)"
     );
-    
-    //guard inputValueNext != inputValuePrev else { return  };
-    
-    if let nextModalBorderRadiusMask = nextModalBorderRadiusMask {
-      modalView.layer.mask = nextModalBorderRadiusMask;
-    };
   };
   
   
@@ -626,7 +572,11 @@ class AdaptiveModalManager {
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
+        self.animator?.stopAnimation(true);
     
+      case .changed:
+        self.interpolateModal(forGesturePoint: gesturePoint);
+        
       case .cancelled, .ended:
         guard self.enableSnapping else {
           self.clearGestureValues();
@@ -652,11 +602,7 @@ class AdaptiveModalManager {
         
         self.currentSnapPointIndex = closestSnapPoint.snapPointIndex;
         self.clearGestureValues();
-        break;
         
-      case .changed:
-        self.interpolateModal(forGesturePoint: gesturePoint);
-
       default:
         break;
     };
