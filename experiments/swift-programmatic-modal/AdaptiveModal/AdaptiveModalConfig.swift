@@ -44,4 +44,14 @@ struct AdaptiveModalConfig {
     self.snapAnimationConfig = snapAnimationConfig;
     self.interpolationClampingConfig = interpolationClampingConfig;
   };
+  
+  func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
+    switch self.snapDirection {
+      case .bottomToTop, .rightToLeft:
+        return array.reversed();
+        
+      case .topToBottom, .leftToRight:
+        return array;
+    };
+  };
 };
