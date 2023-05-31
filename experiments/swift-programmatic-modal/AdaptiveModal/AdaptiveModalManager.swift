@@ -8,76 +8,9 @@
 import UIKit
 
 
-class AdaptiveModalManager {
 
-  struct ViewMaskedCornersAnimator {
-    var inputAxisKey: KeyPath<CGPoint, CGFloat>;
-  
-    var animator: UIViewPropertyAnimator;
-  
-    var interpolationRangeStart: AdaptiveModalInterpolationPoint;
-    var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
-    
-    private var inputRangeStart: CGFloat {
-      self.interpolationRangeStart
-        .computedRect.origin[keyPath: self.inputAxisKey];
-    };
-    
-    private var inputRangeEnd: CGFloat {
-      self.interpolationRangeEnd
-        .computedRect.origin[keyPath: self.inputAxisKey];
-    };
-    
-    init(
-      interpolationRangeStart: AdaptiveModalInterpolationPoint,
-      interpolationRangeEnd: AdaptiveModalInterpolationPoint,
-      forView view: UIView,
-      inputAxisKey: KeyPath<CGPoint, CGFloat>
-    ) {
-      self.interpolationRangeStart = interpolationRangeStart;
-      self.interpolationRangeEnd = interpolationRangeEnd;
-      
-      self.inputAxisKey = inputAxisKey;
-      
-      let animator = UIViewPropertyAnimator(
-        duration: 0,
-        curve: .linear
-      );
-      
-      animator.addAnimations {
-        view.layer.maskedCorners = interpolationRangeEnd.modalMaskedCorners
-      };
-      
-      animator.stopAnimation(true);
-      self.animator = animator;
-    };
-    
-    mutating func update(
-      interpolationRangeStart: AdaptiveModalInterpolationPoint,
-      interpolationRangeEnd: AdaptiveModalInterpolationPoint
-    ){
-      let didChange =
-        interpolationRangeStart != self.interpolationRangeStart ||
-        interpolationRangeEnd   != self.interpolationRangeEnd;
-    
-      guard didChange else { return };
-      
-      self.interpolationRangeStart = interpolationRangeStart;
-      self.interpolationRangeEnd = interpolationRangeEnd;
-    };
-    
-    func setFractionComplete(forPercent percent: CGFloat){
-      self.animator.fractionComplete = percent;
-    };
-    
-    func setFractionComplete(forInputValue inputValue: CGFloat) {
-      let inputRangeEndAdj = self.inputRangeEnd - self.inputRangeStart;
-      let inputValueAdj = inputValue - self.inputRangeStart;
-      
-      let percent = inputValueAdj / inputValueAdj;
-      self.setFractionComplete(forPercent: percent);
-    };
-  };
+
+class AdaptiveModalManager {
 
   // MARK: -  Properties - Config-Related
   // ------------------------------------
@@ -102,7 +35,7 @@ class AdaptiveModalManager {
   
   var prevModalFrame: CGRect = .zero;
   
-  var modalViewMaskedCornersAnimator: ViewMaskedCornersAnimator?;
+  var modalViewMaskedCornersAnimator: AdaptiveModalPropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
@@ -338,7 +271,7 @@ class AdaptiveModalManager {
           )
     else { return };
     
-    let animator: ViewMaskedCornersAnimator = {
+    let animator: AdaptiveModalPropertyAnimator = {
       if var animator = self.modalViewMaskedCornersAnimator {
         animator.update(
           interpolationRangeStart: inputRange.rangeStart,
@@ -348,12 +281,14 @@ class AdaptiveModalManager {
         return animator;
       };
       
-      return ViewMaskedCornersAnimator(
+      return AdaptiveModalPropertyAnimator(
         interpolationRangeStart: inputRange.rangeStart,
         interpolationRangeEnd: inputRange.rangeEnd,
-        forView: modalView,
-        inputAxisKey: self.inputAxisKey
-      );
+        forComponent: modalView,
+        withInputAxisKey: self.inputAxisKey
+      ) {
+        $0.layer.maskedCorners = $1.modalMaskedCorners;
+      };
     }();
     
     animator.setFractionComplete(forInputValue: inputValue);

@@ -1,0 +1,81 @@
+//
+//  AdaptiveModalPropertyAnimator.swift
+//  swift-programmatic-modal
+//
+//  Created by Dominic Go on 5/31/23.
+//
+
+import UIKit
+
+struct AdaptiveModalPropertyAnimator {
+  var inputAxisKey: KeyPath<CGPoint, CGFloat>;
+  
+  var interpolationRangeStart: AdaptiveModalInterpolationPoint;
+  var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
+  
+  var animator: UIViewPropertyAnimator;
+  
+  private var inputRangeStart: CGFloat {
+    self.interpolationRangeStart
+      .computedRect.origin[keyPath: self.inputAxisKey];
+  };
+  
+  private var inputRangeEnd: CGFloat {
+    self.interpolationRangeEnd
+      .computedRect.origin[keyPath: self.inputAxisKey];
+  };
+  
+  init<T>(
+    interpolationRangeStart: AdaptiveModalInterpolationPoint,
+    interpolationRangeEnd: AdaptiveModalInterpolationPoint,
+    forComponent component: T,
+    withInputAxisKey inputAxisKey: KeyPath<CGPoint, CGFloat>,
+    animation: @escaping (
+      _ component: T,
+      _ interpolationPoint: AdaptiveModalInterpolationPoint
+    ) -> Void
+  ) {
+    self.interpolationRangeStart = interpolationRangeStart;
+    self.interpolationRangeEnd = interpolationRangeEnd;
+    
+    self.inputAxisKey = inputAxisKey;
+    
+    let animator = UIViewPropertyAnimator(
+      duration: 0,
+      curve: .linear
+    );
+    
+    animator.addAnimations {
+      animation(component, interpolationRangeEnd);
+    };
+    
+    animator.stopAnimation(true);
+    self.animator = animator;
+  };
+  
+  mutating func update(
+    interpolationRangeStart: AdaptiveModalInterpolationPoint,
+    interpolationRangeEnd: AdaptiveModalInterpolationPoint
+  ){
+    let didChange =
+      interpolationRangeStart != self.interpolationRangeStart ||
+      interpolationRangeEnd   != self.interpolationRangeEnd;
+  
+    guard didChange else { return };
+    
+    self.interpolationRangeStart = interpolationRangeStart;
+    self.interpolationRangeEnd = interpolationRangeEnd;
+  };
+  
+  func setFractionComplete(forPercent percent: CGFloat){
+    self.animator.fractionComplete = percent;
+  };
+  
+  func setFractionComplete(forInputValue inputValue: CGFloat) {
+    let inputRangeEndAdj = self.inputRangeEnd - self.inputRangeStart;
+    let inputValueAdj = inputValue - self.inputRangeStart;
+    
+    let percent = inputValueAdj / inputRangeEndAdj;
+    self.setFractionComplete(forPercent: percent);
+  };
+};

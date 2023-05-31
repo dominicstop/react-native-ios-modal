@@ -15,6 +15,7 @@
 		88B7D0F829C593F600490628 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88B7D0F729C593F600490628 /* Assets.xcassets */; };
 		88B7D0FB29C593F600490628 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88B7D0F929C593F600490628 /* LaunchScreen.storyboard */; };
 		88C2F45C2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2F45B2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift */; };
+		88C2F45E2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2F45D2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift */; };
 		88D016602A14C86B004664D2 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0165F2A14C86B004664D2 /* RootViewController.swift */; };
 		88D0168D2A1730B1004664D2 /* RNILayoutTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */; };
 		88D0169E2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */; };
@@ -101,6 +102,7 @@
 		88B7D0FA29C593F600490628 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88B7D0FC29C593F600490628 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		88C2F45B2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalSnapPointPreset.swift; sourceTree = "<group>"; };
+		88C2F45D2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalPropertyAnimator.swift; sourceTree = "<group>"; };
 		88D0165F2A14C86B004664D2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutTestViewController.swift; sourceTree = "<group>"; };
 		88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNIDraggableTestViewController.swift; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				88E8C0192A228289008C2FF8 /* AdaptiveModalClampingConfig.swift */,
 				88D018872A1D0A36004664D2 /* AdaptiveModalConfig.swift */,
 				880492572A23F89000D74E9F /* AdaptiveModalInterpolationPoint.swift */,
+				88C2F45D2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift */,
 				88D0188D2A1DCA61004664D2 /* AdaptiveModalManager.swift */,
 				88075E262A2121FE00B78388 /* AdaptiveModalManager+Helpers.swift */,
 			);
@@ -656,6 +659,7 @@
 				88E8C0182A224A8D008C2FF8 /* AdaptiveModalSnapAnimationConfig.swift in Sources */,
 				88D018562A1B3030004664D2 /* RNIWeakDictionary.swift in Sources */,
 				88203DC12A122AC20088C8E2 /* RNIDynamicModal.swift in Sources */,
+				88C2F45E2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift in Sources */,
 				88D018542A1B3030004664D2 /* RNIWeakArray.swift in Sources */,
 				88D018792A1B3030004664D2 /* RNIComputableValueMode.swift in Sources */,
 				88D018212A1B3030004664D2 /* CAGradientLayerType+Init.swift in Sources */,
