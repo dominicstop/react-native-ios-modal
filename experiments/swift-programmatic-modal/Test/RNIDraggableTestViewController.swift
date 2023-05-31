@@ -136,8 +136,8 @@ class RNIDraggableTestViewController : UIViewController {
     return label;
   }();
   
-  lazy var floatingView: MaskedView = {
-    let view = MaskedView();
+  lazy var floatingView: UIView = {
+    let view = UIView();
     
     view.backgroundColor = UIColor(
       hue: 0/360,

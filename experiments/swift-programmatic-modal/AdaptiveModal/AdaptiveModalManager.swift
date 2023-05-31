@@ -7,32 +7,6 @@
 
 import UIKit
 
-class MaskedView: UIView {
-  var maskShape: CAShapeLayer?;
-  
-  var maskingView: UIView?;
-  
-  override init(frame: CGRect) {
-    self.maskingView = UIView(frame: frame);
-    self.maskingView!.backgroundColor = .blue;
-    
-    super.init(frame: frame);
-    
-    self.mask = self.maskingView;
-  };
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  override func layoutSubviews() {
-    super.layoutSubviews();
-    
-    self.maskingView!.frame = self.frame;
-    print("MaskedView.layoutSubviews - frame: \(self.frame)")
-  };
-};
-
 
 class AdaptiveModalManager {
 
@@ -50,7 +24,7 @@ class AdaptiveModalManager {
   var currentSizeProvider: () -> CGSize;
 
   weak var targetView: UIView?;
-  weak var modalView: MaskedView?;
+  weak var modalView: UIView?;
   
   var gestureOffset: CGFloat?;
   var gestureVelocity: CGPoint?;
@@ -176,7 +150,7 @@ class AdaptiveModalManager {
   
   init(
     modalConfig: AdaptiveModalConfig,
-    modalView: MaskedView,
+    modalView: UIView,
     targetView: UIView,
     currentSizeProvider: @escaping () -> CGSize
   ) {
@@ -353,7 +327,7 @@ class AdaptiveModalManager {
       forInputValue: gestureInput,
       modalBounds: modalView.bounds
     ) {
-      modalView.maskShape = modalBorderRadiusMask;
+      modalView.layer.mask = modalBorderRadiusMask;
     };
   };
   
@@ -409,8 +383,6 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       modalView.frame = interpolationPoint.computedRect;
-      modalView.maskShape = interpolationPoint.modalRadiusMask;
-      modalView.layoutSubviews();
     };
     
     if let completion = completion {
@@ -420,7 +392,7 @@ class AdaptiveModalManager {
     animator.addCompletion { _ in
       self.animator = nil;
     };
-    
+
     animator.startAnimation();
   };
   
@@ -521,7 +493,6 @@ class AdaptiveModalManager {
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink){
-    return;
     /// `Note:2023-05-30-16-13-29`
     ///
     /// The interpolation can be driven by either via **Method-A** or
