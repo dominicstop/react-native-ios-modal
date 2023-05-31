@@ -20,10 +20,8 @@ struct AdaptiveModalAnimationConfig {
   let modalBackgroundColor: UIColor?;
   let modalBackgroundOpacity: CGFloat?;
   
-  let modalRadiusTopLeft: CGFloat?;
-  let modalRadiusTopRight: CGFloat?;
-  let modalRadiusBottomLeft: CGFloat?;
-  let modalRadiusBottomRight: CGFloat?;
+  let modalCornerRadius: CGFloat?;
+  let modalMaskedCorners: CACornerMask?;
   
   let modalBlurEffectStyle: UIBlurEffect.Style?;
   let modalBlurEffectIntensity: CGFloat?;
@@ -42,10 +40,8 @@ struct AdaptiveModalAnimationConfig {
      modalTranslateY: CGFloat? = nil,
      modalBackgroundColor: UIColor? = nil,
      modalBackgroundOpacity: CGFloat? = nil,
-     modalRadiusTopLeft: CGFloat? = nil,
-     modalRadiusTopRight: CGFloat? = nil,
-     modalRadiusBottomLeft: CGFloat? = nil,
-     modalRadiusBottomRight: CGFloat? = nil,
+     modalCornerRadius: CGFloat? = nil,
+     modalMaskedCorners: CACornerMask? = nil,
      modalBlurEffectStyle: UIBlurEffect.Style? = nil,
      modalBlurEffectIntensity: CGFloat? = nil,
      backgroundColor: UIColor? = nil,
@@ -64,10 +60,8 @@ struct AdaptiveModalAnimationConfig {
     self.modalBackgroundColor = modalBackgroundColor;
     self.modalBackgroundOpacity = modalBackgroundOpacity;
     
-    self.modalRadiusTopLeft = modalRadiusTopLeft;
-    self.modalRadiusTopRight = modalRadiusTopRight;
-    self.modalRadiusBottomLeft = modalRadiusBottomLeft;
-    self.modalRadiusBottomRight = modalRadiusBottomRight;
+    self.modalCornerRadius = modalCornerRadius;
+    self.modalMaskedCorners = modalMaskedCorners;
     
     self.modalBlurEffectStyle = modalBlurEffectStyle;
     self.modalBlurEffectIntensity = modalBlurEffectIntensity;

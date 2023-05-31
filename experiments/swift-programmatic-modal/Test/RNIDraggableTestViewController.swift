@@ -70,6 +70,13 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               height: RNIComputableValue(
                 mode: .percent(percentValue: 0.3)
               )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalCornerRadius: 15,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner
+              ]
             )
           ),
           AdaptiveModalSnapPointConfig(
@@ -86,10 +93,13 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalRadiusTopLeft: 20,
-              modalRadiusTopRight: 20,
-              modalRadiusBottomLeft: 20,
-              modalRadiusBottomRight: 20
+              modalCornerRadius: 20,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMinXMaxYCorner,
+                .layerMaxXMinYCorner,
+                .layerMaxXMaxYCorner
+              ]
             )
           ),
         ],

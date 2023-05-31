@@ -12,47 +12,29 @@ struct AdaptiveModalInterpolationPoint {
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
   
-  let modalRadiusTopLeft: CGFloat;
-  let modalRadiusTopRight: CGFloat;
-  let modalRadiusBottomLeft: CGFloat;
-  let modalRadiusBottomRight: CGFloat;
-  
-  var modalRadiusMask: CAShapeLayer {
-    let radiusPath = UIBezierPath(
-      shouldRoundRect: CGRect(
-        origin: .zero,
-        size: self.computedRect.size
-      ),
-      topLeftRadius: self.modalRadiusTopLeft,
-      topRightRadius: self.modalRadiusTopRight,
-      bottomLeftRadius: self.modalRadiusBottomLeft,
-      bottomRightRadius: self.modalRadiusBottomRight
-    );
-    
-    let shape = CAShapeLayer();
-    shape.path = radiusPath.cgPath;
-    
-    return shape;
-  };
-  
+  let modalCornerRadius: CGFloat;
+  let modalMaskedCorners: CACornerMask;
+
   init(
     withTargetRect targetRect: CGRect,
     currentSize: CGSize,
     snapPointConfig: AdaptiveModalSnapPointConfig,
-    modalRadiusTopLeft: CGFloat,
-    modalRadiusTopRight: CGFloat,
-    modalRadiusBottomLeft: CGFloat,
-    modalRadiusBottomRight: CGFloat
+    modalCornerRadius: CGFloat,
+    modalMaskedCorners: CACornerMask
   ) {
     self.computedRect = snapPointConfig.snapPoint.computeRect(
       withTargetRect: targetRect,
       currentSize: currentSize
     );
     
-    self.modalRadiusTopLeft = modalRadiusTopLeft;
-    self.modalRadiusTopRight = modalRadiusTopRight;
-    self.modalRadiusBottomLeft = modalRadiusBottomLeft;
-    self.modalRadiusBottomRight = modalRadiusBottomRight;
+    self.modalCornerRadius = modalCornerRadius;
+    self.modalMaskedCorners = modalMaskedCorners;
+  };
+  
+  func apply(toModalView modalView: UIView){
+    modalView.frame = self.computedRect;
+    modalView.layer.cornerRadius = self.modalCornerRadius;
+    modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
 };
 
@@ -67,6 +49,13 @@ extension AdaptiveModalInterpolationPoint {
   var items: [AdaptiveModalInterpolationPoint] = [];
 
   let defaultCornerRadius: CGFloat = 0;
+  
+  let defaultMaskedCorners: CACornerMask = [
+    .layerMaxXMinYCorner,
+    .layerMinXMinYCorner,
+    .layerMaxXMaxYCorner,
+    .layerMinXMaxYCorner,
+  ];
     
     for snapConfig in modalConfig.snapPoints {
       let keyframe = snapConfig.animationKeyframe;
@@ -78,17 +67,11 @@ extension AdaptiveModalInterpolationPoint {
           currentSize    : currentSize,
           snapPointConfig: snapConfig,
           
-          modalRadiusTopLeft: keyframe?.modalRadiusTopLeft
-            ?? prevKeyframe?.modalRadiusTopLeft ?? defaultCornerRadius,
+          modalCornerRadius: keyframe?.modalCornerRadius
+            ?? prevKeyframe?.modalCornerRadius ?? defaultCornerRadius,
             
-          modalRadiusTopRight: keyframe?.modalRadiusTopRight
-            ?? prevKeyframe?.modalRadiusTopRight ?? defaultCornerRadius,
-            
-          modalRadiusBottomLeft: keyframe?.modalRadiusBottomLeft
-            ?? prevKeyframe?.modalRadiusBottomLeft ?? defaultCornerRadius,
-            
-          modalRadiusBottomRight: keyframe?.modalRadiusBottomRight
-            ?? prevKeyframe?.modalRadiusBottomRight ?? defaultCornerRadius
+          modalMaskedCorners: keyframe?.modalMaskedCorners
+            ?? prevKeyframe?.modalMaskedCorners ?? defaultMaskedCorners
         )
       );
     };
