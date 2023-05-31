@@ -99,7 +99,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMaxYCorner,
                 .layerMaxXMinYCorner,
                 .layerMaxXMaxYCorner
-              ]
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .prominent)
             )
           ),
         ],
@@ -121,6 +122,7 @@ class RNIDraggableTestViewController : UIViewController {
     modalConfig: AdaptiveModalConfigTestPresets.default.config,
     modalView: self.floatingView,
     targetView: self.view,
+    backgroundVisualEffectView: self.backgroundVisualEffectView,
     currentSizeProvider: {
       .zero
     }
@@ -175,14 +177,62 @@ class RNIDraggableTestViewController : UIViewController {
     
     return view;
   }();
+  
+  lazy var backgroundVisualEffectView = UIVisualEffectView();
+  
+  lazy var dummyBackgroundView: UIView = {
+    let view = UIView();
+    
+    let imageView = UIImageView(
+      image: UIImage(named: "DummyBackgroundImage")
+    );
+    
+    imageView.contentMode = .scaleAspectFill;
+    
+    view.addSubview(imageView);
+    
+    imageView.translatesAutoresizingMaskIntoConstraints = false;
+    
+    NSLayoutConstraint.activate([
+      imageView.topAnchor.constraint(equalTo: view.topAnchor),
+      imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    ]);
+    
+    return view;
+  }();
 
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
+    
+    let dummyBackgroundView = self.dummyBackgroundView;
+    self.view.addSubview(dummyBackgroundView);
+    
+    let backgroundVisualEffectView = self.backgroundVisualEffectView;
+    self.view.addSubview(backgroundVisualEffectView);
+    
+    backgroundVisualEffectView.effect = nil;
     
     let floatingView = self.floatingView;
     self.view.addSubview(floatingView);
     
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
+    
+    dummyBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
+    backgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
+    
+    NSLayoutConstraint.activate([
+      dummyBackgroundView.topAnchor.constraint(equalTo: self.view.topAnchor),
+      dummyBackgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+      dummyBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+      dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+      
+      backgroundVisualEffectView.topAnchor.constraint(equalTo: self.view.topAnchor),
+      backgroundVisualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+      backgroundVisualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+      backgroundVisualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+    ]);
     
     self.modalManager.computeSnapPoints();
     self.modalManager.updateModal();

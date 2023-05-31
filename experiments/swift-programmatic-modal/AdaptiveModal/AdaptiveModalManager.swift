@@ -8,8 +8,6 @@
 import UIKit
 
 
-
-
 class AdaptiveModalManager {
 
   // MARK: -  Properties - Config-Related
@@ -27,6 +25,7 @@ class AdaptiveModalManager {
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
+  weak var backgroundVisualEffectView: UIVisualEffectView?;
   
   var gestureOffset: CGPoint?;
   var gestureVelocity: CGPoint?;
@@ -160,18 +159,69 @@ class AdaptiveModalManager {
     modalConfig: AdaptiveModalConfig,
     modalView: UIView,
     targetView: UIView,
+    backgroundVisualEffectView: UIVisualEffectView? = nil,
     currentSizeProvider: @escaping () -> CGSize
   ) {
     self.modalConfig = modalConfig;
     
     self.modalView = modalView;
     self.targetView = targetView;
+    self.backgroundVisualEffectView = backgroundVisualEffectView;
+    
     self.currentSizeProvider = currentSizeProvider;
   };
   
 
   // MARK: - Functions - Interpolation-Related
   // -----------------------------------------
+  
+  func getInterpolationStepRange(
+   forInputValue inputValue: CGFloat
+  ) -> (
+    rangeStart: AdaptiveModalInterpolationPoint,
+    rangeEnd: AdaptiveModalInterpolationPoint
+  )? {
+    guard let interpolationSteps = self.interpolationSteps,
+          let minStep = interpolationSteps.first,
+          let maxStep = interpolationSteps.last
+    else { return nil };
+    
+    let lastIndex = interpolationSteps.count - 1;
+    
+    if inputValue <= minStep.computedRect.origin[keyPath: self.inputAxisKey]{
+      return (
+        rangeStart: minStep,
+        rangeEnd: interpolationSteps[1]
+      );
+    };
+    
+    if inputValue >= maxStep.computedRect.origin[keyPath: self.inputAxisKey]{
+      return (
+        rangeStart: interpolationSteps[lastIndex - 1],
+        rangeEnd: maxStep
+      );
+    };
+    
+    let firstMatch = interpolationSteps.enumerated().first {
+      guard let nextItem = interpolationSteps[safeIndex: $0.offset + 1]
+      else { return false };
+      
+      let coordCurrent =
+        $0.element.computedRect.origin[keyPath: self.inputAxisKey];
+        
+      let coordNext =
+        nextItem.computedRect.origin[keyPath: self.inputAxisKey];
+      
+      return coordCurrent >= inputValue && inputValue <= coordNext;
+    };
+    
+    guard let rangeStart = firstMatch?.element,
+          let rangeStartIndex = firstMatch?.offset,
+          let rangeEnd = interpolationSteps[safeIndex: rangeStartIndex + 1]
+    else { return nil };
+    
+    return (rangeStart, rangeEnd);
+  };
   
   func interpolateModalRect(
     forInputValue inputValue: CGFloat,
@@ -400,6 +450,10 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
+      
+      if let bgEffectView = self.backgroundVisualEffectView {
+        interpolationPoint.apply(toBackgroundEffectView: bgEffectView);
+      };
     };
     
     if let completion = completion {
@@ -484,54 +538,6 @@ class AdaptiveModalManager {
       interpolationPoint: interpolationSteps[closestSnapPointIndex],
       snapDistance: deltaAvg[closestSnapPointIndex]
     );
-  };
-  
-  func getInterpolationStepRange(
-   forInputValue inputValue: CGFloat
-  ) -> (
-    rangeStart: AdaptiveModalInterpolationPoint,
-    rangeEnd: AdaptiveModalInterpolationPoint
-  )? {
-    guard let interpolationSteps = self.interpolationSteps,
-          let minStep = interpolationSteps.first,
-          let maxStep = interpolationSteps.last
-    else { return nil };
-    
-    let lastIndex = interpolationSteps.count - 1;
-    
-    if inputValue <= minStep.computedRect.origin[keyPath: self.inputAxisKey]{
-      return (
-        rangeStart: minStep,
-        rangeEnd: interpolationSteps[1]
-      );
-    };
-    
-    if inputValue >= maxStep.computedRect.origin[keyPath: self.inputAxisKey]{
-      return (
-        rangeStart: interpolationSteps[lastIndex - 1],
-        rangeEnd: maxStep
-      );
-    };
-    
-    let firstMatch = interpolationSteps.enumerated().first {
-      guard let nextItem = interpolationSteps[safeIndex: $0.offset + 1]
-      else { return false };
-      
-      let coordCurrent =
-        $0.element.computedRect.origin[keyPath: self.inputAxisKey];
-        
-      let coordNext =
-        nextItem.computedRect.origin[keyPath: self.inputAxisKey];
-      
-      return coordCurrent >= inputValue && inputValue <= coordNext;
-    };
-    
-    guard let rangeStart = firstMatch?.element,
-          let rangeStartIndex = firstMatch?.offset,
-          let rangeEnd = interpolationSteps[safeIndex: rangeStartIndex + 1]
-    else { return nil };
-    
-    return (rangeStart, rangeEnd);
   };
   
   // MARK: - Functions - DisplayLink-Related

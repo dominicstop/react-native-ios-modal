@@ -23,14 +23,14 @@ struct AdaptiveModalAnimationConfig {
   let modalCornerRadius: CGFloat?;
   let modalMaskedCorners: CACornerMask?;
   
-  let modalBlurEffectStyle: UIBlurEffect.Style?;
-  let modalBlurEffectIntensity: CGFloat?;
+  let modalVisualEffect: UIVisualEffect?;
+  let modalVisualEffectIntensity: CGFloat?;
   
   let backgroundColor: UIColor?;
   let backgroundOpacity: CGFloat?;
   
-  let backgroundBlurEffectStyle: UIBlurEffect.Style?;
-  let backgroundBlurEffectIntensity: CGFloat?;
+  let backgroundVisualEffect: UIVisualEffect?;
+  let backgroundVisualEffectIntensity: CGFloat?;
   
   init(
      modalRotation: CGFloat? = nil,
@@ -42,12 +42,12 @@ struct AdaptiveModalAnimationConfig {
      modalBackgroundOpacity: CGFloat? = nil,
      modalCornerRadius: CGFloat? = nil,
      modalMaskedCorners: CACornerMask? = nil,
-     modalBlurEffectStyle: UIBlurEffect.Style? = nil,
-     modalBlurEffectIntensity: CGFloat? = nil,
+     modalVisualEffect: UIVisualEffect? = nil,
+     modalVisualEffectIntensity: CGFloat? = nil,
      backgroundColor: UIColor? = nil,
      backgroundOpacity: CGFloat? = nil,
-     backgroundBlurEffectStyle: UIBlurEffect.Style? = nil,
-     backgroundBlurEffectIntensity: CGFloat? = nil
+     backgroundVisualEffect: UIVisualEffect? = nil,
+     backgroundVisualEffectIntensity: CGFloat? = nil
   ) {
     self.modalRotation = modalRotation;
     
@@ -63,13 +63,13 @@ struct AdaptiveModalAnimationConfig {
     self.modalCornerRadius = modalCornerRadius;
     self.modalMaskedCorners = modalMaskedCorners;
     
-    self.modalBlurEffectStyle = modalBlurEffectStyle;
-    self.modalBlurEffectIntensity = modalBlurEffectIntensity;
+    self.modalVisualEffect = modalVisualEffect;
+    self.modalVisualEffectIntensity = modalVisualEffectIntensity;
     
     self.backgroundColor = backgroundColor;
     self.backgroundOpacity = backgroundOpacity;
     
-    self.backgroundBlurEffectStyle = backgroundBlurEffectStyle;
-    self.backgroundBlurEffectIntensity = backgroundBlurEffectIntensity;
+    self.backgroundVisualEffect = backgroundVisualEffect;
+    self.backgroundVisualEffectIntensity = backgroundVisualEffectIntensity;
   };
 };
