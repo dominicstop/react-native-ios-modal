@@ -8,12 +8,15 @@
 import UIKit
 
 struct AdaptiveModalPropertyAnimator {
+
   var inputAxisKey: KeyPath<CGPoint, CGFloat>;
   
   var interpolationRangeStart: AdaptiveModalInterpolationPoint;
   var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
   
   var animator: UIViewPropertyAnimator;
+  
+  private weak var component: AnyObject?;
   
   private var inputRangeStart: CGFloat {
     self.interpolationRangeStart
@@ -25,7 +28,7 @@ struct AdaptiveModalPropertyAnimator {
       .computedRect.origin[keyPath: self.inputAxisKey];
   };
   
-  init<T>(
+  init<T: AnyObject>(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint,
     forComponent component: T,
@@ -39,6 +42,7 @@ struct AdaptiveModalPropertyAnimator {
     self.interpolationRangeEnd = interpolationRangeEnd;
     
     self.inputAxisKey = inputAxisKey;
+    self.component = component;
     
     let animator = UIViewPropertyAnimator(
       duration: 0,
@@ -49,25 +53,22 @@ struct AdaptiveModalPropertyAnimator {
       animation(component, interpolationRangeEnd);
     };
     
-    animator.stopAnimation(true);
+    
     self.animator = animator;
   };
   
-  mutating func update(
+  mutating func didRangeChange(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint
-  ){
+  ) -> Bool {
     let didChange =
       interpolationRangeStart != self.interpolationRangeStart ||
       interpolationRangeEnd   != self.interpolationRangeEnd;
   
-    guard didChange else { return };
-    
-    self.interpolationRangeStart = interpolationRangeStart;
-    self.interpolationRangeEnd = interpolationRangeEnd;
+    return didChange;
   };
   
-  func setFractionComplete(forPercent percent: CGFloat){
+  func setFractionComplete(forPercent percent: CGFloat) {
     self.animator.fractionComplete = percent;
   };
   
@@ -76,6 +77,15 @@ struct AdaptiveModalPropertyAnimator {
     let inputValueAdj = inputValue - self.inputRangeStart;
     
     let percent = inputValueAdj / inputRangeEndAdj;
+    
+    print(
+        "component: \(self.component)"
+      + "\n - percent: \(percent)"
+    );
     self.setFractionComplete(forPercent: percent);
+  };
+  
+  func clear(){
+    self.animator.stopAnimation(true);
   };
 };

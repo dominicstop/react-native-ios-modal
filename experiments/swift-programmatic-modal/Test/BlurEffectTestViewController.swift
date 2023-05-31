@@ -8,14 +8,41 @@
 import UIKit
 
 
+class BlurEffectView: UIVisualEffectView {
+    
+  var animator = UIViewPropertyAnimator(duration: 1, curve: .linear);
+  
+  func setBlur(intensity: CGFloat){
+    self.animator.fractionComplete = intensity;
+  };
+  
+  override func didMoveToSuperview() {
+    guard let superview = superview else { return }
+    backgroundColor = .clear
+    frame = superview.bounds //Or setup constraints instead
+    setupBlur()
+  }
+  
+  private func setupBlur() {
+    animator.stopAnimation(true)
+    effect = nil
 
+    animator.addAnimations { [weak self] in
+      self?.effect = UIBlurEffect(style: .dark)
+    }
+    animator.fractionComplete = 0.1; //This is your blur intensity in range 0 - 1
+  }
+  
+  deinit {
+    animator.stopAnimation(true)
+  }
+}
 
 
 class BlurEffectIntensityManager {
 
   var animator: UIViewPropertyAnimator?;
   var onDisplayLinkUpdateBlock: (() -> Void)? = nil;
-  
   
   func setBlur(
     forBlurEffectView blurEffectView: UIVisualEffectView,
@@ -24,16 +51,14 @@ class BlurEffectIntensityManager {
     duration: CGFloat = 0,
     curve: UIView.AnimationCurve = .easeIn
   ) {
-    guard self.animator == nil else { return };
-    
     let animator = UIViewPropertyAnimator(duration: duration, curve: curve);
     self.animator = animator;
     
+    blurEffectView.effect = nil;
     
-  
     animator.addAnimations {
       blurEffectView.effect = UIBlurEffect(style: blurEffectStyle);
-      blurEffectView.alpha = intensity;
+      // blurEffectView.alpha = intensity;
     };
     
     if duration == 0 {
@@ -43,6 +68,7 @@ class BlurEffectIntensityManager {
       
     } else {
       animator.startAnimation();
+      return;
       
       let displayLink = CADisplayLink(
         target: self,
@@ -62,6 +88,7 @@ class BlurEffectIntensityManager {
   };
   
   @objc func onDisplayLinkUpdate() {
+    return;
     self.onDisplayLinkUpdateBlock?();
   };
 };
@@ -69,7 +96,7 @@ class BlurEffectIntensityManager {
 
 class BlurEffectTestViewController: UIViewController {
 
-  lazy var blurEffectView = UIVisualEffectView();
+  lazy var blurEffectView = BlurEffectView();
   
   let blurManager = BlurEffectIntensityManager();
   var isBlurred = false;
@@ -102,6 +129,7 @@ class BlurEffectTestViewController: UIViewController {
     self.view = view;
     
     let blurEffectView = self.blurEffectView;
+    blurEffectView.effect = UIBlurEffect(style: .prominent);
     
     blurEffectView.addGestureRecognizer(
       UITapGestureRecognizer(
@@ -139,6 +167,7 @@ class BlurEffectTestViewController: UIViewController {
   };
   
   override func viewDidLoad() {
+    return;
     self.blurManager.setBlur(
       forBlurEffectView: self.blurEffectView,
       intensity: 1
@@ -146,21 +175,12 @@ class BlurEffectTestViewController: UIViewController {
   };
   
   @objc func onPressBlurView(_ sender: UITapGestureRecognizer){
+
     if isBlurred {
-      self.blurManager.setBlur(
-        forBlurEffectView: self.blurEffectView,
-        intensity: 0,
-        duration: 1,
-        curve: .easeIn
-      );
+      self.blurEffectView.setBlur(intensity: 0);
     
     } else {
-      self.blurManager.setBlur(
-        forBlurEffectView: self.blurEffectView,
-        intensity: 0.5,
-        duration: 1,
-        curve: .easeIn
-      );
+      self.blurEffectView.setBlur(intensity: 1);
     };
     
     self.isBlurred.toggle();

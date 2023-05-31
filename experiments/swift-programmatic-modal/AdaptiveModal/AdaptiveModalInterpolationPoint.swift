@@ -54,8 +54,8 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
   
-  func apply(toBackgroundEffectView effectView: UIVisualEffectView){
-    effectView.effect = self.backgroundVisualEffect;
+  func apply(toBackgroundEffectView effectView: UIVisualEffectView?){
+    effectView?.effect = self.backgroundVisualEffect;
   };
 };
 

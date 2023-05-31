@@ -212,7 +212,7 @@ class RNIDraggableTestViewController : UIViewController {
     let backgroundVisualEffectView = self.backgroundVisualEffectView;
     self.view.addSubview(backgroundVisualEffectView);
     
-    backgroundVisualEffectView.effect = nil;
+    // backgroundVisualEffectView.effect = nil;
     
     let floatingView = self.floatingView;
     self.view.addSubview(floatingView);
@@ -233,9 +233,6 @@ class RNIDraggableTestViewController : UIViewController {
       backgroundVisualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
       backgroundVisualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
     ]);
-    
-    self.modalManager.computeSnapPoints();
-    self.modalManager.updateModal();
   };
   
   override func viewDidLayoutSubviews() {

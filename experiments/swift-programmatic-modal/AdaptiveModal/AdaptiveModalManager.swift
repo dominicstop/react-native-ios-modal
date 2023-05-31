@@ -35,6 +35,7 @@ class AdaptiveModalManager {
   var prevModalFrame: CGRect = .zero;
   
   var modalViewMaskedCornersAnimator: AdaptiveModalPropertyAnimator?;
+  var backgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
@@ -169,6 +170,10 @@ class AdaptiveModalManager {
     self.backgroundVisualEffectView = backgroundVisualEffectView;
     
     self.currentSizeProvider = currentSizeProvider;
+  };
+  
+  deinit {
+    self.clearAnimators();
   };
   
 
@@ -322,12 +327,7 @@ class AdaptiveModalManager {
     else { return };
     
     let animator: AdaptiveModalPropertyAnimator = {
-      if var animator = self.modalViewMaskedCornersAnimator {
-        animator.update(
-          interpolationRangeStart: inputRange.rangeStart,
-          interpolationRangeEnd: inputRange.rangeEnd
-        );
-        
+      if let animator = self.backgroundVisualEffectAnimator {
         return animator;
       };
       
@@ -341,8 +341,38 @@ class AdaptiveModalManager {
       };
     }();
     
+    self.modalViewMaskedCornersAnimator = animator;
     animator.setFractionComplete(forInputValue: inputValue);
   };
+  
+  func applyInterpolationToBackgroundVisualEffect(
+    forInputValue inputValue: CGFloat
+  ) {
+    guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
+          let inputRange = self.getInterpolationStepRange(
+            forInputValue: inputValue
+          )
+    else { return };
+    
+    let animator: AdaptiveModalPropertyAnimator = {
+      if let animator = self.backgroundVisualEffectAnimator {
+        return animator;
+      };
+      
+      return AdaptiveModalPropertyAnimator(
+        interpolationRangeStart: inputRange.rangeStart,
+        interpolationRangeEnd: inputRange.rangeEnd,
+        forComponent: backgroundVisualEffectView,
+        withInputAxisKey: self.inputAxisKey
+      ) {
+        $0.effect = $1.backgroundVisualEffect;
+      };
+    }();
+    
+    self.backgroundVisualEffectAnimator = animator;
+    animator.setFractionComplete(forInputValue: inputValue);
+  };
+  
   
   func applyInterpolationToModal(forPoint point: CGPoint){
     guard let modalView = self.modalView else { return };
@@ -366,6 +396,7 @@ class AdaptiveModalManager {
     };
     
     self.applyInterpolationToModalMaskedCorners(forInputValue: inputValue);
+    self.applyInterpolationToBackgroundVisualEffect(forInputValue: inputValue);
   };
   
   func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
@@ -405,6 +436,7 @@ class AdaptiveModalManager {
   };
   
   func clearAnimators(){
+    self.modalViewMaskedCornersAnimator?.clear();
     self.modalViewMaskedCornersAnimator = nil;
   };
   
@@ -450,10 +482,6 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
-      
-      if let bgEffectView = self.backgroundVisualEffectView {
-        interpolationPoint.apply(toBackgroundEffectView: bgEffectView);
-      };
     };
     
     if let completion = completion {
@@ -576,7 +604,9 @@ class AdaptiveModalManager {
     let inputValueNext = nextModalFrame.origin[keyPath: self.inputAxisKey];
     let inputValuePrev = prevModalFrame.origin[keyPath: self.inputAxisKey];
     
-    guard inputValueNext != inputValuePrev else { return  };
+    guard inputValueNext != inputValuePrev else { return };
+    
+    self.applyInterpolationToBackgroundVisualEffect(forInputValue: inputValueNext);
     
     self.prevModalFrame = nextModalFrame;
   };
@@ -611,7 +641,7 @@ class AdaptiveModalManager {
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         
       case .cancelled, .ended:
-        self.clearAnimators();
+        // self.clearAnimators();
       
         guard self.enableSnapping else {
           self.clearGestureValues();
@@ -654,9 +684,13 @@ class AdaptiveModalManager {
       
       currentInterpolationStep.apply(toModalView: modalView);
     
-    } else {
-      self.applyInterpolationToModal(
-        forPoint: modalView.frame.origin
+    } else if let currentInterpolationStep = self.currentInterpolationStep {
+      currentInterpolationStep.apply(toModalView: modalView);
+      
+      return;
+      
+      currentInterpolationStep.apply(
+        toBackgroundEffectView: self.backgroundVisualEffectView
       );
     };
   };
