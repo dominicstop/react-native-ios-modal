@@ -26,6 +26,8 @@ class AdaptiveModalManager {
   weak var targetView: UIView?;
   weak var modalView: UIView?;
   
+  var modalMaskView: UIView?;
+  
   var gestureOffset: CGFloat?;
   var gestureVelocity: CGPoint?;
   var gestureInitialPoint: CGPoint?;
@@ -48,11 +50,13 @@ class AdaptiveModalManager {
   var modalFrame: CGRect? {
     set {
       guard let modalView = self.modalView,
+            let modalMaskView = self.modalMaskView,
             let newValue = newValue
       else { return };
       
       self.prevModalFrame = modalView.frame;
       modalView.frame = newValue;
+      modalMaskView.frame = newValue;
     }
     get {
       self.modalView?.frame;
@@ -159,6 +163,12 @@ class AdaptiveModalManager {
     self.modalView = modalView;
     self.targetView = targetView;
     self.currentSizeProvider = currentSizeProvider;
+    
+    let modalMaskView = UIView(frame: modalView.frame);
+    modalMaskView.backgroundColor = .blue;
+    modalView.mask = modalMaskView;
+    
+    self.modalMaskView = modalMaskView;
   };
   
 
@@ -296,6 +306,7 @@ class AdaptiveModalManager {
   
   func interpolateModal(forGesturePoint gesturePoint: CGPoint){
     guard let modalView = self.modalView,
+          let modalMaskView = self.modalMaskView,
           let gestureInitialPoint = self.gestureInitialPoint
     else { return };
     
@@ -325,9 +336,9 @@ class AdaptiveModalManager {
     
     if let modalBorderRadiusMask = self.interpolateModalBorderRadius(
       forInputValue: gestureInput,
-      modalBounds: modalView.bounds
+      modalBounds: modalMaskView.bounds
     ) {
-      modalView.layer.mask = modalBorderRadiusMask;
+      modalMaskView.layer.mask = modalBorderRadiusMask;
     };
   };
   
@@ -381,6 +392,7 @@ class AdaptiveModalManager {
     
     self.animator = animator;
     
+    
     animator.addAnimations {
       modalView.frame = interpolationPoint.computedRect;
     };
@@ -391,8 +403,11 @@ class AdaptiveModalManager {
     
     animator.addCompletion { _ in
       self.animator = nil;
-    };
+      // modalView.backgroundColor = .red;
 
+    };
+    
+    //modalView.backgroundColor = .red;
     animator.startAnimation();
   };
   
@@ -520,6 +535,10 @@ class AdaptiveModalManager {
           let modalViewPresentationLayer = modalView.layer.presentation()
     else { return };
     
+    return;
+    
+    modalView.backgroundColor = .blue;
+    
     if self.isSwiping {
       self.endDisplayLink();
     };
@@ -530,8 +549,14 @@ class AdaptiveModalManager {
     let inputValueNext = nextModalFrame.origin[keyPath: self.inputAxisKey];
     let inputValuePrev = prevModalFrame.origin[keyPath: self.inputAxisKey];
     
-    guard inputValueNext != inputValuePrev else { return  };
+    //guard inputValueNext != inputValuePrev else { return  };
     self.prevModalFrame = nextModalFrame;
+    
+    print(
+      "onDisplayLinkTick"
+      + "\n - displayLink.timestamp: \(displayLink.timestamp)"
+      + "\n - inputValueNext: \(inputValueNext)"
+    );
     
     if let nextModalBorderRadiusMask = self.interpolateModalBorderRadius(
       forInputValue: inputValueNext,
@@ -539,12 +564,6 @@ class AdaptiveModalManager {
     ) {
       modalView.layer.mask = nextModalBorderRadiusMask;
     };
-
-    print(
-      "onDisplayLinkTick"
-      + "\n - displayLink.timestamp: \(displayLink.timestamp)"
-      + "\n - presentation frame: \(modalView.layer.presentation()?.frame)"
-    );
   };
   
   
@@ -570,14 +589,17 @@ class AdaptiveModalManager {
     self.gestureVelocity = gestureVelocity;
     
     switch gesture.state {
-      case .began:
+      case .began, .cancelled:
         self.gestureInitialPoint = gesturePoint;
+        
+        self.endDisplayLink();
         self.animator?.stopAnimation(true);
+        self.animator = nil;
     
       case .changed:
         self.interpolateModal(forGesturePoint: gesturePoint);
         
-      case .cancelled, .ended:
+      case .ended:
         guard self.enableSnapping else {
           self.clearGestureValues();
           return;
