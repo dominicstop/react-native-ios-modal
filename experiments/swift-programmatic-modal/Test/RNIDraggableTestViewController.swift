@@ -100,7 +100,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMinYCorner,
                 .layerMaxXMaxYCorner
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .prominent)
+              backgroundVisualEffect: UIBlurEffect(style: .regular)
             )
           ),
         ],
@@ -153,7 +153,7 @@ class RNIDraggableTestViewController : UIViewController {
     
     view.backgroundColor = UIColor(
       hue: 0/360,
-      saturation: 50/100,
+      saturation: 0/100,
       brightness: 100/100,
       alpha: 1.0
     );

@@ -68,6 +68,20 @@ struct AdaptiveModalPropertyAnimator {
     return didChange;
   };
   
+  mutating func update(
+    interpolationRangeStart: AdaptiveModalInterpolationPoint,
+    interpolationRangeEnd: AdaptiveModalInterpolationPoint
+  ){
+    let didChange =
+      interpolationRangeStart != self.interpolationRangeStart ||
+      interpolationRangeEnd   != self.interpolationRangeEnd;
+  
+    guard didChange else { return };
+    
+    self.interpolationRangeStart = interpolationRangeStart;
+    self.interpolationRangeEnd = interpolationRangeEnd;
+  };
+  
   func setFractionComplete(forPercent percent: CGFloat) {
     self.animator.fractionComplete = percent;
   };
