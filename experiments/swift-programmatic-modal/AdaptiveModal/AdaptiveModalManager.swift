@@ -45,22 +45,14 @@ class AdaptiveModalManager {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var modalRect: CGRect? {
+  var modalFrame: CGRect? {
     set {
       guard let modalView = self.modalView,
             let newValue = newValue
       else { return };
       
-      if let modalPresentationLayer = modalView.layer.presentation() {
-        self.prevModalFrame = modalPresentationLayer.frame;
-      };
-      
-      modalView.bounds.size = newValue.size;
-      
-      modalView.transform = CGAffineTransform(
-        translationX: newValue.midX,
-        y: newValue.midY
-      );
+      self.prevModalFrame = modalView.frame;
+      modalView.frame = newValue;
     }
     get {
       self.modalView?.frame;
@@ -328,7 +320,7 @@ class AdaptiveModalManager {
     if let nextModalRect = self.interpolateModalRect(
       forInputValue: gestureInput
     ) {
-      self.modalRect = nextModalRect;
+      self.modalFrame = nextModalRect;
     };
     
     if let modalBorderRadiusMask = self.interpolateModalBorderRadius(
@@ -390,8 +382,7 @@ class AdaptiveModalManager {
     self.animator = animator;
     
     animator.addAnimations {
-      self.modalRect = interpolationPoint.computedRect;
-      modalView.layer.mask = interpolationPoint.modalRadiusMask
+      modalView.frame = interpolationPoint.computedRect;
     };
     
     if let completion = completion {
@@ -502,7 +493,6 @@ class AdaptiveModalManager {
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink){
-    return;
     /// `Note:2023-05-30-16-13-29`
     ///
     /// The interpolation can be driven by either via **Method-A** or
@@ -553,8 +543,7 @@ class AdaptiveModalManager {
     print(
       "onDisplayLinkTick"
       + "\n - displayLink.timestamp: \(displayLink.timestamp)"
-      + "\n - inputValueNext: \(inputValueNext)"
-      + "\n - inputValuePrev: \(inputValuePrev)"
+      + "\n - presentation frame: \(modalView.layer.presentation()?.frame)"
     );
   };
   
@@ -633,7 +622,7 @@ class AdaptiveModalManager {
         currentSize: self.currentSizeProvider()
       );
       
-      self.modalRect = computedRect;
+      self.modalFrame = computedRect;
     };
   };
   
