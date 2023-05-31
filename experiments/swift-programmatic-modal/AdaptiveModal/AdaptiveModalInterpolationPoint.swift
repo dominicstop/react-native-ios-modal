@@ -18,11 +18,13 @@ struct AdaptiveModalInterpolationPoint {
   let modalRadiusBottomRight: CGFloat;
   
   var modalRadiusMask: CAShapeLayer {
+    let bounds = CGRect(
+      origin: .zero,
+      size: self.computedRect.size
+    );
+    
     let radiusPath = UIBezierPath(
-      shouldRoundRect: CGRect(
-        origin: .zero,
-        size: self.computedRect.size
-      ),
+      shouldRoundRect: bounds,
       topLeftRadius: self.modalRadiusTopLeft,
       topRightRadius: self.modalRadiusTopRight,
       bottomLeftRadius: self.modalRadiusBottomLeft,

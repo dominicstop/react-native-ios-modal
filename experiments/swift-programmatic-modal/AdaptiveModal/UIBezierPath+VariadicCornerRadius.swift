@@ -110,6 +110,8 @@ extension UIBezierPath {
     } else {
       path.addLine(to: topLeft);
     };
+    
+    
 
     path.closeSubpath();
     cgPath = path;
