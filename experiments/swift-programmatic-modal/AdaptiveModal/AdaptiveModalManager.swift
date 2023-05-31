@@ -10,6 +10,75 @@ import UIKit
 
 class AdaptiveModalManager {
 
+  struct ViewMaskedCornersAnimator {
+    var inputAxisKey: KeyPath<CGPoint, CGFloat>;
+  
+    var animator: UIViewPropertyAnimator;
+  
+    var interpolationRangeStart: AdaptiveModalInterpolationPoint;
+    var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
+    
+    private var inputRangeStart: CGFloat {
+      self.interpolationRangeStart
+        .computedRect.origin[keyPath: self.inputAxisKey];
+    };
+    
+    private var inputRangeEnd: CGFloat {
+      self.interpolationRangeEnd
+        .computedRect.origin[keyPath: self.inputAxisKey];
+    };
+    
+    init(
+      interpolationRangeStart: AdaptiveModalInterpolationPoint,
+      interpolationRangeEnd: AdaptiveModalInterpolationPoint,
+      forView view: UIView,
+      inputAxisKey: KeyPath<CGPoint, CGFloat>
+    ) {
+      self.interpolationRangeStart = interpolationRangeStart;
+      self.interpolationRangeEnd = interpolationRangeEnd;
+      
+      self.inputAxisKey = inputAxisKey;
+      
+      let animator = UIViewPropertyAnimator(
+        duration: 0,
+        curve: .linear
+      );
+      
+      animator.addAnimations {
+        view.layer.maskedCorners = interpolationRangeEnd.modalMaskedCorners
+      };
+      
+      animator.stopAnimation(true);
+      self.animator = animator;
+    };
+    
+    mutating func update(
+      interpolationRangeStart: AdaptiveModalInterpolationPoint,
+      interpolationRangeEnd: AdaptiveModalInterpolationPoint
+    ){
+      let didChange =
+        interpolationRangeStart != self.interpolationRangeStart ||
+        interpolationRangeEnd   != self.interpolationRangeEnd;
+    
+      guard didChange else { return };
+      
+      self.interpolationRangeStart = interpolationRangeStart;
+      self.interpolationRangeEnd = interpolationRangeEnd;
+    };
+    
+    func setFractionComplete(forPercent percent: CGFloat){
+      self.animator.fractionComplete = percent;
+    };
+    
+    func setFractionComplete(forInputValue inputValue: CGFloat) {
+      let inputRangeEndAdj = self.inputRangeEnd - self.inputRangeStart;
+      let inputValueAdj = inputValue - self.inputRangeStart;
+      
+      let percent = inputValueAdj / inputValueAdj;
+      self.setFractionComplete(forPercent: percent);
+    };
+  };
+
   // MARK: -  Properties - Config-Related
   // ------------------------------------
   
@@ -32,6 +101,8 @@ class AdaptiveModalManager {
   var gesturePoint: CGPoint?;
   
   var prevModalFrame: CGRect = .zero;
+  
+  var modalViewMaskedCornersAnimator: ViewMaskedCornersAnimator?;
   
   // MARK: -  Properties
   // -------------------
@@ -253,8 +324,39 @@ class AdaptiveModalManager {
         $0.modalCornerRadius
       }
     );
+    
     guard let modalCornerRadius = modalCornerRadius else { return nil };
     return modalCornerRadius;
+  };
+  
+  func applyInterpolationToModalMaskedCorners(
+    forInputValue inputValue: CGFloat
+  ) {
+    guard let modalView = self.modalView,
+          let inputRange = self.getInterpolationStepRange(
+            forInputValue: inputValue
+          )
+    else { return };
+    
+    let animator: ViewMaskedCornersAnimator = {
+      if var animator = self.modalViewMaskedCornersAnimator {
+        animator.update(
+          interpolationRangeStart: inputRange.rangeStart,
+          interpolationRangeEnd: inputRange.rangeEnd
+        );
+        
+        return animator;
+      };
+      
+      return ViewMaskedCornersAnimator(
+        interpolationRangeStart: inputRange.rangeStart,
+        interpolationRangeEnd: inputRange.rangeEnd,
+        forView: modalView,
+        inputAxisKey: self.inputAxisKey
+      );
+    }();
+    
+    animator.setFractionComplete(forInputValue: inputValue);
   };
   
   func applyInterpolationToModal(forPoint point: CGPoint){
@@ -277,6 +379,8 @@ class AdaptiveModalManager {
     if let nextModalRadius = nextModalRadius  {
       modalView.layer.cornerRadius = nextModalRadius;
     };
+    
+    self.applyInterpolationToModalMaskedCorners(forInputValue: inputValue);
   };
   
   func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
@@ -313,6 +417,10 @@ class AdaptiveModalManager {
     self.gestureInitialPoint = nil;
     self.gestureVelocity = nil;
     self.gesturePoint = nil;
+  };
+  
+  func clearAnimators(){
+    self.modalViewMaskedCornersAnimator = nil;
   };
   
   func animateModal(
@@ -443,6 +551,56 @@ class AdaptiveModalManager {
     );
   };
   
+  func getInterpolationStepRange(
+   forInputValue inputValue: CGFloat
+  ) -> (
+    rangeStart: AdaptiveModalInterpolationPoint,
+    rangeEnd: AdaptiveModalInterpolationPoint
+  )? {
+    guard let interpolationSteps = self.interpolationSteps,
+          let minStep = interpolationSteps.first,
+          let maxStep = interpolationSteps.last
+    else { return nil };
+    
+    let lastIndex = interpolationSteps.count - 1;
+    
+    if inputValue <= minStep.computedRect.origin[keyPath: self.inputAxisKey]{
+      return (
+        rangeStart: minStep,
+        rangeEnd: interpolationSteps[1]
+      );
+    };
+    
+    if inputValue >= maxStep.computedRect.origin[keyPath: self.inputAxisKey]{
+      return (
+        rangeStart: interpolationSteps[lastIndex - 1],
+        rangeEnd: maxStep
+      );
+    };
+    
+    let firstMatch = interpolationSteps.enumerated().first {
+      guard let nextItem = interpolationSteps[safeIndex: $0.offset + 1]
+      else { return false };
+      
+      let coordCurrent =
+        $0.element.computedRect.origin[keyPath: self.inputAxisKey];
+        
+      let coordNext =
+        nextItem.computedRect.origin[keyPath: self.inputAxisKey];
+      
+      return coordCurrent >= inputValue && inputValue <= coordNext;
+    };
+    
+    guard let rangeStart = firstMatch?.element,
+          let rangeStartIndex = firstMatch?.offset,
+          let rangeEnd = interpolationSteps[safeIndex: rangeStartIndex + 1]
+    else { return nil };
+    
+    return (rangeStart, rangeEnd);
+  };
+  
+  // MARK: - Functions - DisplayLink-Related
+  // ---------------------------------------
     
   func startDisplayLink() {
     let displayLink = CADisplayLink(
@@ -512,6 +670,8 @@ class AdaptiveModalManager {
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         
       case .cancelled, .ended:
+        self.clearAnimators();
+      
         guard self.enableSnapping else {
           self.clearGestureValues();
           return;

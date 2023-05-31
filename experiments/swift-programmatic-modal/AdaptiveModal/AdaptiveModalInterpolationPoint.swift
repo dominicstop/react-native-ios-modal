@@ -7,7 +7,9 @@
 
 import UIKit
 
-struct AdaptiveModalInterpolationPoint {
+struct AdaptiveModalInterpolationPoint: Equatable {
+
+  let modalConfigIndex: Int;
 
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
@@ -16,11 +18,14 @@ struct AdaptiveModalInterpolationPoint {
   let modalMaskedCorners: CACornerMask;
 
   init(
+    modalConfigIndex: Int,
     withTargetRect targetRect: CGRect,
     currentSize: CGSize,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     prevSnapPointConfig: AdaptiveModalSnapPointConfig? = nil
   ) {
+    self.modalConfigIndex = modalConfigIndex;
+    
     self.computedRect = snapPointConfig.snapPoint.computeRect(
       withTargetRect: targetRect,
       currentSize: currentSize
@@ -69,6 +74,7 @@ extension AdaptiveModalInterpolationPoint {
       
       items.append(
         AdaptiveModalInterpolationPoint(
+          modalConfigIndex: index,
           withTargetRect: targetRect,
           currentSize: currentSize,
           snapPointConfig: snapConfig,
@@ -88,6 +94,7 @@ extension AdaptiveModalInterpolationPoint {
       );
       
       return AdaptiveModalInterpolationPoint(
+        modalConfigIndex: modalConfig.snapPointLastIndex + 1,
         withTargetRect: targetRect,
         currentSize: currentSize,
         snapPointConfig: snapPointConfig,
@@ -98,3 +105,4 @@ extension AdaptiveModalInterpolationPoint {
     return items;
   };
 };
+
