@@ -1,89 +1,43 @@
 //
-//  AdaptiveModalInitialSnapPoint.swift
+//  AdaptiveModalSnapPointPreset.swift
 //  swift-programmatic-modal
 //
-//  Created by Dominic Go on 5/23/23.
+//  Created by Dominic Go on 5/31/23.
 //
 
-import UIKit
+import Foundation
 
-enum AdaptiveModalSnapPointPreset {
-  case offscreenBottom, offscreenTop, offscreenLeft, offscreenRight;
-  case edgeBottom, edgeTop, edgeLeft, edgeRight;
-  case center;
+struct AdaptiveModalSnapPointPreset {
+
+  let snapPointPreset: RNILayoutPreset;
+  let animationKeyframe: AdaptiveModalAnimationConfig?;
   
-  case layoutConfig(_ config: RNILayout);
-  
-  func computeSnapPoint(
-    fromSnapPointConfig prevSnapPoint: RNILayout,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
-  ) -> RNILayout {
-  
-    let prevRect = prevSnapPoint.computeRect(
-      withTargetRect: targetRect,
-      currentSize: currentSize
-    );
-  
-    switch self {
-      case .offscreenBottom:
-        return .init(
-          derivedFrom: prevSnapPoint
-        );
-      
-      case .offscreenTop:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          verticalAlignment: .top,
-          marginTop: -prevRect.height
-        );
-      
-      case .offscreenLeft:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          horizontalAlignment: .left,
-          marginLeft: -prevRect.width
-        );
-      
-      case .offscreenRight:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          horizontalAlignment: .right,
-          marginRight: prevRect.width
-        );
-      
-      case .edgeBottom:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          verticalAlignment: .bottom
-        );
-      
-      case .edgeTop:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          verticalAlignment: .top
-        );
-      
-      case .edgeLeft:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          horizontalAlignment: .left
-        );
-      
-      case .edgeRight:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          horizontalAlignment: .right
-        );
-      
-      case .center:
-        return .init(
-          derivedFrom: prevSnapPoint,
-          verticalAlignment: .center
-        );
-      
-      case let .layoutConfig(config):
-        return config;
+  init(
+    snapPoint: RNILayoutPreset,
+    animationKeyframe: AdaptiveModalAnimationConfig? = nil
+  ) {
+    self.snapPointPreset = snapPoint;
+    self.animationKeyframe = animationKeyframe;
+  };
+};
+
+extension AdaptiveModalSnapPointPreset {
+  static func getDefaultSnapPoint(
+    forDirection direction: AdaptiveModalConfig.Direction
+  ) -> RNILayoutPreset {
+    switch direction {
+      case .bottomToTop: return .offscreenTop;
+      case .topToBottom: return .offscreenBottom;
+      case .leftToRight: return .offscreenLeft;
+      case .rightToLeft: return .offscreenRight;
     };
+  };
+  
+  static func getDefault(
+    forDirection direction: AdaptiveModalConfig.Direction
+  ) -> Self {
+    Self.init(
+      snapPoint: Self.getDefaultSnapPoint(forDirection: direction)
+    );
   };
 };

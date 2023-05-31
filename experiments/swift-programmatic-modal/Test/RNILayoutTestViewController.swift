@@ -290,8 +290,8 @@ class RNILayoutTestViewController : UIViewController {
       marginRight: 20,
       marginBottom: 20
     ),
-    AdaptiveModalSnapPointPreset.offscreenTop.computeSnapPoint(
-      fromSnapPointConfig: RNILayout(
+    RNILayoutPreset.offscreenTop.getLayoutConfig(
+      fromBaseLayoutConfig: RNILayout(
         horizontalAlignment: .left,
         verticalAlignment: .top,
         width: RNIComputableValue(

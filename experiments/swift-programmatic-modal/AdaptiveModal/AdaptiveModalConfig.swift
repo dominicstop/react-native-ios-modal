@@ -26,8 +26,14 @@ struct AdaptiveModalConfig {
   let snapAnimationConfig: AdaptiveModalSnapAnimationConfig;
   let interpolationClampingConfig: AdaptiveModalClampingConfig;
   
+  let overshootSnapPoint: AdaptiveModalSnapPointPreset;
+  
   // let entranceConfig: AdaptiveModalEntranceConfig;
   // let snapSwipeVelocityThreshold: CGFloat = 0;
+  
+  var snapPointLastIndex: Int {
+    self.snapPoints.count - 1;
+  };
   
   // MARK: - Init
   // ------------
@@ -36,14 +42,21 @@ struct AdaptiveModalConfig {
     snapPoints: [AdaptiveModalSnapPointConfig],
     snapDirection: Direction,
     snapAnimationConfig: AdaptiveModalSnapAnimationConfig = .default,
-    interpolationClampingConfig: AdaptiveModalClampingConfig = .default
+    interpolationClampingConfig: AdaptiveModalClampingConfig = .default,
+    overshootSnapPoint: AdaptiveModalSnapPointPreset? = nil
   ) {
     self.snapPoints = snapPoints;
     self.snapDirection = snapDirection;
     
     self.snapAnimationConfig = snapAnimationConfig;
     self.interpolationClampingConfig = interpolationClampingConfig;
+    
+    self.overshootSnapPoint = overshootSnapPoint
+      ?? .getDefault(forDirection: snapDirection);
   };
+  
+  // MARK: - Functions
+  // -----------------
   
   func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
     switch self.snapDirection {

@@ -270,19 +270,12 @@ class AdaptiveModalManager {
       modalBounds: modalView.bounds
     );
     
-    print(
-      "applyInterpolationToModal"
-      + "\n - inputValue: \(inputValue)"
-      + "\n - nextModalRect: \(nextModalRect)"
-      + "\n - nextModalRadius: \(nextModalRadius)"
-    );
-    
     if let nextModalRect = nextModalRect{
       self.modalFrame = nextModalRect;
     };
     
     if let nextModalRadius = nextModalRadius  {
-      // modalView.layer.cornerRadius = modalCornerRadius;
+      modalView.layer.cornerRadius = nextModalRadius;
     };
   };
   
@@ -399,7 +392,11 @@ class AdaptiveModalManager {
     };
     
     let closestSnapPoint = deltaSorted.first!;
-    let closestSnapPointIndex = closestSnapPoint.offset;
+    
+    let closestSnapPointIndex = min(
+      closestSnapPoint.offset,
+      self.modalConfig.snapPointLastIndex
+    );
     
     return (
       snapPointIndex: closestSnapPointIndex,

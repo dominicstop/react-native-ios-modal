@@ -19,16 +19,23 @@ struct AdaptiveModalInterpolationPoint {
     withTargetRect targetRect: CGRect,
     currentSize: CGSize,
     snapPointConfig: AdaptiveModalSnapPointConfig,
-    modalCornerRadius: CGFloat,
-    modalMaskedCorners: CACornerMask
+    prevSnapPointConfig: AdaptiveModalSnapPointConfig? = nil
   ) {
     self.computedRect = snapPointConfig.snapPoint.computeRect(
       withTargetRect: targetRect,
       currentSize: currentSize
     );
     
-    self.modalCornerRadius = modalCornerRadius;
-    self.modalMaskedCorners = modalMaskedCorners;
+    let keyframeCurrent = snapPointConfig.animationKeyframe;
+    let keyframePrev    = prevSnapPointConfig?.animationKeyframe;
+    
+    self.modalCornerRadius = keyframeCurrent?.modalCornerRadius
+      ?? keyframePrev?.modalCornerRadius
+      ?? Self.DefaultCornerRadius;
+      
+    self.modalMaskedCorners = keyframePrev?.modalMaskedCorners
+      ?? keyframePrev?.modalMaskedCorners
+      ?? Self.DefaultMaskedCorners;
   };
   
   func apply(toModalView modalView: UIView){
@@ -39,44 +46,55 @@ struct AdaptiveModalInterpolationPoint {
 };
 
 extension AdaptiveModalInterpolationPoint {
-  
-  static func compute(
-    usingModalConfig modalConfig: AdaptiveModalConfig,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
-  ) -> [AdaptiveModalInterpolationPoint] {
 
-  var items: [AdaptiveModalInterpolationPoint] = [];
-
-  let defaultCornerRadius: CGFloat = 0;
+  private static let DefaultCornerRadius: CGFloat = 0;
   
-  let defaultMaskedCorners: CACornerMask = [
+  private static let DefaultMaskedCorners: CACornerMask = [
     .layerMaxXMinYCorner,
     .layerMinXMinYCorner,
     .layerMaxXMaxYCorner,
     .layerMinXMaxYCorner,
   ];
-    
-    for snapConfig in modalConfig.snapPoints {
-      let keyframe = snapConfig.animationKeyframe;
-      let prevKeyframe = items.last;
+  
+  static func compute(
+    usingModalConfig modalConfig: AdaptiveModalConfig,
+    withTargetRect targetRect: CGRect,
+    currentSize: CGSize
+  ) -> [Self] {
+
+  var items: [AdaptiveModalInterpolationPoint] = [];
+
+    for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
+      let prevSnapConfig = modalConfig.snapPoints[safeIndex: index];
       
       items.append(
         AdaptiveModalInterpolationPoint(
-          withTargetRect : targetRect,
-          currentSize    : currentSize,
+          withTargetRect: targetRect,
+          currentSize: currentSize,
           snapPointConfig: snapConfig,
-          
-          modalCornerRadius: keyframe?.modalCornerRadius
-            ?? prevKeyframe?.modalCornerRadius ?? defaultCornerRadius,
-            
-          modalMaskedCorners: keyframe?.modalMaskedCorners
-            ?? prevKeyframe?.modalMaskedCorners ?? defaultMaskedCorners
+          prevSnapPointConfig: prevSnapConfig
         )
       );
     };
     
+    items.append({
+      let prevSnapPointConfig = modalConfig.snapPoints.last!;
+      
+      let snapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: modalConfig.overshootSnapPoint,
+        fromBaseLayoutConfig: prevSnapPointConfig.snapPoint,
+        withTargetRect: targetRect,
+        currentSize: currentSize
+      );
+      
+      return AdaptiveModalInterpolationPoint(
+        withTargetRect: targetRect,
+        currentSize: currentSize,
+        snapPointConfig: snapPointConfig,
+        prevSnapPointConfig: prevSnapPointConfig
+      );
+    }());
+    
     return items;
   };
-  
 };
