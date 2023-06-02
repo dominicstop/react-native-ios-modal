@@ -27,6 +27,8 @@ class AdaptiveModalManager {
   weak var modalView: UIView?;
   weak var backgroundVisualEffectView: UIVisualEffectView?;
   
+  var displayLinkStartTimestamp: CFTimeInterval?;
+  
   var gestureOffset: CGPoint?;
   var gestureVelocity: CGPoint?;
   var gestureInitialPoint: CGPoint?;
@@ -67,7 +69,15 @@ class AdaptiveModalManager {
   };
   
   var isAnimating: Bool {
-     self.animator != nil || !(self.animator?.isRunning ?? false);
+     self.animator != nil || (self.animator?.isRunning ?? false);
+  };
+  
+  var displayLinkEndTimestamp: CFTimeInterval? {
+    guard let animator = self.animator,
+          let displayLinkStartTimestamp = self.displayLinkStartTimestamp
+    else { return nil };
+    
+    return displayLinkStartTimestamp + animator.duration;
   };
   
   var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
@@ -154,23 +164,6 @@ class AdaptiveModalManager {
   var interpolationRangeMaxInput: CGFloat? {
     guard let targetView = self.targetView else { return nil };
     return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
-  };
-  
-  var currentPercent: CGFloat? {
-    guard let modalView = self.modalView,
-          let interpolationRangeMaxInput = self.interpolationRangeMaxInput
-    else {
-      return self.currentInterpolationStep?.percent;
-    };
-    
-    let inputCoord =
-      modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
-      
-    let percent = inputCoord / interpolationRangeMaxInput;
-    
-    return self.modalConfig.shouldInvertPercent
-      ? Self.invertPercent(percent)
-      : percent;
   };
   
   // MARK: - Init
@@ -366,6 +359,10 @@ class AdaptiveModalManager {
         $0.effect = $1.backgroundVisualEffect;
       };
     }();
+    
+    print(
+      "applyInterpolationToBackgroundVisualEffect - inputPercentValue: \(inputPercentValue)"
+    );
     
     self.backgroundVisualEffectAnimator = animator;
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
@@ -630,11 +627,15 @@ class AdaptiveModalManager {
   @objc func onDisplayLinkTick(displayLink: CADisplayLink) {
     guard let modalView = self.modalView,
           let modalViewPresentationLayer = modalView.layer.presentation(),
-          let currentPercent = self.currentPercent
+          let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
     if self.isSwiping {
       self.endDisplayLink();
+    };
+    
+    if self.displayLinkStartTimestamp == nil {
+      self.displayLinkStartTimestamp = displayLink.timestamp;
     };
     
     let prevModalFrame = self.prevModalFrame;
@@ -642,13 +643,23 @@ class AdaptiveModalManager {
 
     guard prevModalFrame != nextModalFrame else { return };
     
+    let inputCoord =
+      nextModalFrame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+    let percent = inputCoord / interpolationRangeMaxInput;
+    
+    let percentAdj = self.modalConfig.shouldInvertPercent
+      ? Self.invertPercent(percent)
+      : percent;
+    
+    
     self.applyInterpolationToBackgroundVisualEffect(
-      forInputPercentValue: currentPercent
+      forInputPercentValue: percentAdj
     );
     
     print(
         "onDisplayLinkTick"
-      + " - currentPercent: \(currentPercent)"
+      + " - percentAdj: \(percentAdj)"
     );
     
     self.prevModalFrame = nextModalFrame;
@@ -724,7 +735,7 @@ class AdaptiveModalManager {
   
   func updateModal(){
     guard let modalView = self.modalView,
-          self.isAnimating
+          !self.isAnimating
     else { return };
         
     if let gesturePoint = self.gesturePoint {
