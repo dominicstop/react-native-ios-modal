@@ -19,13 +19,11 @@ struct AdaptiveModalPropertyAnimator {
   private weak var component: AnyObject?;
   
   private var inputRangeStart: CGFloat {
-    self.interpolationRangeStart
-      .computedRect.origin[keyPath: self.inputAxisKey];
+    self.interpolationRangeStart.percent;
   };
   
   private var inputRangeEnd: CGFloat {
-    self.interpolationRangeEnd
-      .computedRect.origin[keyPath: self.inputAxisKey];
+    self.interpolationRangeEnd.percent;
   };
   
   init<T: AnyObject>(
@@ -86,11 +84,13 @@ struct AdaptiveModalPropertyAnimator {
     self.animator.fractionComplete = percent;
   };
   
-  func setFractionComplete(forInputValue inputValue: CGFloat) {
+  func setFractionComplete(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) {
     let inputRangeEndAdj = self.inputRangeEnd - self.inputRangeStart;
-    let inputValueAdj = inputValue - self.inputRangeStart;
+    let inputPercentAdj = inputPercentValue - self.inputRangeStart;
     
-    let percent = inputValueAdj / inputRangeEndAdj;
+    let percent = inputPercentAdj / inputRangeEndAdj;
     
     print(
         "component: \(self.component)"

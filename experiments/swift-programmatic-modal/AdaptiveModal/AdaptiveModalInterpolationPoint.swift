@@ -9,7 +9,8 @@ import UIKit
 
 struct AdaptiveModalInterpolationPoint: Equatable {
 
-  let modalConfigIndex: Int;
+  let percent: CGFloat;
+  let snapPointIndex: Int;
 
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
@@ -20,18 +21,53 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let backgroundVisualEffect: UIVisualEffect?;
 
   init(
-    modalConfigIndex: Int,
+    usingModalConfig modalConfig: AdaptiveModalConfig,
+    snapPointIndex: Int,
+    percent: CGFloat? = nil,
     withTargetRect targetRect: CGRect,
     currentSize: CGSize,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     prevSnapPointConfig: AdaptiveModalSnapPointConfig? = nil
   ) {
-    self.modalConfigIndex = modalConfigIndex;
+    self.snapPointIndex = snapPointIndex;
     
-    self.computedRect = snapPointConfig.snapPoint.computeRect(
+    let computedRect = snapPointConfig.snapPoint.computeRect(
       withTargetRect: targetRect,
       currentSize: currentSize
     );
+    
+    self.computedRect = computedRect;
+    
+    self.percent = percent ?? {
+      switch modalConfig.snapPercentStrategy {
+        case .position:
+          let shouldInvertPercent: Bool = {
+            switch modalConfig.snapDirection {
+              case .bottomToTop, .rightToLeft: return true;
+              default: return false;
+            };
+          }();
+        
+          let maxRangeInput =
+            targetRect[keyPath: modalConfig.maxInputRangeKeyForRect];
+          
+          let inputValue =
+            computedRect.origin[keyPath: modalConfig.inputValueKeyForPoint];
+            
+          let percent = inputValue / maxRangeInput;
+          
+          return shouldInvertPercent
+            ? AdaptiveModalManager.invertPercent(percent)
+            : percent;
+            
+        case .index:
+          let current = CGFloat(snapPointIndex + 1);
+          let max = CGFloat(modalConfig.snapPoints.count);
+          
+          return current / max;
+      };
+    }();
+    
     
     let keyframeCurrent = snapPointConfig.animationKeyframe;
     let keyframePrev    = prevSnapPointConfig?.animationKeyframe;
@@ -76,14 +112,15 @@ extension AdaptiveModalInterpolationPoint {
     currentSize: CGSize
   ) -> [Self] {
 
-  var items: [AdaptiveModalInterpolationPoint] = [];
-
+    var items: [AdaptiveModalInterpolationPoint] = [];
+    
     for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
       let prevSnapConfig = modalConfig.snapPoints[safeIndex: index];
       
       items.append(
         AdaptiveModalInterpolationPoint(
-          modalConfigIndex: index,
+          usingModalConfig: modalConfig,
+          snapPointIndex: index,
           withTargetRect: targetRect,
           currentSize: currentSize,
           snapPointConfig: snapConfig,
@@ -95,7 +132,7 @@ extension AdaptiveModalInterpolationPoint {
     items.append({
       let prevSnapPointConfig = modalConfig.snapPoints.last!;
       
-      let snapPointConfig = AdaptiveModalSnapPointConfig(
+      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
         fromSnapPointPreset: modalConfig.overshootSnapPoint,
         fromBaseLayoutConfig: prevSnapPointConfig.snapPoint,
         withTargetRect: targetRect,
@@ -103,10 +140,12 @@ extension AdaptiveModalInterpolationPoint {
       );
       
       return AdaptiveModalInterpolationPoint(
-        modalConfigIndex: modalConfig.snapPointLastIndex + 1,
+        usingModalConfig: modalConfig,
+        snapPointIndex: modalConfig.snapPointLastIndex + 1,
+        percent: 1,
         withTargetRect: targetRect,
         currentSize: currentSize,
-        snapPointConfig: snapPointConfig,
+        snapPointConfig: overshootSnapPointConfig,
         prevSnapPointConfig: prevSnapPointConfig
       );
     }());

@@ -106,4 +106,9 @@ extension AdaptiveModalManager {
       ? position + displacement
       : position - displacement;
   };
+  
+  static func invertPercent(_ percent: CGFloat) -> CGFloat {
+    let offset = percent > 1 ? abs(percent - 1) : 0;
+    return 1 - percent + offset;
+  };
 };

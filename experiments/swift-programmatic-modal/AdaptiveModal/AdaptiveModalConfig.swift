@@ -15,11 +15,18 @@ struct AdaptiveModalConfig {
     case rightToLeft;
   };
   
+  enum SnapPercentStrategy {
+    case index;
+    case position;
+  };
+  
   // MARK: - Properties
   // ------------------
   
   let snapPoints: [AdaptiveModalSnapPointConfig];
   let snapDirection: Direction;
+  
+  let snapPercentStrategy: SnapPercentStrategy;
   
   // let snapPointInitial: 
   
@@ -35,18 +42,37 @@ struct AdaptiveModalConfig {
     self.snapPoints.count - 1;
   };
   
+  /// Defines which axis of the gesture point to use to drive the interpolation
+  /// of the modal snap points
+  ///
+  var inputValueKeyForPoint: KeyPath<CGPoint, CGFloat> {
+    switch self.snapDirection {
+      case .topToBottom, .bottomToTop: return \.y;
+      case .leftToRight, .rightToLeft: return \.x;
+    };
+  };
+  
+  var maxInputRangeKeyForRect: KeyPath<CGRect, CGFloat> {
+    switch self.snapDirection {
+      case .bottomToTop, .topToBottom: return \.height;
+      case .leftToRight, .rightToLeft: return \.width;
+    };
+  };
+  
   // MARK: - Init
   // ------------
   
   init(
     snapPoints: [AdaptiveModalSnapPointConfig],
     snapDirection: Direction,
+    snapPercentStrategy: SnapPercentStrategy = .position,
     snapAnimationConfig: AdaptiveModalSnapAnimationConfig = .default,
     interpolationClampingConfig: AdaptiveModalClampingConfig = .default,
     overshootSnapPoint: AdaptiveModalSnapPointPreset? = nil
   ) {
     self.snapPoints = snapPoints;
     self.snapDirection = snapDirection;
+    self.snapPercentStrategy = snapPercentStrategy;
     
     self.snapAnimationConfig = snapAnimationConfig;
     self.interpolationClampingConfig = interpolationClampingConfig;
@@ -61,10 +87,10 @@ struct AdaptiveModalConfig {
   func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
     switch self.snapDirection {
       case .bottomToTop, .rightToLeft:
-        return array.reversed();
+        return array;
         
       case .topToBottom, .leftToRight:
-        return array;
+        return array.reversed();
     };
   };
 };

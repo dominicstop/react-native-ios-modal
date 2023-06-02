@@ -66,14 +66,8 @@ class AdaptiveModalManager {
     self.gestureInitialPoint != nil
   };
   
-  /// Defines which axis of the gesture point to use to drive the interpolation
-  /// of the modal snap points
-  ///
-  var inputAxisKey: KeyPath<CGPoint, CGFloat> {
-    switch self.modalConfig.snapDirection {
-      case .topToBottom, .bottomToTop: return \.y;
-      case .leftToRight, .rightToLeft: return \.x;
-    };
+  var isAnimating: Bool {
+     self.animator != nil || !(self.animator?.isRunning ?? false);
   };
   
   var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
@@ -90,9 +84,14 @@ class AdaptiveModalManager {
           let gestureVelocity     = self.gestureVelocity
     else { return nil };
   
-    let gestureInitialCoord  = gestureInitialPoint[keyPath: self.inputAxisKey];
-    let gestureFinalCoord    = gestureFinalPoint  [keyPath: self.inputAxisKey];
-    let gestureVelocityCoord = gestureVelocity    [keyPath: self.inputAxisKey];
+    let gestureInitialCoord =
+      gestureInitialPoint[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+    let gestureFinalCoord =
+      gestureFinalPoint[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+    let gestureVelocityCoord =
+      gestureVelocity[keyPath: self.modalConfig.inputValueKeyForPoint];
     
     var velocity: CGFloat = 0;
     let distance = gestureFinalCoord - gestureInitialCoord;
@@ -148,8 +147,37 @@ class AdaptiveModalManager {
   
   var interpolationRangeInput: [CGFloat]? {
     self.interpolationStepsSorted?.map {
-      $0.computedRect.origin[keyPath: self.inputAxisKey];
+      $0.percent
     };
+  };
+  
+  var interpolationRangeMaxInput: CGFloat? {
+    guard let targetView = self.targetView else { return nil };
+    return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
+  };
+  
+  var currentPercent: CGFloat? {
+    guard let modalView = self.modalView,
+          let interpolationRangeMaxInput = self.interpolationRangeMaxInput
+    else {
+      return self.currentInterpolationStep?.percent;
+    };
+    
+    let inputCoord =
+      modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+    let shouldInvertPercent: Bool = {
+      switch self.modalConfig.snapDirection {
+        case .bottomToTop, .rightToLeft: return true;
+        default: return false;
+      };
+    }();
+      
+    let percent = inputCoord / interpolationRangeMaxInput;
+    
+    return shouldInvertPercent
+      ? Self.invertPercent(percent)
+      : percent;
   };
   
   // MARK: - Init
@@ -180,7 +208,7 @@ class AdaptiveModalManager {
   // -----------------------------------------
   
   func getInterpolationStepRange(
-   forInputValue inputValue: CGFloat
+   forInputPercentValue inputPercentValue: CGFloat
   ) -> (
     rangeStart: AdaptiveModalInterpolationPoint,
     rangeEnd: AdaptiveModalInterpolationPoint
@@ -192,14 +220,17 @@ class AdaptiveModalManager {
     
     let lastIndex = interpolationSteps.count - 1;
     
-    if inputValue <= minStep.computedRect.origin[keyPath: self.inputAxisKey]{
+    let minStepValue = minStep.percent;
+    let maxStepValue = maxStep.percent;
+    
+    if inputPercentValue <= minStepValue {
       return (
         rangeStart: minStep,
         rangeEnd: interpolationSteps[1]
       );
     };
     
-    if inputValue >= maxStep.computedRect.origin[keyPath: self.inputAxisKey]{
+    if inputPercentValue >= maxStepValue {
       return (
         rangeStart: interpolationSteps[lastIndex - 1],
         rangeEnd: maxStep
@@ -210,13 +241,14 @@ class AdaptiveModalManager {
       guard let nextItem = interpolationSteps[safeIndex: $0.offset + 1]
       else { return false };
       
-      let coordCurrent =
-        $0.element.computedRect.origin[keyPath: self.inputAxisKey];
-        
-      let coordNext =
-        nextItem.computedRect.origin[keyPath: self.inputAxisKey];
+      let percentCurrent = $0.element.percent;
+      let percentNext    = nextItem.percent;
       
-      return coordCurrent >= inputValue && inputValue <= coordNext;
+      /// `inputPercentValue` is between the range of `percentCurrent`
+      /// and `percentNext`
+      ///
+      return percentCurrent    >= inputPercentValue &&
+             inputPercentValue <= percentNext;
     };
     
     guard let rangeStart = firstMatch?.element,
@@ -228,7 +260,7 @@ class AdaptiveModalManager {
   };
   
   func interpolateModalRect(
-    forInputValue inputValue: CGFloat,
+    forInputPercentValue inputPercentValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
     rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
   ) -> CGRect? {
@@ -236,11 +268,13 @@ class AdaptiveModalManager {
     guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
+    
+    print("interpolationRangeInput:", interpolationRangeInput);
 
     let clampConfig = modalConfig.interpolationClampingConfig;
 
     let nextHeight = Self.interpolate(
-      inputValue: inputValue,
+      inputValue: inputPercentValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
         $0.computedRect.height
@@ -250,7 +284,7 @@ class AdaptiveModalManager {
     );
     
     let nextWidth = Self.interpolate(
-      inputValue: inputValue,
+      inputValue: inputPercentValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
         $0.computedRect.width
@@ -260,7 +294,7 @@ class AdaptiveModalManager {
     );
     
     let nextX = Self.interpolate(
-      inputValue: inputValue,
+      inputValue: inputPercentValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
         $0.computedRect.minX
@@ -270,7 +304,7 @@ class AdaptiveModalManager {
     );
     
     let nextY = Self.interpolate(
-      inputValue: inputValue,
+      inputValue: inputPercentValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
         $0.computedRect.minY
@@ -294,7 +328,7 @@ class AdaptiveModalManager {
   };
   
   func interpolateModalBorderRadius(
-    forInputValue inputValue: CGFloat,
+    forInputPercentValue inputPercentValue: CGFloat,
     modalBounds: CGRect,
     rangeInput: [CGFloat]? = nil,
     rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
@@ -305,7 +339,7 @@ class AdaptiveModalManager {
     else { return nil };
     
     let modalCornerRadius = Self.interpolate(
-      inputValue: inputValue,
+      inputValue: inputPercentValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
         $0.modalCornerRadius
@@ -317,11 +351,11 @@ class AdaptiveModalManager {
   };
 
   func applyInterpolationToBackgroundVisualEffect(
-    forInputValue inputValue: CGFloat
+    forInputPercentValue inputPercentValue: CGFloat
   ) {
     guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
           let inputRange = self.getInterpolationStepRange(
-            forInputValue: inputValue
+            forInputPercentValue: inputPercentValue
           )
     else { return };
     
@@ -334,27 +368,27 @@ class AdaptiveModalManager {
         interpolationRangeStart: inputRange.rangeStart,
         interpolationRangeEnd: inputRange.rangeEnd,
         forComponent: backgroundVisualEffectView,
-        withInputAxisKey: self.inputAxisKey
+        withInputAxisKey: self.modalConfig.inputValueKeyForPoint
       ) {
         $0.effect = $1.backgroundVisualEffect;
       };
     }();
     
     self.backgroundVisualEffectAnimator = animator;
-    animator.setFractionComplete(forInputValue: inputValue);
+    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
   
-  
-  func applyInterpolationToModal(forPoint point: CGPoint){
+  func applyInterpolationToModal(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) {
     guard let modalView = self.modalView else { return };
-    let inputValue = point[keyPath: self.inputAxisKey];
     
     let nextModalRect = self.interpolateModalRect(
-      forInputValue: inputValue
+      forInputPercentValue: inputPercentValue
     );
     
     let nextModalRadius = self.interpolateModalBorderRadius(
-      forInputValue: inputValue,
+      forInputPercentValue: inputPercentValue,
       modalBounds: modalView.bounds
     );
     
@@ -366,7 +400,39 @@ class AdaptiveModalManager {
       modalView.layer.cornerRadius = nextModalRadius;
     };
     
-    self.applyInterpolationToBackgroundVisualEffect(forInputValue: inputValue);
+    self.applyInterpolationToBackgroundVisualEffect(
+      forInputPercentValue: inputPercentValue
+    );
+  };
+  
+  func applyInterpolationToModal(forPoint point: CGPoint){
+    guard let interpolationRangeMaxInput = self.interpolationRangeMaxInput
+    else { return };
+    
+    let inputValue = point[keyPath: self.modalConfig.inputValueKeyForPoint];
+    
+    let shouldInvertPercent: Bool = {
+      switch modalConfig.snapDirection {
+        case .bottomToTop, .rightToLeft: return true;
+        default: return false;
+      };
+    }();
+    
+    let percent = inputValue / interpolationRangeMaxInput;
+    
+    let percentAdj = shouldInvertPercent
+      ? Self.invertPercent(percent)
+      : percent;
+      
+    print(
+      "applyInterpolationToModal"
+      + " - inputValue: \(inputValue)"
+      + " - maxInputValue: \(interpolationRangeMaxInput)"
+      + " - percent: \(percent)"
+      + " - percentAdj: \(percentAdj)"
+    );
+    
+    self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
   
   func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
@@ -390,6 +456,14 @@ class AdaptiveModalManager {
     let gestureInputPoint = CGPoint(
       x: gesturePoint.x - gestureOffset.x,
       y: gesturePoint.y - gestureOffset.y
+    );
+    
+    print(
+      "applyInterpolationToModal"
+      + " - gesturePoint: \(gesturePoint)"
+      + " - gestureOffset: \(gestureOffset)"
+      + " - gestureInputPoint: \(gestureInputPoint)"
+      + " - modalRect: \(modalRect.origin)"
     );
   
     self.applyInterpolationToModal(forPoint: gestureInputPoint);
@@ -477,10 +551,10 @@ class AdaptiveModalManager {
           let modalView = self.modalView
     else { return nil };
     
-    let inputCoord = modalView.frame.origin[keyPath: self.inputAxisKey];
+    let inputCoord = modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
     
     let delta = interpolationSteps.map {
-      abs($0.computedRect.origin[keyPath: self.inputAxisKey] - inputCoord);
+      abs($0.computedRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint] - inputCoord);
     };
     
     let deltaSorted = delta.enumerated().sorted {
@@ -562,7 +636,8 @@ class AdaptiveModalManager {
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink) {
     guard let modalView = self.modalView,
-          let modalViewPresentationLayer = modalView.layer.presentation()
+          let modalViewPresentationLayer = modalView.layer.presentation(),
+          let currentPercent = self.currentPercent
     else { return };
     
     if self.isSwiping {
@@ -571,13 +646,17 @@ class AdaptiveModalManager {
     
     let prevModalFrame = self.prevModalFrame;
     let nextModalFrame = modalViewPresentationLayer.frame;
+
+    // guard inputValueNext != inputValuePrev else { return };
     
-    let inputValueNext = nextModalFrame.origin[keyPath: self.inputAxisKey];
-    let inputValuePrev = prevModalFrame.origin[keyPath: self.inputAxisKey];
+    self.applyInterpolationToBackgroundVisualEffect(
+      forInputPercentValue: currentPercent
+    );
     
-    guard inputValueNext != inputValuePrev else { return };
-    
-    self.applyInterpolationToBackgroundVisualEffect(forInputValue: inputValueNext);
+    print(
+        "onDisplayLinkTick"
+      + " - currentPercent: \(currentPercent)"
+    );
     
     self.prevModalFrame = nextModalFrame;
   };
@@ -585,8 +664,14 @@ class AdaptiveModalManager {
   // MARK: - User-Invoked Functions
   // ------------------------------
   
-  func computeSnapPoints() {
-    guard let targetView = self.targetView else { return };
+  func computeSnapPoints(forTargetView nextTargetView: UIView? = nil) {
+    if nextTargetView != nil {
+      self.targetView = nextTargetView;
+    };
+  
+    guard let targetView = nextTargetView ?? self.targetView
+    else { return };
+    
     let currentSize = self.currentSizeProvider();
     
     self.interpolationSteps = .Element.compute(
@@ -594,6 +679,8 @@ class AdaptiveModalManager {
       withTargetRect: targetView.frame,
       currentSize: currentSize
     );
+    
+    print(self.interpolationSteps);
   };
   
   func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
@@ -618,7 +705,9 @@ class AdaptiveModalManager {
         };
         
         let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
-        let gestureFinalCoord = gestureFinalPoint[keyPath: self.inputAxisKey];
+        
+        let gestureFinalCoord =
+          gestureFinalPoint[keyPath: self.modalConfig.inputValueKeyForPoint];
         
         let closestSnapPoint =
           self.getClosestSnapPoint(forGestureCoord: gestureFinalCoord);
@@ -644,13 +733,12 @@ class AdaptiveModalManager {
   
   func updateModal(){
     guard let modalView = self.modalView,
-          self.animator == nil || !(self.animator?.isRunning ?? false)
+          self.isAnimating
     else { return };
-    
-    
+        
     if let gesturePoint = self.gesturePoint {
       self.applyInterpolationToModal(forGesturePoint: gesturePoint);
-      
+    
     } else if let currentInterpolationStep = self.currentInterpolationStep,
            currentInterpolationStep.computedRect != modalView.frame {
       
