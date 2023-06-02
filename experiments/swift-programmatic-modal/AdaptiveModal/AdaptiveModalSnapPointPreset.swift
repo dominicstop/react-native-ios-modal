@@ -26,10 +26,10 @@ extension AdaptiveModalSnapPointPreset {
     forDirection direction: AdaptiveModalConfig.Direction
   ) -> RNILayoutPreset {
     switch direction {
-      case .bottomToTop: return .offscreenTop;
-      case .topToBottom: return .offscreenBottom;
-      case .leftToRight: return .offscreenLeft;
-      case .rightToLeft: return .offscreenRight;
+      case .bottomToTop: return .edgeTop;
+      case .topToBottom: return .edgeBottom;
+      case .leftToRight: return .edgeLeft;
+      case .rightToLeft: return .edgeRight;
     };
   };
   

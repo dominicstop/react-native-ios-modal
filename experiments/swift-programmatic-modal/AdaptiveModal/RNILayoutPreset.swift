@@ -9,6 +9,7 @@ import UIKit
 
 enum RNILayoutPreset {
   case offscreenBottom, offscreenTop, offscreenLeft, offscreenRight;
+  case halfOffscreenBottom, halfOffscreenTop, halfOffscreenLeft, halfOffscreenRight;
   case edgeBottom, edgeTop, edgeLeft, edgeRight;
   case center;
   
@@ -56,6 +57,34 @@ enum RNILayoutPreset {
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .bottom
+        );
+        
+      case .halfOffscreenBottom:
+        return .init(
+          derivedFrom: baseLayoutConfig,
+          verticalAlignment: .top,
+          marginTop: baseRect.height / 2
+        );
+      
+      case .halfOffscreenTop:
+        return .init(
+          derivedFrom: baseLayoutConfig,
+          verticalAlignment: .top,
+          marginTop: -(baseRect.height / 2)
+        );
+        
+      case .halfOffscreenLeft:
+        return .init(
+          derivedFrom: baseLayoutConfig,
+          horizontalAlignment: .left,
+          marginLeft: -(baseRect.width / 2)
+        );
+        
+      case .halfOffscreenRight:
+        return .init(
+          derivedFrom: baseLayoutConfig,
+          horizontalAlignment: .right,
+          marginRight: baseRect.width / 2
         );
       
       case .edgeTop:
