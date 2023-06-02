@@ -21,11 +21,11 @@ extension AdaptiveModalManager {
           rangeInput.count >= 2
     else { return nil };
     
-    if shouldClampMin, inputValue <= rangeInput.first! {
+    if shouldClampMin, inputValue < rangeInput.first! {
       return rangeOutput.first!;
     };
     
-    if shouldClampMax, inputValue <= rangeInput.last! {
+    if shouldClampMax, inputValue > rangeInput.last! {
       return rangeOutput.last!;
     };
     

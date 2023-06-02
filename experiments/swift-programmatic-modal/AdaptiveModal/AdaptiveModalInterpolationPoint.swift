@@ -19,6 +19,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let modalMaskedCorners: CACornerMask;
   
   let backgroundVisualEffect: UIVisualEffect?;
+  let backgroundVisualEffectIntensity: CGFloat;
 
   init(
     usingModalConfig modalConfig: AdaptiveModalConfig,
@@ -61,7 +62,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       };
     }();
     
-    
     let keyframeCurrent = snapPointConfig.animationKeyframe;
     let keyframePrev    = prevSnapPointConfig?.animationKeyframe;
     
@@ -69,12 +69,16 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       ?? keyframePrev?.modalCornerRadius
       ?? Self.DefaultCornerRadius;
       
-    self.modalMaskedCorners = keyframePrev?.modalMaskedCorners
+    self.modalMaskedCorners = keyframeCurrent?.modalMaskedCorners
       ?? keyframePrev?.modalMaskedCorners
       ?? Self.DefaultMaskedCorners;
       
-    self.backgroundVisualEffect = keyframePrev?.backgroundVisualEffect
+    self.backgroundVisualEffect = keyframeCurrent?.backgroundVisualEffect
       ?? keyframePrev?.backgroundVisualEffect;
+      
+    self.backgroundVisualEffectIntensity = keyframeCurrent?.backgroundVisualEffectIntensity
+      ?? keyframePrev?.backgroundVisualEffectIntensity
+      ?? 1;
   };
   
   func apply(toModalView modalView: UIView){

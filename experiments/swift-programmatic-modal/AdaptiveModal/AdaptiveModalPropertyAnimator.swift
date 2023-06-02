@@ -8,29 +8,27 @@
 import UIKit
 
 struct AdaptiveModalPropertyAnimator {
-
-  var inputAxisKey: KeyPath<CGPoint, CGFloat>;
   
   var interpolationRangeStart: AdaptiveModalInterpolationPoint;
   var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
+  
+  let interpolationOutputKey:
+    KeyPath<AdaptiveModalInterpolationPoint, CGFloat>;
   
   var animator: UIViewPropertyAnimator;
   
   private weak var component: AnyObject?;
   
-  private var inputRangeStart: CGFloat {
-    self.interpolationRangeStart.percent;
-  };
-  
-  private var inputRangeEnd: CGFloat {
-    self.interpolationRangeEnd.percent;
-  };
+  private var range: [AdaptiveModalInterpolationPoint] {[
+    self.interpolationRangeStart,
+    self.interpolationRangeEnd
+  ]};
   
   init<T: AnyObject>(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint,
     forComponent component: T,
-    withInputAxisKey inputAxisKey: KeyPath<CGPoint, CGFloat>,
+    interpolationOutputKey: KeyPath<AdaptiveModalInterpolationPoint, CGFloat>,
     animation: @escaping (
       _ component: T,
       _ interpolationPoint: AdaptiveModalInterpolationPoint
@@ -39,7 +37,7 @@ struct AdaptiveModalPropertyAnimator {
     self.interpolationRangeStart = interpolationRangeStart;
     self.interpolationRangeEnd = interpolationRangeEnd;
     
-    self.inputAxisKey = inputAxisKey;
+    self.interpolationOutputKey = interpolationOutputKey;
     self.component = component;
     
     let animator = UIViewPropertyAnimator(
@@ -87,10 +85,17 @@ struct AdaptiveModalPropertyAnimator {
   func setFractionComplete(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
-    let inputRangeEndAdj = self.inputRangeEnd - self.inputRangeStart;
-    let inputPercentAdj = inputPercentValue - self.inputRangeStart;
+    let percent = AdaptiveModalManager.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: range.map {
+        $0.percent
+      },
+      rangeOutput: range.map {
+        $0[keyPath: self.interpolationOutputKey]
+      }
+    );
     
-    let percent = inputPercentAdj / inputRangeEndAdj;
+    guard let percent = percent else { return };
     self.setFractionComplete(forPercent: percent);
   };
   

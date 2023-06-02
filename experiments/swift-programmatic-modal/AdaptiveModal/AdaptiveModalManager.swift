@@ -233,7 +233,7 @@ class AdaptiveModalManager {
       /// `inputPercentValue` is between the range of `percentCurrent`
       /// and `percentNext`
       ///
-      return percentCurrent    >= inputPercentValue &&
+      return inputPercentValue >= percentCurrent &&
              inputPercentValue <= percentNext;
     };
     
@@ -254,8 +254,6 @@ class AdaptiveModalManager {
     guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
-    
-    print("interpolationRangeInput:", interpolationRangeInput);
 
     let clampConfig = modalConfig.interpolationClampingConfig;
 
@@ -339,32 +337,30 @@ class AdaptiveModalManager {
   func applyInterpolationToBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
-    guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
-          let inputRange = self.getInterpolationStepRange(
-            forInputPercentValue: inputPercentValue
-          )
-    else { return };
-    
-    let animator: AdaptiveModalPropertyAnimator = {
+    let animator: AdaptiveModalPropertyAnimator? = {
       if let animator = self.backgroundVisualEffectAnimator {
         return animator;
       };
+      
+      guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
+            let inputRange = self.getInterpolationStepRange(
+              forInputPercentValue: inputPercentValue
+            )
+      else { return nil };
       
       return AdaptiveModalPropertyAnimator(
         interpolationRangeStart: inputRange.rangeStart,
         interpolationRangeEnd: inputRange.rangeEnd,
         forComponent: backgroundVisualEffectView,
-        withInputAxisKey: self.modalConfig.inputValueKeyForPoint
+        interpolationOutputKey: \.backgroundVisualEffectIntensity
       ) {
         $0.effect = $1.backgroundVisualEffect;
       };
     }();
     
-    print(
-      "applyInterpolationToBackgroundVisualEffect - inputPercentValue: \(inputPercentValue)"
-    );
-    
+    guard let animator = animator else { return };
     self.backgroundVisualEffectAnimator = animator;
+    
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
   
@@ -413,14 +409,6 @@ class AdaptiveModalManager {
     let percentAdj = shouldInvertPercent
       ? Self.invertPercent(percent)
       : percent;
-      
-    print(
-      "applyInterpolationToModal"
-      + " - inputValue: \(inputValue)"
-      + " - maxInputValue: \(interpolationRangeMaxInput)"
-      + " - percent: \(percent)"
-      + " - percentAdj: \(percentAdj)"
-    );
     
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
@@ -446,14 +434,6 @@ class AdaptiveModalManager {
     let gestureInputPoint = CGPoint(
       x: gesturePoint.x - gestureOffset.x,
       y: gesturePoint.y - gestureOffset.y
-    );
-    
-    print(
-      "applyInterpolationToModal"
-      + " - gesturePoint: \(gesturePoint)"
-      + " - gestureOffset: \(gestureOffset)"
-      + " - gestureInputPoint: \(gestureInputPoint)"
-      + " - modalRect: \(modalRect.origin)"
     );
   
     self.applyInterpolationToModal(forPoint: gestureInputPoint);
@@ -655,11 +635,6 @@ class AdaptiveModalManager {
     
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: percentAdj
-    );
-    
-    print(
-        "onDisplayLinkTick"
-      + " - percentAdj: \(percentAdj)"
     );
     
     self.prevModalFrame = nextModalFrame;

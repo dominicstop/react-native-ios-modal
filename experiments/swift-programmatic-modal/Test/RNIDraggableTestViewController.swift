@@ -76,7 +76,9 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner
-              ]
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
             )
           ),
           AdaptiveModalSnapPointConfig(
@@ -100,7 +102,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMinYCorner,
                 .layerMaxXMaxYCorner
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .regular)
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0.5
             )
           ),
         ],
