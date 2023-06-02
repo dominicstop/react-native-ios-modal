@@ -91,11 +91,6 @@ struct AdaptiveModalPropertyAnimator {
     let inputPercentAdj = inputPercentValue - self.inputRangeStart;
     
     let percent = inputPercentAdj / inputRangeEndAdj;
-    
-    print(
-        "component: \(self.component)"
-      + "\n - percent: \(percent)"
-    );
     self.setFractionComplete(forPercent: percent);
   };
   

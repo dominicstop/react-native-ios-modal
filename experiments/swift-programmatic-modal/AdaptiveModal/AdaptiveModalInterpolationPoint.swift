@@ -41,13 +41,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     self.percent = percent ?? {
       switch modalConfig.snapPercentStrategy {
         case .position:
-          let shouldInvertPercent: Bool = {
-            switch modalConfig.snapDirection {
-              case .bottomToTop, .rightToLeft: return true;
-              default: return false;
-            };
-          }();
-        
           let maxRangeInput =
             targetRect[keyPath: modalConfig.maxInputRangeKeyForRect];
           
@@ -56,7 +49,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
             
           let percent = inputValue / maxRangeInput;
           
-          return shouldInvertPercent
+          return modalConfig.shouldInvertPercent
             ? AdaptiveModalManager.invertPercent(percent)
             : percent;
             

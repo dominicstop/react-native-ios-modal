@@ -166,16 +166,9 @@ class AdaptiveModalManager {
     let inputCoord =
       modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
       
-    let shouldInvertPercent: Bool = {
-      switch self.modalConfig.snapDirection {
-        case .bottomToTop, .rightToLeft: return true;
-        default: return false;
-      };
-    }();
-      
     let percent = inputCoord / interpolationRangeMaxInput;
     
-    return shouldInvertPercent
+    return self.modalConfig.shouldInvertPercent
       ? Self.invertPercent(percent)
       : percent;
   };
@@ -647,7 +640,7 @@ class AdaptiveModalManager {
     let prevModalFrame = self.prevModalFrame;
     let nextModalFrame = modalViewPresentationLayer.frame;
 
-    // guard inputValueNext != inputValuePrev else { return };
+    guard prevModalFrame != nextModalFrame else { return };
     
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: currentPercent
@@ -679,8 +672,6 @@ class AdaptiveModalManager {
       withTargetRect: targetView.frame,
       currentSize: currentSize
     );
-    
-    print(self.interpolationSteps);
   };
   
   func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){

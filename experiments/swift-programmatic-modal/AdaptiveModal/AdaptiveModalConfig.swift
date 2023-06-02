@@ -59,6 +59,13 @@ struct AdaptiveModalConfig {
     };
   };
   
+  var shouldInvertPercent: Bool {
+    switch self.snapDirection {
+      case .bottomToTop, .rightToLeft: return true;
+      default: return false;
+    };
+  };
+  
   // MARK: - Init
   // ------------
   
