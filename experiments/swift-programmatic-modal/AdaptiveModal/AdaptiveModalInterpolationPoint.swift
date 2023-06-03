@@ -15,8 +15,25 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
   
+  //let modalRotation: CGFloat?;
+  
+  //let modalScaleX: CGFloat?;
+  //let modalScaleY: CGFloat?;
+
+  //let modalTranslateX: CGFloat?;
+  //let modalTranslateY: CGFloat?;
+  
+  //let modalBackgroundColor: UIColor?;
+  let modalBackgroundOpacity: CGFloat;
+  
   let modalCornerRadius: CGFloat;
   let modalMaskedCorners: CACornerMask;
+  
+  //let modalVisualEffect: UIVisualEffect?;
+  //let modalVisualEffectIntensity: CGFloat;
+  
+  //let backgroundColor: UIColor?;
+  //let backgroundOpacity: CGFloat?;
   
   let backgroundVisualEffect: UIVisualEffect?;
   let backgroundVisualEffectIntensity: CGFloat;
@@ -28,7 +45,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     withTargetRect targetRect: CGRect,
     currentSize: CGSize,
     snapPointConfig: AdaptiveModalSnapPointConfig,
-    prevSnapPointConfig: AdaptiveModalSnapPointConfig? = nil
+    prevInterpolationPoint keyframePrev: Self? = nil
   ) {
     self.snapPointIndex = snapPointIndex;
     
@@ -63,7 +80,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     }();
     
     let keyframeCurrent = snapPointConfig.animationKeyframe;
-    let keyframePrev    = prevSnapPointConfig?.animationKeyframe;
+    
+    self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
+      ?? keyframePrev?.modalBackgroundOpacity
+      ?? 1;
     
     self.modalCornerRadius = keyframeCurrent?.modalCornerRadius
       ?? keyframePrev?.modalCornerRadius
@@ -83,6 +103,8 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalView modalView: UIView){
     modalView.frame = self.computedRect;
+    modalView.alpha = self.modalBackgroundOpacity
+    
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
@@ -112,8 +134,6 @@ extension AdaptiveModalInterpolationPoint {
     var items: [AdaptiveModalInterpolationPoint] = [];
     
     for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
-      let prevSnapConfig = modalConfig.snapPoints[safeIndex: index];
-      
       items.append(
         AdaptiveModalInterpolationPoint(
           usingModalConfig: modalConfig,
@@ -121,7 +141,7 @@ extension AdaptiveModalInterpolationPoint {
           withTargetRect: targetRect,
           currentSize: currentSize,
           snapPointConfig: snapConfig,
-          prevSnapPointConfig: prevSnapConfig
+          prevInterpolationPoint: items.last
         )
       );
     };
@@ -143,7 +163,7 @@ extension AdaptiveModalInterpolationPoint {
         withTargetRect: targetRect,
         currentSize: currentSize,
         snapPointConfig: overshootSnapPointConfig,
-        prevSnapPointConfig: prevSnapPointConfig
+        prevInterpolationPoint: items.last
       );
     }());
     

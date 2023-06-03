@@ -311,6 +311,25 @@ class AdaptiveModalManager {
     );
   };
   
+  func interpolateModalBackgroundOpacity(
+    forInputPercentValue inputPercentValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+  ) -> CGFloat? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+
+    return Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalBackgroundOpacity
+      }
+    );
+  };
+  
   func interpolateModalBorderRadius(
     forInputPercentValue inputPercentValue: CGFloat,
     modalBounds: CGRect,
@@ -337,16 +356,30 @@ class AdaptiveModalManager {
   func applyInterpolationToBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
+    guard let inputRange = self.getInterpolationStepRange(
+      forInputPercentValue: inputPercentValue
+    ) else { return };
+  
     let animator: AdaptiveModalPropertyAnimator? = {
-      if let animator = self.backgroundVisualEffectAnimator {
+    
+      if let animator = self.backgroundVisualEffectAnimator,
+         !animator.didRangeChange(
+           interpolationRangeStart: inputRange.rangeStart,
+           interpolationRangeEnd: inputRange.rangeEnd
+      ) {
+      
         return animator;
       };
+      
+      self.backgroundVisualEffectAnimator?.clear();
       
       guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
             let inputRange = self.getInterpolationStepRange(
               forInputPercentValue: inputPercentValue
             )
       else { return nil };
+      
+      backgroundVisualEffectView.effect = nil;
       
       return AdaptiveModalPropertyAnimator(
         interpolationRangeStart: inputRange.rangeStart,
@@ -369,21 +402,23 @@ class AdaptiveModalManager {
   ) {
     guard let modalView = self.modalView else { return };
     
-    let nextModalRect = self.interpolateModalRect(
+    if let nextModalRect = self.interpolateModalRect(
       forInputPercentValue: inputPercentValue
-    );
-    
-    let nextModalRadius = self.interpolateModalBorderRadius(
-      forInputPercentValue: inputPercentValue,
-      modalBounds: modalView.bounds
-    );
-    
-    if let nextModalRect = nextModalRect{
+    ) {
       self.modalFrame = nextModalRect;
     };
     
-    if let nextModalRadius = nextModalRadius  {
+    if let nextModalRadius = self.interpolateModalBorderRadius(
+      forInputPercentValue: inputPercentValue,
+      modalBounds: modalView.bounds
+    ) {
       modalView.layer.cornerRadius = nextModalRadius;
+    };
+    
+    if let nextModalBackgroundOpacity = self.interpolateModalBackgroundOpacity(
+      forInputPercentValue: inputPercentValue
+    ) {
+      modalView.alpha = nextModalBackgroundOpacity;
     };
     
     self.applyInterpolationToBackgroundVisualEffect(
@@ -670,7 +705,7 @@ class AdaptiveModalManager {
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
-        self.animator?.stopAnimation(true);
+        
     
       case .changed:
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
@@ -696,6 +731,7 @@ class AdaptiveModalManager {
         
         self.animateModal(to: closestSnapPoint.interpolationPoint) { _ in
           self.endDisplayLink();
+          
         };
         
         self.startDisplayLink();
@@ -719,8 +755,9 @@ class AdaptiveModalManager {
     } else if let currentInterpolationStep = self.currentInterpolationStep,
            currentInterpolationStep.computedRect != modalView.frame {
       
-      let inputRect = currentInterpolationStep.computedRect;
-      self.applyInterpolationToModal(forPoint: inputRect.origin);
+      self.applyInterpolationToModal(
+        forInputPercentValue: currentInterpolationStep.percent
+      );
     };
   };
   

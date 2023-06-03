@@ -13,7 +13,7 @@ struct AdaptiveModalPropertyAnimator {
   var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
   
   let interpolationOutputKey:
-    KeyPath<AdaptiveModalInterpolationPoint, CGFloat>;
+    KeyPath<AdaptiveModalInterpolationPoint, CGFloat>?;
   
   var animator: UIViewPropertyAnimator;
   
@@ -28,7 +28,8 @@ struct AdaptiveModalPropertyAnimator {
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint,
     forComponent component: T,
-    interpolationOutputKey: KeyPath<AdaptiveModalInterpolationPoint, CGFloat>,
+    interpolationOutputKey:
+      KeyPath<AdaptiveModalInterpolationPoint, CGFloat>? = nil,
     animation: @escaping (
       _ component: T,
       _ interpolationPoint: AdaptiveModalInterpolationPoint
@@ -53,7 +54,7 @@ struct AdaptiveModalPropertyAnimator {
     self.animator = animator;
   };
   
-  mutating func didRangeChange(
+  func didRangeChange(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint
   ) -> Bool {
@@ -85,18 +86,32 @@ struct AdaptiveModalPropertyAnimator {
   func setFractionComplete(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
+    let rangeOutput: [CGFloat] = {
+      if let interpolationOutputKey = self.interpolationOutputKey {
+        return range.map {
+          $0[keyPath: interpolationOutputKey]
+        }
+      };
+      
+      return [0, 1];
+    }();
+  
     let percent = AdaptiveModalManager.interpolate(
       inputValue: inputPercentValue,
       rangeInput: range.map {
         $0.percent
       },
-      rangeOutput: range.map {
-        $0[keyPath: self.interpolationOutputKey]
-      }
+      rangeOutput: rangeOutput
     );
     
     guard let percent = percent else { return };
     self.setFractionComplete(forPercent: percent);
+    
+    print(
+        "\(self.component)"
+      + " - percent: \(percent)"
+      + " - rangeOutput"
+    );
   };
   
   func clear(){

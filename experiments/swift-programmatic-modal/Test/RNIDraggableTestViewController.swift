@@ -10,10 +10,11 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .test02;
+  static let `default`: Self = .test03;
 
   case test01;
   case test02;
+  case test03;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -58,6 +59,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         ],
         snapDirection: .bottomToTop
       );
+      
       case .test02: return AdaptiveModalConfig(
         snapPoints: [
           AdaptiveModalSnapPointConfig(
@@ -112,6 +114,119 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           shouldClampModalLastHeight: true,
           shouldClampModalLastWidth: true,
           shouldClampModalLastX: true
+        )
+      );
+      
+      case .test03: return AdaptiveModalConfig(
+        snapPoints: [
+          // Snap Point 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.3)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBackgroundOpacity: 1,
+              modalCornerRadius: 15,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
+            )
+          ),
+          // Snap Point 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.5)
+              ),
+              marginLeft: 15,
+              marginRight: 15,
+              marginBottom: 15
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBackgroundOpacity: 0.9,
+              modalCornerRadius: 15,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner,
+                .layerMinXMaxYCorner,
+                .layerMaxXMaxYCorner
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0.1
+            )
+          ),
+          // Snap Point 3
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: RNIComputableValue(
+                mode: .percent(percentValue: 0.85),
+                maxValue: ScreenSize.iPhone8.size.width
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.75),
+                maxValue: ScreenSize.iPhone8.size.height
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalCornerRadius: 20,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMinXMaxYCorner,
+                .layerMaxXMinYCorner,
+                .layerMaxXMaxYCorner
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0.5
+            )
+          ),
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .stretch
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.95),
+                maxValue: ScreenSize.iPhone8.size.height
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalCornerRadius: 15,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner,
+              ],
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 1
+            )
+          ),
+        ],
+        snapDirection: .bottomToTop,
+        interpolationClampingConfig: .init(
+          shouldClampModalLastHeight: true,
+          shouldClampModalLastWidth: true,
+          shouldClampModalLastX: true
+        ),
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          snapPoint: .fitScreen
         )
       );
     };
