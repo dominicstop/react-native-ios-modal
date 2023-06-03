@@ -25,6 +25,9 @@ class AdaptiveModalManager {
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
+  
+  weak var modalBackgroundView: UIView?;
+  weak var modalBackgroundVisualEffectView: UIVisualEffectView?;
   weak var backgroundVisualEffectView: UIVisualEffectView?;
   
   var displayLinkStartTimestamp: CFTimeInterval?;
@@ -37,6 +40,7 @@ class AdaptiveModalManager {
   var prevModalFrame: CGRect = .zero;
   
   var backgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
+  var modalBackgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
@@ -173,6 +177,8 @@ class AdaptiveModalManager {
     modalConfig: AdaptiveModalConfig,
     modalView: UIView,
     targetView: UIView,
+    modalBackgroundView: UIView? = nil,
+    modalBackgroundVisualEffectView: UIVisualEffectView? = nil,
     backgroundVisualEffectView: UIVisualEffectView? = nil,
     currentSizeProvider: @escaping () -> CGSize
   ) {
@@ -180,9 +186,15 @@ class AdaptiveModalManager {
     
     self.modalView = modalView;
     self.targetView = targetView;
+    
+    self.modalBackgroundView = modalBackgroundView;
     self.backgroundVisualEffectView = backgroundVisualEffectView;
+    self.modalBackgroundVisualEffectView = modalBackgroundVisualEffectView;
     
     self.currentSizeProvider = currentSizeProvider;
+    
+    modalBackgroundView?.backgroundColor = .systemBackground;
+    modalView.backgroundColor = .clear;
   };
   
   deinit {
@@ -356,35 +368,35 @@ class AdaptiveModalManager {
   func applyInterpolationToBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
-    guard let inputRange = self.getInterpolationStepRange(
-      forInputPercentValue: inputPercentValue
-    ) else { return };
   
     let animator: AdaptiveModalPropertyAnimator? = {
-    
-      if let animator = self.backgroundVisualEffectAnimator,
-         !animator.didRangeChange(
-           interpolationRangeStart: inputRange.rangeStart,
-           interpolationRangeEnd: inputRange.rangeEnd
-      ) {
+      let interpolationRange = self.getInterpolationStepRange(
+        forInputPercentValue: inputPercentValue
+      );
       
+      guard let interpolationRange = interpolationRange else { return nil };
+      let animator = self.backgroundVisualEffectAnimator;
+      
+      let animatorDidRangeChange = animator?.didRangeChange(
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd
+      );
+    
+      if let animator = animator, !animatorDidRangeChange! {
         return animator;
       };
       
-      self.backgroundVisualEffectAnimator?.clear();
+      animator?.clear();
       
-      guard let backgroundVisualEffectView = self.backgroundVisualEffectView,
-            let inputRange = self.getInterpolationStepRange(
-              forInputPercentValue: inputPercentValue
-            )
+      guard let visualEffectView = self.backgroundVisualEffectView
       else { return nil };
       
-      backgroundVisualEffectView.effect = nil;
+      visualEffectView.effect = nil;
       
       return AdaptiveModalPropertyAnimator(
-        interpolationRangeStart: inputRange.rangeStart,
-        interpolationRangeEnd: inputRange.rangeEnd,
-        forComponent: backgroundVisualEffectView,
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd,
+        forComponent: visualEffectView,
         interpolationOutputKey: \.backgroundVisualEffectIntensity
       ) {
         $0.effect = $1.backgroundVisualEffect;
@@ -393,6 +405,50 @@ class AdaptiveModalManager {
     
     guard let animator = animator else { return };
     self.backgroundVisualEffectAnimator = animator;
+    
+    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
+  };
+  
+  func applyInterpolationToModalBackgroundVisualEffect(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) {
+  
+    let animator: AdaptiveModalPropertyAnimator? = {
+      let interpolationRange = self.getInterpolationStepRange(
+        forInputPercentValue: inputPercentValue
+      );
+      
+      guard let interpolationRange = interpolationRange else { return nil };
+      let animator = self.modalBackgroundVisualEffectAnimator;
+      
+      let animatorRangeDidChange = animator?.didRangeChange(
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd
+      );
+    
+      if let animator = animator, !animatorRangeDidChange! {
+        return animator;
+      };
+      
+      animator?.clear();
+      
+      guard let visualEffectView = self.modalBackgroundVisualEffectView
+      else { return nil };
+      
+      visualEffectView.effect = nil;
+      
+      return AdaptiveModalPropertyAnimator(
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd,
+        forComponent: visualEffectView,
+        interpolationOutputKey: \.modalBackgroundVisualEffectIntensity
+      ) {
+        $0.effect = $1.modalBackgroundVisualEffect;
+      };
+    }();
+    
+    guard let animator = animator else { return };
+    self.modalBackgroundVisualEffectAnimator = animator;
     
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
@@ -416,12 +472,18 @@ class AdaptiveModalManager {
     };
     
     if let nextModalBackgroundOpacity = self.interpolateModalBackgroundOpacity(
-      forInputPercentValue: inputPercentValue
-    ) {
-      modalView.alpha = nextModalBackgroundOpacity;
+         forInputPercentValue: inputPercentValue
+       ),
+       let modalBackgroundView = self.modalBackgroundView {
+       
+      modalBackgroundView.alpha = nextModalBackgroundOpacity;
     };
     
     self.applyInterpolationToBackgroundVisualEffect(
+      forInputPercentValue: inputPercentValue
+    );
+    
+    self.applyInterpolationToModalBackgroundVisualEffect(
       forInputPercentValue: inputPercentValue
     );
   };
@@ -487,6 +549,9 @@ class AdaptiveModalManager {
   func clearAnimators(){
     self.backgroundVisualEffectAnimator?.clear();
     self.backgroundVisualEffectAnimator = nil;
+    
+    self.modalBackgroundVisualEffectAnimator?.clear();
+    self.modalBackgroundVisualEffectAnimator = nil;
   };
   
   func animateModal(
@@ -531,7 +596,7 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
-      modalView.layer.maskedCorners = interpolationPoint.modalMaskedCorners;
+      interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
     };
     
     if let completion = completion {
@@ -669,6 +734,10 @@ class AdaptiveModalManager {
     
     
     self.applyInterpolationToBackgroundVisualEffect(
+      forInputPercentValue: percentAdj
+    );
+    
+    self.applyInterpolationToModalBackgroundVisualEffect(
       forInputPercentValue: percentAdj
     );
     

@@ -23,8 +23,8 @@ struct AdaptiveModalAnimationConfig {
   let modalCornerRadius: CGFloat?;
   let modalMaskedCorners: CACornerMask?;
   
-  let modalVisualEffect: UIVisualEffect?;
-  let modalVisualEffectIntensity: CGFloat?;
+  let modalBackgroundVisualEffect: UIVisualEffect?;
+  let modalBackgroundVisualEffectIntensity: CGFloat?;
   
   let backgroundColor: UIColor?;
   let backgroundOpacity: CGFloat?;
@@ -42,8 +42,8 @@ struct AdaptiveModalAnimationConfig {
      modalBackgroundOpacity: CGFloat? = nil,
      modalCornerRadius: CGFloat? = nil,
      modalMaskedCorners: CACornerMask? = nil,
-     modalVisualEffect: UIVisualEffect? = nil,
-     modalVisualEffectIntensity: CGFloat? = nil,
+     modalBackgroundVisualEffect: UIVisualEffect? = nil,
+     modalBackgroundVisualEffectIntensity: CGFloat? = nil,
      backgroundColor: UIColor? = nil,
      backgroundOpacity: CGFloat? = nil,
      backgroundVisualEffect: UIVisualEffect? = nil,
@@ -63,8 +63,8 @@ struct AdaptiveModalAnimationConfig {
     self.modalCornerRadius = modalCornerRadius;
     self.modalMaskedCorners = modalMaskedCorners;
     
-    self.modalVisualEffect = modalVisualEffect;
-    self.modalVisualEffectIntensity = modalVisualEffectIntensity;
+    self.modalBackgroundVisualEffect = modalBackgroundVisualEffect;
+    self.modalBackgroundVisualEffectIntensity = modalBackgroundVisualEffectIntensity;
     
     self.backgroundColor = backgroundColor;
     self.backgroundOpacity = backgroundOpacity;

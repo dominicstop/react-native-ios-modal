@@ -132,13 +132,15 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalBackgroundOpacity: 1,
+              modalBackgroundOpacity: 0.9,
               modalCornerRadius: 15,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
+              modalBackgroundVisualEffectIntensity: 1,
+              backgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterialDark),
               backgroundVisualEffectIntensity: 0
             )
           ),
@@ -158,7 +160,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               marginBottom: 15
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalBackgroundOpacity: 0.9,
+              modalBackgroundOpacity: 0.85,
               modalCornerRadius: 15,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
@@ -166,8 +168,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMaxYCorner,
                 .layerMaxXMaxYCorner
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .regular),
-              backgroundVisualEffectIntensity: 0.1
+              modalBackgroundVisualEffectIntensity: 0.6,
+              backgroundVisualEffectIntensity: 0.075
             )
           ),
           // Snap Point 3
@@ -185,6 +187,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBackgroundOpacity: 0.8,
               modalCornerRadius: 20,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
@@ -192,7 +195,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMinYCorner,
                 .layerMaxXMaxYCorner
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalBackgroundVisualEffectIntensity: 1,
               backgroundVisualEffectIntensity: 0.5
             )
           ),
@@ -209,12 +212,13 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBackgroundOpacity: 0.85,
               modalCornerRadius: 15,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner,
               ],
-              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalBackgroundVisualEffectIntensity: 1,
               backgroundVisualEffectIntensity: 1
             )
           ),
@@ -240,6 +244,8 @@ class RNIDraggableTestViewController : UIViewController {
     modalConfig: AdaptiveModalConfigTestPresets.default.config,
     modalView: self.floatingView,
     targetView: self.view,
+    modalBackgroundView: self.modalBackgroundView,
+    modalBackgroundVisualEffectView: self.modalBackgroundVisualEffectView,
     backgroundVisualEffectView: self.backgroundVisualEffectView,
     currentSizeProvider: {
       .zero
@@ -269,12 +275,12 @@ class RNIDraggableTestViewController : UIViewController {
   lazy var floatingView: UIView = {
     let view = UIView();
     
-    view.backgroundColor = UIColor(
-      hue: 0/360,
-      saturation: 0/100,
-      brightness: 100/100,
-      alpha: 1.0
-    );
+    // view.backgroundColor = UIColor(
+    //   hue: 0/360,
+    //   saturation: 0/100,
+    //   brightness: 100/100,
+    //   alpha: 0
+    // );
     
     view.addGestureRecognizer(
       UIPanGestureRecognizer(
@@ -296,7 +302,9 @@ class RNIDraggableTestViewController : UIViewController {
     return view;
   }();
   
+  lazy var modalBackgroundView = UIView();
   lazy var backgroundVisualEffectView = UIVisualEffectView();
+  lazy var modalBackgroundVisualEffectView = UIVisualEffectView();
   
   lazy var dummyBackgroundView: UIView = {
     let view = UIView();
@@ -327,6 +335,15 @@ class RNIDraggableTestViewController : UIViewController {
     let dummyBackgroundView = self.dummyBackgroundView;
     self.view.addSubview(dummyBackgroundView);
     
+    let modalBackgroundView = self.modalBackgroundView;
+    let modalBackgroundVisualEffectView = self.modalBackgroundVisualEffectView;
+    
+    self.floatingView.addSubview(modalBackgroundView);
+    self.floatingView.addSubview(modalBackgroundVisualEffectView);
+    
+    self.floatingView.sendSubviewToBack(modalBackgroundView);
+    self.floatingView.sendSubviewToBack(modalBackgroundVisualEffectView);
+    
     let backgroundVisualEffectView = self.backgroundVisualEffectView;
     self.view.addSubview(backgroundVisualEffectView);
     
@@ -335,9 +352,14 @@ class RNIDraggableTestViewController : UIViewController {
     let floatingView = self.floatingView;
     self.view.addSubview(floatingView);
     
+    backgroundVisualEffectView.clipsToBounds = true;
+    floatingView.clipsToBounds = true;
+    
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
     
     dummyBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
+    modalBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
+    modalBackgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
     backgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
     
     NSLayoutConstraint.activate([
@@ -345,6 +367,16 @@ class RNIDraggableTestViewController : UIViewController {
       dummyBackgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
       dummyBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
       dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+      
+      modalBackgroundView.topAnchor.constraint(equalTo: self.floatingView.topAnchor),
+      modalBackgroundView.bottomAnchor.constraint(equalTo: self.floatingView.bottomAnchor),
+      modalBackgroundView.leadingAnchor.constraint(equalTo: self.floatingView.leadingAnchor),
+      modalBackgroundView.trailingAnchor.constraint(equalTo: self.floatingView.trailingAnchor),
+      
+      modalBackgroundVisualEffectView.topAnchor.constraint(equalTo: self.floatingView.topAnchor),
+      modalBackgroundVisualEffectView.bottomAnchor.constraint(equalTo: self.floatingView.bottomAnchor),
+      modalBackgroundVisualEffectView.leadingAnchor.constraint(equalTo: self.floatingView.leadingAnchor),
+      modalBackgroundVisualEffectView.trailingAnchor.constraint(equalTo: self.floatingView.trailingAnchor),
       
       backgroundVisualEffectView.topAnchor.constraint(equalTo: self.view.topAnchor),
       backgroundVisualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
