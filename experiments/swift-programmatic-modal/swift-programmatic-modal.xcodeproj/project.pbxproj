@@ -16,6 +16,7 @@
 		88B7D0FB29C593F600490628 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88B7D0F929C593F600490628 /* LaunchScreen.storyboard */; };
 		88C2F45C2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2F45B2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift */; };
 		88C2F45E2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2F45D2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift */; };
+		88C2F4602A2CA8CF00DA7450 /* RoundedViewTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2F45F2A2CA8CF00DA7450 /* RoundedViewTestViewController.swift */; };
 		88D016602A14C86B004664D2 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0165F2A14C86B004664D2 /* RootViewController.swift */; };
 		88D0168D2A1730B1004664D2 /* RNILayoutTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */; };
 		88D0169E2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */; };
@@ -103,6 +104,7 @@
 		88B7D0FC29C593F600490628 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		88C2F45B2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalSnapPointPreset.swift; sourceTree = "<group>"; };
 		88C2F45D2A278A9200DA7450 /* AdaptiveModalPropertyAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalPropertyAnimator.swift; sourceTree = "<group>"; };
+		88C2F45F2A2CA8CF00DA7450 /* RoundedViewTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedViewTestViewController.swift; sourceTree = "<group>"; };
 		88D0165F2A14C86B004664D2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutTestViewController.swift; sourceTree = "<group>"; };
 		88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNIDraggableTestViewController.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */,
 				88D0187B2A1B32E6004664D2 /* TestRoutes.swift */,
 				88D0187D2A1B6CB3004664D2 /* BlurEffectTestViewController.swift */,
+				88C2F45F2A2CA8CF00DA7450 /* RoundedViewTestViewController.swift */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				88D018772A1B3030004664D2 /* RNIComputableValue.swift in Sources */,
 				88C2F45C2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift in Sources */,
 				88E8C01C2A23203E008C2FF8 /* RNILayoutPreset.swift in Sources */,
+				88C2F4602A2CA8CF00DA7450 /* RoundedViewTestViewController.swift in Sources */,
 				88D018292A1B3030004664D2 /* RNICleanupMode.swift in Sources */,
 				88D018532A1B3030004664D2 /* RNIMulticastDelegate.swift in Sources */,
 				88D018642A1B3030004664D2 /* RNIViewControllerLifeCycleNotifiable.swift in Sources */,
