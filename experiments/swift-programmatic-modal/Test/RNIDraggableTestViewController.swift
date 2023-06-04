@@ -60,7 +60,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalScaleX: 0.5,
               modalScaleY: 1,
               modalTranslateX: 1000,
-              modalTranslateY: 0
+              modalTranslateY: 1000
             )
           ),
           // snap point - 2

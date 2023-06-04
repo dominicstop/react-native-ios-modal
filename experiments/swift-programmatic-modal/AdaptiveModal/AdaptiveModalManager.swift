@@ -761,8 +761,7 @@ class AdaptiveModalManager {
   };
   
   func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
-    guard let modalView = self.modalView,
-          let gestureInitialPoint = self.gestureInitialPoint
+    guard let gestureInitialPoint = self.gestureInitialPoint
     else { return };
     
     let modalRect = self.modalFrame!;
