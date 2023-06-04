@@ -28,6 +28,7 @@ class AdaptiveModalManager {
   
   weak var modalBackgroundView: UIView?;
   weak var modalBackgroundVisualEffectView: UIVisualEffectView?;
+  weak var backgroundDimmingView: UIView?;
   weak var backgroundVisualEffectView: UIVisualEffectView?;
   
   var displayLinkStartTimestamp: CFTimeInterval?;
@@ -179,6 +180,7 @@ class AdaptiveModalManager {
     targetView: UIView,
     modalBackgroundView: UIView? = nil,
     modalBackgroundVisualEffectView: UIVisualEffectView? = nil,
+    backgroundDimmingView: UIView? = nil,
     backgroundVisualEffectView: UIVisualEffectView? = nil,
     currentSizeProvider: @escaping () -> CGSize
   ) {
@@ -188,13 +190,12 @@ class AdaptiveModalManager {
     self.targetView = targetView;
     
     self.modalBackgroundView = modalBackgroundView;
-    self.backgroundVisualEffectView = backgroundVisualEffectView;
     self.modalBackgroundVisualEffectView = modalBackgroundVisualEffectView;
     
-    self.currentSizeProvider = currentSizeProvider;
+    self.backgroundVisualEffectView = backgroundVisualEffectView;
+    self.backgroundDimmingView  = backgroundDimmingView;
     
-    modalBackgroundView?.backgroundColor = .systemBackground;
-    modalView.backgroundColor = .clear;
+    self.currentSizeProvider = currentSizeProvider;
   };
   
   deinit {
@@ -216,6 +217,14 @@ class AdaptiveModalManager {
       bgVisualEffectView.backgroundColor = .clear;
     };
     
+    if let bgDimmingView = self.backgroundDimmingView {
+      targetView.addSubview(bgDimmingView);
+      
+      bgDimmingView.clipsToBounds = true;
+      bgDimmingView.backgroundColor = .black;
+      bgDimmingView.alpha = 0;
+    };
+    
     targetView.addSubview(modalView);
     
     modalView.clipsToBounds = true;
@@ -226,6 +235,7 @@ class AdaptiveModalManager {
       modalView.sendSubviewToBack(modalBackgroundView);
       
       modalBackgroundView.backgroundColor = .systemBackground;
+      modalBackgroundView.isUserInteractionEnabled = false;
     };
     
     if let modalBGVisualEffectView = self.modalBackgroundVisualEffectView {
@@ -234,6 +244,7 @@ class AdaptiveModalManager {
       
       modalBGVisualEffectView.clipsToBounds = true;
       modalBGVisualEffectView.backgroundColor = .clear;
+      modalBGVisualEffectView.isUserInteractionEnabled = false;
     };
   };
   
@@ -250,6 +261,17 @@ class AdaptiveModalManager {
         bgVisualEffectView.bottomAnchor  .constraint(equalTo: targetView.bottomAnchor  ),
         bgVisualEffectView.leadingAnchor .constraint(equalTo: targetView.leadingAnchor ),
         bgVisualEffectView.trailingAnchor.constraint(equalTo: targetView.trailingAnchor),
+      ]);
+    };
+    
+    if let bgDimmingView = self.backgroundDimmingView {
+      bgDimmingView.translatesAutoresizingMaskIntoConstraints = false;
+      
+      NSLayoutConstraint.activate([
+        bgDimmingView.topAnchor     .constraint(equalTo: targetView.topAnchor     ),
+        bgDimmingView.bottomAnchor  .constraint(equalTo: targetView.bottomAnchor  ),
+        bgDimmingView.leadingAnchor .constraint(equalTo: targetView.leadingAnchor ),
+        bgDimmingView.trailingAnchor.constraint(equalTo: targetView.trailingAnchor),
       ]);
     };
     
@@ -438,49 +460,24 @@ class AdaptiveModalManager {
     guard let modalCornerRadius = modalCornerRadius else { return nil };
     return modalCornerRadius;
   };
-
-  func applyInterpolationToBackgroundVisualEffect(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) {
   
-    let animator: AdaptiveModalPropertyAnimator? = {
-      let interpolationRange = self.getInterpolationStepRange(
-        forInputPercentValue: inputPercentValue
-      );
-      
-      guard let interpolationRange = interpolationRange else { return nil };
-      let animator = self.backgroundVisualEffectAnimator;
-      
-      let animatorDidRangeChange = animator?.didRangeChange(
-        interpolationRangeStart: interpolationRange.rangeStart,
-        interpolationRangeEnd: interpolationRange.rangeEnd
-      );
-    
-      if let animator = animator, !animatorDidRangeChange! {
-        return animator;
-      };
-      
-      animator?.clear();
-      
-      guard let visualEffectView = self.backgroundVisualEffectView
-      else { return nil };
-      
-      visualEffectView.effect = nil;
-      
-      return AdaptiveModalPropertyAnimator(
-        interpolationRangeStart: interpolationRange.rangeStart,
-        interpolationRangeEnd: interpolationRange.rangeEnd,
-        forComponent: visualEffectView,
-        interpolationOutputKey: \.backgroundVisualEffectIntensity
-      ) {
-        $0.effect = $1.backgroundVisualEffect;
-      };
-    }();
-    
-    guard let animator = animator else { return };
-    self.backgroundVisualEffectAnimator = animator;
-    
-    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
+  func interpolateBackgroundOpacity(
+    forInputPercentValue inputPercentValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+  ) -> CGFloat? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+
+    return Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.backgroundOpacity
+      }
+    );
   };
   
   func applyInterpolationToModalBackgroundVisualEffect(
@@ -526,6 +523,50 @@ class AdaptiveModalManager {
     
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
+
+  func applyInterpolationToBackgroundVisualEffect(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) {
+  
+    let animator: AdaptiveModalPropertyAnimator? = {
+      let interpolationRange = self.getInterpolationStepRange(
+        forInputPercentValue: inputPercentValue
+      );
+      
+      guard let interpolationRange = interpolationRange else { return nil };
+      let animator = self.backgroundVisualEffectAnimator;
+      
+      let animatorDidRangeChange = animator?.didRangeChange(
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd
+      );
+    
+      if let animator = animator, !animatorDidRangeChange! {
+        return animator;
+      };
+      
+      animator?.clear();
+      
+      guard let visualEffectView = self.backgroundVisualEffectView
+      else { return nil };
+      
+      visualEffectView.effect = nil;
+      
+      return AdaptiveModalPropertyAnimator(
+        interpolationRangeStart: interpolationRange.rangeStart,
+        interpolationRangeEnd: interpolationRange.rangeEnd,
+        forComponent: visualEffectView,
+        interpolationOutputKey: \.backgroundVisualEffectIntensity
+      ) {
+        $0.effect = $1.backgroundVisualEffect;
+      };
+    }();
+    
+    guard let animator = animator else { return };
+    self.backgroundVisualEffectAnimator = animator;
+    
+    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
+  };
   
   func applyInterpolationToModal(
     forInputPercentValue inputPercentValue: CGFloat
@@ -545,12 +586,20 @@ class AdaptiveModalManager {
       modalView.layer.cornerRadius = nextModalRadius;
     };
     
-    if let nextModalBackgroundOpacity = self.interpolateModalBackgroundOpacity(
+    if let modalBgView = self.modalBackgroundView,
+       let nextModalBgOpacity = self.interpolateModalBackgroundOpacity(
          forInputPercentValue: inputPercentValue
-       ),
-       let modalBackgroundView = self.modalBackgroundView {
+       ) {
        
-      modalBackgroundView.alpha = nextModalBackgroundOpacity;
+      modalBgView.alpha = nextModalBgOpacity;
+    };
+    
+    if let bgDimmingView = self.backgroundDimmingView,
+       let nextBgOpacity = self.interpolateBackgroundOpacity(
+         forInputPercentValue: inputPercentValue
+       ) {
+      
+      bgDimmingView.alpha = nextBgOpacity;
     };
     
     self.applyInterpolationToBackgroundVisualEffect(
@@ -670,7 +719,9 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
+      
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
+      interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
     };
     
     if let completion = completion {

@@ -15,15 +15,15 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
   
-  //let modalRotation: CGFloat?;
+  //let modalRotation: CGFloat;
   
-  //let modalScaleX: CGFloat?;
-  //let modalScaleY: CGFloat?;
+  //let modalScaleX: CGFloat;
+  //let modalScaleY: CGFloat;
 
-  //let modalTranslateX: CGFloat?;
-  //let modalTranslateY: CGFloat?;
+  //let modalTranslateX: CGFloat;
+  //let modalTranslateY: CGFloat;
   
-  //let modalBackgroundColor: UIColor?;
+  //let modalBackgroundColor: UIColor;
   let modalBackgroundOpacity: CGFloat;
   
   let modalCornerRadius: CGFloat;
@@ -32,8 +32,8 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let modalBackgroundVisualEffect: UIVisualEffect?;
   let modalBackgroundVisualEffectIntensity: CGFloat;
   
-  //let backgroundColor: UIColor?;
-  //let backgroundOpacity: CGFloat?;
+  //let backgroundColor: UIColor;
+  let backgroundOpacity: CGFloat;
   
   let backgroundVisualEffect: UIVisualEffect?;
   let backgroundVisualEffectIntensity: CGFloat;
@@ -100,6 +100,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       ?? keyframePrev?.modalBackgroundVisualEffectIntensity
       ?? 1;
       
+    self.backgroundOpacity = keyframeCurrent?.backgroundOpacity
+      ?? keyframePrev?.backgroundOpacity
+      ?? 0;
+      
     self.backgroundVisualEffect = keyframeCurrent?.backgroundVisualEffect
       ?? keyframePrev?.backgroundVisualEffect;
       
@@ -114,12 +118,16 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
   
-  func apply(toModalBackgroundView modalBackgroundView: UIView?){
-    modalBackgroundView?.alpha = self.modalBackgroundOpacity;
+  func apply(toModalBackgroundView modalBgView: UIView?){
+    modalBgView?.alpha = self.modalBackgroundOpacity;
   };
   
   func apply(toBackgroundEffectView effectView: UIVisualEffectView?){
     effectView?.effect = self.backgroundVisualEffect;
+  };
+  
+  func apply(toBackgroundView bgView: UIView?){
+    bgView?.alpha = self.backgroundOpacity;
   };
 };
 

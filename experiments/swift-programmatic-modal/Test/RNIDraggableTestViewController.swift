@@ -140,6 +140,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               ],
               modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
               modalBackgroundVisualEffectIntensity: 1,
+              backgroundOpacity: 0,
               backgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterialDark),
               backgroundVisualEffectIntensity: 0
             )
@@ -169,6 +170,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMaxYCorner
               ],
               modalBackgroundVisualEffectIntensity: 0.6,
+              backgroundOpacity: 0.1,
               backgroundVisualEffectIntensity: 0.075
             )
           ),
@@ -196,6 +198,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMaxYCorner
               ],
               modalBackgroundVisualEffectIntensity: 1,
+              backgroundOpacity: 0,
               backgroundVisualEffectIntensity: 0.5
             )
           ),
@@ -246,6 +249,7 @@ class RNIDraggableTestViewController : UIViewController {
     targetView: self.view,
     modalBackgroundView: self.modalBackgroundView,
     modalBackgroundVisualEffectView: self.modalBackgroundVisualEffectView,
+    backgroundDimmingView: self.backgroundDimmingView,
     backgroundVisualEffectView: self.backgroundVisualEffectView,
     currentSizeProvider: {
       .zero
@@ -303,8 +307,10 @@ class RNIDraggableTestViewController : UIViewController {
   }();
   
   lazy var modalBackgroundView = UIView();
-  lazy var backgroundVisualEffectView = UIVisualEffectView();
   lazy var modalBackgroundVisualEffectView = UIVisualEffectView();
+  
+  lazy var backgroundDimmingView = UIView();
+  lazy var backgroundVisualEffectView = UIVisualEffectView();
   
   lazy var dummyBackgroundView: UIView = {
     let view = UIView();
