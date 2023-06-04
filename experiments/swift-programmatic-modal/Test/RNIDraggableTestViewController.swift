@@ -212,7 +212,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalBackgroundOpacity: 0.85,
+              modalBackgroundOpacity: 0.83,
               modalCornerRadius: 15,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
@@ -335,54 +335,19 @@ class RNIDraggableTestViewController : UIViewController {
     let dummyBackgroundView = self.dummyBackgroundView;
     self.view.addSubview(dummyBackgroundView);
     
-    let modalBackgroundView = self.modalBackgroundView;
-    let modalBackgroundVisualEffectView = self.modalBackgroundVisualEffectView;
-    
-    self.floatingView.addSubview(modalBackgroundView);
-    self.floatingView.addSubview(modalBackgroundVisualEffectView);
-    
-    self.floatingView.sendSubviewToBack(modalBackgroundView);
-    self.floatingView.sendSubviewToBack(modalBackgroundVisualEffectView);
-    
-    let backgroundVisualEffectView = self.backgroundVisualEffectView;
-    self.view.addSubview(backgroundVisualEffectView);
-    
-    // backgroundVisualEffectView.effect = nil;
-    
-    let floatingView = self.floatingView;
-    self.view.addSubview(floatingView);
-    
-    backgroundVisualEffectView.clipsToBounds = true;
-    floatingView.clipsToBounds = true;
-    
     self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
     
     dummyBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
-    modalBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
-    modalBackgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
-    backgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
-    
+
     NSLayoutConstraint.activate([
       dummyBackgroundView.topAnchor.constraint(equalTo: self.view.topAnchor),
       dummyBackgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
       dummyBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
       dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-      
-      modalBackgroundView.topAnchor.constraint(equalTo: self.floatingView.topAnchor),
-      modalBackgroundView.bottomAnchor.constraint(equalTo: self.floatingView.bottomAnchor),
-      modalBackgroundView.leadingAnchor.constraint(equalTo: self.floatingView.leadingAnchor),
-      modalBackgroundView.trailingAnchor.constraint(equalTo: self.floatingView.trailingAnchor),
-      
-      modalBackgroundVisualEffectView.topAnchor.constraint(equalTo: self.floatingView.topAnchor),
-      modalBackgroundVisualEffectView.bottomAnchor.constraint(equalTo: self.floatingView.bottomAnchor),
-      modalBackgroundVisualEffectView.leadingAnchor.constraint(equalTo: self.floatingView.leadingAnchor),
-      modalBackgroundVisualEffectView.trailingAnchor.constraint(equalTo: self.floatingView.trailingAnchor),
-      
-      backgroundVisualEffectView.topAnchor.constraint(equalTo: self.view.topAnchor),
-      backgroundVisualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-      backgroundVisualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-      backgroundVisualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
     ]);
+    
+    self.modalManager.setupAddViews();
+    self.modalManager.setupViewConstraints();
   };
   
   override func viewDidLayoutSubviews() {

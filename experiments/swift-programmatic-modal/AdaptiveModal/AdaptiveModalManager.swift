@@ -201,6 +201,80 @@ class AdaptiveModalManager {
     self.clearAnimators();
   };
   
+  // MARK: - Functions - Setup
+  // -------------------------
+  
+  func setupAddViews(){
+    guard let modalView = self.modalView,
+          let targetView = self.targetView
+    else { return };
+    
+    if let bgVisualEffectView = self.backgroundVisualEffectView {
+      targetView.addSubview(bgVisualEffectView);
+      
+      bgVisualEffectView.clipsToBounds = true;
+      bgVisualEffectView.backgroundColor = .clear;
+    };
+    
+    targetView.addSubview(modalView);
+    
+    modalView.clipsToBounds = true;
+    modalView.backgroundColor = .clear;
+    
+    if let modalBackgroundView = self.modalBackgroundView {
+      modalView.addSubview(modalBackgroundView);
+      modalView.sendSubviewToBack(modalBackgroundView);
+      
+      modalBackgroundView.backgroundColor = .systemBackground;
+    };
+    
+    if let modalBGVisualEffectView = self.modalBackgroundVisualEffectView {
+      modalView.addSubview(modalBGVisualEffectView);
+      modalView.sendSubviewToBack(modalBGVisualEffectView);
+      
+      modalBGVisualEffectView.clipsToBounds = true;
+      modalBGVisualEffectView.backgroundColor = .clear;
+    };
+  };
+  
+  func setupViewConstraints(){
+    guard let modalView = self.modalView,
+          let targetView = self.targetView
+    else { return };
+    
+    if let bgVisualEffectView = self.backgroundVisualEffectView {
+      bgVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
+      
+      NSLayoutConstraint.activate([
+        bgVisualEffectView.topAnchor     .constraint(equalTo: targetView.topAnchor     ),
+        bgVisualEffectView.bottomAnchor  .constraint(equalTo: targetView.bottomAnchor  ),
+        bgVisualEffectView.leadingAnchor .constraint(equalTo: targetView.leadingAnchor ),
+        bgVisualEffectView.trailingAnchor.constraint(equalTo: targetView.trailingAnchor),
+      ]);
+    };
+    
+    if let modalBGView = self.modalBackgroundView {
+      modalBGView.translatesAutoresizingMaskIntoConstraints = false;
+      
+      NSLayoutConstraint.activate([
+        modalBGView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
+        modalBGView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
+        modalBGView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
+        modalBGView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
+      ]);
+    };
+    
+    if let modalBGVisualEffectView = self.modalBackgroundVisualEffectView {
+      modalBGVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
+      
+      NSLayoutConstraint.activate([
+        modalBGVisualEffectView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
+        modalBGVisualEffectView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
+        modalBGVisualEffectView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
+        modalBGVisualEffectView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
+      ]);
+    };
+  };
 
   // MARK: - Functions - Interpolation-Related
   // -----------------------------------------
