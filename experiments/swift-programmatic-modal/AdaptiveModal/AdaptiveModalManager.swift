@@ -461,7 +461,6 @@ class AdaptiveModalManager {
     rangeInput: [CGFloat]? = nil,
     rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
   ) -> CGFloat? {
-    return nil;
   
     guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
@@ -627,23 +626,6 @@ class AdaptiveModalManager {
     self.applyInterpolationToModalBackgroundVisualEffect(
       forInputPercentValue: inputPercentValue
     );
-    
-    let layerMask: CAShapeLayer = {
-      let path = UIBezierPath(
-        shouldRoundRect: modalView.bounds,
-        topLeftRadius: 20,
-        topRightRadius: 20,
-        bottomLeftRadius: 20,
-        bottomRightRadius: 20
-      );
-      
-      let shape = CAShapeLayer();
-      shape.path = path.cgPath;
-      
-      return shape;
-    }();
-    
-    self.modalView!.layer.mask = layerMask;
   };
   
   func applyInterpolationToModal(forPoint point: CGPoint){
@@ -903,26 +885,6 @@ class AdaptiveModalManager {
     );
     
     self.prevModalFrame = nextModalFrame;
-    
-    print("onDisplayLinkTick - timestamp: \(displayLink.timestamp)");
-    
-    
-    let layerMask: CAShapeLayer = {
-      let path = UIBezierPath(
-        shouldRoundRect: dummyModalViewPresentationLayer.bounds,
-        topLeftRadius: 20,
-        topRightRadius: 20,
-        bottomLeftRadius: 20,
-        bottomRightRadius: 20
-      );
-      
-      let shape = CAShapeLayer();
-      shape.path = path.cgPath;
-      
-      return shape;
-    }();
-    
-    self.modalView!.layer.mask = layerMask;
   };
   
   // MARK: - User-Invoked Functions
