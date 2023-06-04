@@ -22,6 +22,8 @@ class AdaptiveModalManager {
   // ------------------------------------
 
   var currentSizeProvider: () -> CGSize;
+  
+  lazy var dummyModalView = UIView();
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
@@ -63,6 +65,8 @@ class AdaptiveModalManager {
       
       self.prevModalFrame = modalView.frame;
       modalView.frame = newValue;
+      
+      self.dummyModalView.frame = newValue;
     }
     get {
       self.modalView?.frame;
@@ -196,6 +200,8 @@ class AdaptiveModalManager {
     self.backgroundDimmingView  = backgroundDimmingView;
     
     self.currentSizeProvider = currentSizeProvider;
+    
+    self.setupdummyModalView();
   };
   
   deinit {
@@ -204,6 +210,17 @@ class AdaptiveModalManager {
   
   // MARK: - Functions - Setup
   // -------------------------
+  
+  private func setupdummyModalView(){
+    guard let targetView = self.targetView else { return };
+    let dummyModalView = self.dummyModalView;
+    
+    dummyModalView.backgroundColor = .clear;
+    dummyModalView.alpha = 0.1;
+    dummyModalView.isUserInteractionEnabled = false;
+    
+    targetView.addSubview(dummyModalView);
+  };
   
   func setupAddViews(){
     guard let modalView = self.modalView,
@@ -720,6 +737,7 @@ class AdaptiveModalManager {
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
       
+      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
     };
@@ -830,8 +848,8 @@ class AdaptiveModalManager {
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink) {
-    guard let modalView = self.modalView,
-          let modalViewPresentationLayer = modalView.layer.presentation(),
+    guard let dummyModalViewPresentationLayer =
+            self.dummyModalView.layer.presentation(),
           let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
@@ -844,7 +862,7 @@ class AdaptiveModalManager {
     };
     
     let prevModalFrame = self.prevModalFrame;
-    let nextModalFrame = modalViewPresentationLayer.frame;
+    let nextModalFrame = dummyModalViewPresentationLayer.frame;
 
     guard prevModalFrame != nextModalFrame else { return };
     
