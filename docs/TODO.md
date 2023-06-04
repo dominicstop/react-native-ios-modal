@@ -97,6 +97,17 @@
 
 <br><br>
 
+## TODO - Adaptive Modal
+
+- [ ] `TODO:2023-06-04-23-45-31` - Impl: Adaptive Modal - `LayoutComputableValue`
+	* Layout value: "percentage relative to parent", "percentage relative to current window width/height", "percentage relative to screen width/height".
+	* Layout value: "dynamic constant - `safeAreaInsets` top/bottom/width/height", "dynamic constant -  current keyboard height/width", "constant value".
+	* Layout value should accept "array of computable layout values".
+	* Layout value should accept "offset + offset operation".
+	* Layout value should accept "min/max values".
+
+<br><br>
+
 ## TODO - Completed
 
 <br>
