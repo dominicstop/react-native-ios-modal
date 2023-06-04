@@ -47,7 +47,6 @@ class AdaptiveModalManager {
   
   var backgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
   var modalBackgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
-  var modalTransformAnimator: AdaptiveModalPropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
@@ -448,6 +447,99 @@ class AdaptiveModalManager {
     );
   };
   
+  func interpolateModalTransform(
+    forInputPercentValue inputPercentValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+  ) -> CGAffineTransform? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+
+    let clampConfig = modalConfig.interpolationClampingConfig;
+
+    let nextModalRotation = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalRotation
+      },
+      shouldClampMin: clampConfig.shouldClampModalInitRotation,
+      shouldClampMax: clampConfig.shouldClampModalLastRotation
+    );
+    
+    let nextScaleX = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalScaleX;
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastScaleX,
+      shouldClampMax: clampConfig.shouldClampModalLastScaleX
+    );
+    
+    let nextScaleY = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalScaleY
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastScaleY,
+      shouldClampMax: clampConfig.shouldClampModalLastScaleY
+    );
+    
+    let nextTranslateX = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalTranslateX
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastTranslateX,
+      shouldClampMax: clampConfig.shouldClampModalLastTranslateX
+    );
+    
+    let nextTranslateY = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalTranslateY
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastTranslateY,
+      shouldClampMax: clampConfig.shouldClampModalLastTranslateY
+    );
+    
+    let nextTransform: CGAffineTransform = {
+      var transform: CGAffineTransform = .identity;
+      
+      if let rotation = nextModalRotation {
+        transform = transform.rotated(by: rotation);
+      };
+      
+      if let nextScaleX = nextScaleX,
+         let nextScaleY = nextScaleY {
+         
+        transform = transform.scaledBy(
+          x: nextScaleX,
+          y: nextScaleY
+        );
+      };
+      
+      if let nextTranslateX = nextTranslateX,
+         let nextTranslateY = nextTranslateY {
+         
+        transform = transform.translatedBy(
+          x: nextTranslateX,
+          y: nextTranslateY
+        );
+      };
+      
+      return transform;
+    }();
+ 
+    return nextTransform;
+  };
+  
   func interpolateModalBackgroundOpacity(
     forInputPercentValue inputPercentValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
@@ -507,47 +599,6 @@ class AdaptiveModalManager {
         $0.backgroundOpacity
       }
     );
-  };
-  
-  func applyInterpolationToModalTransform(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) {
-  
-    let animator: AdaptiveModalPropertyAnimator? = {
-      let interpolationRange = self.getInterpolationStepRange(
-        forInputPercentValue: inputPercentValue
-      );
-      
-      guard let interpolationRange = interpolationRange else { return nil };
-      let animator = self.modalTransformAnimator;
-      
-      let animatorRangeDidChange = animator?.didRangeChange(
-        interpolationRangeStart: interpolationRange.rangeStart,
-        interpolationRangeEnd: interpolationRange.rangeEnd
-      );
-    
-      if let animator = animator, !animatorRangeDidChange! {
-        return animator;
-      };
-      
-      animator?.clear();
-      
-      guard let modalView = self.modalView else { return nil };
-      
-      return AdaptiveModalPropertyAnimator(
-        interpolationRangeStart: interpolationRange.rangeStart,
-        interpolationRangeEnd: interpolationRange.rangeEnd,
-        forComponent: modalView
-      ) {
-        $0.transform = $1.transform;
-        modalView.setNeedsLayout();
-      };
-    }();
-    
-    guard let animator = animator else { return };
-    self.modalTransformAnimator = animator;
-    
-    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
   
   func applyInterpolationToModalBackgroundVisualEffect(
@@ -649,6 +700,12 @@ class AdaptiveModalManager {
       self.modalFrame = nextModalRect;
     };
     
+    if let nextModalTransform = self.interpolateModalTransform(
+      forInputPercentValue: inputPercentValue
+    ) {
+      modalView.transform = nextModalTransform;
+    };
+    
     if let nextModalRadius = self.interpolateModalBorderRadius(
       forInputPercentValue: inputPercentValue,
       modalBounds: modalView.bounds
@@ -677,10 +734,6 @@ class AdaptiveModalManager {
     );
     
     self.applyInterpolationToModalBackgroundVisualEffect(
-      forInputPercentValue: inputPercentValue
-    );
-    
-    self.applyInterpolationToModalTransform(
       forInputPercentValue: inputPercentValue
     );
   };

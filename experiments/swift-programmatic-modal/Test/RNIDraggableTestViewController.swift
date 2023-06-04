@@ -59,8 +59,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalRotation: 0.1,
               modalScaleX: 0.5,
               modalScaleY: 1,
-              modalTranslateX: 0,
-              modalTranslateY: 0
+              modalTranslateX: 1000,
+              modalTranslateY: 1000
             )
           ),
           // snap point - 2
@@ -76,10 +76,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalRotation: 0,
+              modalRotation: -0.1,
               modalScaleX: 1,
               modalScaleY: 1,
-              modalTranslateX: 0,
+              modalTranslateX: -400,
               modalTranslateY: 0
             )
           ),
