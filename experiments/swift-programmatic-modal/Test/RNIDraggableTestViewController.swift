@@ -216,7 +216,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBackgroundOpacity: 0.83,
-              modalCornerRadius: 15,
+              modalCornerRadius: 25,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner,
@@ -243,18 +243,23 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
 
 class RNIDraggableTestViewController : UIViewController {
   
-  lazy var modalManager = AdaptiveModalManager(
-    modalConfig: AdaptiveModalConfigTestPresets.default.config,
-    modalView: self.floatingView,
-    targetView: self.view,
-    modalBackgroundView: self.modalBackgroundView,
-    modalBackgroundVisualEffectView: self.modalBackgroundVisualEffectView,
-    backgroundDimmingView: self.backgroundDimmingView,
-    backgroundVisualEffectView: self.backgroundVisualEffectView,
-    currentSizeProvider: {
-      .zero
-    }
-  );
+  lazy var modalManager = {
+    let manager = AdaptiveModalManager(
+      modalConfig: AdaptiveModalConfigTestPresets.default.config,
+      modalView: self.floatingView,
+      targetView: self.view,
+      modalBackgroundView: self.modalBackgroundView,
+      modalBackgroundVisualEffectView: self.modalBackgroundVisualEffectView,
+      backgroundDimmingView: self.backgroundDimmingView,
+      backgroundVisualEffectView: self.backgroundVisualEffectView,
+      currentSizeProvider: {
+        .zero
+      }
+    );
+    
+    manager.eventDelegate = self;
+    return manager;
+  }();
   
   private var initialGesturePoint: CGPoint = .zero;
   private var floatingViewInitialCenter: CGPoint = .zero
@@ -371,5 +376,25 @@ class RNIDraggableTestViewController : UIViewController {
   
     self.modalManager.notifyOnDragPanGesture(sender);
     
+  };
+};
+
+extension RNIDraggableTestViewController: AdaptiveModalEventNotifiable {
+  func notifyOnModalWillSnap(
+    prevSnapPointIndex: Int?,
+    nextSnapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    interpolationPoint: AdaptiveModalInterpolationPoint
+  ) {
+    self.floatingViewLabel.text = "\(nextSnapPointIndex)";
+  }
+  
+  func notifyOnModalDidSnap(
+    prevSnapPointIndex: Int?,
+    currentSnapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    interpolationPoint: AdaptiveModalInterpolationPoint
+  ) {
+    self.floatingViewLabel.text = "\(currentSnapPointIndex)";
   };
 };

@@ -7,26 +7,27 @@
 
 import UIKit
 
-
 class AdaptiveModalManager {
 
   // MARK: -  Properties - Config-Related
   // ------------------------------------
   
   var modalConfig: AdaptiveModalConfig;
-    
-  var currentSnapPointIndex = 0;
+  
   var enableSnapping = true;
   
-  // MARK: -  Properties - Refs/Providers
-  // ------------------------------------
-
-  var currentSizeProvider: () -> CGSize;
+  // MARK: -  Properties - Refs
+  // --------------------------
   
+  weak var eventDelegate: AdaptiveModalEventNotifiable?;
+
   lazy var dummyModalView = UIView();
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
+  
+  var animator: UIViewPropertyAnimator?;
+  var displayLink: CADisplayLink?;
   
   weak var modalBackgroundView: UIView?;
   weak var modalBackgroundVisualEffectView: UIVisualEffectView?;
@@ -42,17 +43,27 @@ class AdaptiveModalManager {
   
   var prevModalFrame: CGRect = .zero;
   
+  var nextSnapPointIndex: Int?;
+  
   var backgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
   var modalBackgroundVisualEffectAnimator: AdaptiveModalPropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
   
-  var animator: UIViewPropertyAnimator?;
-  var displayLink: CADisplayLink?;
+  var currentSizeProvider: () -> CGSize;
+  
+  var prevSnapPointIndex: Int?;
+  var currentSnapPointIndex = 0 {
+    didSet {
+      self.prevSnapPointIndex = oldValue;
+    }
+  };
   
   /// The computed frames of the modal based on the snap points
   var interpolationSteps: [AdaptiveModalInterpolationPoint]?;
+  
+  var currentInterpolationIndex = 0;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -94,7 +105,7 @@ class AdaptiveModalManager {
   };
   
   var currentInterpolationStep: AdaptiveModalInterpolationPoint? {
-    self.interpolationSteps?[self.currentSnapPointIndex];
+    self.interpolationSteps?[self.currentInterpolationIndex];
   };
   
   var gestureInitialVelocity: CGVector? {
@@ -679,14 +690,14 @@ class AdaptiveModalManager {
   // MARK: - Functions
   // -----------------
   
-  func clearGestureValues(){
+  private func clearGestureValues(){
     self.gestureOffset = nil;
     self.gestureInitialPoint = nil;
     self.gestureVelocity = nil;
     self.gesturePoint = nil;
   };
   
-  func clearAnimators(){
+  private func clearAnimators(){
     self.backgroundVisualEffectAnimator?.clear();
     self.backgroundVisualEffectAnimator = nil;
     
@@ -753,10 +764,8 @@ class AdaptiveModalManager {
     animator.startAnimation();
   };
   
-  func getClosestSnapPoint(
-    forGestureCoord gestureCoord: CGFloat
-  ) -> (
-    snapPointIndex: Int,
+  func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
+    interpolationIndex: Int,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     interpolationPoint: AdaptiveModalInterpolationPoint
   )? {
@@ -764,7 +773,8 @@ class AdaptiveModalManager {
           let modalView = self.modalView
     else { return nil };
     
-    let inputCoord = modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+    let inputCoord = coord ??
+      modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
     
     let delta = interpolationSteps.map {
       abs($0.computedRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint] - inputCoord);
@@ -776,15 +786,18 @@ class AdaptiveModalManager {
     
     let closestSnapPoint = deltaSorted.first!;
     
-    let closestSnapPointIndex = min(
+    let closestInterpolationIndex = min(
       closestSnapPoint.offset,
       self.modalConfig.snapPointLastIndex
     );
     
+    let interpolationPoint = interpolationSteps[closestInterpolationIndex];
+    let snapPointIndex = interpolationPoint.snapPointIndex;
+    
     return (
-      snapPointIndex: closestSnapPointIndex,
-      snapPointConfig: self.modalConfig.snapPoints[closestSnapPointIndex],
-      interpolationPoint: interpolationSteps[closestSnapPointIndex]
+      interpolationIndex: closestInterpolationIndex,
+      snapPointConfig: self.modalConfig.snapPoints[snapPointIndex],
+      interpolationPoint: interpolationPoint
     );
   };
   
@@ -917,10 +930,10 @@ class AdaptiveModalManager {
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
-        
     
       case .changed:
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
+        self.onModalWillSnap();
         
       case .cancelled, .ended:
         guard self.enableSnapping else {
@@ -934,7 +947,7 @@ class AdaptiveModalManager {
           gestureFinalPoint[keyPath: self.modalConfig.inputValueKeyForPoint];
         
         let closestSnapPoint =
-          self.getClosestSnapPoint(forGestureCoord: gestureFinalCoord);
+          self.getClosestSnapPoint(forCoord: gestureFinalCoord);
         
         guard let closestSnapPoint = closestSnapPoint else {
           self.clearGestureValues();
@@ -942,13 +955,17 @@ class AdaptiveModalManager {
         };
         
         self.animateModal(to: closestSnapPoint.interpolationPoint) { _ in
-          self.endDisplayLink();
+          self.currentInterpolationIndex =
+            closestSnapPoint.interpolationIndex;
+        
+          self.currentSnapPointIndex =
+            closestSnapPoint.interpolationPoint.snapPointIndex;
           
+          self.endDisplayLink();
+          self.onModalDidSnap();
         };
         
         self.startDisplayLink();
-        
-        self.currentSnapPointIndex = closestSnapPoint.snapPointIndex;
         self.clearGestureValues();
         
       default:
@@ -990,5 +1007,39 @@ class AdaptiveModalManager {
       to: closestSnapPoint.interpolationPoint,
       duration: interpolatedDuration
     );
+  };
+  
+  // MARK: - Event Functions
+  // -----------------------
+  
+  func onModalWillSnap(){
+    guard let _ = self.modalView else { return };
+    
+    guard let closestSnapPoint = self.getClosestSnapPoint()
+    else { return };
+    
+    let prevIndex = self.nextSnapPointIndex;
+    let nextIndex = closestSnapPoint.interpolationPoint.snapPointIndex;
+    
+    guard prevIndex != nextIndex else { return };
+    self.nextSnapPointIndex = nextIndex;
+    
+    self.eventDelegate?.notifyOnModalWillSnap(
+      prevSnapPointIndex: prevIndex,
+      nextSnapPointIndex: nextIndex,
+      snapPointConfig: closestSnapPoint.snapPointConfig,
+      interpolationPoint: closestSnapPoint.interpolationPoint
+    );
+  };
+  
+  func onModalDidSnap(){
+    self.eventDelegate?.notifyOnModalDidSnap(
+      prevSnapPointIndex: self.prevSnapPointIndex,
+      currentSnapPointIndex: self.currentSnapPointIndex,
+      snapPointConfig: self.currentSnapPointConfig,
+      interpolationPoint: self.currentInterpolationStep!
+    );
+    
+    self.nextSnapPointIndex = nil;
   };
 };
