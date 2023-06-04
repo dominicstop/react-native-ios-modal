@@ -14,7 +14,7 @@ class AdaptiveModalManager {
   
   var modalConfig: AdaptiveModalConfig;
   
-  var enableSnapping = true;
+  var enableSnapping = false;
   
   // MARK: -  Properties - Refs
   // --------------------------
@@ -68,7 +68,7 @@ class AdaptiveModalManager {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var modalFrame: CGRect? {
+  var modalFrame: CGRect! {
     set {
       guard let modalView = self.modalView,
             let newValue = newValue
@@ -80,7 +80,7 @@ class AdaptiveModalManager {
       self.dummyModalView.frame = newValue;
     }
     get {
-      self.modalView?.frame;
+      self.dummyModalView.frame;
     }
   };
   
@@ -212,7 +212,7 @@ class AdaptiveModalManager {
     
     self.currentSizeProvider = currentSizeProvider;
     
-    self.setupdummyModalView();
+    self.setupDummyModalView();
   };
   
   deinit {
@@ -222,7 +222,7 @@ class AdaptiveModalManager {
   // MARK: - Functions - Setup
   // -------------------------
   
-  private func setupdummyModalView(){
+  private func setupDummyModalView(){
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
     
@@ -447,6 +447,99 @@ class AdaptiveModalManager {
     );
   };
   
+  func interpolateModalTransform(
+    forInputPercentValue inputPercentValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+  ) -> CGAffineTransform? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+
+    let clampConfig = modalConfig.interpolationClampingConfig;
+
+    let nextModalRotation = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalRotation
+      },
+      shouldClampMin: clampConfig.shouldClampModalInitRotation,
+      shouldClampMax: clampConfig.shouldClampModalLastRotation
+    );
+    
+    let nextScaleX = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalScaleX;
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastScaleX,
+      shouldClampMax: clampConfig.shouldClampModalLastScaleX
+    );
+    
+    let nextScaleY = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalScaleY
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastScaleY,
+      shouldClampMax: clampConfig.shouldClampModalLastScaleY
+    );
+    
+    let nextTranslateX = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalTranslateX
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastTranslateX,
+      shouldClampMax: clampConfig.shouldClampModalLastTranslateX
+    );
+    
+    let nextTranslateY = Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalTranslateY
+      },
+      shouldClampMin: clampConfig.shouldClampModalLastTranslateY,
+      shouldClampMax: clampConfig.shouldClampModalLastTranslateY
+    );
+    
+    let nextTransform: CGAffineTransform = {
+      var transform: CGAffineTransform = .identity;
+      
+      if let rotation = nextModalRotation {
+        transform = transform.rotated(by: rotation);
+      };
+      
+      if let nextScaleX = nextScaleX,
+         let nextScaleY = nextScaleY {
+         
+        transform = transform.scaledBy(
+          x: nextScaleX,
+          y: nextScaleY
+        );
+      };
+      
+      if let nextTranslateX = nextTranslateX,
+         let nextTranslateY = nextTranslateY {
+         
+        transform = transform.translatedBy(
+          x: nextTranslateX,
+          y: nextTranslateY
+        );
+      };
+      
+      return transform;
+    }();
+ 
+    return nextTransform;
+  };
+  
   func interpolateModalBackgroundOpacity(
     forInputPercentValue inputPercentValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
@@ -607,6 +700,12 @@ class AdaptiveModalManager {
       self.modalFrame = nextModalRect;
     };
     
+    if let nextModalTransform = self.interpolateModalTransform(
+      forInputPercentValue: inputPercentValue
+    ) {
+      modalView.transform = nextModalTransform;
+    };
+    
     if let nextModalRadius = self.interpolateModalBorderRadius(
       forInputPercentValue: inputPercentValue,
       modalBounds: modalView.bounds
@@ -666,7 +765,7 @@ class AdaptiveModalManager {
           let gestureInitialPoint = self.gestureInitialPoint
     else { return };
     
-    let modalRect = modalView.frame;
+    let modalRect = self.modalFrame!;
 
     let gestureOffset = self.gestureOffset ?? {
       return CGPoint(
@@ -751,6 +850,8 @@ class AdaptiveModalManager {
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
+      
+      modalView.layoutIfNeeded();
     };
     
     if let completion = completion {
@@ -769,12 +870,13 @@ class AdaptiveModalManager {
     snapPointConfig: AdaptiveModalSnapPointConfig,
     interpolationPoint: AdaptiveModalInterpolationPoint
   )? {
-    guard let interpolationSteps = self.interpolationSteps,
-          let modalView = self.modalView
+    guard let interpolationSteps = self.interpolationSteps
     else { return nil };
     
+    let inputRect = self.modalFrame!;
+    
     let inputCoord = coord ??
-      modalView.frame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      inputRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
     
     let delta = interpolationSteps.map {
       abs($0.computedRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint] - inputCoord);
@@ -974,15 +1076,13 @@ class AdaptiveModalManager {
   };
   
   func updateModal(){
-    guard let modalView = self.modalView,
-          !self.isAnimating
-    else { return };
+    guard !self.isAnimating else { return };
         
     if let gesturePoint = self.gesturePoint {
       self.applyInterpolationToModal(forGesturePoint: gesturePoint);
     
     } else if let currentInterpolationStep = self.currentInterpolationStep,
-           currentInterpolationStep.computedRect != modalView.frame {
+           currentInterpolationStep.computedRect != self.modalFrame {
       
       self.applyInterpolationToModal(
         forInputPercentValue: currentInterpolationStep.percent
@@ -991,10 +1091,9 @@ class AdaptiveModalManager {
   };
   
   func snapToClosestSnapPoint(){
-    guard let modalView = self.modalView,
-          let targetView = self.targetView,
+    guard let targetView = self.targetView,
           let closestSnapPoint =
-            self.getClosestSnapPoint(forRect: modalView.frame)
+            self.getClosestSnapPoint(forRect: self.modalFrame)
     else { return };
     
     let interpolatedDuration = Self.interpolate(
@@ -1013,8 +1112,6 @@ class AdaptiveModalManager {
   // -----------------------
   
   func onModalWillSnap(){
-    guard let _ = self.modalView else { return };
-    
     guard let closestSnapPoint = self.getClosestSnapPoint()
     else { return };
     

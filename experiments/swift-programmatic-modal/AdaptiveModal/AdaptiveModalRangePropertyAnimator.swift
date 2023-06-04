@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct AdaptiveModalPropertyAnimator {
+struct AdaptiveModalRangePropertyAnimator {
   
   var interpolationRangeStart: AdaptiveModalInterpolationPoint;
   var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
@@ -106,12 +106,6 @@ struct AdaptiveModalPropertyAnimator {
     
     guard let percent = percent else { return };
     self.setFractionComplete(forPercent: percent);
-    
-    print(
-        "\(self.component)"
-      + " - percent: \(percent)"
-      + " - rangeOutput"
-    );
   };
   
   func clear(){

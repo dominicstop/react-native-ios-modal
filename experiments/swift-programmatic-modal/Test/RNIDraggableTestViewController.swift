@@ -10,7 +10,9 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .test03;
+  static let `default`: Self = .testModalTransform01;
+  
+  case testModalTransform01;
 
   case test01;
   case test02;
@@ -18,6 +20,76 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
   
   var config: AdaptiveModalConfig {
     switch self {
+      case .testModalTransform01: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 0
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.2)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalRotation: 0,
+              modalScaleX: 1,
+              modalScaleY: 1,
+              modalTranslateX: 0,
+              modalTranslateY: 0
+            )
+          ),
+          
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.4)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalRotation: 0.1,
+              modalScaleX: 0.5,
+              modalScaleY: 1,
+              modalTranslateX: 1000,
+              modalTranslateY: 0
+            )
+          ),
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNIComputableValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNIComputableValue(
+                mode: .percent(percentValue: 0.6)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalRotation: -0.1,
+              modalScaleX: 1,
+              modalScaleY: 1,
+              modalTranslateX: -400,
+              modalTranslateY: 0
+            )
+          ),
+        ],
+        snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          snapPoint: .fitScreenVertically
+        )
+      );
+    
       case .test01: return AdaptiveModalConfig(
         snapPoints:  [
           AdaptiveModalSnapPointConfig(

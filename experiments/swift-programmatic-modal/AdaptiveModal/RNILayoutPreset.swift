@@ -11,7 +11,7 @@ enum RNILayoutPreset {
   case offscreenBottom, offscreenTop, offscreenLeft, offscreenRight;
   case halfOffscreenBottom, halfOffscreenTop, halfOffscreenLeft, halfOffscreenRight;
   case edgeBottom, edgeTop, edgeLeft, edgeRight;
-  case fitScreen;
+  case fitScreen, fitScreenHorizontally, fitScreenVertically;
   case center;
   
   case layoutConfig(_ config: RNILayout);
@@ -111,6 +111,7 @@ enum RNILayoutPreset {
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .center
         );
+        
       case .fitScreen:
         return .init(
           derivedFrom: baseLayoutConfig,
@@ -119,6 +120,22 @@ enum RNILayoutPreset {
           width: RNIComputableValue(
             mode: .stretch
           ),
+          height: RNIComputableValue(
+            mode: .stretch
+          )
+        );
+        
+      case .fitScreenHorizontally:
+        return .init(
+          derivedFrom: baseLayoutConfig,
+          width: RNIComputableValue(
+            mode: .stretch
+          )
+        );
+        
+      case .fitScreenVertically:
+        return .init(
+          derivedFrom: baseLayoutConfig,
           height: RNIComputableValue(
             mode: .stretch
           )

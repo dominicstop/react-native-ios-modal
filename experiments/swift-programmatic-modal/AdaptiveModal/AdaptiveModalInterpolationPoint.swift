@@ -9,19 +9,32 @@ import UIKit
 
 struct AdaptiveModalInterpolationPoint: Equatable {
 
+  private static let DefaultMaskedCorners: CACornerMask = [
+    .layerMaxXMinYCorner,
+    .layerMinXMinYCorner,
+    .layerMaxXMaxYCorner,
+    .layerMinXMaxYCorner,
+  ];
+
+  // MARK: - Properties
+  // ------------------
+
   let percent: CGFloat;
   let snapPointIndex: Int;
 
   /// The computed frames of the modal based on the snap points
   let computedRect: CGRect;
   
-  //let modalRotation: CGFloat;
+  // MARK: - Properties - Keyframes
+  // ------------------------------
   
-  //let modalScaleX: CGFloat;
-  //let modalScaleY: CGFloat;
+  let modalRotation: CGFloat;
+  
+  let modalScaleX: CGFloat;
+  let modalScaleY: CGFloat;
 
-  //let modalTranslateX: CGFloat;
-  //let modalTranslateY: CGFloat;
+  let modalTranslateX: CGFloat;
+  let modalTranslateY: CGFloat;
   
   //let modalBackgroundColor: UIColor;
   let modalBackgroundOpacity: CGFloat;
@@ -37,6 +50,30 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   let backgroundVisualEffect: UIVisualEffect?;
   let backgroundVisualEffectIntensity: CGFloat;
+  
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  var transform: CGAffineTransform {
+    var transform: CGAffineTransform = .identity;
+    
+    transform = transform.rotated(by: self.modalRotation);
+    
+    transform = transform.scaledBy(
+      x: self.modalScaleX,
+      y: self.modalScaleY
+    );
+    
+    transform = transform.translatedBy(
+      x: self.modalTranslateX,
+      y: self.modalTranslateY
+    );
+    
+    return transform;
+  };
+  
+  // MARK: - Init
+  // ------------
 
   init(
     usingModalConfig modalConfig: AdaptiveModalConfig,
@@ -81,13 +118,33 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     
     let keyframeCurrent = snapPointConfig.animationKeyframe;
     
+    self.modalRotation = keyframeCurrent?.modalRotation
+      ?? keyframePrev?.modalRotation
+      ?? 0;
+    
+    self.modalScaleX = keyframeCurrent?.modalScaleX
+      ?? keyframePrev?.modalScaleX
+      ?? 1;
+    
+    self.modalScaleY = keyframeCurrent?.modalScaleY
+      ?? keyframePrev?.modalScaleY
+      ?? 1;
+      
+    self.modalTranslateX = keyframeCurrent?.modalTranslateX
+      ?? keyframePrev?.modalTranslateX
+      ?? 0;
+      
+    self.modalTranslateY = keyframeCurrent?.modalTranslateY
+      ?? keyframePrev?.modalTranslateY
+      ?? 0;
+      
     self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
       ?? keyframePrev?.modalBackgroundOpacity
       ?? 1;
     
     self.modalCornerRadius = keyframeCurrent?.modalCornerRadius
       ?? keyframePrev?.modalCornerRadius
-      ?? Self.DefaultCornerRadius;
+      ?? 0;
       
     self.modalMaskedCorners = keyframeCurrent?.modalMaskedCorners
       ?? keyframePrev?.modalMaskedCorners
@@ -112,8 +169,42 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       ?? 1;
   };
   
+  // MARK: - Functions
+  // -----------------
+  
+  func getTransform(
+    shouldApplyRotation: Bool = true,
+    shouldApplyScale: Bool = true,
+    shouldApplyTranslate: Bool = true
+  ) -> CGAffineTransform {
+  
+    var transform: CGAffineTransform = .identity;
+    
+    if shouldApplyRotation {
+      transform = transform.rotated(by: self.modalRotation);
+    };
+    
+    if shouldApplyScale {
+      transform = transform.scaledBy(
+        x: self.modalScaleX,
+        y: self.modalScaleY
+      );
+    };
+    
+    if shouldApplyTranslate {
+      transform = transform.translatedBy(
+        x: self.modalTranslateX,
+        y: self.modalTranslateY
+      );
+    };
+    
+    return transform;
+  };
+  
   func apply(toModalView modalView: UIView){
     modalView.frame = self.computedRect;
+    modalView.transform = self.transform;
+    
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
@@ -137,15 +228,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
 
 extension AdaptiveModalInterpolationPoint {
 
-  private static let DefaultCornerRadius: CGFloat = 0;
-  
-  private static let DefaultMaskedCorners: CACornerMask = [
-    .layerMaxXMinYCorner,
-    .layerMinXMinYCorner,
-    .layerMaxXMaxYCorner,
-    .layerMinXMaxYCorner,
-  ];
-  
   static func compute(
     usingModalConfig modalConfig: AdaptiveModalConfig,
     withTargetRect targetRect: CGRect,
