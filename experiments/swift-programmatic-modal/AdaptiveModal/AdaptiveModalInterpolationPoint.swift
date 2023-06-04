@@ -54,22 +54,28 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var transform: CGAffineTransform {
-    var transform: CGAffineTransform = .identity;
+  var modalTransforms: [CGAffineTransform] {
+    var transforms: [CGAffineTransform] = [];
     
-    transform = transform.rotated(by: self.modalRotation);
-    
-    transform = transform.scaledBy(
-      x: self.modalScaleX,
-      y: self.modalScaleY
+    transforms.append(
+      .init(rotationAngle: self.modalRotation)
     );
     
-    transform = transform.translatedBy(
-      x: self.modalTranslateX,
-      y: self.modalTranslateY
+    transforms.append(
+      .init(scaleX: self.modalScaleX, y: self.modalScaleY)
     );
     
-    return transform;
+    transforms.append(
+      .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
+    );
+    
+    return transforms;
+  };
+  
+  var modalTransform: CGAffineTransform {
+    self.modalTransforms.reduce(.identity){
+      $0.concatenating($1);
+    };
   };
   
   // MARK: - Init
@@ -172,38 +178,39 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   // MARK: - Functions
   // -----------------
   
-  func getTransform(
+  func getModalTransform(
     shouldApplyRotation: Bool = true,
     shouldApplyScale: Bool = true,
     shouldApplyTranslate: Bool = true
   ) -> CGAffineTransform {
   
-    var transform: CGAffineTransform = .identity;
+    var transforms: [CGAffineTransform] = [];
     
     if shouldApplyRotation {
-      transform = transform.rotated(by: self.modalRotation);
+      transforms.append(
+        .init(rotationAngle: self.modalRotation)
+      );
     };
     
     if shouldApplyScale {
-      transform = transform.scaledBy(
-        x: self.modalScaleX,
-        y: self.modalScaleY
+      transforms.append(
+        .init(scaleX: self.modalScaleX, y: self.modalScaleY)
       );
     };
     
     if shouldApplyTranslate {
-      transform = transform.translatedBy(
-        x: self.modalTranslateX,
-        y: self.modalTranslateY
+      transforms.append(
+        .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
       );
     };
     
-    return transform;
+    return transforms.reduce(.identity){
+      $0.concatenating($1);
+    };
   };
   
   func apply(toModalView modalView: UIView){
     modalView.frame = self.computedRect;
-    modalView.transform = self.transform;
     
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;

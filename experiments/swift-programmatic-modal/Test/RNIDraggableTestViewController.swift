@@ -59,8 +59,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalRotation: 0.1,
               modalScaleX: 0.5,
               modalScaleY: 1,
-              modalTranslateX: 1000,
-              modalTranslateY: 1000
+              modalTranslateX: 500,
+              modalTranslateY: 500
             )
           ),
           // snap point - 2
@@ -79,7 +79,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalRotation: -0.1,
               modalScaleX: 1,
               modalScaleY: 1,
-              modalTranslateX: -400,
+              modalTranslateX: -600,
               modalTranslateY: 0
             )
           ),
@@ -444,10 +444,9 @@ class RNIDraggableTestViewController : UIViewController {
   };
   
   @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
-    print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
+    // print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
   
     self.modalManager.notifyOnDragPanGesture(sender);
-    
   };
 };
 

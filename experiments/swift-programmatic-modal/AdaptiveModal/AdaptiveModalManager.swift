@@ -14,7 +14,7 @@ class AdaptiveModalManager {
   
   var modalConfig: AdaptiveModalConfig;
   
-  var enableSnapping = false;
+  var enableSnapping = true;
   
   // MARK: -  Properties - Refs
   // --------------------------
@@ -489,52 +489,26 @@ class AdaptiveModalManager {
       shouldClampMax: clampConfig.shouldClampModalLastScaleY
     );
     
-    let nextTranslateX = Self.interpolate(
-      inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalTranslateX
-      },
-      shouldClampMin: clampConfig.shouldClampModalLastTranslateX,
-      shouldClampMax: clampConfig.shouldClampModalLastTranslateX
-    );
-    
-    let nextTranslateY = Self.interpolate(
-      inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalTranslateY
-      },
-      shouldClampMin: clampConfig.shouldClampModalLastTranslateY,
-      shouldClampMax: clampConfig.shouldClampModalLastTranslateY
-    );
-    
     let nextTransform: CGAffineTransform = {
-      var transform: CGAffineTransform = .identity;
+      var transforms: [CGAffineTransform] = [];
       
       if let rotation = nextModalRotation {
-        transform = transform.rotated(by: rotation);
+        transforms.append(
+          .init(rotationAngle: rotation)
+        );
       };
       
       if let nextScaleX = nextScaleX,
          let nextScaleY = nextScaleY {
          
-        transform = transform.scaledBy(
-          x: nextScaleX,
-          y: nextScaleY
+        transforms.append(
+          .init(scaleX: nextScaleX, y: nextScaleY)
         );
       };
       
-      if let nextTranslateX = nextTranslateX,
-         let nextTranslateY = nextTranslateY {
-         
-        transform = transform.translatedBy(
-          x: nextTranslateX,
-          y: nextTranslateY
-        );
+      return transforms.reduce(.identity) {
+        $0.concatenating($1);
       };
-      
-      return transform;
     }();
  
     return nextTransform;
@@ -849,8 +823,6 @@ class AdaptiveModalManager {
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
-      
-      modalView.layoutIfNeeded();
     };
     
     if let completion = completion {
@@ -962,8 +934,10 @@ class AdaptiveModalManager {
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink) {
-    guard let dummyModalViewPresentationLayer =
+    guard let modalView = self.modalView,
+          let dummyModalViewPresentationLayer =
             self.dummyModalView.layer.presentation(),
+            
           let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
@@ -989,7 +963,6 @@ class AdaptiveModalManager {
       ? Self.invertPercent(percent)
       : percent;
     
-    
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: percentAdj
     );
@@ -997,6 +970,12 @@ class AdaptiveModalManager {
     self.applyInterpolationToModalBackgroundVisualEffect(
       forInputPercentValue: percentAdj
     );
+    
+    if let modalTranslate = self.interpolateModalTransform(
+      forInputPercentValue: percentAdj
+    ) {
+      modalView.transform = modalTranslate.concatenating(.identity);
+    };
     
     self.prevModalFrame = nextModalFrame;
   };
