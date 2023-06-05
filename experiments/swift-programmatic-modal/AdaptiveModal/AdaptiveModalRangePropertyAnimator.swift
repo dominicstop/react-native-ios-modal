@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 struct AdaptiveModalRangePropertyAnimator {
   
   var interpolationRangeStart: AdaptiveModalInterpolationPoint;
@@ -24,7 +25,7 @@ struct AdaptiveModalRangePropertyAnimator {
     self.interpolationRangeEnd
   ]};
   
-  init<T: AnyObject>(
+  init<T: UIView>(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint,
     forComponent component: T,
@@ -49,7 +50,6 @@ struct AdaptiveModalRangePropertyAnimator {
     animator.addAnimations {
       animation(component, interpolationRangeEnd);
     };
-    
     
     self.animator = animator;
   };

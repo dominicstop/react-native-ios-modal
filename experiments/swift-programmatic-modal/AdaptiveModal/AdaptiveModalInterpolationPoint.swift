@@ -65,10 +65,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       .init(scaleX: self.modalScaleX, y: self.modalScaleY)
     );
     
-    transforms.append(
-      .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
-    );
-    
     return transforms;
   };
   
@@ -221,7 +217,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalView modalView: UIView){
     modalView.frame = self.computedRect;
-    modalView.transform = self.getModalTransform(shouldApplyTranslate: false);
     
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;
