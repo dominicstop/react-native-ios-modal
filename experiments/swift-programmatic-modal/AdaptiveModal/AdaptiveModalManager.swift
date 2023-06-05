@@ -539,7 +539,7 @@ class AdaptiveModalManager {
     return nextTransform;
   };
   
-  func interpolateOpacity(
+  func interpolateModalOpacity(
     forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
 
@@ -556,6 +556,16 @@ class AdaptiveModalManager {
     return self.interpolate(
       inputValue: inputPercentValue,
       rangeOutputKey: \.modalBackgroundOpacity
+    );
+  };
+  
+  func interpolateModalBackgroundVisualEffectOpacity(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) -> CGFloat? {
+  
+    return self.interpolate(
+      inputValue: inputPercentValue,
+      rangeOutputKey: \.modalBackgroundVisualEffectOpacity
     );
   };
   
@@ -693,7 +703,7 @@ class AdaptiveModalManager {
     Self.setProperty(
       forObject: modalView,
       forPropertyKey: \.alpha,
-      withValue:  self.interpolateOpacity(
+      withValue:  self.interpolateModalOpacity(
         forInputPercentValue: inputPercentValue
       )
     );
@@ -710,6 +720,14 @@ class AdaptiveModalManager {
       forObject: self.modalBackgroundView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolateModalBackgroundOpacity(
+        forInputPercentValue: inputPercentValue
+      )
+    );
+    
+    Self.setProperty(
+      forObject: self.modalBackgroundVisualEffectView,
+      forPropertyKey: \.alpha,
+      withValue:  self.interpolateModalBackgroundVisualEffectOpacity(
         forInputPercentValue: inputPercentValue
       )
     );
@@ -843,6 +861,8 @@ class AdaptiveModalManager {
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
+      
+      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView)
     };
     
     if let completion = completion {
