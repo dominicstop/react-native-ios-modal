@@ -538,37 +538,7 @@ class AdaptiveModalManager {
  
     return nextTransform;
   };
-  
-  func interpolateModalOpacity(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) -> CGFloat? {
 
-    return self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalOpacity
-    );
-  };
-  
-  func interpolateModalBackgroundOpacity(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) -> CGFloat? {
-  
-    return self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalBackgroundOpacity
-    );
-  };
-  
-  func interpolateModalBackgroundVisualEffectOpacity(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) -> CGFloat? {
-  
-    return self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalBackgroundVisualEffectOpacity
-    );
-  };
-  
   func interpolateModalBorderRadius(
     forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
@@ -576,16 +546,6 @@ class AdaptiveModalManager {
     return self.interpolate(
       inputValue: inputPercentValue,
       rangeOutputKey: \.modalCornerRadius
-    );
-  };
-  
-  func interpolateBackgroundOpacity(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) -> CGFloat? {
-
-    return self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.backgroundOpacity
     );
   };
   
@@ -703,8 +663,9 @@ class AdaptiveModalManager {
     Self.setProperty(
       forObject: modalView,
       forPropertyKey: \.alpha,
-      withValue:  self.interpolateModalOpacity(
-        forInputPercentValue: inputPercentValue
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalOpacity
       )
     );
     
@@ -719,24 +680,27 @@ class AdaptiveModalManager {
     Self.setProperty(
       forObject: self.modalBackgroundView,
       forPropertyKey: \.alpha,
-      withValue:  self.interpolateModalBackgroundOpacity(
-        forInputPercentValue: inputPercentValue
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalBackgroundOpacity
       )
     );
     
     Self.setProperty(
       forObject: self.modalBackgroundVisualEffectView,
       forPropertyKey: \.alpha,
-      withValue:  self.interpolateModalBackgroundVisualEffectOpacity(
-        forInputPercentValue: inputPercentValue
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalBackgroundVisualEffectOpacity
       )
     );
     
     Self.setProperty(
       forObject: self.backgroundDimmingView,
       forPropertyKey: \.alpha,
-      withValue:  self.interpolateBackgroundOpacity(
-        forInputPercentValue: inputPercentValue
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.backgroundOpacity
       )
     );
     

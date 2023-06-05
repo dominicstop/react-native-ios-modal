@@ -244,7 +244,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMaxYCorner,
                 .layerMaxXMaxYCorner
               ],
-              modalBackgroundVisualEffectOpacity: 0.9,
               modalBackgroundVisualEffectIntensity: 0.6,
               backgroundOpacity: 0.1,
               backgroundVisualEffectIntensity: 0.075
