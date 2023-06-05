@@ -32,6 +32,7 @@ struct AdaptiveModalAnimationConfig {
   let backgroundOpacity: CGFloat?;
   
   let backgroundVisualEffect: UIVisualEffect?;
+  let backgroundVisualEffectOpacity: CGFloat?;
   let backgroundVisualEffectIntensity: CGFloat?;
   
   init(
@@ -51,6 +52,7 @@ struct AdaptiveModalAnimationConfig {
      backgroundColor: UIColor? = nil,
      backgroundOpacity: CGFloat? = nil,
      backgroundVisualEffect: UIVisualEffect? = nil,
+     backgroundVisualEffectOpacity: CGFloat? = nil,
      backgroundVisualEffectIntensity: CGFloat? = nil
   ) {
     self.modalRotation = modalRotation;
@@ -76,6 +78,7 @@ struct AdaptiveModalAnimationConfig {
     self.backgroundOpacity = backgroundOpacity;
     
     self.backgroundVisualEffect = backgroundVisualEffect;
+    self.backgroundVisualEffectOpacity = backgroundVisualEffectOpacity;
     self.backgroundVisualEffectIntensity = backgroundVisualEffectIntensity;
   };
 };

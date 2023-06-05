@@ -51,6 +51,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let backgroundOpacity: CGFloat;
   
   let backgroundVisualEffect: UIVisualEffect?;
+  let backgroundVisualEffectOpacity: CGFloat;
   let backgroundVisualEffectIntensity: CGFloat;
   
   // MARK: - Computed Properties
@@ -180,6 +181,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     self.backgroundVisualEffect = keyframeCurrent?.backgroundVisualEffect
       ?? keyframePrev?.backgroundVisualEffect;
       
+    self.backgroundVisualEffectOpacity = keyframeCurrent?.backgroundVisualEffectOpacity
+      ?? keyframePrev?.backgroundVisualEffectOpacity
+      ?? 1;
+      
     self.backgroundVisualEffectIntensity = keyframeCurrent?.backgroundVisualEffectIntensity
       ?? keyframePrev?.backgroundVisualEffectIntensity
       ?? 1;
@@ -255,6 +260,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toBackgroundView bgView: UIView?){
     bgView?.alpha = self.backgroundOpacity;
+  };
+  
+  func apply(toBackgroundVisualEffectView effectView: UIView?){
+    effectView?.alpha = self.backgroundVisualEffectOpacity;
   };
 };
 

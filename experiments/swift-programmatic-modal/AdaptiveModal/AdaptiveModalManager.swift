@@ -704,6 +704,15 @@ class AdaptiveModalManager {
       )
     );
     
+    Self.setProperty(
+      forObject: self.backgroundVisualEffectView,
+      forPropertyKey: \.alpha,
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.backgroundVisualEffectOpacity
+      )
+    );
+    
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: inputPercentValue
     );
@@ -826,7 +835,8 @@ class AdaptiveModalManager {
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
       
-      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView)
+      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView);
+      interpolationPoint.apply(toBackgroundVisualEffectView: self.backgroundVisualEffectView);
     };
     
     if let completion = completion {

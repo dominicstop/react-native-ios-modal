@@ -219,6 +219,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               backgroundVisualEffectIntensity: 0
             )
           ),
+          
           // Snap Point 2
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
@@ -249,6 +250,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               backgroundVisualEffectIntensity: 0.075
             )
           ),
+          
           // Snap Point 3
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
@@ -274,9 +276,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               ],
               modalBackgroundVisualEffectIntensity: 1,
               backgroundOpacity: 0,
+              //backgroundVisualEffectOpacity: 0.5,
               backgroundVisualEffectIntensity: 0.5
             )
           ),
+          
+          // Snap Point 4
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
               horizontalAlignment: .center,
