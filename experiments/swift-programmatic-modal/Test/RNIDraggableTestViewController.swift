@@ -35,11 +35,11 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalRotation: -0.2,
-              modalScaleX: 1,
-              modalScaleY: 1,
-              modalTranslateX: 0,
-              modalTranslateY: 0
+              //modalRotation: -0.2,
+              modalScaleX: 0.5,
+              modalScaleY: 0.5
+              //modalTranslateX: 0,
+              //modalTranslateY: 0
             )
           ),
           
@@ -56,11 +56,11 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalRotation: 0.1,
+              //modalRotation: 0.1,
               modalScaleX: 0.5,
-              modalScaleY: 1,
-              modalTranslateX: 0,
-              modalTranslateY: 0
+              modalScaleY: 1
+              //modalTranslateX: 0,
+              //modalTranslateY: 0
             )
           ),
           // snap point - 2
@@ -76,11 +76,11 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalRotation: 1,
+              //modalRotation: 1,
               modalScaleX: 1,
-              modalScaleY: 1,
-              modalTranslateX: 0,
-              modalTranslateY: 0
+              modalScaleY: 1
+              //modalTranslateX: 0,
+              //modalTranslateY: 0
             )
           ),
         ],

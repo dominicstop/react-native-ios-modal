@@ -45,8 +45,6 @@ class AdaptiveModalManager {
   
   var nextSnapPointIndex: Int?;
   
-  var modalTransformAnimator: AdaptiveModalKeyframePropertyAnimator?;
-  
   var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
   var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
   
@@ -510,36 +508,6 @@ class AdaptiveModalManager {
     );
   };
   
-  func applyInterpolationToModalTransform(
-    forInputPercentValue inputPercentValue: CGFloat
-  ) {
-    
-    let animator: AdaptiveModalKeyframePropertyAnimator? = {
-      if let modalTransformAnimator = self.modalTransformAnimator {
-        return modalTransformAnimator;
-      };
-      
-      guard let interpolationSteps = self.interpolationStepsSorted,
-            let modalView = self.modalView
-      else { return nil };
-      
-      return .init(
-        interpolationPoints: interpolationSteps,
-        forComponent: modalView
-      ) {
-        $0.transform = $1.modalTransform;
-      };
-    }();
-    
-    self.modalTransformAnimator = animator;
-    animator?.setFractionComplete(forPercent: inputPercentValue);
-    
-    print(
-        "applyInterpolationToModalTransform"
-      + " - inputPercentValue: \(inputPercentValue)"
-    );
-  };
-  
   func applyInterpolationToModalBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
@@ -667,10 +635,6 @@ class AdaptiveModalManager {
     );
     
     self.applyInterpolationToModalBackgroundVisualEffect(
-      forInputPercentValue: inputPercentValue
-    );
-    
-    self.applyInterpolationToModalTransform(
       forInputPercentValue: inputPercentValue
     );
   };
