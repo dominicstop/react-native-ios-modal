@@ -22,7 +22,6 @@ class AdaptiveModalManager {
   weak var eventDelegate: AdaptiveModalEventNotifiable?;
 
   lazy var dummyModalView = UIView();
-  lazy var modalWrapperView = UIView();
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
@@ -71,11 +70,14 @@ class AdaptiveModalManager {
   
   var modalFrame: CGRect! {
     set {
-      guard let newValue = newValue else { return };
-      self.prevModalFrame = self.dummyModalView.frame;
+      guard let modalView = self.modalView,
+            let newValue = newValue
+      else { return };
+      
+      self.prevModalFrame = modalView.frame;
+      modalView.frame = newValue;
       
       self.dummyModalView.frame = newValue;
-      self.modalWrapperView.frame = newValue;
     }
     get {
       self.dummyModalView.frame;
@@ -251,26 +253,22 @@ class AdaptiveModalManager {
       bgDimmingView.alpha = 0;
     };
     
-    let modalWrapperView = self.modalWrapperView;
-    modalWrapperView.backgroundColor = .clear;
-    targetView.addSubview(modalWrapperView);
-    
-    modalWrapperView.addSubview(modalView);
+    targetView.addSubview(modalView);
     
     modalView.clipsToBounds = true;
     modalView.backgroundColor = .clear;
     
     if let modalBackgroundView = self.modalBackgroundView {
-      modalWrapperView.addSubview(modalBackgroundView);
-      modalWrapperView.sendSubviewToBack(modalBackgroundView);
+      modalView.addSubview(modalBackgroundView);
+      modalView.sendSubviewToBack(modalBackgroundView);
       
       modalBackgroundView.backgroundColor = .systemBackground;
       modalBackgroundView.isUserInteractionEnabled = false;
     };
     
     if let modalBGVisualEffectView = self.modalBackgroundVisualEffectView {
-      modalWrapperView.addSubview(modalBGVisualEffectView);
-      modalWrapperView.sendSubviewToBack(modalBGVisualEffectView);
+      modalView.addSubview(modalBGVisualEffectView);
+      modalView.sendSubviewToBack(modalBGVisualEffectView);
       
       modalBGVisualEffectView.clipsToBounds = true;
       modalBGVisualEffectView.backgroundColor = .clear;
@@ -282,8 +280,6 @@ class AdaptiveModalManager {
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
-    
-    let modalWrapperView = self.modalWrapperView;
     
     if let bgVisualEffectView = self.backgroundVisualEffectView {
       bgVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
@@ -307,23 +303,14 @@ class AdaptiveModalManager {
       ]);
     };
     
-    modalView.translatesAutoresizingMaskIntoConstraints = false;
-      
-    NSLayoutConstraint.activate([
-      modalView.topAnchor     .constraint(equalTo: modalWrapperView.topAnchor     ),
-      modalView.bottomAnchor  .constraint(equalTo: modalWrapperView.bottomAnchor  ),
-      modalView.leadingAnchor .constraint(equalTo: modalWrapperView.leadingAnchor ),
-      modalView.trailingAnchor.constraint(equalTo: modalWrapperView.trailingAnchor),
-    ]);
-    
     if let modalBGView = self.modalBackgroundView {
       modalBGView.translatesAutoresizingMaskIntoConstraints = false;
       
       NSLayoutConstraint.activate([
-        modalBGView.topAnchor     .constraint(equalTo: modalWrapperView.topAnchor     ),
-        modalBGView.bottomAnchor  .constraint(equalTo: modalWrapperView.bottomAnchor  ),
-        modalBGView.leadingAnchor .constraint(equalTo: modalWrapperView.leadingAnchor ),
-        modalBGView.trailingAnchor.constraint(equalTo: modalWrapperView.trailingAnchor),
+        modalBGView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
+        modalBGView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
+        modalBGView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
+        modalBGView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
       ]);
     };
     
@@ -331,10 +318,10 @@ class AdaptiveModalManager {
       modalBGVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
       
       NSLayoutConstraint.activate([
-        modalBGVisualEffectView.topAnchor     .constraint(equalTo: modalWrapperView.topAnchor     ),
-        modalBGVisualEffectView.bottomAnchor  .constraint(equalTo: modalWrapperView.bottomAnchor  ),
-        modalBGVisualEffectView.leadingAnchor .constraint(equalTo: modalWrapperView.leadingAnchor ),
-        modalBGVisualEffectView.trailingAnchor.constraint(equalTo: modalWrapperView.trailingAnchor),
+        modalBGVisualEffectView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
+        modalBGVisualEffectView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
+        modalBGVisualEffectView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
+        modalBGVisualEffectView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
       ]);
     };
   };
@@ -458,73 +445,6 @@ class AdaptiveModalManager {
       width: nextWidth,
       height: nextHeight
     );
-  };
-  
-  func interpolateModalTransform(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
-  ) -> CGAffineTransform? {
-  
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
-
-    let clampConfig = modalConfig.interpolationClampingConfig;
-
-    let nextModalRotation = Self.interpolate(
-      inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalRotation
-      },
-      shouldClampMin: clampConfig.shouldClampModalInitRotation,
-      shouldClampMax: clampConfig.shouldClampModalLastRotation
-    );
-    
-    let nextScaleX = Self.interpolate(
-      inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalScaleX;
-      },
-      shouldClampMin: clampConfig.shouldClampModalLastScaleX,
-      shouldClampMax: clampConfig.shouldClampModalLastScaleX
-    );
-    
-    let nextScaleY = Self.interpolate(
-      inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalScaleY
-      },
-      shouldClampMin: clampConfig.shouldClampModalLastScaleY,
-      shouldClampMax: clampConfig.shouldClampModalLastScaleY
-    );
-    
-    let nextTransform: CGAffineTransform = {
-      var transforms: [CGAffineTransform] = [];
-      
-      if let rotation = nextModalRotation {
-        transforms.append(
-          .init(rotationAngle: rotation)
-        );
-      };
-      
-      if let nextScaleX = nextScaleX,
-         let nextScaleY = nextScaleY {
-         
-        transforms.append(
-          .init(scaleX: nextScaleX, y: nextScaleY)
-        );
-      };
-      
-      return transforms.reduce(.identity) {
-        $0.concatenating($1);
-      };
-    }();
- 
-    return nextTransform;
   };
   
   func interpolateModalBackgroundOpacity(
@@ -825,14 +745,11 @@ class AdaptiveModalManager {
     self.animator = animator;
     
     animator.addAnimations {
-      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalView: modalView);
       
+      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
       interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
-      
-      self.modalWrapperView.layoutIfNeeded();
-      modalView.layoutIfNeeded();
     };
     
     if let completion = completion {
