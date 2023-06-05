@@ -335,8 +335,32 @@ class AdaptiveModalManager {
     };
   };
 
-  // MARK: - Functions - Interpolation-Related
-  // -----------------------------------------
+  // MARK: - Functions - Interpolation-Related Helpers
+  // -------------------------------------------------
+  
+  func interpolate(
+    inputValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil,
+    rangeOutputKey: KeyPath<AdaptiveModalInterpolationPoint, CGFloat>,
+    shouldClampMin: Bool = false,
+    shouldClampMax: Bool = false
+  ) -> CGFloat? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+  
+    return Self.interpolate(
+      inputValue: inputValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0[keyPath: rangeOutputKey];
+      },
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+  };
   
   func getInterpolationStepRange(
    forInputPercentValue inputPercentValue: CGFloat
@@ -390,54 +414,39 @@ class AdaptiveModalManager {
     return (rangeStart, rangeEnd);
   };
   
+  // MARK: - Functions - Value Interpolators
+  // ---------------------------------------
+  
   func interpolateModalRect(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGRect? {
   
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
-
     let clampConfig = modalConfig.interpolationClampingConfig;
 
-    let nextHeight = Self.interpolate(
+    let nextHeight = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.computedRect.height
-      },
+      rangeOutputKey: \.computedRect.height,
       shouldClampMin: clampConfig.shouldClampModalLastHeight,
       shouldClampMax: clampConfig.shouldClampModalInitHeight
     );
     
-    let nextWidth = Self.interpolate(
+    let nextWidth = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.computedRect.width
-      },
+      rangeOutputKey: \.computedRect.width,
       shouldClampMin: clampConfig.shouldClampModalLastWidth,
       shouldClampMax: clampConfig.shouldClampModalInitWidth
     );
     
-    let nextX = Self.interpolate(
+    let nextX = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.computedRect.minX
-      },
+      rangeOutputKey: \.computedRect.origin.x,
       shouldClampMin: clampConfig.shouldClampModalLastX,
       shouldClampMax: clampConfig.shouldClampModalInitX
     );
     
-    let nextY = Self.interpolate(
+    let nextY = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.computedRect.minY
-      },
+      rangeOutputKey: \.computedRect.origin.y,
       shouldClampMin: clampConfig.shouldClampModalLastY,
       shouldClampMax: clampConfig.shouldClampModalInitY
     );
@@ -457,63 +466,42 @@ class AdaptiveModalManager {
   };
   
   func interpolateModalTransform(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGAffineTransform? {
-  
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
 
     let clampConfig = modalConfig.interpolationClampingConfig;
 
-    let nextModalRotation = Self.interpolate(
+    let nextModalRotation = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalRotation
-      },
+      rangeOutputKey: \.modalRotation,
       shouldClampMin: clampConfig.shouldClampModalInitRotation,
       shouldClampMax: clampConfig.shouldClampModalLastRotation
     );
     
-    let nextScaleX = Self.interpolate(
+    let nextScaleX = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalScaleX;
-      },
+      rangeOutputKey: \.modalScaleX,
       shouldClampMin: clampConfig.shouldClampModalLastScaleX,
       shouldClampMax: clampConfig.shouldClampModalLastScaleX
     );
     
-    let nextScaleY = Self.interpolate(
+    let nextScaleY = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalScaleY
-      },
+      rangeOutputKey: \.modalScaleY,
       shouldClampMin: clampConfig.shouldClampModalLastScaleY,
       shouldClampMax: clampConfig.shouldClampModalLastScaleY
     );
     
-    let nextTranslateX = Self.interpolate(
+    let nextTranslateX = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalTranslateX
-      },
+      rangeOutputKey: \.modalTranslateX,
       shouldClampMin: clampConfig.shouldClampModalInitTranslateX,
       shouldClampMax: clampConfig.shouldClampModalLastTranslateX
     );
     
-    let nextTranslateY = Self.interpolate(
+    let nextTranslateY = self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalTranslateY
-      },
+      rangeOutputKey: \.modalTranslateY,
       shouldClampMin: clampConfig.shouldClampModalInitTranslateY,
       shouldClampMax: clampConfig.shouldClampModalLastTranslateY
     );
@@ -552,84 +540,47 @@ class AdaptiveModalManager {
   };
   
   func interpolateOpacity(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
-  
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
 
-    return Self.interpolate(
+    return self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalOpacity
-      }
+      rangeOutputKey: \.modalOpacity
     );
   };
   
   func interpolateModalBackgroundOpacity(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
   
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
-
-    return Self.interpolate(
+    return self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalBackgroundOpacity
-      }
+      rangeOutputKey: \.modalBackgroundOpacity
     );
   };
   
   func interpolateModalBorderRadius(
-    forInputPercentValue inputPercentValue: CGFloat,
-    modalBounds: CGRect,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
   
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
-    
-    let modalCornerRadius = Self.interpolate(
+    return self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.modalCornerRadius
-      }
+      rangeOutputKey: \.modalCornerRadius
     );
-    
-    guard let modalCornerRadius = modalCornerRadius else { return nil };
-    return modalCornerRadius;
   };
   
   func interpolateBackgroundOpacity(
-    forInputPercentValue inputPercentValue: CGFloat,
-    rangeInput: [CGFloat]? = nil,
-    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+    forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
-  
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
-          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
-    else { return nil };
 
-    return Self.interpolate(
+    return self.interpolate(
       inputValue: inputPercentValue,
-      rangeInput: interpolationRangeInput,
-      rangeOutput: interpolationSteps.map {
-        $0.backgroundOpacity
-      }
+      rangeOutputKey: \.backgroundOpacity
     );
   };
+  
+  // MARK: - Functions - Property Interpolators
+  // ------------------------------------------
   
   func applyInterpolationToModalBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
@@ -719,6 +670,9 @@ class AdaptiveModalManager {
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
   
+  // MARK: - Functions - Apply Interpolators
+  // ----------------------------------------
+  
   func applyInterpolationToModal(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
@@ -743,8 +697,7 @@ class AdaptiveModalManager {
     };
     
     if let nextModalRadius = self.interpolateModalBorderRadius(
-      forInputPercentValue: inputPercentValue,
-      modalBounds: modalView.bounds
+      forInputPercentValue: inputPercentValue
     ) {
       modalView.layer.cornerRadius = nextModalRadius;
     };
