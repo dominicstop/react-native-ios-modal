@@ -186,22 +186,32 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
     var transforms: [CGAffineTransform] = [];
     
-    if shouldApplyRotation {
+    if shouldApplyRotation,
+       self.modalRotation != 0 {
+       
       transforms.append(
         .init(rotationAngle: self.modalRotation)
       );
     };
     
-    if shouldApplyScale {
+    if shouldApplyScale,
+      self.modalScaleX != 1 && self.modalScaleY != 1 {
+      
       transforms.append(
         .init(scaleX: self.modalScaleX, y: self.modalScaleY)
       );
     };
     
-    if shouldApplyTranslate {
+    if shouldApplyTranslate,
+       self.modalTranslateX != 0 && self.modalTranslateY != 0 {
+       
       transforms.append(
         .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
       );
+    };
+    
+    if transforms.isEmpty {
+      return .identity;
     };
     
     return transforms.reduce(.identity){
@@ -211,6 +221,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalView modalView: UIView){
     modalView.frame = self.computedRect;
+    modalView.transform = self.getModalTransform(shouldApplyTranslate: false);
     
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;

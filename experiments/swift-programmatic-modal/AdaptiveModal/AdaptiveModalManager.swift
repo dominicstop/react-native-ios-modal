@@ -677,7 +677,7 @@ class AdaptiveModalManager {
     if let nextModalTransform = self.interpolateModalTransform(
       forInputPercentValue: inputPercentValue
     ) {
-      modalView.transform = nextModalTransform;
+      //modalView.transform = nextModalTransform;
     };
     
     if let nextModalRadius = self.interpolateModalBorderRadius(
@@ -934,10 +934,8 @@ class AdaptiveModalManager {
   };
   
   @objc func onDisplayLinkTick(displayLink: CADisplayLink) {
-    guard let modalView = self.modalView,
-          let dummyModalViewPresentationLayer =
+    guard let dummyModalViewPresentationLayer =
             self.dummyModalView.layer.presentation(),
-            
           let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
@@ -963,6 +961,7 @@ class AdaptiveModalManager {
       ? Self.invertPercent(percent)
       : percent;
     
+    
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: percentAdj
     );
@@ -970,12 +969,6 @@ class AdaptiveModalManager {
     self.applyInterpolationToModalBackgroundVisualEffect(
       forInputPercentValue: percentAdj
     );
-    
-    if let modalTranslate = self.interpolateModalTransform(
-      forInputPercentValue: percentAdj
-    ) {
-      modalView.transform = modalTranslate.concatenating(.identity);
-    };
     
     self.prevModalFrame = nextModalFrame;
   };
