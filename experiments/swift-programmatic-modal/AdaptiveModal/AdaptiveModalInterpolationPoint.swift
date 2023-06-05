@@ -228,6 +228,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalBackgroundView modalBgView: UIView?){
     modalBgView?.alpha = self.modalBackgroundOpacity;
+    modalBgView?.transform = self.modalTransform;
   };
   
   func apply(toBackgroundEffectView effectView: UIVisualEffectView?){

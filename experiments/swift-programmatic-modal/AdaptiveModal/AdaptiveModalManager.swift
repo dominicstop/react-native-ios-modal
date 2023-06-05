@@ -307,10 +307,10 @@ class AdaptiveModalManager {
       modalBGView.translatesAutoresizingMaskIntoConstraints = false;
       
       NSLayoutConstraint.activate([
-        modalBGView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
-        modalBGView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
-        modalBGView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
-        modalBGView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
+        modalBGView.centerXAnchor.constraint(equalTo: modalView.centerXAnchor),
+        modalBGView.centerYAnchor.constraint(equalTo: modalView.centerYAnchor),
+        modalBGView.widthAnchor  .constraint(equalTo: modalView.widthAnchor  ),
+        modalBGView.heightAnchor .constraint(equalTo: modalView.heightAnchor ),
       ]);
     };
     
@@ -318,10 +318,10 @@ class AdaptiveModalManager {
       modalBGVisualEffectView.translatesAutoresizingMaskIntoConstraints = false;
       
       NSLayoutConstraint.activate([
-        modalBGVisualEffectView.topAnchor     .constraint(equalTo: modalView.topAnchor     ),
-        modalBGVisualEffectView.bottomAnchor  .constraint(equalTo: modalView.bottomAnchor  ),
-        modalBGVisualEffectView.leadingAnchor .constraint(equalTo: modalView.leadingAnchor ),
-        modalBGVisualEffectView.trailingAnchor.constraint(equalTo: modalView.trailingAnchor),
+        modalBGVisualEffectView.centerXAnchor.constraint(equalTo: modalView.centerXAnchor),
+        modalBGVisualEffectView.centerYAnchor.constraint(equalTo: modalView.centerYAnchor),
+        modalBGVisualEffectView.widthAnchor  .constraint(equalTo: modalView.widthAnchor  ),
+        modalBGVisualEffectView.heightAnchor .constraint(equalTo: modalView.heightAnchor ),
       ]);
     };
   };
