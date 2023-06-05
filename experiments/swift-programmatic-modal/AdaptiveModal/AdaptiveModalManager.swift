@@ -678,45 +678,49 @@ class AdaptiveModalManager {
   ) {
     guard let modalView = self.modalView else { return };
     
-    if let nextModalRect = self.interpolateModalRect(
+    self.modalFrame = self.interpolateModalRect(
       forInputPercentValue: inputPercentValue
-    ) {
-      self.modalFrame = nextModalRect;
-    };
+    );
     
-    if let nextModalTransform = self.interpolateModalTransform(
-      forInputPercentValue: inputPercentValue
-    ) {
-      modalView.transform = nextModalTransform;
-    };
+    Self.setProperty(
+      forObject: modalView,
+      forPropertyKey: \.transform,
+      withValue:  self.interpolateModalTransform(
+        forInputPercentValue: inputPercentValue
+      )
+    );
     
-    if let nextModalOpacity = self.interpolateOpacity(
-      forInputPercentValue: inputPercentValue
-    ) {
-      modalView.alpha = nextModalOpacity;
-    };
+    Self.setProperty(
+      forObject: modalView,
+      forPropertyKey: \.alpha,
+      withValue:  self.interpolateOpacity(
+        forInputPercentValue: inputPercentValue
+      )
+    );
     
-    if let nextModalRadius = self.interpolateModalBorderRadius(
-      forInputPercentValue: inputPercentValue
-    ) {
-      modalView.layer.cornerRadius = nextModalRadius;
-    };
+    Self.setProperty(
+      forObject: modalView,
+      forPropertyKey: \.layer.cornerRadius,
+      withValue:  self.interpolateModalBorderRadius(
+        forInputPercentValue: inputPercentValue
+      )
+    );
     
-    if let modalBgView = self.modalBackgroundView,
-       let nextModalBgOpacity = self.interpolateModalBackgroundOpacity(
-         forInputPercentValue: inputPercentValue
-       ) {
-       
-      modalBgView.alpha = nextModalBgOpacity;
-    };
+    Self.setProperty(
+      forObject: self.modalBackgroundView,
+      forPropertyKey: \.alpha,
+      withValue:  self.interpolateModalBackgroundOpacity(
+        forInputPercentValue: inputPercentValue
+      )
+    );
     
-    if let bgDimmingView = self.backgroundDimmingView,
-       let nextBgOpacity = self.interpolateBackgroundOpacity(
-         forInputPercentValue: inputPercentValue
-       ) {
-      
-      bgDimmingView.alpha = nextBgOpacity;
-    };
+    Self.setProperty(
+      forObject: self.backgroundDimmingView,
+      forPropertyKey: \.alpha,
+      withValue:  self.interpolateBackgroundOpacity(
+        forInputPercentValue: inputPercentValue
+      )
+    );
     
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: inputPercentValue

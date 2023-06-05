@@ -111,4 +111,28 @@ extension AdaptiveModalManager {
     let offset = percent > 1 ? abs(percent - 1) : 0;
     return 1 - percent + offset;
   };
+  
+  static func setProperty<O: AnyObject, T>(
+    forObject object: O?,
+    forPropertyKey propertyKey: WritableKeyPath<O, T>,
+    withValue value: T?
+  ) {
+    guard var object = object,
+          let value = value
+    else { return };
+    
+    object[keyPath: propertyKey] = value;
+  };
+  
+  static func setProperty<O, T>(
+    for valueType: inout O?,
+    forPropertyKey propertyKey: WritableKeyPath<O, T>,
+    withValue newValue: T?
+  ) {
+    guard var valueType = valueType,
+          let newValue = newValue
+    else { return };
+    
+    valueType[keyPath: propertyKey] = newValue;
+  };
 };

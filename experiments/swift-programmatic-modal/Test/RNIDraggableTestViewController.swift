@@ -10,7 +10,7 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .testModalTransform01;
+  static let `default`: Self = .test03;
   
   case testModalTransform01;
 
