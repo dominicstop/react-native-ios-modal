@@ -10,7 +10,7 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .testModalTransform01;
+  static let `default`: Self = .test03;
   
   case testModalTransform01;
 
@@ -35,11 +35,11 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              //modalRotation: -0.2,
+              modalRotation: 0.2,
               modalScaleX: 0.5,
-              modalScaleY: 0.5
-              //modalTranslateX: 0,
-              //modalTranslateY: 0
+              modalScaleY: 0.5,
+              modalTranslateX: -100,
+              modalTranslateY: 20
             )
           ),
           
@@ -56,11 +56,11 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              //modalRotation: 0.1,
+              modalRotation: -0.2,
               modalScaleX: 0.5,
-              modalScaleY: 1
-              //modalTranslateX: 0,
-              //modalTranslateY: 0
+              modalScaleY: 1,
+              modalTranslateX: 0,
+              modalTranslateY: 0
             )
           ),
           // snap point - 2
