@@ -71,13 +71,10 @@ class AdaptiveModalManager {
   
   var modalFrame: CGRect! {
     set {
-      guard let modalView = self.modalView,
-            let newValue = newValue
-      else { return };
-      
+      guard let newValue = newValue else { return };
       self.prevModalFrame = dummyModalView.frame;
-      self.modalWrapperView.frame = newValue;
       
+      self.modalWrapperView.frame = newValue;
       self.dummyModalView.frame = newValue;
     }
     get {
@@ -945,6 +942,8 @@ class AdaptiveModalManager {
         self.gestureInitialPoint = gesturePoint;
     
       case .changed:
+        self.animator?.stopAnimation(true);
+        
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         self.onModalWillSnap();
         
