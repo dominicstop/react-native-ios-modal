@@ -22,6 +22,7 @@ class AdaptiveModalManager {
   weak var eventDelegate: AdaptiveModalEventNotifiable?;
 
   lazy var dummyModalView = UIView();
+  lazy var modalWrapperView = UIView();
 
   weak var targetView: UIView?;
   weak var modalView: UIView?;
@@ -74,8 +75,8 @@ class AdaptiveModalManager {
             let newValue = newValue
       else { return };
       
-      self.prevModalFrame = modalView.frame;
-      modalView.frame = newValue;
+      self.prevModalFrame = dummyModalView.frame;
+      self.modalWrapperView.frame = newValue;
       
       self.dummyModalView.frame = newValue;
     }
@@ -253,10 +254,12 @@ class AdaptiveModalManager {
       bgDimmingView.alpha = 0;
     };
     
-    targetView.addSubview(modalView);
+    let modalWrapperView = self.modalWrapperView;
+    targetView.addSubview(modalWrapperView);
     
     modalView.clipsToBounds = true;
     modalView.backgroundColor = .clear;
+    modalWrapperView.addSubview(modalView);
     
     if let modalBackgroundView = self.modalBackgroundView {
       modalView.addSubview(modalBackgroundView);
@@ -292,6 +295,15 @@ class AdaptiveModalManager {
       ]);
     };
     
+    modalView.translatesAutoresizingMaskIntoConstraints = false;
+      
+    NSLayoutConstraint.activate([
+      modalView.centerXAnchor.constraint(equalTo: self.modalWrapperView.centerXAnchor),
+      modalView.centerYAnchor.constraint(equalTo: self.modalWrapperView.centerYAnchor),
+      modalView.widthAnchor  .constraint(equalTo: self.modalWrapperView.widthAnchor  ),
+      modalView.heightAnchor .constraint(equalTo: self.modalWrapperView.heightAnchor ),
+    ]);
+  
     if let bgDimmingView = self.backgroundDimmingView {
       bgDimmingView.translatesAutoresizingMaskIntoConstraints = false;
       
@@ -746,6 +758,7 @@ class AdaptiveModalManager {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
+      interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
       
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);

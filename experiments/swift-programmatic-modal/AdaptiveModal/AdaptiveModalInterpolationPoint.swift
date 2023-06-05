@@ -216,10 +216,15 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   };
   
   func apply(toModalView modalView: UIView){
-    modalView.frame = self.computedRect;
+    //modalView.frame = self.computedRect;
     
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;
+  };
+  
+  func apply(toModalWrapperView modalWrapperView: UIView){
+    //modalView.frame = self.computedRect;
+    modalWrapperView.frame = self.computedRect;
   };
   
   func apply(toDummyModalView dummyModalView: UIView){
@@ -228,7 +233,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalBackgroundView modalBgView: UIView?){
     modalBgView?.alpha = self.modalBackgroundOpacity;
-    modalBgView?.transform = self.modalTransform;
   };
   
   func apply(toBackgroundEffectView effectView: UIVisualEffectView?){
