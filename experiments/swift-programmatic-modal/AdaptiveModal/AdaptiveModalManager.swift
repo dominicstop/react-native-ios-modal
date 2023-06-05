@@ -551,6 +551,25 @@ class AdaptiveModalManager {
     return nextTransform;
   };
   
+  func interpolateOpacity(
+    forInputPercentValue inputPercentValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil
+  ) -> CGFloat? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+
+    return Self.interpolate(
+      inputValue: inputPercentValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0.modalOpacity
+      }
+    );
+  };
+  
   func interpolateModalBackgroundOpacity(
     forInputPercentValue inputPercentValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
@@ -715,6 +734,12 @@ class AdaptiveModalManager {
       forInputPercentValue: inputPercentValue
     ) {
       modalView.transform = nextModalTransform;
+    };
+    
+    if let nextModalOpacity = self.interpolateOpacity(
+      forInputPercentValue: inputPercentValue
+    ) {
+      modalView.alpha = nextModalOpacity;
     };
     
     if let nextModalRadius = self.interpolateModalBorderRadius(

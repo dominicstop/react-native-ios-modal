@@ -204,6 +204,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
+              //modalOpacity: 1,
               modalBackgroundOpacity: 0.9,
               modalCornerRadius: 15,
               modalMaskedCorners: [
@@ -212,6 +213,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               ],
               modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
               modalBackgroundVisualEffectIntensity: 1,
+              
               backgroundOpacity: 0,
               backgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterialDark),
               backgroundVisualEffectIntensity: 0
@@ -233,6 +235,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               marginBottom: 15
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
+              //modalOpacity: 0.5,
               modalBackgroundOpacity: 0.85,
               modalCornerRadius: 15,
               modalMaskedCorners: [

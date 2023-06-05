@@ -17,6 +17,7 @@ struct AdaptiveModalAnimationConfig {
   let modalTranslateX: CGFloat?;
   let modalTranslateY: CGFloat?;
   
+  let modalOpacity: CGFloat?;
   let modalBackgroundColor: UIColor?;
   let modalBackgroundOpacity: CGFloat?;
   
@@ -38,6 +39,7 @@ struct AdaptiveModalAnimationConfig {
      modalScaleY: CGFloat? = nil,
      modalTranslateX: CGFloat? = nil,
      modalTranslateY: CGFloat? = nil,
+     modalOpacity: CGFloat? = nil,
      modalBackgroundColor: UIColor? = nil,
      modalBackgroundOpacity: CGFloat? = nil,
      modalCornerRadius: CGFloat? = nil,
@@ -57,6 +59,7 @@ struct AdaptiveModalAnimationConfig {
     self.modalTranslateX = modalTranslateX;
     self.modalTranslateY = modalTranslateY;
     
+    self.modalOpacity = modalOpacity;
     self.modalBackgroundColor = modalBackgroundColor;
     self.modalBackgroundOpacity = modalBackgroundOpacity;
     

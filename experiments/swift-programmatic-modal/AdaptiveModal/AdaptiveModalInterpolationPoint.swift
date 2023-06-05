@@ -36,6 +36,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let modalTranslateX: CGFloat;
   let modalTranslateY: CGFloat;
   
+  let modalOpacity: CGFloat;
   //let modalBackgroundColor: UIColor;
   let modalBackgroundOpacity: CGFloat;
   
@@ -144,6 +145,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       ?? keyframePrev?.modalTranslateY
       ?? 0;
       
+    self.modalOpacity = keyframeCurrent?.modalOpacity
+      ?? keyframePrev?.modalOpacity
+      ?? 1;
+      
     self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
       ?? keyframePrev?.modalBackgroundOpacity
       ?? 1;
@@ -221,13 +226,13 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   func apply(toModalView modalView: UIView){
     modalView.transform = self.modalTransform;
+    modalView.alpha = self.modalOpacity;
     
     modalView.layer.cornerRadius = self.modalCornerRadius;
     modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
   
   func apply(toModalWrapperView modalWrapperView: UIView){
-    //modalView.frame = self.computedRect;
     modalWrapperView.frame = self.computedRect;
   };
   
