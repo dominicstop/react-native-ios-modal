@@ -47,7 +47,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let modalBackgroundVisualEffectOpacity: CGFloat;
   let modalBackgroundVisualEffectIntensity: CGFloat;
   
-  //let backgroundColor: UIColor;
+  let backgroundColor: UIColor;
   let backgroundOpacity: CGFloat;
   
   let backgroundVisualEffect: UIVisualEffect?;
@@ -177,6 +177,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     self.modalBackgroundVisualEffectIntensity = keyframeCurrent?.modalBackgroundVisualEffectIntensity
       ?? keyframePrev?.modalBackgroundVisualEffectIntensity
       ?? 1;
+      
+    self.backgroundColor = keyframeCurrent?.backgroundColor
+      ?? keyframePrev?.backgroundColor
+      ?? .black;
       
     self.backgroundOpacity = keyframeCurrent?.backgroundOpacity
       ?? keyframePrev?.backgroundOpacity

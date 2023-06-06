@@ -730,6 +730,15 @@ class AdaptiveModalManager {
     
     Self.setProperty(
       forObject: self.backgroundDimmingView,
+      forPropertyKey: \.backgroundColor,
+      withValue:  self.interpolateColor(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.backgroundColor
+      )
+    );
+    
+    Self.setProperty(
+      forObject: self.backgroundDimmingView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
         inputValue: inputPercentValue,
