@@ -146,11 +146,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalCornerRadius: 15,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMaxXMinYCorner
-              ],
+              modalCornerRadius: .init(
+                topLeftRadius: 15,
+                topRightRadius: 15,
+                bottomLeftRadius: 15,
+                bottomRightRadius: 15
+              ),
               backgroundVisualEffect: UIBlurEffect(style: .regular),
               backgroundVisualEffectIntensity: 0
             )
@@ -169,13 +170,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalCornerRadius: 20,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMinXMaxYCorner,
-                .layerMaxXMinYCorner,
-                .layerMaxXMaxYCorner
-              ],
+              modalCornerRadius: .init(uniformRadius: 20),
               backgroundVisualEffect: UIBlurEffect(style: .regular),
               backgroundVisualEffectIntensity: 0.5
             )
@@ -206,11 +201,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 1,
               modalBackgroundOpacity: 0.9,
-              modalCornerRadius: 15,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMaxXMinYCorner
-              ],
+              modalCornerRadius: .init(
+                topLeftRadius: 15,
+                topRightRadius: 15,
+                bottomLeftRadius: 15,
+                bottomRightRadius: 15
+              ),
               modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
               modalBackgroundVisualEffectIntensity: 1,
               
@@ -239,13 +235,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               //modalOpacity: 0.5,
               //modalBackgroundColor: .red,
               modalBackgroundOpacity: 0.85,
-              modalCornerRadius: 15,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMaxXMinYCorner,
-                .layerMinXMaxYCorner,
-                .layerMaxXMaxYCorner
-              ],
+              modalCornerRadius: .init(
+                topLeftRadius: 15,
+                topRightRadius: 15,
+                bottomLeftRadius: 15,
+                bottomRightRadius: 15
+              ),
               modalBackgroundVisualEffectIntensity: 0.6,
               //backgroundColor: .red,
               backgroundOpacity: 0.1,
@@ -269,13 +264,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBackgroundOpacity: 0.8,
-              modalCornerRadius: 20,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMinXMaxYCorner,
-                .layerMaxXMinYCorner,
-                .layerMaxXMaxYCorner
-              ],
+              modalCornerRadius: .init(uniformRadius: 20),
               modalBackgroundVisualEffectIntensity: 1,
               backgroundOpacity: 0,
               //backgroundVisualEffectOpacity: 0.5,
@@ -298,11 +287,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBackgroundOpacity: 0.83,
-              modalCornerRadius: 25,
-              modalMaskedCorners: [
-                .layerMinXMinYCorner,
-                .layerMaxXMinYCorner,
-              ],
+              modalCornerRadius: .init(uniformRadius: 25),
               modalBackgroundVisualEffectIntensity: 1,
               backgroundVisualEffectIntensity: 1
             )

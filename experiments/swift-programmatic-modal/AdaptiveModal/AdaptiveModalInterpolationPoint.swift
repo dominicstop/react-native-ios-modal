@@ -40,8 +40,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   let modalBackgroundColor: UIColor;
   let modalBackgroundOpacity: CGFloat;
   
-  let modalCornerRadius: CGFloat;
-  let modalMaskedCorners: CACornerMask;
+  let modalCornerRadius: AdaptiveModalAnimationConfig.CornerRadius;
   
   let modalBackgroundVisualEffect: UIVisualEffect?;
   let modalBackgroundVisualEffectOpacity: CGFloat;
@@ -79,6 +78,19 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     self.modalTransforms.reduce(.identity){
       $0.concatenating($1);
     };
+  };
+  
+  var modalCornerRadiusPath: UIBezierPath {
+    UIBezierPath(
+      shouldRoundRect: CGRect(
+        origin: .zero,
+        size: self.computedRect.size
+      ),
+      topLeftRadius: self.modalCornerRadius.topLeftRadius,
+      topRightRadius: self.modalCornerRadius.topRightRadius,
+      bottomLeftRadius: self.modalCornerRadius.bottomLeftRadius,
+      bottomRightRadius: self.modalCornerRadius.bottomRightRadius
+    );
   };
   
   // MARK: - Init
@@ -161,11 +173,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     
     self.modalCornerRadius = keyframeCurrent?.modalCornerRadius
       ?? keyframePrev?.modalCornerRadius
-      ?? 0;
-      
-    self.modalMaskedCorners = keyframeCurrent?.modalMaskedCorners
-      ?? keyframePrev?.modalMaskedCorners
-      ?? Self.DefaultMaskedCorners;
+      ?? .default;
       
     self.modalBackgroundVisualEffect = keyframeCurrent?.modalBackgroundVisualEffect
       ?? keyframePrev?.modalBackgroundVisualEffect;
@@ -245,9 +253,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   func apply(toModalView modalView: UIView){
     modalView.transform = self.modalTransform;
     modalView.alpha = self.modalOpacity;
-    
-    modalView.layer.cornerRadius = self.modalCornerRadius;
-    modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
   
   func apply(toModalWrapperView modalWrapperView: UIView){

@@ -9,6 +9,35 @@ import UIKit
 
 
 struct AdaptiveModalAnimationConfig {
+
+  struct CornerRadius: Equatable {
+    static let `default`: Self = .init(uniformRadius: 0);
+  
+    let topLeftRadius    : CGFloat;
+    let topRightRadius   : CGFloat;
+    let bottomLeftRadius : CGFloat;
+    let bottomRightRadius: CGFloat;
+    
+    init(
+      topLeftRadius    : CGFloat,
+      topRightRadius   : CGFloat,
+      bottomLeftRadius : CGFloat,
+      bottomRightRadius: CGFloat
+    ) {
+      self.topLeftRadius     = topLeftRadius;
+      self.topRightRadius    = topRightRadius;
+      self.bottomLeftRadius  = bottomLeftRadius;
+      self.bottomRightRadius = bottomRightRadius;
+    };
+    
+    init(uniformRadius: CGFloat) {
+      self.topLeftRadius     = uniformRadius;
+      self.topRightRadius    = uniformRadius;
+      self.bottomLeftRadius  = uniformRadius;
+      self.bottomRightRadius = uniformRadius;
+    };
+  };
+  
   let modalRotation: CGFloat?;
   
   let modalScaleX: CGFloat?;
@@ -21,8 +50,7 @@ struct AdaptiveModalAnimationConfig {
   let modalBackgroundColor: UIColor?;
   let modalBackgroundOpacity: CGFloat?;
   
-  let modalCornerRadius: CGFloat?;
-  let modalMaskedCorners: CACornerMask?;
+  let modalCornerRadius: CornerRadius?;
   
   let modalBackgroundVisualEffect: UIVisualEffect?;
   let modalBackgroundVisualEffectOpacity: CGFloat?;
@@ -44,8 +72,7 @@ struct AdaptiveModalAnimationConfig {
      modalOpacity: CGFloat? = nil,
      modalBackgroundColor: UIColor? = nil,
      modalBackgroundOpacity: CGFloat? = nil,
-     modalCornerRadius: CGFloat? = nil,
-     modalMaskedCorners: CACornerMask? = nil,
+     modalCornerRadius: CornerRadius? = nil,
      modalBackgroundVisualEffect: UIVisualEffect? = nil,
      modalBackgroundVisualEffectOpacity: CGFloat? = nil,
      modalBackgroundVisualEffectIntensity: CGFloat? = nil,
@@ -68,7 +95,6 @@ struct AdaptiveModalAnimationConfig {
     self.modalBackgroundOpacity = modalBackgroundOpacity;
     
     self.modalCornerRadius = modalCornerRadius;
-    self.modalMaskedCorners = modalMaskedCorners;
     
     self.modalBackgroundVisualEffect = modalBackgroundVisualEffect;
     self.modalBackgroundVisualEffectOpacity = modalBackgroundVisualEffectOpacity;
