@@ -15,8 +15,6 @@ class RoundedView: UIView {
       origin: .zero,
       size: frame.size
     );
-    
-    self.layer.mask = self.makeShapeMask(bounds: bounds);
   }
   
   required init?(coder: NSCoder) {
@@ -25,8 +23,6 @@ class RoundedView: UIView {
   
   override func layoutSubviews() {
     super.layoutSubviews();
-    
-    self.layer.mask = self.makeShapeMask(bounds: self.bounds);
   };
   
   func makeShapeMask(bounds: CGRect) -> CAShapeLayer {
@@ -125,8 +121,8 @@ class RoundedViewTestViewController: UIViewController {
         relativeDuration: 0
       ) {
         roundedView.frame = prevFrame;
-        roundedView.setNeedsLayout();
-        roundedView.layoutIfNeeded();
+        //roundedView.layer.frame = prevFrame;
+        //roundedView.layer.mask = prevMask;
       };
       
       UIView.addKeyframe(
@@ -134,10 +130,64 @@ class RoundedViewTestViewController: UIViewController {
         relativeDuration: 0
       ) {
         roundedView.frame = nextFrame;
-        roundedView.setNeedsLayout();
-        roundedView.layoutIfNeeded();
+        //roundedView.layer.frame = nextFrame;
+        //roundedView.layer.mask = nextMask;
       };
     };
+    
+    
+    // define your new path to animate the mask layer to
+    //let path = UIBezierPath(roundedRect: CGRectInset(view.bounds, 100, 100), cornerRadius: 20.0)
+    //path.appendPath(UIBezierPath(rect: view.bounds))
+
+    // create new animation
+    let pathAnimator = CABasicAnimation(keyPath: "path");
+    
+    let shapeMask = CAShapeLayer();
+    
+    let prevPath = UIBezierPath(
+      shouldRoundRect: prevBounds,
+      topLeftRadius: 10,
+      topRightRadius: 10,
+      bottomLeftRadius: 10,
+      bottomRightRadius: 10
+    );
+
+    // from value is the current mask path
+    pathAnimator.fromValue = prevPath.cgPath;
+    
+    let nextPath = UIBezierPath(
+      shouldRoundRect: nextBounds,
+      topLeftRadius: 25,
+      topRightRadius: 25,
+      bottomLeftRadius: 25,
+      bottomRightRadius: 25
+    );
+
+    // to value is the new path
+    pathAnimator.toValue = nextPath.cgPath;
+
+    // duration of your animation
+    pathAnimator.duration = viewAnimator.duration;
+
+    // custom timing function to make it look smooth
+    pathAnimator.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut);
+    
+    pathAnimator.isRemovedOnCompletion = false;
+    pathAnimator.fillMode = .both;
+
+    // add animation
+    shapeMask.add(pathAnimator, forKey: nil);
+
+    // update the path property on the mask layer, using a CATransaction to prevent an implicit animation
+    CATransaction.begin();
+    
+    roundedView.layer.mask = shapeMask;
+    CATransaction.commit();
+    
+    
+    
+    
     
     viewAnimator.startAnimation();
   };
