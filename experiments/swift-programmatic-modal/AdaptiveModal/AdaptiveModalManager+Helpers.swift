@@ -92,6 +92,74 @@ extension AdaptiveModalManager {
     );
   };
   
+  static func interpolateColor(
+    inputValue    : CGFloat,
+    rangeInput    : [CGFloat],
+    rangeOutput   : [UIColor],
+    shouldClampMin: Bool = false,
+    shouldClampMax: Bool = false
+  ) -> UIColor? {
+    var rangeR: [CGFloat] = [];
+    var rangeG: [CGFloat] = [];
+    var rangeB: [CGFloat] = [];
+    var rangeA: [CGFloat] = [];
+    
+    for color in rangeOutput {
+      let rgba = color.rgba;
+      
+      rangeR.append(rgba.r);
+      rangeG.append(rgba.g);
+      rangeB.append(rgba.b);
+      rangeA.append(rgba.a);
+    };
+    
+  
+    let nextR = Self.interpolate(
+      inputValue: inputValue,
+      rangeInput: rangeInput,
+      rangeOutput: rangeR,
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+    
+    let nextG = Self.interpolate(
+      inputValue: inputValue,
+      rangeInput: rangeInput,
+      rangeOutput: rangeG,
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+    
+    let nextB = Self.interpolate(
+      inputValue: inputValue,
+      rangeInput: rangeInput,
+      rangeOutput: rangeB,
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+    
+    let nextA = Self.interpolate(
+      inputValue: inputValue,
+      rangeInput: rangeInput,
+      rangeOutput: rangeA,
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+    
+    guard let nextR = nextR,
+          let nextG = nextG,
+          let nextB = nextB,
+          let nextA = nextA
+    else { return nil };
+    
+    return UIColor(
+      red  : nextR,
+      green: nextG,
+      blue : nextB,
+      alpha: nextA
+    );
+  };
+  
   static func computeFinalPosition(
     position: CGFloat,
     initialVelocity: CGFloat,

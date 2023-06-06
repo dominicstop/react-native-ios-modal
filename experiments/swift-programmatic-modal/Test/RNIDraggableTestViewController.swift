@@ -237,6 +237,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 0.5,
+              //modalBackgroundColor: .red,
               modalBackgroundOpacity: 0.85,
               modalCornerRadius: 15,
               modalMaskedCorners: [

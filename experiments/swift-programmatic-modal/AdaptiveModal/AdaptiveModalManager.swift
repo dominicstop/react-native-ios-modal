@@ -362,6 +362,30 @@ class AdaptiveModalManager {
     );
   };
   
+  func interpolateColor(
+    inputValue: CGFloat,
+    rangeInput: [CGFloat]? = nil,
+    rangeOutput: [AdaptiveModalInterpolationPoint]? = nil,
+    rangeOutputKey: KeyPath<AdaptiveModalInterpolationPoint, UIColor>,
+    shouldClampMin: Bool = false,
+    shouldClampMax: Bool = false
+  ) -> UIColor? {
+  
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+          let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
+    else { return nil };
+  
+    return Self.interpolateColor(
+      inputValue: inputValue,
+      rangeInput: interpolationRangeInput,
+      rangeOutput: interpolationSteps.map {
+        $0[keyPath: rangeOutputKey];
+      },
+      shouldClampMin: shouldClampMin,
+      shouldClampMax: shouldClampMax
+    );
+  };
+  
   func getInterpolationStepRange(
    forInputPercentValue inputPercentValue: CGFloat
   ) -> (
@@ -674,6 +698,15 @@ class AdaptiveModalManager {
       forPropertyKey: \.layer.cornerRadius,
       withValue:  self.interpolateModalBorderRadius(
         forInputPercentValue: inputPercentValue
+      )
+    );
+    
+    Self.setProperty(
+      forObject: self.modalBackgroundView,
+      forPropertyKey: \.backgroundColor,
+      withValue:  self.interpolateColor(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalBackgroundColor
       )
     );
     
