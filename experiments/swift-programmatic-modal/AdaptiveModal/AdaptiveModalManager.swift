@@ -879,9 +879,6 @@ class AdaptiveModalManager {
   ) {
     guard let modalView = self.modalView else { return };
     
-    // MARK: Make Animator - Modal Animator
-    // ------------------------------------
-    
     let modalAnimator: UIViewPropertyAnimator = {
       // A - Animation based on duration
       if let duration = duration {
@@ -934,75 +931,8 @@ class AdaptiveModalManager {
     modalAnimator.addCompletion { _ in
       self.modalAnimator = nil;
     };
-    
-    // MARK: Make Animator - Modal Layer Mask Animator
-    // -----------------------------------------------
-    
-    let modalLayerMask = modalView.layer.mask as? CAShapeLayer;
-    
-    let modalMaskAnimator: CABasicAnimation? = {
-      guard let modalLayerMask = modalLayerMask else { return nil };
-      
-      let animator = CASpringAnimation(keyPath: "path");
-      
-      animator.fromValue = modalLayerMask.path;
-      animator.toValue = interpolationPoint.modalCornerRadiusPath.cgPath;
-      
-      
-      if let gestureInitialVelocity = self.gestureInitialVelocity {
-        let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
-        
- 
-        //Set initial velocity and desired duration
-        let initialVelocity: CGFloat = gestureInitialVelocity.dy;
-        let relaxationTime: CGFloat = animator.settlingDuration;
-
-        //Spring constants
-        let dampingRatio: CGFloat = snapAnimationConfig.springDampingRatio;
-        
-        //Only allow damping ratio between just above 0 and 1 (critically damped)
-        let clippedDampingRatio: CGFloat = min(1, max(dampingRatio, 0.01))
-        let mass: CGFloat = 1
-        let fractionOfAmplitude: CGFloat = 1500 //A spring never gets to 0 amplitude, it gets infinitely smaller. This fraction represents the perceived 0 point.
-        let logOfFraction: CGFloat = log(fractionOfAmplitude)
-        let stiffness: CGFloat = (mass * pow(logOfFraction, 2)) / (pow(relaxationTime, 2) * pow(clippedDampingRatio, 2))
-        let angularFrequency: CGFloat = sqrt(stiffness/mass)
-        let damping: CGFloat = 2 * mass * angularFrequency * clippedDampingRatio
-
-        animator.initialVelocity = initialVelocity
-        animator.mass = mass
-        animator.stiffness = stiffness
-        animator.damping = damping
-        
-        animator.duration = min(animator.settlingDuration, modalAnimator.duration);
-      };
-      
-      
-      animator.isRemovedOnCompletion = false;
-      animator.fillMode = .both;
-      
-      modalLayerMask.add(animator, forKey: nil);
-      
-      return animator;
-    }();
-    
-    self.modalMaskAnimator = modalMaskAnimator;
-    
-    let startModalMaskAnimator = {
-      guard let modalLayerMask = modalLayerMask,
-            modalMaskAnimator != nil
-      else { return };
-      
-      CATransaction.begin();
-      modalView.layer.mask = modalLayerMask;
-      CATransaction.commit();
-    };
-    
-    // MARK: Start Animators
-    // ---------------------
 
     modalAnimator.startAnimation();
-    startModalMaskAnimator();
   };
   
   func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
@@ -1129,6 +1059,19 @@ class AdaptiveModalManager {
     let percentAdj = self.modalConfig.shouldInvertPercent
       ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
+      
+    modalView!.layer.mask =  {
+      let cornerRadiusPath = self.interpolateModalBorderRadius(
+        forInputPercentValue: percentAdj
+      );
+      
+      guard let cornerRadiusPath = cornerRadiusPath else { return nil };
+        
+      let shape = CAShapeLayer();
+      shape.path = cornerRadiusPath.cgPath;
+      
+      return shape;
+    }();
     
     
     self.applyInterpolationToBackgroundVisualEffect(
