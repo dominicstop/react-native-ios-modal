@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension AdaptiveModalManager {
+class AdaptiveModalUtilities {
 
   static func interpolate(
     inputValue    : CGFloat,
@@ -180,7 +180,7 @@ extension AdaptiveModalManager {
     return 1 - percent + offset;
   };
   
-  static func setProperty<O: AnyObject, T>(
+  static func unwrapAndSetProperty<O: AnyObject, T>(
     forObject object: O?,
     forPropertyKey propertyKey: WritableKeyPath<O, T>,
     withValue value: T?
@@ -192,7 +192,7 @@ extension AdaptiveModalManager {
     object[keyPath: propertyKey] = value;
   };
   
-  static func setProperty<O, T>(
+  static func unwrapAndSetProperty<O, T>(
     for valueType: inout O?,
     forPropertyKey propertyKey: WritableKeyPath<O, T>,
     withValue newValue: T?

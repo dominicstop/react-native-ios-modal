@@ -154,12 +154,12 @@ class AdaptiveModalManager {
       y: (gestureVelocity.y / 2).clamped(minMax: maxVelocity)
     );
     
-    let nextX = Self.computeFinalPosition(
+    let nextX = AdaptiveModalUtilities.computeFinalPosition(
       position: gesturePoint.x,
       initialVelocity: gestureVelocityClamped.x
     );
     
-    let nextY = Self.computeFinalPosition(
+    let nextY = AdaptiveModalUtilities.computeFinalPosition(
       position: gesturePoint.y,
       initialVelocity: gestureVelocityClamped.y
     );
@@ -351,7 +351,7 @@ class AdaptiveModalManager {
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
   
-    return Self.interpolate(
+    return AdaptiveModalUtilities.interpolate(
       inputValue: inputValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
@@ -375,7 +375,7 @@ class AdaptiveModalManager {
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
   
-    return Self.interpolateColor(
+    return AdaptiveModalUtilities.interpolateColor(
       inputValue: inputValue,
       rangeInput: interpolationRangeInput,
       rangeOutput: interpolationSteps.map {
@@ -676,7 +676,7 @@ class AdaptiveModalManager {
       forInputPercentValue: inputPercentValue
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: modalView,
       forPropertyKey: \.transform,
       withValue:  self.interpolateModalTransform(
@@ -684,7 +684,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: modalView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
@@ -693,7 +693,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: modalView,
       forPropertyKey: \.layer.cornerRadius,
       withValue:  self.interpolateModalBorderRadius(
@@ -701,7 +701,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.modalBackgroundView,
       forPropertyKey: \.backgroundColor,
       withValue:  self.interpolateColor(
@@ -710,7 +710,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.modalBackgroundView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
@@ -719,7 +719,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.modalBackgroundVisualEffectView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
@@ -728,7 +728,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.backgroundDimmingView,
       forPropertyKey: \.backgroundColor,
       withValue:  self.interpolateColor(
@@ -737,7 +737,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.backgroundDimmingView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
@@ -746,7 +746,7 @@ class AdaptiveModalManager {
       )
     );
     
-    Self.setProperty(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.backgroundVisualEffectView,
       forPropertyKey: \.alpha,
       withValue:  self.interpolate(
@@ -780,7 +780,7 @@ class AdaptiveModalManager {
     let percent = inputValue / interpolationRangeMaxInput;
     
     let percentAdj = shouldInvertPercent
-      ? Self.invertPercent(percent)
+      ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
     
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
@@ -1014,7 +1014,7 @@ class AdaptiveModalManager {
     let percent = inputCoord / interpolationRangeMaxInput;
     
     let percentAdj = self.modalConfig.shouldInvertPercent
-      ? Self.invertPercent(percent)
+      ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
     
     
@@ -1125,7 +1125,7 @@ class AdaptiveModalManager {
             self.getClosestSnapPoint(forRect: self.modalFrame)
     else { return };
     
-    let interpolatedDuration = Self.interpolate(
+    let interpolatedDuration = AdaptiveModalUtilities.interpolate(
       inputValue: closestSnapPoint.snapDistance,
       rangeInput: [0, targetView.frame.height],
       rangeOutput: [0.2, 0.7]

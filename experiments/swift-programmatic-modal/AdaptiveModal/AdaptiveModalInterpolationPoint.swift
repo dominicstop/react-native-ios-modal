@@ -114,7 +114,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
           let percent = inputValue / maxRangeInput;
           
           return modalConfig.shouldInvertPercent
-            ? AdaptiveModalManager.invertPercent(percent)
+            ? AdaptiveModalUtilities.invertPercent(percent)
             : percent;
             
         case .index:

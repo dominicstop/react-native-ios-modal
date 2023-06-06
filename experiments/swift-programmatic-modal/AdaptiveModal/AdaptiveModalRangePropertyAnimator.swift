@@ -96,7 +96,7 @@ struct AdaptiveModalRangePropertyAnimator {
       return [0, 1];
     }();
   
-    let percent = AdaptiveModalManager.interpolate(
+    let percent = AdaptiveModalUtilities.interpolate(
       inputValue: inputPercentValue,
       rangeInput: range.map {
         $0.percent
