@@ -27,8 +27,7 @@ class AdaptiveModalManager {
   weak var targetView: UIView?;
   weak var modalView: UIView?;
   
-  var modalAnimator: UIViewPropertyAnimator?;
-  var modalMaskAnimator: CABasicAnimation?;
+  var animator: UIViewPropertyAnimator?;
   var displayLink: CADisplayLink?;
   
   weak var modalBackgroundView: UIView?;
@@ -88,18 +87,11 @@ class AdaptiveModalManager {
   };
   
   var isAnimating: Bool {
-     self.modalAnimator != nil || (self.modalAnimator?.isRunning ?? false);
-  };
-  
-  var currentPercent: CGFloat {
-    let currentCoord =
-      self.modalFrame!.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
-      
-    return currentCoord / self.interpolationRangeMaxInput!;
+     self.animator != nil || (self.animator?.isRunning ?? false);
   };
   
   var displayLinkEndTimestamp: CFTimeInterval? {
-    guard let animator = self.modalAnimator,
+    guard let animator = self.animator,
           let displayLinkStartTimestamp = self.displayLinkStartTimestamp
     else { return nil };
     
@@ -573,41 +565,11 @@ class AdaptiveModalManager {
 
   func interpolateModalBorderRadius(
     forInputPercentValue inputPercentValue: CGFloat
-  ) -> UIBezierPath? {
-    guard let modalView = self .modalView else { return nil };
-    
-    let nextTopLeftRadius = self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalCornerRadius.topLeftRadius
-    );
-    
-    let nextTopRightRadius = self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalCornerRadius.topRightRadius
-    );
-    
-    let nextBottomLeftRadius = self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalCornerRadius.bottomLeftRadius
-    );
-    
-    let nextBottomRightRadius = self.interpolate(
-      inputValue: inputPercentValue,
-      rangeOutputKey: \.modalCornerRadius.bottomRightRadius
-    );
-    
-    guard let nextTopLeftRadius     = nextTopLeftRadius,
-          let nextTopRightRadius    = nextTopRightRadius,
-          let nextBottomLeftRadius  = nextBottomLeftRadius,
-          let nextBottomRightRadius = nextBottomRightRadius
-    else { return nil };
+  ) -> CGFloat? {
   
-    return UIBezierPath(
-      shouldRoundRect: modalView.bounds,
-      topLeftRadius: nextTopLeftRadius,
-      topRightRadius: nextTopRightRadius,
-      bottomLeftRadius: nextBottomLeftRadius,
-      bottomRightRadius: nextBottomRightRadius
+    return self.interpolate(
+      inputValue: inputPercentValue,
+      rangeOutputKey: \.modalCornerRadius
     );
   };
   
@@ -731,18 +693,13 @@ class AdaptiveModalManager {
       )
     );
     
-    modalView.layer.mask = {
-      let cornerRadiusPath = self.interpolateModalBorderRadius(
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: modalView,
+      forPropertyKey: \.layer.cornerRadius,
+      withValue:  self.interpolateModalBorderRadius(
         forInputPercentValue: inputPercentValue
-      );
-      
-      guard let cornerRadiusPath = cornerRadiusPath else { return nil };
-        
-      let shape = CAShapeLayer();
-      shape.path = cornerRadiusPath.cgPath;
-      
-      return shape;
-    }();
+      )
+    );
     
     AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.modalBackgroundView,
@@ -879,7 +836,7 @@ class AdaptiveModalManager {
   ) {
     guard let modalView = self.modalView else { return };
     
-    let modalAnimator: UIViewPropertyAnimator = {
+    let animator: UIViewPropertyAnimator = {
       // A - Animation based on duration
       if let duration = duration {
         return UIViewPropertyAnimator(
@@ -910,9 +867,9 @@ class AdaptiveModalManager {
       );
     }();
     
-    self.modalAnimator = modalAnimator;
+    self.animator = animator;
     
-    modalAnimator.addAnimations {
+    animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
       interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
       
@@ -925,14 +882,14 @@ class AdaptiveModalManager {
     };
     
     if let completion = completion {
-      modalAnimator.addCompletion(completion);
+      animator.addCompletion(completion);
     };
     
-    modalAnimator.addCompletion { _ in
-      self.modalAnimator = nil;
+    animator.addCompletion { _ in
+      self.animator = nil;
     };
 
-    modalAnimator.startAnimation();
+    animator.startAnimation();
   };
   
   func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
@@ -1059,19 +1016,6 @@ class AdaptiveModalManager {
     let percentAdj = self.modalConfig.shouldInvertPercent
       ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
-      
-    modalView!.layer.mask =  {
-      let cornerRadiusPath = self.interpolateModalBorderRadius(
-        forInputPercentValue: percentAdj
-      );
-      
-      guard let cornerRadiusPath = cornerRadiusPath else { return nil };
-        
-      let shape = CAShapeLayer();
-      shape.path = cornerRadiusPath.cgPath;
-      
-      return shape;
-    }();
     
     
     self.applyInterpolationToBackgroundVisualEffect(
@@ -1115,9 +1059,10 @@ class AdaptiveModalManager {
     switch gesture.state {
       case .began:
         self.gestureInitialPoint = gesturePoint;
-        self.modalAnimator?.stopAnimation(true);
     
       case .changed:
+        self.animator?.stopAnimation(true);
+        
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         self.onModalWillSnap();
         
@@ -1139,8 +1084,6 @@ class AdaptiveModalManager {
           self.clearGestureValues();
           return;
         };
-        
-        self.modalAnimator?.stopAnimation(true);
         
         self.animateModal(to: closestSnapPoint.interpolationPoint) { _ in
           self.currentInterpolationIndex =
