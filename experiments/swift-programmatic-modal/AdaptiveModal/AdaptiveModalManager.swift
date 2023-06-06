@@ -943,15 +943,40 @@ class AdaptiveModalManager {
     let modalMaskAnimator: CABasicAnimation? = {
       guard let modalLayerMask = modalLayerMask else { return nil };
       
-      let animator = CABasicAnimation(keyPath: "path");
+      let animator = CASpringAnimation(keyPath: "path");
       
       animator.fromValue = modalLayerMask.path;
       animator.toValue = interpolationPoint.modalCornerRadiusPath.cgPath;
       
-      animator.duration = modalAnimator.duration;
       
-      animator.timingFunction =
-        CAMediaTimingFunction(name: CAMediaTimingFunctionName.default);
+      if let gestureInitialVelocity = self.gestureInitialVelocity {
+        let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
+        
+ 
+        //Set initial velocity and desired duration
+        let initialVelocity: CGFloat = gestureInitialVelocity.dy;
+        let relaxationTime: CGFloat = animator.settlingDuration;
+
+        //Spring constants
+        let dampingRatio: CGFloat = snapAnimationConfig.springDampingRatio;
+        
+        //Only allow damping ratio between just above 0 and 1 (critically damped)
+        let clippedDampingRatio: CGFloat = min(1, max(dampingRatio, 0.01))
+        let mass: CGFloat = 1
+        let fractionOfAmplitude: CGFloat = 1500 //A spring never gets to 0 amplitude, it gets infinitely smaller. This fraction represents the perceived 0 point.
+        let logOfFraction: CGFloat = log(fractionOfAmplitude)
+        let stiffness: CGFloat = (mass * pow(logOfFraction, 2)) / (pow(relaxationTime, 2) * pow(clippedDampingRatio, 2))
+        let angularFrequency: CGFloat = sqrt(stiffness/mass)
+        let damping: CGFloat = 2 * mass * angularFrequency * clippedDampingRatio
+
+        animator.initialVelocity = initialVelocity
+        animator.mass = mass
+        animator.stiffness = stiffness
+        animator.damping = damping
+        
+        animator.duration = min(animator.settlingDuration, modalAnimator.duration);
+      };
+      
       
       animator.isRemovedOnCompletion = false;
       animator.fillMode = .both;
