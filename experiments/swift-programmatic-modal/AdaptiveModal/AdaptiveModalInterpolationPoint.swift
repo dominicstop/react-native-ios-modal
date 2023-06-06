@@ -246,8 +246,23 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     modalView.transform = self.modalTransform;
     modalView.alpha = self.modalOpacity;
     
-    modalView.layer.cornerRadius = self.modalCornerRadius;
-    modalView.layer.maskedCorners = self.modalMaskedCorners;
+    modalView.layer.mask = {
+      let path = UIBezierPath(
+        shouldRoundRect: modalView.bounds,
+        topLeftRadius: 20,
+        topRightRadius: 20,
+        bottomLeftRadius: 20,
+        bottomRightRadius: 20
+      );
+      
+      let shape = CAShapeLayer();
+      shape.path = path.cgPath;
+      
+      return shape;
+    }();
+    
+    //modalView.layer.cornerRadius = self.modalCornerRadius;
+    //modalView.layer.maskedCorners = self.modalMaskedCorners;
   };
   
   func apply(toModalWrapperView modalWrapperView: UIView){

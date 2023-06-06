@@ -693,13 +693,28 @@ class AdaptiveModalManager {
       )
     );
     
-    AdaptiveModalUtilities.unwrapAndSetProperty(
-      forObject: modalView,
-      forPropertyKey: \.layer.cornerRadius,
-      withValue:  self.interpolateModalBorderRadius(
-        forInputPercentValue: inputPercentValue
-      )
-    );
+    // AdaptiveModalUtilities.unwrapAndSetProperty(
+    //   forObject: modalView,
+    //   forPropertyKey: \.layer.cornerRadius,
+    //   withValue:  self.interpolateModalBorderRadius(
+    //     forInputPercentValue: inputPercentValue
+    //   )
+    // );
+    
+    modalView.layer.mask = {
+      let path = UIBezierPath(
+        shouldRoundRect: modalView.bounds,
+        topLeftRadius: 20,
+        topRightRadius: 20,
+        bottomLeftRadius: 20,
+        bottomRightRadius: 20
+      );
+      
+      let shape = CAShapeLayer();
+      shape.path = path.cgPath;
+      
+      return shape;
+    }();
     
     AdaptiveModalUtilities.unwrapAndSetProperty(
       forObject: self.modalBackgroundView,
