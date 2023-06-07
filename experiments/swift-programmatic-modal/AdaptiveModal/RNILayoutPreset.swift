@@ -8,13 +8,31 @@
 import UIKit
 
 enum RNILayoutPreset {
-  case offscreenBottom, offscreenTop, offscreenLeft, offscreenRight;
-  case halfOffscreenBottom, halfOffscreenTop, halfOffscreenLeft, halfOffscreenRight;
-  case edgeBottom, edgeTop, edgeLeft, edgeRight;
-  case fitScreen, fitScreenHorizontally, fitScreenVertically;
+  case offscreenBottom,
+       offscreenTop,
+       offscreenLeft,
+       offscreenRight;
+       
+  case halfOffscreenBottom,
+       halfOffscreenTop,
+       halfOffscreenLeft,
+       halfOffscreenRight;
+      
+  case edgeBottom,
+       edgeTop,
+       edgeLeft,
+       edgeRight;
+       
+  case fitScreen,
+       fitScreenHorizontally,
+       fitScreenVertically;
+       
   case center;
   
   case layoutConfig(_ config: RNILayout);
+  
+  // MARK: Functions
+  // ---------------
   
   func getLayoutConfig(
     fromBaseLayoutConfig baseLayoutConfig: RNILayout,

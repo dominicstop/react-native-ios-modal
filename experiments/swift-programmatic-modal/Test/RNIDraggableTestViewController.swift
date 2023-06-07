@@ -330,10 +330,6 @@ class RNIDraggableTestViewController : UIViewController {
       modalConfig: AdaptiveModalConfigTestPresets.default.config,
       modalView: self.floatingView,
       targetView: self.view,
-      modalBackgroundView: self.modalBackgroundView,
-      modalBackgroundVisualEffectView: self.modalBackgroundVisualEffectView,
-      backgroundDimmingView: self.backgroundDimmingView,
-      backgroundVisualEffectView: self.backgroundVisualEffectView,
       currentSizeProvider: {
         .zero
       }

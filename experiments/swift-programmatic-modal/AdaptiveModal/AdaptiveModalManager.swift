@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdaptiveModalManager {
+class AdaptiveModalManager: NSObject {
 
   // MARK: -  Properties - Config-Related
   // ------------------------------------
@@ -16,24 +16,29 @@ class AdaptiveModalManager {
   
   var enableSnapping = true;
   
-  // MARK: -  Properties - Refs
-  // --------------------------
+  // MARK: -  Properties - Views/View Controllers
+  // --------------------------------------------
   
-  weak var eventDelegate: AdaptiveModalEventNotifiable?;
-
-  lazy var dummyModalView = UIView();
-  lazy var modalWrapperView = UIView();
-
+  weak var modalViewController: UIViewController?;
+  weak var targetViewController: UIViewController?;
+  
   weak var targetView: UIView?;
   weak var modalView: UIView?;
   
+  lazy var dummyModalView = UIView();
+  lazy var modalWrapperView = UIView();
+  
+  var modalBackgroundView: UIView?;
+  var modalBackgroundVisualEffectView: UIVisualEffectView?;
+  
+  var backgroundDimmingView: UIView?;
+  var backgroundVisualEffectView: UIVisualEffectView?;
+  
+  // MARK: -  Properties - Animation + Gesture Related
+  // -------------------------------------------------
+  
   var animator: UIViewPropertyAnimator?;
   var displayLink: CADisplayLink?;
-  
-  weak var modalBackgroundView: UIView?;
-  weak var modalBackgroundVisualEffectView: UIVisualEffectView?;
-  weak var backgroundDimmingView: UIView?;
-  weak var backgroundVisualEffectView: UIVisualEffectView?;
   
   var displayLinkStartTimestamp: CFTimeInterval?;
   
@@ -42,29 +47,31 @@ class AdaptiveModalManager {
   var gestureInitialPoint: CGPoint?;
   var gesturePoint: CGPoint?;
   
-  var prevModalFrame: CGRect = .zero;
-  
-  var nextSnapPointIndex: Int?;
-  
   var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
   var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
   
   // MARK: -  Properties
   // -------------------
   
-  var currentSizeProvider: () -> CGSize;
+  weak var eventDelegate: AdaptiveModalEventNotifiable?;
+  
+  var currentSizeProvider: (() -> CGSize)?;
+  
+  var prevModalFrame: CGRect = .zero;
+  
+   /// The computed frames of the modal based on the snap points
+  var interpolationSteps: [AdaptiveModalInterpolationPoint]?;
+  
+  var currentInterpolationIndex = 0;
   
   var prevSnapPointIndex: Int?;
+  var nextSnapPointIndex: Int?;
+  
   var currentSnapPointIndex = 0 {
     didSet {
       self.prevSnapPointIndex = oldValue;
     }
   };
-  
-  /// The computed frames of the modal based on the snap points
-  var interpolationSteps: [AdaptiveModalInterpolationPoint]?;
-  
-  var currentInterpolationIndex = 0;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -191,25 +198,28 @@ class AdaptiveModalManager {
     modalConfig: AdaptiveModalConfig,
     modalView: UIView,
     targetView: UIView,
-    modalBackgroundView: UIView? = nil,
-    modalBackgroundVisualEffectView: UIVisualEffectView? = nil,
-    backgroundDimmingView: UIView? = nil,
-    backgroundVisualEffectView: UIVisualEffectView? = nil,
-    currentSizeProvider: @escaping () -> CGSize
+    currentSizeProvider: (() -> CGSize)? = nil
   ) {
     self.modalConfig = modalConfig;
     
     self.modalView = modalView;
     self.targetView = targetView;
     
-    self.modalBackgroundView = modalBackgroundView;
-    self.modalBackgroundVisualEffectView = modalBackgroundVisualEffectView;
+    self.currentSizeProvider = currentSizeProvider ?? { .zero };
+  
+    super.init();
     
-    self.backgroundVisualEffectView = backgroundVisualEffectView;
-    self.backgroundDimmingView  = backgroundDimmingView;
+    self.setupInitViews();
+    self.setupDummyModalView();
+  };
+  
+  init(modalConfig: AdaptiveModalConfig) {
+    self.modalConfig = modalConfig;
     
-    self.currentSizeProvider = currentSizeProvider;
+    super.init();
     
+    self.setupViewControllers();
+    self.setupInitViews();
     self.setupDummyModalView();
   };
   
@@ -219,6 +229,19 @@ class AdaptiveModalManager {
   
   // MARK: - Functions - Setup
   // -------------------------
+  
+  func setupViewControllers() {
+    modalViewController?.modalPresentationStyle = .custom;
+    modalViewController?.transitioningDelegate = self;
+  };
+  
+  func setupInitViews(){
+    self.modalBackgroundView = UIView();
+    self.modalBackgroundVisualEffectView = UIVisualEffectView();
+    
+    self.backgroundDimmingView = UIView();
+    self.backgroundVisualEffectView = UIVisualEffectView();
+  };
   
   private func setupDummyModalView(){
     guard let targetView = self.targetView else { return };
@@ -1032,6 +1055,24 @@ class AdaptiveModalManager {
   // MARK: - User-Invoked Functions
   // ------------------------------
   
+  func set(
+    viewControllerToPresent: UIViewController,
+    presentingViewController: UIViewController
+  ) {
+    self.modalViewController = viewControllerToPresent;
+    self.targetViewController = presentingViewController;
+    
+    self.modalView = viewControllerToPresent.view;
+    self.targetView = presentingViewController.view;
+    
+    self.currentSizeProvider = currentSizeProvider ?? { .zero };
+    
+    self.setupViewControllers();
+    self.setupDummyModalView();
+    self.setupInitViews();
+    self.setupViewConstraints();
+  };
+  
   func computeSnapPoints(forTargetView nextTargetView: UIView? = nil) {
     if nextTargetView != nil {
       self.targetView = nextTargetView;
@@ -1040,7 +1081,7 @@ class AdaptiveModalManager {
     guard let targetView = nextTargetView ?? self.targetView
     else { return };
     
-    let currentSize = self.currentSizeProvider();
+    let currentSize = self.currentSizeProvider?() ?? .zero;
     
     self.interpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,
