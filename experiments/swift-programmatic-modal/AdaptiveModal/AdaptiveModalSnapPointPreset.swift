@@ -22,22 +22,35 @@ struct AdaptiveModalSnapPointPreset {
 };
 
 extension AdaptiveModalSnapPointPreset {
-  static func getDefaultSnapPoint(
-    forDirection direction: AdaptiveModalConfig.Direction
-  ) -> RNILayoutPreset {
-    switch direction {
-      case .bottomToTop: return .edgeTop;
-      case .topToBottom: return .edgeBottom;
-      case .leftToRight: return .edgeLeft;
-      case .rightToLeft: return .edgeRight;
-    };
-  };
-  
-  static func getDefault(
+  static func getDefaultOvershootSnapPoint(
     forDirection direction: AdaptiveModalConfig.Direction
   ) -> Self {
-    Self.init(
-      snapPoint: Self.getDefaultSnapPoint(forDirection: direction)
-    );
+  
+    let snapPoint: RNILayoutPreset = {
+      switch direction {
+        case .bottomToTop: return .edgeTop;
+        case .topToBottom: return .edgeBottom;
+        case .leftToRight: return .edgeLeft;
+        case .rightToLeft: return .edgeRight;
+      };
+    }();
+  
+    return self.init(snapPoint: snapPoint);
+  };
+  
+  static func getDefaultInitialSnapPoint(
+    forDirection direction: AdaptiveModalConfig.Direction
+  ) -> Self {
+  
+    let snapPoint: RNILayoutPreset = {
+      switch direction {
+        case .bottomToTop: return .offscreenBottom;
+        case .topToBottom: return .offscreenTop;
+        case .leftToRight: return .offscreenLeft;
+        case .rightToLeft: return .offscreenRight;
+      };
+    }();
+  
+    return self.init(snapPoint: snapPoint);
   };
 };

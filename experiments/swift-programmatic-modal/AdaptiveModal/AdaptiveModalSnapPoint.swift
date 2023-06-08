@@ -24,7 +24,7 @@ struct AdaptiveModalSnapPointConfig {
     fromBaseLayoutConfig baseLayoutConfig: RNILayout,
     withTargetRect targetRect: CGRect,
     currentSize: CGSize
-  ){
+  ) {
     let snapPointLayoutPreset = snapPointPreset.snapPointPreset;
     
     let snapPointLayout = snapPointLayoutPreset.getLayoutConfig(
@@ -37,3 +37,17 @@ struct AdaptiveModalSnapPointConfig {
     self.animationKeyframe = snapPointPreset.animationKeyframe;
   };
 };
+
+//extension AdaptiveModalSnapPointConfig {
+//
+//  static func deriveSnapPoints(
+//    initialSnapPoint: AdaptiveModalSnapPointPreset,
+//    inBetweenSnapPoints: [AdaptiveModalSnapPointConfig],
+//    overshootSnapPoint: AdaptiveModalSnapPointPreset
+//  ) -> [AdaptiveModalSnapPointConfig] {
+//
+//    var snapPoints: [AdaptiveModalSnapPointConfig] = [];
+//
+//    return snapPoints;
+//  };
+//};

@@ -286,6 +286,25 @@ extension AdaptiveModalInterpolationPoint {
 
     var items: [AdaptiveModalInterpolationPoint] = [];
     
+//    items.append({
+//      let nextSnapPointConfig = modalConfig.snapPoints.first!;
+//
+//      let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
+//        fromSnapPointPreset: modalConfig.initialSnapPoint,
+//        fromBaseLayoutConfig: nextSnapPointConfig.snapPoint,
+//        withTargetRect: targetRect,
+//        currentSize: currentSize
+//      );
+//
+//      return AdaptiveModalInterpolationPoint(
+//        usingModalConfig: modalConfig,
+//        snapPointIndex: -1,
+//        withTargetRect: targetRect,
+//        currentSize: currentSize,
+//        snapPointConfig: initialSnapPointConfig
+//      );
+//    }());
+    
     for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
       items.append(
         AdaptiveModalInterpolationPoint(
