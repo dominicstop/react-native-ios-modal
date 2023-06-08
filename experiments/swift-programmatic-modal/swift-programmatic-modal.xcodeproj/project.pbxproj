@@ -217,6 +217,7 @@
 		88B7D0E229C593F400490628 = {
 			isa = PBXGroup;
 			children = (
+				88D017D62A1B302F004664D2 /* RNILayout */,
 				88D018802A1D06EA004664D2 /* AdaptiveModal */,
 				88D0178D2A1B302F004664D2 /* src_library */,
 				88D0168B2A173093004664D2 /* Test */,
@@ -390,7 +391,6 @@
 			isa = PBXGroup;
 			children = (
 				88D017CF2A1B302F004664D2 /* RNIDictionarySynthesizable */,
-				88D017D62A1B302F004664D2 /* RNILayout */,
 				88D017D82A1B302F004664D2 /* RNIAnimator */,
 				88D017E12A1B302F004664D2 /* RNIMulticastDelegate */,
 				88D017E42A1B302F004664D2 /* RNIWeak */,
@@ -417,6 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				88D017D72A1B302F004664D2 /* RNILayout.swift */,
+				88E8C01B2A23203E008C2FF8 /* RNILayoutPreset.swift */,
 			);
 			path = RNILayout;
 			sourceTree = "<group>";
@@ -523,7 +524,6 @@
 		88D018802A1D06EA004664D2 /* AdaptiveModal */ = {
 			isa = PBXGroup;
 			children = (
-				88E8C01B2A23203E008C2FF8 /* RNILayoutPreset.swift */,
 				88E8C01D2A234B0A008C2FF8 /* UIBezierPath+VariadicCornerRadius.swift */,
 				88D018812A1D09DD004664D2 /* AdaptiveModalAnimationConfig.swift */,
 				88D018852A1D0A1D004664D2 /* AdaptiveModalSnapPoint.swift */,
