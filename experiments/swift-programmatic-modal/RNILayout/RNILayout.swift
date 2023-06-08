@@ -102,6 +102,12 @@ public struct RNILayout {
       usingLayoutValueContext: context,
       preferredSizeKey: \.height
     );
+    
+    print(
+      "computeRawRectSize"
+      + "\n - computedWidth: \(computedWidth)"
+      + "\n - computedHeight: \(computedHeight)"
+    );
   
     return CGSize(
       width : computedWidth  ?? 0,
@@ -115,15 +121,13 @@ public struct RNILayout {
   ///
   public func computeRawRectOrigin(
     usingLayoutValueContext context: RNILayoutValueContext,
-    withTargetRect targetRect: CGRect,
     forRect rect: CGRect? = nil,
-    withSize size: CGSize? = nil,
     ignoreXAxis: Bool = false,
     ignoreYAxis: Bool = false
   ) -> CGRect {
   
     let origin = rect?.origin ?? .zero;
-    let size = rect?.size ?? size ?? .zero;
+    let size = rect?.size ?? context.currentSize ?? .zero;
     
     var rect = CGRect(origin: origin, size: size);
     
@@ -131,13 +135,13 @@ public struct RNILayout {
       // Compute Origin - X
       switch self.horizontalAlignment {
         case .center:
-          rect.setPoint(midX: targetRect.midX);
+          rect.setPoint(midX: context.targetRect.midX);
           
         case .left:
-          rect.setPoint(minX: targetRect.minX);
+          rect.setPoint(minX: context.targetRect.minX);
           
         case .right:
-          rect.setPoint(maxX: targetRect.maxX);
+          rect.setPoint(maxX: context.targetRect.maxX);
       };
     };
     
@@ -145,13 +149,13 @@ public struct RNILayout {
       // Compute Origin - Y
       switch self.verticalAlignment {
         case .center:
-          rect.setPoint(midY: targetRect.midY);
+          rect.setPoint(midY: context.targetRect.midY);
           
         case .top:
-          rect.setPoint(minY: targetRect.minY);
+          rect.setPoint(minY: context.targetRect.minY);
           
         case .bottom:
-          rect.setPoint(maxY: targetRect.maxY);
+          rect.setPoint(maxY: context.targetRect.maxY);
       };
     };
     
@@ -176,60 +180,68 @@ public struct RNILayout {
     let computedSize = self.computeRawRectSize(
       usingLayoutValueContext: baseContext
     );
-  
-    var rect = self.computeRawRectOrigin(
-      usingLayoutValueContext: baseContext,
-      withTargetRect: baseContext.targetRect
-    );
     
     let context = RNILayoutValueContext(
       derivedFrom: baseContext,
       currentSize: computedSize
     );
+  
+    var rect = self.computeRawRectOrigin(usingLayoutValueContext: context);
+    
+    let computedMarginLeft = self.marginLeft?.compute(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.width
+    );
+    
+    let computedMarginRight = self.marginRight?.compute(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.width
+    );
+    
+    let computedMarginTop = self.marginTop?.compute(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.height
+    );
+    
+    let computedMarginBottom = self.marginBottom?.compute(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.height
+    );
+    
+    let computedMarginHorizontal =
+      (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
+      
+    let computedMargiVertical =
+      (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
+      
+    print(
+      "computeRect"
+      + "\n - computedMarginLeft: \(computedMarginLeft)"
+      + "\n - computedMarginRight: \(computedMarginRight)"
+      + "\n - computedMarginTop: \(computedMarginTop)"
+      + "\n - computedMarginBottom: \(computedMarginBottom)"
+      + "\n - computedMarginHorizontal: \(computedMarginHorizontal)"
+      + "\n - computedMargiVertical: \(computedMargiVertical)"
+    );
+  
     
     // Margin - X-Axis
     switch self.horizontalAlignment {
       case .left:
-        let computedMarginLeft =
-          self.marginLeft?.compute(
-            usingLayoutValueContext: context,
-            preferredSizeKey: \.width
-          );
-      
         guard let marginLeft = computedMarginLeft else { break };
         rect.origin.x = rect.origin.x + marginLeft;
         
       case .right:
-        let computedMarginRight = self.marginRight?.compute(
-          usingLayoutValueContext: context,
-          preferredSizeKey: \.width
-        );
-      
         guard let marginRight = computedMarginRight else { break };
         rect.origin.x = rect.origin.x - marginRight;
         
       case .center:
         if case .stretch = self.width.mode {
-          let computedMarginHorizontal: CGFloat = {
-            let computedMarginLeft = self.marginLeft?.compute(
-              usingLayoutValueContext: context,
-              preferredSizeKey: \.width
-            );
-              
-            let computedMarginRight = self.marginRight?.compute(
-              usingLayoutValueContext: context,
-              preferredSizeKey: \.width
-            );
-              
-            return (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
-          }();
-        
           rect.size.width = rect.size.width - computedMarginHorizontal;
           
           // re-compute origin
           rect = self.computeRawRectOrigin(
             usingLayoutValueContext: context,
-            withTargetRect: context.targetRect,
             forRect: rect,
             ignoreYAxis: true
           );
@@ -239,45 +251,20 @@ public struct RNILayout {
     // Margin - Y-Axis
     switch self.verticalAlignment {
       case .top:
-        let computedMarginTop = self.marginTop?.compute(
-          usingLayoutValueContext: context,
-          preferredSizeKey: \.height
-        );
-          
         guard let marginTop = computedMarginTop else { break };
         rect.origin.y = rect.origin.y + marginTop;
         
       case .bottom:
-        let computedMarginBottom = self.marginBottom?.compute(
-          usingLayoutValueContext: context,
-          preferredSizeKey: \.height
-        );
-          
         guard let marginBottom = computedMarginBottom else { break };
         rect.origin.y = rect.origin.y - marginBottom;
         
       case .center:
         if case .stretch = self.height.mode {
-          let computedMargiVertical: CGFloat = {
-            let computedMarginTop = self.marginTop?.compute(
-              usingLayoutValueContext: context,
-              preferredSizeKey: \.height
-            );
-              
-            let computedMarginBottom = self.marginBottom?.compute(
-              usingLayoutValueContext: context,
-              preferredSizeKey: \.height
-            );
-              
-            return (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
-          }();
-        
           rect.size.height = rect.size.height - computedMargiVertical;
 
           // re-compute origin
           rect = self.computeRawRectOrigin(
             usingLayoutValueContext: context,
-            withTargetRect: context.targetRect,
             forRect: rect,
             ignoreXAxis: true
           );

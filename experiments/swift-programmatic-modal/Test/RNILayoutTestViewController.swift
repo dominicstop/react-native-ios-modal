@@ -365,11 +365,11 @@ class RNILayoutTestViewController : UIViewController {
     self.view.addSubview(floatingView);
     
     self.view = view;
-    self.updateFloatingView();
   };
   
   override func viewDidLayoutSubviews() {
-    self.applyRadiusMaskFor();
+    self.updateFloatingView();
+    // self.applyRadiusMaskFor();
   };
   
   func updateFloatingView(){
@@ -381,11 +381,16 @@ class RNILayoutTestViewController : UIViewController {
       usingLayoutValueContext: layoutValueContext
     );
     
+    print(
+      "updateFloatingView"
+      + "\n - computedRect: \(computedRect)"
+    );
+    
     let floatingView = self.floatingView;
     floatingView.frame = computedRect;
     
     self.floatingViewLabel.text = "\(self.layoutConfigIndex)";
-    self.applyRadiusMaskFor();
+    //self.applyRadiusMaskFor();
   };
   
   @objc func onPressFloatingView(_ sender: UITapGestureRecognizer){

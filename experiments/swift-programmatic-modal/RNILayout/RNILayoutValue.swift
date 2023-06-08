@@ -49,14 +49,14 @@ public struct RNILayoutValue {
     usingLayoutValueContext context: RNILayoutValueContext,
     toValue value: CGFloat
   ) -> CGFloat? {
-    guard let offsetValue = self.offsetValue else { return nil };
+    guard let offsetValue = self.offsetValue else { return value };
     
     let computedOffsetValue = offsetValue.compute(
       usingLayoutValueContext: context,
       preferredSizeKey: nil
     );
     
-    guard let computedOffsetValue = computedOffsetValue else { return nil };
+    guard let computedOffsetValue = computedOffsetValue else { return value };
     
     let computableOffset = RNIComputableOffset(
       offset: computedOffsetValue,
@@ -80,7 +80,9 @@ public struct RNILayoutValue {
       preferredSizeKey: nil
     );
  
-    return value.clamped(min: computedMinValue, max: computedMaxValue);
+    let clamped = value.clamped(min: computedMinValue, max: computedMaxValue);
+    
+    return clamped;
   };
   
   public func computeRawValue(
@@ -109,6 +111,12 @@ public struct RNILayoutValue {
     let computedValueWithOffsets = self.applyOffsets(
       usingLayoutValueContext: context,
       toValue: computedValueRaw ?? 0
+    );
+    
+    print(
+      "RNILayoutValue.computeValue"
+      + "\n - computedValueRaw: \(computedValueRaw)"
+      + "\n - computedValueWithOffsets: \(computedValueWithOffsets)"
     );
     
     return self.clampValue(
