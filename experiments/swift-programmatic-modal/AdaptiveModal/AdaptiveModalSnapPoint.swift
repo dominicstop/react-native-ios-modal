@@ -21,16 +21,12 @@ struct AdaptiveModalSnapPointConfig {
   
   init(
     fromSnapPointPreset snapPointPreset: AdaptiveModalSnapPointPreset,
-    fromBaseLayoutConfig baseLayoutConfig: RNILayout,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
+    fromBaseLayoutConfig baseLayoutConfig: RNILayout
   ) {
     let snapPointLayoutPreset = snapPointPreset.snapPointPreset;
     
     let snapPointLayout = snapPointLayoutPreset.getLayoutConfig(
-      fromBaseLayoutConfig: baseLayoutConfig,
-      withTargetRect: targetRect,
-      currentSize: currentSize
+      fromBaseLayoutConfig: baseLayoutConfig
     );
     
     self.snapPoint = snapPointLayout;

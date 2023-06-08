@@ -26,54 +26,54 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      width: RNILayoutValue(
+        mode: .constant(100)
       ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      height: RNILayoutValue(
+        mode: .constant(100)
       )
     ),
     // 1 B
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      width: RNILayoutValue(
+        mode: .constant(100)
       ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      height: RNILayoutValue(
+        mode: .constant(100)
       )
     ),
     // 2 C
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      width: RNILayoutValue(
+        mode: .constant(100)
       ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      height: RNILayoutValue(
+        mode: .constant(100)
       )
     ),
     // 3 D
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      width: RNILayoutValue(
+        mode: .constant(100)
       ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      height: RNILayoutValue(
+        mode: .constant(100)
       )
     ),
     // 4 E
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.5)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .stretch
       )
     ),
@@ -81,10 +81,10 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.5)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .stretch
       )
     ),
@@ -92,10 +92,10 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.3)
       )
     ),
@@ -103,10 +103,10 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .top,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.3)
       )
     ),
@@ -114,63 +114,63 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.7),
-        maxValue: ScreenSize.iPhone8.size.width
+        maxValue: .constant(ScreenSize.iPhone8.size.width)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.7),
-        maxValue: ScreenSize.iPhone8.size.height
+        maxValue: .constant(ScreenSize.iPhone8.size.height)
       )
     ),
     // 9 J
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .top,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.3)
       ),
-      marginLeft: 20,
-      marginRight: 20
+      marginLeft: .constant(20),
+      marginRight: .constant(20)
     ),
     // 10 K
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.3)
       ),
-      marginLeft: 20,
-      marginRight: 20
+      marginLeft: .constant(20),
+      marginRight: .constant(20)
     ),
     // 11 L
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.5)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.6),
-        maxValue: ScreenSize.iPhone8.size.height
+        maxValue: .constant(ScreenSize.iPhone8.size.height)
       )
     ),
     // 12 M
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.5)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.6),
-        maxValue: ScreenSize.iPhone8.size.height
+        maxValue: .constant(ScreenSize.iPhone8.size.height)
       )
     ),
     // N
@@ -178,131 +178,129 @@ class RNILayoutTestViewController : UIViewController {
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.4)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .stretch,
-        maxValue: ScreenSize.iPhone8.size.height
+        maxValue: .constant(ScreenSize.iPhone8.size.height)
       ),
-      marginLeft: 20,
-      marginTop: 20,
-      marginBottom: 20
+      marginLeft: .constant(20),
+      marginTop: .constant(20),
+      marginBottom: .constant(20)
     ),
     // P
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .center,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.4)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .stretch,
-        maxValue: ScreenSize.iPhone8.size.height
+        maxValue: .constant(ScreenSize.iPhone8.size.height)
       ),
-      marginRight: 20,
-      marginTop: 20,
-      marginBottom: 20
+      marginRight: .constant(20),
+      marginTop: .constant(20),
+      marginBottom: .constant(20)
     ),
     // Q = 15
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.4)
       ),
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 15
+      marginLeft: .constant(20),
+      marginRight: .constant(20),
+      marginBottom: .constant(15)
     ),
     // R - 16
     RNILayout(
       horizontalAlignment: .center,
       verticalAlignment: .top,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .stretch
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.4)
       ),
-      marginLeft: 20,
-      marginRight: 20,
-      marginTop: 20
+      marginLeft: .constant(20),
+      marginRight: .constant(20),
+      marginTop: .constant(20)
     ),
     // S
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .top,
-      width: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      width: RNILayoutValue(
+        mode: .constant(100)
       ),
-      height: RNIComputableValue(
-        mode: .constant(constantValue: 100)
+      height: RNILayoutValue(
+        mode: .constant(100)
       ),
-      marginLeft: 20,
-      marginTop: 20
+      marginLeft: .constant(20),
+      marginTop: .constant(20)
     ),
     // T
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .top,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.35),
-        maxValue: ScreenSize.iPhone8.size.width * 0.6
+        maxValue: .constant(ScreenSize.iPhone8.size.width * 0.6)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.25),
-        maxValue: ScreenSize.iPhone8.size.height * 0.5
+        maxValue: .constant(ScreenSize.iPhone8.size.height * 0.5)
       ),
-      marginRight: 20,
-      marginTop: 20
+      marginRight: .constant(20),
+      marginTop: .constant(20)
     ),
     // U
     RNILayout(
       horizontalAlignment: .left,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.width * 0.7
+        maxValue: .constant(ScreenSize.iPhone8.size.width * 0.7)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.height * 0.7
+        maxValue: .constant(ScreenSize.iPhone8.size.height * 0.7)
       ),
-      marginLeft: 20,
-      marginBottom: 20
+      marginLeft: .constant(20),
+      marginBottom: .constant(20)
     ),
     // V
     RNILayout(
       horizontalAlignment: .right,
       verticalAlignment: .bottom,
-      width: RNIComputableValue(
+      width: RNILayoutValue(
         mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.width * 0.7
+        maxValue: .constant(ScreenSize.iPhone8.size.width * 0.7)
       ),
-      height: RNIComputableValue(
+      height: RNILayoutValue(
         mode: .percent(percentValue: 0.4),
-        maxValue: ScreenSize.iPhone8.size.height * 0.7
+        maxValue: .constant(ScreenSize.iPhone8.size.height * 0.7)
       ),
-      marginRight: 20,
-      marginBottom: 20
+      marginRight: .constant(20),
+      marginBottom: .constant(20)
     ),
-    RNILayoutPreset.offscreenTop.getLayoutConfig(
+    RNILayoutPreset.halfOffscreenTop.getLayoutConfig(
       fromBaseLayoutConfig: RNILayout(
         horizontalAlignment: .left,
         verticalAlignment: .top,
-        width: RNIComputableValue(
-          mode: .constant(constantValue: 100)
+        width: RNILayoutValue(
+          mode: .constant(100)
         ),
-        height: RNIComputableValue(
-          mode: .constant(constantValue: 100)
+        height: RNILayoutValue(
+          mode: .constant(100)
         )
-      ),
-      withTargetRect: self.view.frame,
-      currentSize: .zero
+      )
     ),
   ];
   
@@ -314,6 +312,10 @@ class RNILayoutTestViewController : UIViewController {
   
   var layoutConfig: RNILayout {
     return self.layoutConfigs[self.layoutConfigIndex];
+  };
+  
+  var layoutValueContext: RNILayoutValueContext? {
+    .init(fromTargetViewController: self)
   };
   
   lazy var floatingViewLabel: UILabel = {
@@ -371,11 +373,12 @@ class RNILayoutTestViewController : UIViewController {
   };
   
   func updateFloatingView(){
+    guard let layoutValueContext = self.layoutValueContext else { return };
+    
     let layoutConfig = self.layoutConfig;
     
     let computedRect = layoutConfig.computeRect(
-      withTargetRect: self.view.frame,
-      currentSize: CGSize(width: 300, height: 300)
+      usingLayoutValueContext: layoutValueContext
     );
     
     let floatingView = self.floatingView;

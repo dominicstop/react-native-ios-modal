@@ -35,15 +35,8 @@ enum RNILayoutPreset {
   // ---------------
   
   func getLayoutConfig(
-    fromBaseLayoutConfig baseLayoutConfig: RNILayout,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
+    fromBaseLayoutConfig baseLayoutConfig: RNILayout
   ) -> RNILayout {
-  
-    let baseRect = baseLayoutConfig.computeRect(
-      withTargetRect: targetRect,
-      currentSize: currentSize
-    );
   
     switch self {
       case .offscreenBottom:
@@ -55,21 +48,30 @@ enum RNILayoutPreset {
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .top,
-          marginTop: -baseRect.height
+          marginTop: .percent(
+            relativeTo: .currentHeight,
+            percentValue: -1
+          )
         );
       
       case .offscreenLeft:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .left,
-          marginLeft: -baseRect.width
+          marginLeft: .percent(
+            relativeTo: .currentWidth,
+            percentValue: -1
+          )
         );
       
       case .offscreenRight:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .right,
-          marginRight: baseRect.width
+          marginRight: .percent(
+            relativeTo: .currentWidth,
+            percentValue: 1
+          )
         );
       
       case .edgeBottom:
@@ -82,28 +84,40 @@ enum RNILayoutPreset {
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .top,
-          marginTop: baseRect.height / 2
+          marginTop: .percent(
+            relativeTo: .currentHeight,
+            percentValue: 0.5
+          )
         );
       
       case .halfOffscreenTop:
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .top,
-          marginTop: -(baseRect.height / 2)
+          marginTop: .percent(
+              relativeTo: .currentHeight,
+              percentValue: -0.5
+            )
         );
         
       case .halfOffscreenLeft:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .left,
-          marginLeft: -(baseRect.width / 2)
+          marginLeft: .percent(
+            relativeTo: .currentWidth,
+            percentValue: -0.5
+          )
         );
         
       case .halfOffscreenRight:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .right,
-          marginRight: baseRect.width / 2
+          marginRight: .percent(
+            relativeTo: .currentWidth,
+            percentValue: 0.5
+          )
         );
       
       case .edgeTop:
@@ -135,10 +149,10 @@ enum RNILayoutPreset {
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .center,
           verticalAlignment: .center,
-          width: RNIComputableValue(
+          width: RNILayoutValue(
             mode: .stretch
           ),
-          height: RNIComputableValue(
+          height: RNILayoutValue(
             mode: .stretch
           )
         );
@@ -146,7 +160,7 @@ enum RNILayoutPreset {
       case .fitScreenHorizontally:
         return .init(
           derivedFrom: baseLayoutConfig,
-          width: RNIComputableValue(
+          width: RNILayoutValue(
             mode: .stretch
           )
         );
@@ -154,7 +168,7 @@ enum RNILayoutPreset {
       case .fitScreenVertically:
         return .init(
           derivedFrom: baseLayoutConfig,
-          height: RNIComputableValue(
+          height: RNILayoutValue(
             mode: .stretch
           )
         );

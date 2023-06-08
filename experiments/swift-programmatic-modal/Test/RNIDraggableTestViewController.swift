@@ -27,10 +27,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .percent(percentValue: 0.8)
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.2)
               )
             ),
@@ -48,10 +48,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .percent(percentValue: 0.8)
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.4)
               )
             ),
@@ -68,10 +68,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .percent(percentValue: 0.8)
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.6)
               )
             ),
@@ -96,10 +96,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
                 horizontalAlignment: .center,
                 verticalAlignment: .bottom,
-                width: RNIComputableValue(
+                width: RNILayoutValue(
                   mode: .stretch
                 ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.1)
               )
             )
@@ -108,10 +108,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.3)
               )
             )
@@ -120,10 +120,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.7)
               )
             )
@@ -138,10 +138,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.3)
               )
             ),
@@ -159,13 +159,13 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .center,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .percent(percentValue: 0.7),
-                maxValue: ScreenSize.iPhone8.size.width
+                maxValue: .constant(ScreenSize.iPhone8.size.width)
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.7),
-                maxValue: ScreenSize.iPhone8.size.height
+                maxValue: .constant(ScreenSize.iPhone8.size.height)
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
@@ -196,10 +196,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.3)
               )
             ),
@@ -225,15 +225,15 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.5)
               ),
-              marginLeft: 15,
-              marginRight: 15,
-              marginBottom: 15
+              marginLeft: .constant(15),
+              marginRight: .constant(15),
+              marginBottom: .constant(15)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 0.5,
@@ -258,13 +258,13 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .center,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .percent(percentValue: 0.85),
-                maxValue: ScreenSize.iPhone8.size.width
+                maxValue: .constant(ScreenSize.iPhone8.size.width)
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.75),
-                maxValue: ScreenSize.iPhone8.size.height
+                maxValue: .constant(ScreenSize.iPhone8.size.height)
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
@@ -288,12 +288,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNIComputableValue(
+              width: RNILayoutValue(
                 mode: .stretch
               ),
-              height: RNIComputableValue(
+              height: RNILayoutValue(
                 mode: .percent(percentValue: 0.95),
-                maxValue: ScreenSize.iPhone8.size.height
+                maxValue: .constant(ScreenSize.iPhone8.size.height)
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(

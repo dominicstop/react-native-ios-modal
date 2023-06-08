@@ -88,16 +88,14 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     usingModalConfig modalConfig: AdaptiveModalConfig,
     snapPointIndex: Int,
     percent: CGFloat? = nil,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize,
+    layoutValueContext context: RNILayoutValueContext,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     prevInterpolationPoint keyframePrev: Self? = nil
   ) {
     self.snapPointIndex = snapPointIndex;
     
     let computedRect = snapPointConfig.snapPoint.computeRect(
-      withTargetRect: targetRect,
-      currentSize: currentSize
+      usingLayoutValueContext: context
     );
     
     self.computedRect = computedRect;
@@ -106,7 +104,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       switch modalConfig.snapPercentStrategy {
         case .position:
           let maxRangeInput =
-            targetRect[keyPath: modalConfig.maxInputRangeKeyForRect];
+            context.targetRect[keyPath: modalConfig.maxInputRangeKeyForRect];
           
           let inputValue =
             computedRect.origin[keyPath: modalConfig.inputValueKeyForPoint];
@@ -280,8 +278,7 @@ extension AdaptiveModalInterpolationPoint {
 
   static func compute(
     usingModalConfig modalConfig: AdaptiveModalConfig,
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
+    layoutValueContext context: RNILayoutValueContext
   ) -> [Self] {
 
     var items: [AdaptiveModalInterpolationPoint] = [];
@@ -310,8 +307,7 @@ extension AdaptiveModalInterpolationPoint {
         AdaptiveModalInterpolationPoint(
           usingModalConfig: modalConfig,
           snapPointIndex: index,
-          withTargetRect: targetRect,
-          currentSize: currentSize,
+          layoutValueContext: context,
           snapPointConfig: snapConfig,
           prevInterpolationPoint: items.last
         )
@@ -323,17 +319,14 @@ extension AdaptiveModalInterpolationPoint {
       
       let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
         fromSnapPointPreset: modalConfig.overshootSnapPoint,
-        fromBaseLayoutConfig: prevSnapPointConfig.snapPoint,
-        withTargetRect: targetRect,
-        currentSize: currentSize
+        fromBaseLayoutConfig: prevSnapPointConfig.snapPoint
       );
       
       return AdaptiveModalInterpolationPoint(
         usingModalConfig: modalConfig,
         snapPointIndex: modalConfig.snapPointLastIndex + 1,
         percent: 1,
-        withTargetRect: targetRect,
-        currentSize: currentSize,
+        layoutValueContext: context,
         snapPointConfig: overshootSnapPointConfig,
         prevInterpolationPoint: items.last
       );

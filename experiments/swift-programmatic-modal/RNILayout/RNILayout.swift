@@ -21,61 +21,56 @@ public struct RNILayout {
   // ------------------
   
   public let horizontalAlignment: HorizontalAlignment;
-  public let verticalAlignment: VerticalAlignment;
+  public let verticalAlignment  : VerticalAlignment;
   
-  public let width: RNIComputableValue;
-  public let height: RNIComputableValue;
+  public let width : RNILayoutValue;
+  public let height: RNILayoutValue;
   
-  public let marginLeft: CGFloat?;
-  public let marginRight: CGFloat?;
-  public let marginTop: CGFloat?;
-  public let marginBottom: CGFloat?;
-  
-  // MARK: - Computed Properties
-  // ---------------------------
-  
-  public var marginHorizontal: CGFloat {
-    (self.marginLeft ?? 0) + (self.marginRight ?? 0)
-  };
-  
-  public var marginVertical: CGFloat {
-    (self.marginTop ?? 0) + (self.marginBottom ?? 0)
-  };
+  public let marginLeft  : RNILayoutValueMode?;
+  public let marginRight : RNILayoutValueMode?;
+  public let marginTop   : RNILayoutValueMode?;
+  public let marginBottom: RNILayoutValueMode?;
   
   // MARK: - Init
   // ------------
   
   init(
     horizontalAlignment: HorizontalAlignment,
-    verticalAlignment: VerticalAlignment,
-    width: RNIComputableValue,
-    height: RNIComputableValue,
-    marginLeft: CGFloat? = nil,
-    marginRight: CGFloat? = nil,
-    marginTop: CGFloat? = nil,
-    marginBottom: CGFloat? = nil
+    verticalAlignment  : VerticalAlignment,
+    
+    width : RNILayoutValue,
+    height: RNILayoutValue,
+    
+    marginLeft  : RNILayoutValueMode? = nil,
+    marginRight : RNILayoutValueMode? = nil,
+    marginTop   : RNILayoutValueMode? = nil,
+    marginBottom: RNILayoutValueMode? = nil
   ) {
     self.horizontalAlignment = horizontalAlignment;
-    self.verticalAlignment = verticalAlignment;
-    self.width = width;
+    self.verticalAlignment   = verticalAlignment;
+    
+    self.width  = width;
     self.height = height;
-    self.marginLeft = marginLeft;
-    self.marginRight = marginRight;
-    self.marginTop = marginTop;
+    
+    self.marginLeft   = marginLeft;
+    self.marginRight  = marginRight;
+    self.marginTop    = marginTop;
     self.marginBottom = marginBottom;
   };
   
   init(
     derivedFrom prev: Self,
     horizontalAlignment: HorizontalAlignment? = nil,
-    verticalAlignment: VerticalAlignment? = nil,
-    width: RNIComputableValue? = nil,
-    height: RNIComputableValue? = nil,
-    marginLeft: CGFloat? = nil,
-    marginRight: CGFloat? = nil,
-    marginTop: CGFloat? = nil,
-    marginBottom: CGFloat? = nil
-  ){
+    verticalAlignment  : VerticalAlignment? = nil,
+    
+    width : RNILayoutValue? = nil,
+    height: RNILayoutValue? = nil,
+    
+    marginLeft  : RNILayoutValueMode? = nil,
+    marginRight : RNILayoutValueMode? = nil,
+    marginTop   : RNILayoutValueMode? = nil,
+    marginBottom: RNILayoutValueMode? = nil
+  ) {
     self.horizontalAlignment = horizontalAlignment ?? prev.horizontalAlignment;
     self.verticalAlignment   = verticalAlignment   ?? prev.verticalAlignment;
     
@@ -95,43 +90,42 @@ public struct RNILayout {
   /// * Rect with the computed size based on `size` config.
   ///
   public func computeRawRectSize(
-    withTargetRect targetRect: CGRect,
-    currentSize:  CGSize
-  ) -> CGRect {
-    let targetSize = targetRect.size;
+    usingLayoutValueContext context: RNILayoutValueContext
+  ) -> CGSize {
   
-    let computedSize = CGSize(
-      width: self.width.compute(
-        withTargetValue: targetSize.width,
-        currentValue: currentSize.width
-      ),
-      height: self.height.compute(
-        withTargetValue: targetSize.height,
-        currentValue: currentSize.height
-      )
+    let computedWidth = self.width.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.width
+    );
+    
+    let computedHeight = self.height.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.height
     );
   
-    return CGRect(origin: .zero, size: computedSize);
+    return CGSize(
+      width : computedWidth  ?? 0,
+      height: computedHeight ?? 0
+    );
   };
   
   /// Compute Rect - Step 2
-  /// * Rect with the computed size based on `size` config.
-  ///
   /// * Rect with the origin based on `horizontalAlignment`, and
   ///   `verticalAlignment` config.
   ///
   public func computeRawRectOrigin(
-    forRect rect: CGRect? = nil,
+    usingLayoutValueContext context: RNILayoutValueContext,
     withTargetRect targetRect: CGRect,
-    currentSize: CGSize,
+    forRect rect: CGRect? = nil,
+    withSize size: CGSize? = nil,
     ignoreXAxis: Bool = false,
     ignoreYAxis: Bool = false
   ) -> CGRect {
   
-    var rect = rect ?? self.computeRawRectSize(
-      withTargetRect: targetRect,
-      currentSize: currentSize
-    );
+    let origin = rect?.origin ?? .zero;
+    let size = rect?.size ?? size ?? .zero;
+    
+    var rect = CGRect(origin: origin, size: size);
     
     if !ignoreXAxis {
       // Compute Origin - X
@@ -176,33 +170,67 @@ public struct RNILayout {
   /// * Rect with margins applied to it based on the margin-related properties
   ///
   public func computeRect(
-    withTargetRect targetRect: CGRect,
-    currentSize: CGSize
+    usingLayoutValueContext baseContext: RNILayoutValueContext
   ) -> CGRect {
+  
+    let computedSize = self.computeRawRectSize(
+      usingLayoutValueContext: baseContext
+    );
+  
     var rect = self.computeRawRectOrigin(
-      withTargetRect: targetRect,
-      currentSize: currentSize
+      usingLayoutValueContext: baseContext,
+      withTargetRect: baseContext.targetRect
+    );
+    
+    let context = RNILayoutValueContext(
+      derivedFrom: baseContext,
+      currentSize: computedSize
     );
     
     // Margin - X-Axis
     switch self.horizontalAlignment {
       case .left:
-        guard let marginLeft = self.marginLeft else { break };
+        let computedMarginLeft =
+          self.marginLeft?.compute(
+            usingLayoutValueContext: context,
+            preferredSizeKey: \.width
+          );
+      
+        guard let marginLeft = computedMarginLeft else { break };
         rect.origin.x = rect.origin.x + marginLeft;
         
       case .right:
-        guard let marginRight = self.marginRight else { break };
+        let computedMarginRight = self.marginRight?.compute(
+          usingLayoutValueContext: context,
+          preferredSizeKey: \.width
+        );
+      
+        guard let marginRight = computedMarginRight else { break };
         rect.origin.x = rect.origin.x - marginRight;
         
       case .center:
         if case .stretch = self.width.mode {
-          rect.size.width = rect.size.width - self.marginHorizontal;
+          let computedMarginHorizontal: CGFloat = {
+            let computedMarginLeft = self.marginLeft?.compute(
+              usingLayoutValueContext: context,
+              preferredSizeKey: \.width
+            );
+              
+            let computedMarginRight = self.marginRight?.compute(
+              usingLayoutValueContext: context,
+              preferredSizeKey: \.width
+            );
+              
+            return (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
+          }();
+        
+          rect.size.width = rect.size.width - computedMarginHorizontal;
           
           // re-compute origin
           rect = self.computeRawRectOrigin(
+            usingLayoutValueContext: context,
+            withTargetRect: context.targetRect,
             forRect: rect,
-            withTargetRect: targetRect,
-            currentSize: currentSize,
             ignoreYAxis: true
           );
         };
@@ -211,22 +239,46 @@ public struct RNILayout {
     // Margin - Y-Axis
     switch self.verticalAlignment {
       case .top:
-        guard let marginTop = self.marginTop else { break };
+        let computedMarginTop = self.marginTop?.compute(
+          usingLayoutValueContext: context,
+          preferredSizeKey: \.height
+        );
+          
+        guard let marginTop = computedMarginTop else { break };
         rect.origin.y = rect.origin.y + marginTop;
         
       case .bottom:
-        guard let marginBottom = self.marginBottom else { break };
+        let computedMarginBottom = self.marginBottom?.compute(
+          usingLayoutValueContext: context,
+          preferredSizeKey: \.height
+        );
+          
+        guard let marginBottom = computedMarginBottom else { break };
         rect.origin.y = rect.origin.y - marginBottom;
         
       case .center:
         if case .stretch = self.height.mode {
-          rect.size.height = rect.size.height - self.marginVertical;
-          
+          let computedMargiVertical: CGFloat = {
+            let computedMarginTop = self.marginTop?.compute(
+              usingLayoutValueContext: context,
+              preferredSizeKey: \.height
+            );
+              
+            let computedMarginBottom = self.marginBottom?.compute(
+              usingLayoutValueContext: context,
+              preferredSizeKey: \.height
+            );
+              
+            return (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
+          }();
+        
+          rect.size.height = rect.size.height - computedMargiVertical;
+
           // re-compute origin
           rect = self.computeRawRectOrigin(
+            usingLayoutValueContext: context,
+            withTargetRect: context.targetRect,
             forRect: rect,
-            withTargetRect: targetRect,
-            currentSize: currentSize,
             ignoreXAxis: true
           );
         };

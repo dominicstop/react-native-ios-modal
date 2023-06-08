@@ -191,6 +191,18 @@ class AdaptiveModalManager: NSObject {
     return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
   };
   
+  var layoutValueContext: RNILayoutValueContext? {
+    if let targetVC = self.targetViewController {
+      return .init(fromTargetViewController: targetVC);
+    };
+    
+    if let targetView = self.targetView {
+      return .init(fromTargetView: targetView);
+    };
+    
+    return nil;
+  };
+  
   // MARK: - Init
   // ------------
   
@@ -1073,20 +1085,17 @@ class AdaptiveModalManager: NSObject {
     self.setupViewConstraints();
   };
   
-  func computeSnapPoints(forTargetView nextTargetView: UIView? = nil) {
-    if nextTargetView != nil {
-      self.targetView = nextTargetView;
-    };
-  
-    guard let targetView = nextTargetView ?? self.targetView
+  func computeSnapPoints(
+    usingLayoutValueContext context: RNILayoutValueContext? = nil
+  ) {
+    guard let context = context ?? self.layoutValueContext
     else { return };
     
     let currentSize = self.currentSizeProvider?() ?? .zero;
     
     self.interpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,
-      withTargetRect: targetView.frame,
-      currentSize: currentSize
+      layoutValueContext: context
     );
   };
   

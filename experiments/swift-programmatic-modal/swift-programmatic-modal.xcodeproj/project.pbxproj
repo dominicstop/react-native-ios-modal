@@ -14,6 +14,10 @@
 		884A18FA2A3146CA0044AA66 /* AdaptiveModalManager+UIViewControllerTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884A18F92A3146CA0044AA66 /* AdaptiveModalManager+UIViewControllerTransitioningDelegate.swift */; };
 		884A18FC2A3146FC0044AA66 /* AdaptiveModalManager+UIViewControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884A18FB2A3146FC0044AA66 /* AdaptiveModalManager+UIViewControllerAnimatedTransitioning.swift */; };
 		884A18FE2A31472E0044AA66 /* AdaptiveModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884A18FD2A31472E0044AA66 /* AdaptiveModalPresentationController.swift */; };
+		886AFCAB2A31FF40004AC9FB /* RNILayoutValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAA2A31FF40004AC9FB /* RNILayoutValue.swift */; };
+		886AFCAD2A3209D5004AC9FB /* RNILayoutValueMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */; };
+		886AFCAF2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */; };
+		886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
 		88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0F029C593F400490628 /* SceneDelegate.swift */; };
 		88B7D0F829C593F600490628 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88B7D0F729C593F600490628 /* Assets.xcassets */; };
@@ -106,6 +110,10 @@
 		884A18F92A3146CA0044AA66 /* AdaptiveModalManager+UIViewControllerTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdaptiveModalManager+UIViewControllerTransitioningDelegate.swift"; sourceTree = "<group>"; };
 		884A18FB2A3146FC0044AA66 /* AdaptiveModalManager+UIViewControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdaptiveModalManager+UIViewControllerAnimatedTransitioning.swift"; sourceTree = "<group>"; };
 		884A18FD2A31472E0044AA66 /* AdaptiveModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalPresentationController.swift; sourceTree = "<group>"; };
+		886AFCAA2A31FF40004AC9FB /* RNILayoutValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValue.swift; sourceTree = "<group>"; };
+		886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueMode.swift; sourceTree = "<group>"; };
+		886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValuePercentTarget.swift; sourceTree = "<group>"; };
+		886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueContext.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B7D0EE29C593F400490628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88B7D0F029C593F400490628 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -418,6 +426,10 @@
 			children = (
 				88D017D72A1B302F004664D2 /* RNILayout.swift */,
 				88E8C01B2A23203E008C2FF8 /* RNILayoutPreset.swift */,
+				886AFCAA2A31FF40004AC9FB /* RNILayoutValue.swift */,
+				886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */,
+				886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */,
+				886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */,
 			);
 			path = RNILayout;
 			sourceTree = "<group>";
@@ -626,6 +638,7 @@
 				88D018342A1B3030004664D2 /* UIModalPresentationStyle+Init.swift in Sources */,
 				884A18F82A30516B0044AA66 /* AdaptiveModalPresentationTestViewController.swift in Sources */,
 				88D0186B2A1B3030004664D2 /* RNIModalPresentationNotifiable.swift in Sources */,
+				886AFCAB2A31FF40004AC9FB /* RNILayoutValue.swift in Sources */,
 				88D018552A1B3030004664D2 /* RNIWeakRef.swift in Sources */,
 				88D018652A1B3030004664D2 /* RNIViewControllerLifeCycleNotifiable+Default.swift in Sources */,
 				88D0168D2A1730B1004664D2 /* RNILayoutTestViewController.swift in Sources */,
@@ -645,6 +658,7 @@
 				88D0183A2A1B3030004664D2 /* CAAnimation+Helpers.swift in Sources */,
 				88D018582A1B3030004664D2 /* RNIObjectMetadata.swift in Sources */,
 				88D0187A2A1B3030004664D2 /* RNIComputableOffset.swift in Sources */,
+				886AFCAD2A3209D5004AC9FB /* RNILayoutValueMode.swift in Sources */,
 				88D018382A1B3030004664D2 /* UIModalTransitionStyle+Helpers.swift in Sources */,
 				88D0184A2A1B3030004664D2 /* RNILayout.swift in Sources */,
 				88D018472A1B3030004664D2 /* RNIDictionarySynthesizable+Default.swift in Sources */,
@@ -665,6 +679,7 @@
 				88D0183E2A1B3030004664D2 /* CAAnimation+Block.swift in Sources */,
 				88D0184C2A1B3030004664D2 /* RNIAnimator.swift in Sources */,
 				88D018362A1B3030004664D2 /* CGSize+Init.swift in Sources */,
+				886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */,
 				88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */,
 				88D018222A1B3030004664D2 /* UIImage+Init.swift in Sources */,
 				88D018702A1B3030004664D2 /* RNIModalFlags.swift in Sources */,
@@ -681,6 +696,7 @@
 				88D0185B2A1B3030004664D2 /* RNIIdentifiable+Default.swift in Sources */,
 				88C2F4622A2CD81F00DA7450 /* AdaptiveModalEventNotifiable.swift in Sources */,
 				88D018762A1B3030004664D2 /* RNIComputableSizeMode.swift in Sources */,
+				886AFCAF2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift in Sources */,
 				88D018262A1B3030004664D2 /* UIColor+Helpers.swift in Sources */,
 				88E8C0182A224A8D008C2FF8 /* AdaptiveModalSnapAnimationConfig.swift in Sources */,
 				88D018562A1B3030004664D2 /* RNIWeakDictionary.swift in Sources */,
