@@ -103,12 +103,6 @@ public struct RNILayout {
       preferredSizeKey: \.height
     );
     
-    print(
-      "computeRawRectSize"
-      + "\n - computedWidth: \(computedWidth)"
-      + "\n - computedHeight: \(computedHeight)"
-    );
-  
     return CGSize(
       width : computedWidth  ?? 0,
       height: computedHeight ?? 0
@@ -213,18 +207,7 @@ public struct RNILayout {
       
     let computedMargiVertical =
       (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
-      
-    print(
-      "computeRect"
-      + "\n - computedMarginLeft: \(computedMarginLeft)"
-      + "\n - computedMarginRight: \(computedMarginRight)"
-      + "\n - computedMarginTop: \(computedMarginTop)"
-      + "\n - computedMarginBottom: \(computedMarginBottom)"
-      + "\n - computedMarginHorizontal: \(computedMarginHorizontal)"
-      + "\n - computedMargiVertical: \(computedMargiVertical)"
-    );
-  
-    
+   
     // Margin - X-Axis
     switch self.horizontalAlignment {
       case .left:

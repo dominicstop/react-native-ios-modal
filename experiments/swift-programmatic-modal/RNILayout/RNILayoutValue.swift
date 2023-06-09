@@ -113,12 +113,6 @@ public struct RNILayoutValue {
       toValue: computedValueRaw ?? 0
     );
     
-    print(
-      "RNILayoutValue.computeValue"
-      + "\n - computedValueRaw: \(computedValueRaw)"
-      + "\n - computedValueWithOffsets: \(computedValueWithOffsets)"
-    );
-    
     return self.clampValue(
       usingLayoutValueContext: context,
       forValue: computedValueWithOffsets ?? 0

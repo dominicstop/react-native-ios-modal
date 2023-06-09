@@ -31,7 +31,9 @@ class RNILayoutTestViewController : UIViewController {
       ),
       height: RNILayoutValue(
         mode: .constant(100)
-      )
+      ),
+      marginLeft: .safeAreaInsets(insetKey: \.left),
+      marginTop: .safeAreaInsets(insetKey: \.top)
     ),
     // 1 B
     RNILayout(
@@ -42,7 +44,9 @@ class RNILayoutTestViewController : UIViewController {
       ),
       height: RNILayoutValue(
         mode: .constant(100)
-      )
+      ),
+      marginRight: .safeAreaInsets(insetKey: \.right),
+      marginTop: .safeAreaInsets(insetKey: \.top)
     ),
     // 2 C
     RNILayout(
@@ -379,11 +383,6 @@ class RNILayoutTestViewController : UIViewController {
     
     let computedRect = layoutConfig.computeRect(
       usingLayoutValueContext: layoutValueContext
-    );
-    
-    print(
-      "updateFloatingView"
-      + "\n - computedRect: \(computedRect)"
     );
     
     let floatingView = self.floatingView;
