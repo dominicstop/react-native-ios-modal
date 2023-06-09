@@ -41,7 +41,12 @@ enum RNILayoutPreset {
     switch self {
       case .offscreenBottom:
         return .init(
-          derivedFrom: baseLayoutConfig
+          derivedFrom: baseLayoutConfig,
+          verticalAlignment: .bottom,
+          marginBottom: .percent(
+            relativeTo: .currentHeight,
+            percentValue: -1
+          )
         );
       
       case .offscreenTop:

@@ -8,6 +8,12 @@
 import UIKit
 
 public struct RNILayoutValueContext {
+  static let `default`: Self = .init(
+    targetRect: .zero,
+    windowSize: nil,
+    currentSize: nil,
+    safeAreaInsets: nil
+  );
 
   let targetRect: CGRect;
 

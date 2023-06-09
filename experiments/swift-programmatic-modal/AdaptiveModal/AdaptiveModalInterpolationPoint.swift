@@ -123,6 +123,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       };
     }();
     
+    let isFirstSnapPoint = snapPointIndex == 0;
     let keyframeCurrent = snapPointConfig.animationKeyframe;
     
     self.modalRotation = keyframeCurrent?.modalRotation
@@ -174,7 +175,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       
     self.modalBackgroundVisualEffectIntensity = keyframeCurrent?.modalBackgroundVisualEffectIntensity
       ?? keyframePrev?.modalBackgroundVisualEffectIntensity
-      ?? 1;
+      ?? (isFirstSnapPoint ? 0 : 1);
       
     self.backgroundColor = keyframeCurrent?.backgroundColor
       ?? keyframePrev?.backgroundColor
@@ -193,7 +194,7 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       
     self.backgroundVisualEffectIntensity = keyframeCurrent?.backgroundVisualEffectIntensity
       ?? keyframePrev?.backgroundVisualEffectIntensity
-      ?? 1;
+      ?? (isFirstSnapPoint ? 0 : 1);
   };
   
   // MARK: - Functions
@@ -283,25 +284,6 @@ extension AdaptiveModalInterpolationPoint {
 
     var items: [AdaptiveModalInterpolationPoint] = [];
     
-//    items.append({
-//      let nextSnapPointConfig = modalConfig.snapPoints.first!;
-//
-//      let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
-//        fromSnapPointPreset: modalConfig.initialSnapPoint,
-//        fromBaseLayoutConfig: nextSnapPointConfig.snapPoint,
-//        withTargetRect: targetRect,
-//        currentSize: currentSize
-//      );
-//
-//      return AdaptiveModalInterpolationPoint(
-//        usingModalConfig: modalConfig,
-//        snapPointIndex: -1,
-//        withTargetRect: targetRect,
-//        currentSize: currentSize,
-//        snapPointConfig: initialSnapPointConfig
-//      );
-//    }());
-    
     for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
       items.append(
         AdaptiveModalInterpolationPoint(
@@ -313,24 +295,6 @@ extension AdaptiveModalInterpolationPoint {
         )
       );
     };
-    
-    items.append({
-      let prevSnapPointConfig = modalConfig.snapPoints.last!;
-      
-      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
-        fromSnapPointPreset: modalConfig.overshootSnapPoint,
-        fromBaseLayoutConfig: prevSnapPointConfig.snapPoint
-      );
-      
-      return AdaptiveModalInterpolationPoint(
-        usingModalConfig: modalConfig,
-        snapPointIndex: modalConfig.snapPointLastIndex + 1,
-        percent: 1,
-        layoutValueContext: context,
-        snapPointConfig: overshootSnapPointConfig,
-        prevInterpolationPoint: items.last
-      );
-    }());
     
     return items;
   };

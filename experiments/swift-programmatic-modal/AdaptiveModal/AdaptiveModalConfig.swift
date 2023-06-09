@@ -23,7 +23,7 @@ struct AdaptiveModalConfig {
   // MARK: - Properties
   // ------------------
   
-  let snapPoints: [AdaptiveModalSnapPointConfig];
+  let baseSnapPoints: [AdaptiveModalSnapPointConfig];
   let snapDirection: Direction;
   
   let snapPercentStrategy: SnapPercentStrategy;
@@ -38,6 +38,32 @@ struct AdaptiveModalConfig {
   
   // let entranceConfig: AdaptiveModalEntranceConfig;
   // let snapSwipeVelocityThreshold: CGFloat = 0;
+  
+  var snapPoints: [AdaptiveModalSnapPointConfig] {
+    var items: [AdaptiveModalSnapPointConfig] = [];
+    
+    if let snapPointFirst = self.baseSnapPoints.first {
+      let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: self.initialSnapPoint,
+        fromBaseLayoutConfig: snapPointFirst.snapPoint
+      );
+      
+      items.append(initialSnapPointConfig);
+    };
+    
+    items += self.baseSnapPoints;
+    
+    if let snapPointLast = self.baseSnapPoints.last {
+      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: self.overshootSnapPoint,
+        fromBaseLayoutConfig: snapPointLast.snapPoint
+      );
+      
+      items.append(overshootSnapPointConfig);
+    };
+    
+    return items;
+  };
   
   var snapPointLastIndex: Int {
     self.snapPoints.count - 1;
@@ -79,7 +105,7 @@ struct AdaptiveModalConfig {
     initialSnapPoint: AdaptiveModalSnapPointPreset? = nil,
     overshootSnapPoint: AdaptiveModalSnapPointPreset? = nil
   ) {
-    self.snapPoints = snapPoints;
+    self.baseSnapPoints = snapPoints;
     
     self.snapDirection = snapDirection;
     self.snapPercentStrategy = snapPercentStrategy;
