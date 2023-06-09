@@ -292,9 +292,9 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 mode: .stretch
               ),
               height: RNILayoutValue(
-                mode: .percent(percentValue: 0.95),
-                maxValue: .constant(ScreenSize.iPhone8.size.height)
-              )
+                mode: .stretch
+              ),
+              marginTop: .safeAreaInsets(insetKey: \.top)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBackgroundOpacity: 0.83,

@@ -154,7 +154,11 @@ enum RNILayoutPreset {
           ),
           height: RNILayoutValue(
             mode: .stretch
-          )
+          ),
+          marginLeft: .constant(0),
+          marginRight: .constant(0),
+          marginTop: .constant(0),
+          marginBottom: .constant(0)
         );
         
       case .fitScreenHorizontally:
@@ -162,7 +166,9 @@ enum RNILayoutPreset {
           derivedFrom: baseLayoutConfig,
           width: RNILayoutValue(
             mode: .stretch
-          )
+          ),
+          marginLeft: .constant(0),
+          marginRight: .constant(0)
         );
         
       case .fitScreenVertically:
@@ -170,7 +176,9 @@ enum RNILayoutPreset {
           derivedFrom: baseLayoutConfig,
           height: RNILayoutValue(
             mode: .stretch
-          )
+          ),
+          marginTop: .constant(0),
+          marginBottom: .constant(0)
         );
       
       case let .layoutConfig(config):

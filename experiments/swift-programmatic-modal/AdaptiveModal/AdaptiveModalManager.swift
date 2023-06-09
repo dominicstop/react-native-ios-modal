@@ -1088,10 +1088,7 @@ class AdaptiveModalManager: NSObject {
   func computeSnapPoints(
     usingLayoutValueContext context: RNILayoutValueContext? = nil
   ) {
-    guard let context = context ?? self.layoutValueContext
-    else { return };
-    
-    let currentSize = self.currentSizeProvider?() ?? .zero;
+    guard let context = context ?? self.layoutValueContext else { return };
     
     self.interpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,

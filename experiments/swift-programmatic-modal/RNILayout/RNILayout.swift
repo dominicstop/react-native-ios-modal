@@ -219,16 +219,7 @@ public struct RNILayout {
         rect.origin.x = rect.origin.x - marginRight;
         
       case .center:
-        if case .stretch = self.width.mode {
-          rect.size.width = rect.size.width - computedMarginHorizontal;
-          
-          // re-compute origin
-          rect = self.computeRawRectOrigin(
-            usingLayoutValueContext: context,
-            forRect: rect,
-            ignoreYAxis: true
-          );
-        };
+        break;
     };
     
     // Margin - Y-Axis
@@ -242,16 +233,39 @@ public struct RNILayout {
         rect.origin.y = rect.origin.y - marginBottom;
         
       case .center:
-        if case .stretch = self.height.mode {
-          rect.size.height = rect.size.height - computedMargiVertical;
-
-          // re-compute origin
-          rect = self.computeRawRectOrigin(
-            usingLayoutValueContext: context,
-            forRect: rect,
-            ignoreXAxis: true
-          );
-        };
+        break;
+    };
+    
+    let shouldRecomputeXAxis: Bool = {
+      switch self.width.mode {
+        case .stretch: return true;
+        default: return false;
+      };
+    }();
+    
+    let shouldRecomputeYAxis: Bool = {
+      switch self.height.mode {
+        case .stretch: return true;
+        default: return false;
+      };
+    }();
+    
+    if shouldRecomputeXAxis {
+      rect.size.width = rect.size.width - computedMarginHorizontal;
+    };
+    
+    if shouldRecomputeYAxis {
+      rect.size.height = rect.size.height - computedMargiVertical;
+    };
+    
+    if shouldRecomputeXAxis || shouldRecomputeYAxis {
+      // re-compute origin
+      rect = self.computeRawRectOrigin(
+        usingLayoutValueContext: context,
+        forRect: rect,
+        ignoreXAxis: !shouldRecomputeXAxis,
+        ignoreYAxis: !shouldRecomputeYAxis
+      );
     };
     
     return rect;
