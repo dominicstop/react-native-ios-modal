@@ -68,7 +68,7 @@ class AdaptiveModalManager: NSObject {
   // ------------------------------------------
   
  /// The computed frames of the modal based on the snap points
-  private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]!;
+  private(set) var rawInterpolationSteps: [AdaptiveModalInterpolationPoint]!;
   
   var prevInterpolationIndex = 0;
   var nextInterpolationIndex: Int?;
@@ -84,13 +84,12 @@ class AdaptiveModalManager: NSObject {
   };
   
   // sorted based on the modal direction
-  var interpolationStepsSorted: [AdaptiveModalInterpolationPoint]? {
-    guard let interpolationSteps = self.interpolationSteps else { return nil };
-    return self.modalConfig.sortInterpolationSteps(interpolationSteps);
+  var interpolationSteps: [AdaptiveModalInterpolationPoint]! {
+    self.modalConfig.sortInterpolationSteps(self.rawInterpolationSteps);
   };
   
-  var interpolationRangeInput: [CGFloat]? {
-    self.interpolationStepsSorted?.map {
+  var interpolationRangeInput: [CGFloat]! {
+    self.interpolationSteps.map {
       $0.percent
     };
   };
@@ -393,7 +392,7 @@ class AdaptiveModalManager: NSObject {
     shouldClampMax: Bool = false
   ) -> CGFloat? {
   
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationSteps,
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
   
@@ -417,7 +416,7 @@ class AdaptiveModalManager: NSObject {
     shouldClampMax: Bool = false
   ) -> UIColor? {
   
-    guard let interpolationSteps      = rangeOutput ?? self.interpolationStepsSorted,
+    guard let interpolationSteps      = rangeOutput ?? self.interpolationSteps,
           let interpolationRangeInput = rangeInput  ?? self.interpolationRangeInput
     else { return nil };
   
@@ -1112,7 +1111,7 @@ class AdaptiveModalManager: NSObject {
   ) {
     let context = context ?? self.layoutValueContext;
     
-    self.interpolationSteps = .Element.compute(
+    self.rawInterpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,
       layoutValueContext: context
     );
