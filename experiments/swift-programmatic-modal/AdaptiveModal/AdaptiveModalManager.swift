@@ -19,8 +19,8 @@ class AdaptiveModalManager: NSObject {
   var shouldSnapToOvershootSnapPoint = false;
   var shouldSnapToInitialSnapPoint = false;
   
-  // MARK: -  Properties - Views/View Controllers
-  // --------------------------------------------
+  // MARK: -  Properties - Layout-Related
+  // ------------------------------------
   
   weak var modalViewController: UIViewController?;
   weak var targetViewController: UIViewController?;
@@ -31,51 +31,13 @@ class AdaptiveModalManager: NSObject {
   lazy var dummyModalView = UIView();
   lazy var modalWrapperView = UIView();
   
+  var prevModalFrame: CGRect = .zero;
+  
   var modalBackgroundView: UIView?;
   var modalBackgroundVisualEffectView: UIVisualEffectView?;
   
   var backgroundDimmingView: UIView?;
   var backgroundVisualEffectView: UIVisualEffectView?;
-  
-  // MARK: -  Properties - Animation + Gesture Related
-  // -------------------------------------------------
-  
-  var animator: UIViewPropertyAnimator?;
-  var displayLink: CADisplayLink?;
-  
-  var displayLinkStartTimestamp: CFTimeInterval?;
-  
-  var gestureOffset: CGPoint?;
-  var gestureVelocity: CGPoint?;
-  var gestureInitialPoint: CGPoint?;
-  var gesturePoint: CGPoint?;
-  
-  var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
-  var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
-  
-  // MARK: -  Properties
-  // -------------------
-  
-  weak var eventDelegate: AdaptiveModalEventNotifiable?;
-  
-  var currentSizeProvider: (() -> CGSize)?;
-  
-  var prevModalFrame: CGRect = .zero;
-  
-   /// The computed frames of the modal based on the snap points
-  private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]!;
-  
-  var prevInterpolationIndex = 0;
-  var nextInterpolationIndex: Int?;
-  
-  var currentInterpolationIndex = 1 {
-    didSet {
-      self.prevInterpolationIndex = oldValue;
-    }
-  };
-
-  // MARK: - Computed Properties
-  // ---------------------------
   
   var modalFrame: CGRect! {
     set {
@@ -90,35 +52,80 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var isSwiping: Bool {
-    self.gestureInitialPoint != nil
+  var layoutValueContext: RNILayoutValueContext {
+    if let targetVC = self.targetViewController {
+      return .init(fromTargetViewController: targetVC) ?? .default;
+    };
+    
+    if let targetView = self.targetView {
+      return .init(fromTargetView: targetView) ?? .default;
+    };
+    
+    return .default;
   };
   
-  var isAnimating: Bool {
-     self.animator != nil || (self.animator?.isRunning ?? false);
+  // MARK: -  Properties - Interpolation Points
+  // ------------------------------------------
+  
+ /// The computed frames of the modal based on the snap points
+  private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]!;
+  
+  var prevInterpolationIndex = 0;
+  var nextInterpolationIndex: Int?;
+  
+  var currentInterpolationIndex = 1 {
+    didSet {
+      self.prevInterpolationIndex = oldValue;
+    }
   };
+  
+  var currentInterpolationStep: AdaptiveModalInterpolationPoint {
+    self.interpolationSteps[self.currentInterpolationIndex];
+  };
+  
+  // sorted based on the modal direction
+  var interpolationStepsSorted: [AdaptiveModalInterpolationPoint]? {
+    guard let interpolationSteps = self.interpolationSteps else { return nil };
+    return self.modalConfig.sortInterpolationSteps(interpolationSteps);
+  };
+  
+  var interpolationRangeInput: [CGFloat]? {
+    self.interpolationStepsSorted?.map {
+      $0.percent
+    };
+  };
+  
+  var interpolationRangeMaxInput: CGFloat? {
+    guard let targetView = self.targetView else { return nil };
+    return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
+  };
+  
+  // MARK: -  Properties - Animation-Related
+  // ---------------------------------------
+  
+  var modalAnimator: UIViewPropertyAnimator?;
+
+  var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
+  var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
+  
+  var displayLink: CADisplayLink?;
+  var displayLinkStartTimestamp: CFTimeInterval?;
   
   var displayLinkEndTimestamp: CFTimeInterval? {
-    guard let animator = self.animator,
+    guard let animator = self.modalAnimator,
           let displayLinkStartTimestamp = self.displayLinkStartTimestamp
     else { return nil };
     
     return displayLinkStartTimestamp + animator.duration;
   };
   
-  var currentSnapPointIndex: Int {
-    self.currentInterpolationStep.snapPointIndex
-  };
+  // MARK: -  Properties - Gesture-Related
+  // -------------------------------------
   
-  var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
-    self.modalConfig.snapPoints[
-      self.currentInterpolationStep.snapPointIndex
-    ];
-  };
-  
-  var currentInterpolationStep: AdaptiveModalInterpolationPoint {
-    self.interpolationSteps[self.currentInterpolationIndex];
-  };
+  var gestureOffset: CGPoint?;
+  var gestureVelocity: CGPoint?;
+  var gestureInitialPoint: CGPoint?;
+  var gesturePoint: CGPoint?;
   
   var gestureInitialVelocity: CGVector? {
     guard let gestureInitialPoint = self.gestureInitialPoint,
@@ -180,36 +187,33 @@ class AdaptiveModalManager: NSObject {
     
     return CGPoint(x: nextX, y: nextY);
   };
+  
+  // MARK: -  Properties
+  // -------------------
+  
+  weak var eventDelegate: AdaptiveModalEventNotifiable?;
 
-  // sorted based on the modal direction
-  var interpolationStepsSorted: [AdaptiveModalInterpolationPoint]? {
-    guard let interpolationSteps = self.interpolationSteps else { return nil };
-    return self.modalConfig.sortInterpolationSteps(interpolationSteps);
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  var isSwiping: Bool {
+    self.gestureInitialPoint != nil
   };
   
-  var interpolationRangeInput: [CGFloat]? {
-    self.interpolationStepsSorted?.map {
-      $0.percent
-    };
+  var isAnimating: Bool {
+     self.modalAnimator != nil || (self.modalAnimator?.isRunning ?? false);
   };
   
-  var interpolationRangeMaxInput: CGFloat? {
-    guard let targetView = self.targetView else { return nil };
-    return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
+  var currentSnapPointIndex: Int {
+    self.currentInterpolationStep.snapPointIndex
   };
   
-  var layoutValueContext: RNILayoutValueContext {
-    if let targetVC = self.targetViewController {
-      return .init(fromTargetViewController: targetVC) ?? .default;
-    };
-    
-    if let targetView = self.targetView {
-      return .init(fromTargetView: targetView) ?? .default;
-    };
-    
-    return .default;
+  var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
+    self.modalConfig.snapPoints[
+      self.currentInterpolationStep.snapPointIndex
+    ];
   };
-  
+
   // MARK: - Init
   // ------------
   
@@ -223,9 +227,7 @@ class AdaptiveModalManager: NSObject {
     
     self.modalView = modalView;
     self.targetView = targetView;
-    
-    self.currentSizeProvider = currentSizeProvider ?? { .zero };
-  
+
     super.init();
     
     self.computeSnapPoints();
@@ -911,7 +913,7 @@ class AdaptiveModalManager: NSObject {
       );
     }();
     
-    self.animator = animator;
+    self.modalAnimator = animator;
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
@@ -930,7 +932,7 @@ class AdaptiveModalManager: NSObject {
     };
     
     animator.addCompletion { _ in
-      self.animator = nil;
+      self.modalAnimator = nil;
     };
 
     animator.startAnimation();
@@ -1095,8 +1097,6 @@ class AdaptiveModalManager: NSObject {
     self.modalView = viewControllerToPresent.view;
     self.targetView = presentingViewController.view;
     
-    self.currentSizeProvider = currentSizeProvider ?? { .zero };
-    
     self.setupViewControllers();
     self.setupDummyModalView();
     self.setupInitViews();
@@ -1126,7 +1126,7 @@ class AdaptiveModalManager: NSObject {
         self.gestureInitialPoint = gesturePoint;
     
       case .changed:
-        self.animator?.stopAnimation(true);
+        self.modalAnimator?.stopAnimation(true);
         
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         self.onModalWillSnap();
@@ -1187,10 +1187,7 @@ class AdaptiveModalManager: NSObject {
         );
       };
       
-      return (
-        self.currentInterpolationIndex,
-        self.currentInterpolationStep
-      );
+      return (1, self.interpolationSteps[1]);
     }();
     
     let prevFrame = self.modalFrame;
