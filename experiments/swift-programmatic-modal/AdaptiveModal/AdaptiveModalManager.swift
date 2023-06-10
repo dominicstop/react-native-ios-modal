@@ -230,8 +230,13 @@ class AdaptiveModalManager: NSObject {
     super.init();
     
     self.computeSnapPoints();
+    
     self.setupInitViews();
     self.setupDummyModalView();
+    self.setupGestureHandler();
+    
+    self.setupAddViews();
+    self.setupViewConstraints();
   };
   
   init(modalConfig: AdaptiveModalConfig) {
@@ -265,6 +270,17 @@ class AdaptiveModalManager: NSObject {
     self.backgroundVisualEffectView = UIVisualEffectView();
   };
   
+  func setupGestureHandler(){
+    guard let modalView = self.modalView else { return };
+  
+    modalView.addGestureRecognizer(
+      UIPanGestureRecognizer(
+        target: self,
+        action: #selector(self.onDragPanGesture(_:))
+      )
+    );
+  };
+  
   private func setupDummyModalView(){
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
@@ -276,7 +292,7 @@ class AdaptiveModalManager: NSObject {
     targetView.addSubview(dummyModalView);
   };
   
-  func setupAddViews(){
+  private func setupAddViews(){
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -1026,6 +1042,44 @@ class AdaptiveModalManager: NSObject {
     return nextIndex;
   };
   
+  @objc func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
+    let gesturePoint = sender.location(in: self.targetView);
+    self.gesturePoint = gesturePoint;
+    
+    let gestureVelocity = sender.velocity(in: self.targetView);
+    self.gestureVelocity = gestureVelocity;
+    
+    switch sender.state {
+      case .began:
+        self.gestureInitialPoint = gesturePoint;
+    
+      case .changed:
+        self.modalAnimator?.stopAnimation(true);
+        
+        self.applyInterpolationToModal(forGesturePoint: gesturePoint);
+        self.onModalWillSnap();
+        
+      case .cancelled, .ended:
+        guard self.enableSnapping else {
+          self.clearGestureValues();
+          return;
+        };
+        
+        let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
+        
+        self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
+          self.endDisplayLink();
+          self.onModalDidSnap();
+        };
+        
+        self.clearGestureValues();
+        self.startDisplayLink();
+        
+      default:
+        break;
+    };
+  };
+  
   // MARK: - Functions - DisplayLink-Related
   // ---------------------------------------
     
@@ -1103,7 +1157,13 @@ class AdaptiveModalManager: NSObject {
     self.setupViewControllers();
     self.setupDummyModalView();
     self.setupInitViews();
+    self.setupGestureHandler();
+    
+    self.setupAddViews();
     self.setupViewConstraints();
+    
+    self.computeSnapPoints();
+    self.updateModal();
   };
   
   func computeSnapPoints(
@@ -1115,44 +1175,6 @@ class AdaptiveModalManager: NSObject {
       usingModalConfig: self.modalConfig,
       layoutValueContext: context
     );
-  };
-  
-  func notifyOnDragPanGesture(_ gesture: UIPanGestureRecognizer){
-    let gesturePoint = gesture.location(in: self.targetView);
-    self.gesturePoint = gesturePoint;
-    
-    let gestureVelocity = gesture.velocity(in: self.targetView);
-    self.gestureVelocity = gestureVelocity;
-    
-    switch gesture.state {
-      case .began:
-        self.gestureInitialPoint = gesturePoint;
-    
-      case .changed:
-        self.modalAnimator?.stopAnimation(true);
-        
-        self.applyInterpolationToModal(forGesturePoint: gesturePoint);
-        self.onModalWillSnap();
-        
-      case .cancelled, .ended:
-        guard self.enableSnapping else {
-          self.clearGestureValues();
-          return;
-        };
-        
-        let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
-        
-        self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
-          self.endDisplayLink();
-          self.onModalDidSnap();
-        };
-        
-        self.clearGestureValues();
-        self.startDisplayLink();
-        
-      default:
-        break;
-    };
   };
   
   func updateModal(){

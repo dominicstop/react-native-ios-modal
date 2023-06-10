@@ -15,13 +15,13 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
     presenting: UIViewController,
     source: UIViewController
   ) -> UIViewControllerAnimatedTransitioning? {
-    return nil;
+    return self;
   };
 
   func animationController(
     forDismissed dismissed: UIViewController
   ) -> UIViewControllerAnimatedTransitioning? {
-    return nil;
+    return self;
   };
   
   func presentationController(

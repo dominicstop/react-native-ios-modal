@@ -69,6 +69,13 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   
   @objc func onPressButtonPresentViewController(_ sender: UIButton) {
     let testVC = TestViewController();
+    
+    self.adaptiveModalManager.set(
+      viewControllerToPresent: testVC,
+      presentingViewController: self
+    );
+    
+    
     self.present(testVC, animated: true);
   };
 };

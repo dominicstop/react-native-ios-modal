@@ -369,12 +369,12 @@ class RNIDraggableTestViewController : UIViewController {
     //   alpha: 0
     // );
     
-    view.addGestureRecognizer(
-      UIPanGestureRecognizer(
-        target: self,
-        action: #selector(self.onDragPanGestureView(_:))
-      )
-    );
+    // view.addGestureRecognizer(
+    //   UIPanGestureRecognizer(
+    //     target: self,
+    //     action: #selector(self.onDragPanGestureView(_:))
+    //   )
+    // );
     
     let floatingViewLabel = self.floatingViewLabel;
     view.addSubview(floatingViewLabel);
@@ -435,8 +435,8 @@ class RNIDraggableTestViewController : UIViewController {
       dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
     ]);
     
-    self.modalManager.setupAddViews();
-    self.modalManager.setupViewConstraints();
+    // self.modalManager.setupAddViews();
+    // self.modalManager.setupViewConstraints();
   };
   
   override func viewDidLayoutSubviews() {
@@ -449,11 +449,11 @@ class RNIDraggableTestViewController : UIViewController {
     // self.updateFloatingView(isAnimated: true);
   };
   
-  @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
-    // print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
-  
-    self.modalManager.notifyOnDragPanGesture(sender);
-  };
+  // @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
+  //   // print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
+  //
+  //   self.modalManager.notifyOnDragPanGesture(sender);
+  // };
 };
 
 extension RNIDraggableTestViewController: AdaptiveModalEventNotifiable {
