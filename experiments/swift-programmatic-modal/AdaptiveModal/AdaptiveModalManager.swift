@@ -1009,18 +1009,22 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func shouldSnap(toInterpolationPointIndex nextIndex: Int) -> Bool {
+  func adjustInterpolationIndex(for nextIndex: Int) -> Int {
     if nextIndex == 0 {
-      return self.shouldSnapToInitialSnapPoint;
+      return self.shouldSnapToInitialSnapPoint
+        ? nextIndex
+        : 1;
     };
     
     let lastIndex = self.interpolationSteps.count - 1;
     
     if nextIndex == lastIndex {
-      return self.shouldSnapToOvershootSnapPoint;
+      return self.shouldSnapToOvershootSnapPoint
+        ? nextIndex
+        : lastIndex - 1;
     };
     
-    return true;
+    return nextIndex;
   };
   
   // MARK: - Functions - DisplayLink-Related
@@ -1173,23 +1177,12 @@ class AdaptiveModalManager: NSObject {
     let coord = point[keyPath: self.modalConfig.inputValueKeyForPoint];
     let closestSnapPoint = self.getClosestSnapPoint(forCoord: coord);
     
-    let (nextInterpolationIndex, nextInterpolationPoint):
-      (Int, AdaptiveModalInterpolationPoint) = {
-      
-      let shouldSnap = self.shouldSnap(
-        toInterpolationPointIndex: closestSnapPoint.interpolationIndex
-      );
-      
-      if shouldSnap {
-        return (
-          closestSnapPoint.interpolationIndex,
-          closestSnapPoint.interpolationPoint
-        );
-      };
-      
-      return (1, self.interpolationSteps[1]);
-    }();
+    let nextInterpolationIndex =
+      self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);
     
+    let nextInterpolationPoint =
+      self.interpolationSteps[nextInterpolationIndex];
+ 
     let prevFrame = self.modalFrame;
     let nextFrame = nextInterpolationPoint.computedRect;
     
@@ -1225,19 +1218,19 @@ class AdaptiveModalManager: NSObject {
   func snapToClosestSnapPoint(){
     let closestSnapPoint = self.getClosestSnapPoint(forRect: self.modalFrame);
     
-    let shouldSnap = self.shouldSnap(
-      toInterpolationPointIndex: closestSnapPoint.interpolationIndex
-    );
+    let nextInterpolationIndex =
+      self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);
+    
+    let nextInterpolationPoint =
+      self.interpolationSteps[nextInterpolationIndex];
     
     let prevFrame = self.modalFrame;
-    let nextFrame = closestSnapPoint.interpolationPoint.computedRect;
+    let nextFrame = nextInterpolationPoint.computedRect;
     
-    guard shouldSnap,
-          prevFrame != nextFrame
-    else { return };
+    guard prevFrame != nextFrame else { return };
     
     self.animateModal(
-      to: closestSnapPoint.interpolationPoint
+      to: nextInterpolationPoint
     );
   };
   
