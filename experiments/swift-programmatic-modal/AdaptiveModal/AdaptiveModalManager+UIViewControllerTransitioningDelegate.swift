@@ -8,6 +8,7 @@
 import UIKit
 
 
+
 extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
 
   func animationController(
@@ -30,10 +31,13 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
     source: UIViewController
   ) -> UIPresentationController? {
     
-    return AdaptiveModalPresentationController(
+    let presentationController = AdaptiveModalPresentationController(
       presentedViewController: presented,
       presenting: presenting,
       modalManager: self
     );
+    
+    //presentationController.delegate = self;
+    return presentationController;
   };
 };

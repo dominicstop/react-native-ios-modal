@@ -33,8 +33,11 @@ struct AdaptiveModalConfig {
   let snapAnimationConfig: AdaptiveModalSnapAnimationConfig;
   let interpolationClampingConfig: AdaptiveModalClampingConfig;
   
+  // rename to undershootSnapPoint
   let initialSnapPoint: AdaptiveModalSnapPointPreset;
   let overshootSnapPoint: AdaptiveModalSnapPointPreset;
+  
+  let initialSnapPointIndex: Int;
   
   // let entranceConfig: AdaptiveModalEntranceConfig;
   // let snapSwipeVelocityThreshold: CGFloat = 0;
@@ -102,6 +105,7 @@ struct AdaptiveModalConfig {
     snapPercentStrategy: SnapPercentStrategy = .position,
     snapAnimationConfig: AdaptiveModalSnapAnimationConfig = .default,
     interpolationClampingConfig: AdaptiveModalClampingConfig = .default,
+    initialSnapPointIndex: Int = 1,
     initialSnapPoint: AdaptiveModalSnapPointPreset? = nil,
     overshootSnapPoint: AdaptiveModalSnapPointPreset? = nil
   ) {
@@ -112,6 +116,8 @@ struct AdaptiveModalConfig {
     
     self.snapAnimationConfig = snapAnimationConfig;
     self.interpolationClampingConfig = interpolationClampingConfig;
+    
+    self.initialSnapPointIndex = initialSnapPointIndex;
     
     self.initialSnapPoint = initialSnapPoint
       ?? .getDefaultInitialSnapPoint(forDirection: snapDirection);

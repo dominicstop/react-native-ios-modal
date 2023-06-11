@@ -22,5 +22,13 @@ class AdaptiveModalPresentationController: UIPresentationController {
     );
     
     self.modalManager = modalManager;
-  }
+  };
+  
+  override func presentationTransitionWillBegin() {
+
+  };
+  
+  override func presentationTransitionDidEnd(_ completed: Bool) {
+    
+  };
 };

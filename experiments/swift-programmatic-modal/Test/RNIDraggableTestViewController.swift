@@ -325,19 +325,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
 
 class RNIDraggableTestViewController : UIViewController {
   
-  lazy var modalManager = {
-    let manager = AdaptiveModalManager(
-      modalConfig: AdaptiveModalConfigTestPresets.default.config,
-      modalView: self.floatingView,
-      targetView: self.view,
-      currentSizeProvider: {
-        .zero
-      }
-    );
-    
-    manager.eventDelegate = self;
-    return manager;
-  }();
+  var modalManager: AdaptiveModalManager?;
   
   private var initialGesturePoint: CGPoint = .zero;
   private var floatingViewInitialCenter: CGPoint = .zero
@@ -345,17 +333,10 @@ class RNIDraggableTestViewController : UIViewController {
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
     
-    // label.text = "\(self.modalManager.currentSnapPointIndex)";
+    label.text = "\(self.modalManager?.currentSnapPointIndex ?? -1)";
     label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5);
     label.font = .boldSystemFont(ofSize: 22);
-    
-    label.addGestureRecognizer(
-      UITapGestureRecognizer(
-        target: self,
-        action: #selector(self.onPressFloatingViewLabel(_:))
-      )
-    );
-    
+
     return label;
   }();
   
@@ -388,13 +369,7 @@ class RNIDraggableTestViewController : UIViewController {
     
     return view;
   }();
-  
-  lazy var modalBackgroundView = UIView();
-  lazy var modalBackgroundVisualEffectView = UIVisualEffectView();
-  
-  lazy var backgroundDimmingView = UIView();
-  lazy var backgroundVisualEffectView = UIVisualEffectView();
-  
+
   lazy var dummyBackgroundView: UIView = {
     let view = UIView();
     
@@ -417,43 +392,76 @@ class RNIDraggableTestViewController : UIViewController {
     
     return view;
   }();
-
+  
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
     
-    let dummyBackgroundView = self.dummyBackgroundView;
+    let dummyBackgroundView: UIView = {
+      let imageView = UIImageView(
+        image: UIImage(named: "DummyBackgroundImage")
+      );
+      
+      imageView.contentMode = .scaleAspectFill;
+      return imageView;
+    }();
+    
     self.view.addSubview(dummyBackgroundView);
-    
-    self.floatingViewLabel.text = "\(self.modalManager.currentSnapPointIndex)";
-    
     dummyBackgroundView.translatesAutoresizingMaskIntoConstraints = false;
-
+    
     NSLayoutConstraint.activate([
-      dummyBackgroundView.topAnchor.constraint(equalTo: self.view.topAnchor),
-      dummyBackgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-      dummyBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+      dummyBackgroundView.topAnchor     .constraint(equalTo: self.view.topAnchor     ),
+      dummyBackgroundView.bottomAnchor  .constraint(equalTo: self.view.bottomAnchor  ),
+      dummyBackgroundView.leadingAnchor .constraint(equalTo: self.view.leadingAnchor ),
       dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
     ]);
     
-    // self.modalManager.setupAddViews();
-    // self.modalManager.setupViewConstraints();
+    let presentButton: UIButton = {
+      let button = UIButton();
+      
+      button.setTitle("Show Modal", for: .normal);
+      button.configuration = .filled();
+      
+      button.addTarget(
+        self,
+        action: #selector(self.onPressButtonPresentViewController(_:)),
+        for: .touchUpInside
+      );
+      
+      return button;
+    }();
+    
+    self.view.addSubview(presentButton);
+    presentButton.translatesAutoresizingMaskIntoConstraints = false;
+    
+    NSLayoutConstraint.activate([
+      presentButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+      presentButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+    ]);
   };
   
-  override func viewDidLayoutSubviews() {
-    self.modalManager.computeSnapPoints();
-    self.modalManager.updateModal();
+  @objc func onPressButtonPresentViewController(_ sender: UIButton){
+    let manager = AdaptiveModalManager(
+      modalConfig: AdaptiveModalConfigTestPresets.default.config
+    );
+    
+    manager.prepareForPresentation(
+      modalView: self.floatingView,
+      targetView: self.view
+    );
+    
+    manager.showModal(){ _ in
+      manager.setupGestureHandler();
+    }
+    
+    print(
+        "onPressButtonPresentViewController"
+      + "\n - floatingView.superview: \(self.floatingView.superview)"
+      + "\n - floatingView: \(self.floatingView)"
+      + "\n - manager.modalWrapperView: \(manager.modalWrapperView)"
+      + "\n - manager.modalWrapperView.subviews: \(manager.modalWrapperView.subviews)"
+      + "\n - manager.modalWrapperView.subviews.first!.subviews: \(manager.modalWrapperView.subviews.first!.subviews)"
+    );
   };
-  
-  @objc func onPressFloatingViewLabel(_ sender: UITapGestureRecognizer){
-    // self.layoutConfigCount += 1;
-    // self.updateFloatingView(isAnimated: true);
-  };
-  
-  // @objc func onDragPanGestureView(_ sender: UIPanGestureRecognizer) {
-  //   // print("onDragPanGestureView - velocity: \(sender.velocity(in: self.view))");
-  //
-  //   self.modalManager.notifyOnDragPanGesture(sender);
-  // };
 };
 
 extension RNIDraggableTestViewController: AdaptiveModalEventNotifiable {
