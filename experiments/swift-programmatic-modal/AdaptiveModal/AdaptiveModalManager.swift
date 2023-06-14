@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
+class AdaptiveModalManager: NSObject {
 
   // MARK: -  Properties - Config-Related
   // ------------------------------------
@@ -222,6 +222,9 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
     super.init();
     
     self.computeSnapPoints();
+    self.setupViewControllers();
+    self.setupInitViews();
+    self.setupDummyModalView();
   };
   
   deinit {
@@ -231,15 +234,31 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
   // MARK: - Functions - Setup
   // -------------------------
   
-  func setupInitViews(){
-    //self.modalBackgroundView = UIView();
-    //self.modalBackgroundVisualEffectView = UIVisualEffectView();
+  private func setupViewControllers() {
+    modalViewController?.modalPresentationStyle = .custom;
+    modalViewController?.transitioningDelegate = self;
+  };
+  
+  private func setupInitViews(){
+    self.modalBackgroundView = UIView();
+    self.modalBackgroundVisualEffectView = UIVisualEffectView();
     
     self.backgroundDimmingView = UIView();
     self.backgroundVisualEffectView = UIVisualEffectView();
   };
   
-  func setupDummyModalView(){
+  private func setupGestureHandler(){
+    guard let modalView = self.modalView else { return };
+  
+    modalView.addGestureRecognizer(
+      UIPanGestureRecognizer(
+        target: self,
+        action: #selector(self.onDragPanGesture(_:))
+      )
+    );
+  };
+  
+  private func setupDummyModalView(){
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
     
@@ -250,7 +269,7 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
     targetView.addSubview(dummyModalView);
   };
   
-  func setupAddViews(){
+  private func setupAddViews(){
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -275,7 +294,6 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
     
     modalView.clipsToBounds = true;
     modalView.backgroundColor = .clear;
-    
     modalWrapperView.addSubview(modalView);
     
     if let modalBackgroundView = self.modalBackgroundView {
@@ -291,11 +309,12 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
       modalView.sendSubviewToBack(modalBGVisualEffectView);
       
       modalBGVisualEffectView.clipsToBounds = true;
+      modalBGVisualEffectView.backgroundColor = .clear;
       modalBGVisualEffectView.isUserInteractionEnabled = false;
     };
   };
   
-  func setupViewConstraints(){
+  private func setupViewConstraints(){
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -352,29 +371,6 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
         modalBGVisualEffectView.heightAnchor .constraint(equalTo: modalView.heightAnchor ),
       ]);
     };
-  };
-  
-  func setupGestureHandler(){
-    guard let modalView = self.modalView else { return };
-    
-    let gesture = UIPanGestureRecognizer(
-      target: self,
-      action: #selector(Self.onDragPanGesture(_:))
-    );
-    
-    gesture.isEnabled = true;
-    gesture.minimumNumberOfTouches = 1;
-    gesture.maximumNumberOfTouches = 1;
-    gesture.delegate = self;
-    
-    modalView.addGestureRecognizer(gesture);
-    modalView.isUserInteractionEnabled = true;
-    modalView.backgroundColor = .systemBackground;
-  };
-  
-  func setupViewControllers() {
-    modalViewController?.modalPresentationStyle = .custom;
-    modalViewController?.transitioningDelegate = self;
   };
 
   // MARK: - Functions - Interpolation-Related Helpers
@@ -1023,13 +1019,6 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
     return nextIndex;
   };
   
-  public func gestureRecognizer(
-    _ gestureRecognizer: UIGestureRecognizer,
-    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-  ) -> Bool {
-    return true;
-  };
-  
   @objc func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
@@ -1131,38 +1120,6 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
   
   // MARK: - User-Invoked Functions
   // ------------------------------
-
-  func prepareForPresentation(
-    modalView: UIView,
-    targetView: UIView
-  ) {
-    self.modalView = modalView;
-    self.targetView = targetView;
-    
-    modalView.isUserInteractionEnabled = true;
-    
-    self.setupInitViews();
-    self.setupDummyModalView();
-    
-    self.setupAddViews();
-    self.setupViewConstraints();
-    self.setupGestureHandler();
-    
-    self.computeSnapPoints();
-    self.updateModal();
-    
-    modalView.frame = self.modalWrapperView.frame;
-  };
-  
-  func showModal(
-    completion: ((UIViewAnimatingPosition) -> Void)? = nil
-  ){
-    self.currentInterpolationIndex = self.modalConfig.initialSnapPointIndex;
-    self.animateModal(
-      to: self.currentInterpolationStep,
-      completion: completion
-    );
-  };
   
   func computeSnapPoints(
     usingLayoutValueContext context: RNILayoutValueContext? = nil
@@ -1173,6 +1130,24 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
       usingModalConfig: self.modalConfig,
       layoutValueContext: context
     );
+  };
+  
+  func prepareForPresentation(
+    modalView: UIView,
+    targetView: UIView
+  ) {
+    self.modalView = modalView;
+    self.targetView = targetView;
+    
+    self.computeSnapPoints();
+
+    self.setupInitViews();
+    self.setupDummyModalView();
+    self.setupGestureHandler();
+    
+    self.setupAddViews();
+    self.setupViewConstraints();
+    self.updateModal();
   };
   
   func updateModal(){
@@ -1186,10 +1161,6 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
         forInputPercentValue: currentInterpolationStep.percent
       );
     };
-  };
-  
-  func snapToCurrentIndex(){
-    self.animateModal(to: self.currentInterpolationStep);
   };
   
   func snapToClosestSnapPoint(
@@ -1255,6 +1226,29 @@ class AdaptiveModalManager: NSObject, UIGestureRecognizerDelegate {
     self.animateModal(
       to: nextInterpolationPoint
     );
+  };
+  
+  func snapToCurrentIndex(){
+    self.animateModal(to: self.currentInterpolationStep);
+  };
+  
+  func showModal(
+    completion: ((UIViewAnimatingPosition) -> Void)? = nil
+  ) {
+    let prevIndex = self.currentInterpolationIndex;
+    let nextIndex = self.modalConfig.initialSnapPointIndex;
+    
+    self.nextInterpolationIndex = nextIndex;
+    self.onModalWillSnap();
+    
+    let nextPoint = self.interpolationSteps[nextIndex];
+    
+    self.animateModal(to: nextPoint) { [unowned self] in
+      self.currentInterpolationIndex = nextIndex;
+      self.onModalDidSnap();
+      
+      completion?($0);
+    };
   };
   
   // MARK: - Event Functions

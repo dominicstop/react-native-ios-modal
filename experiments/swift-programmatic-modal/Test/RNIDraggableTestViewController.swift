@@ -325,7 +325,9 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
 
 class RNIDraggableTestViewController : UIViewController {
   
-  var modalManager: AdaptiveModalManager?;
+  lazy var modalManager = AdaptiveModalManager(
+    modalConfig: AdaptiveModalConfigTestPresets.default.config
+  );
   
   private var initialGesturePoint: CGPoint = .zero;
   private var floatingViewInitialCenter: CGPoint = .zero
@@ -333,7 +335,7 @@ class RNIDraggableTestViewController : UIViewController {
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
     
-    label.text = "\(self.modalManager?.currentSnapPointIndex ?? -1)";
+    label.text = "\(self.modalManager.currentSnapPointIndex)";
     label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5);
     label.font = .boldSystemFont(ofSize: 22);
 
@@ -440,27 +442,14 @@ class RNIDraggableTestViewController : UIViewController {
   };
   
   @objc func onPressButtonPresentViewController(_ sender: UIButton){
-    let manager = AdaptiveModalManager(
-      modalConfig: AdaptiveModalConfigTestPresets.default.config
-    );
+    self.modalManager.eventDelegate = self;
     
-    manager.prepareForPresentation(
+    self.modalManager.prepareForPresentation(
       modalView: self.floatingView,
       targetView: self.view
     );
-    
-    manager.showModal(){ _ in
-      manager.setupGestureHandler();
-    }
-    
-    print(
-        "onPressButtonPresentViewController"
-      + "\n - floatingView.superview: \(self.floatingView.superview)"
-      + "\n - floatingView: \(self.floatingView)"
-      + "\n - manager.modalWrapperView: \(manager.modalWrapperView)"
-      + "\n - manager.modalWrapperView.subviews: \(manager.modalWrapperView.subviews)"
-      + "\n - manager.modalWrapperView.subviews.first!.subviews: \(manager.modalWrapperView.subviews.first!.subviews)"
-    );
+  
+    self.modalManager.showModal();
   };
 };
 
