@@ -33,8 +33,7 @@ struct AdaptiveModalConfig {
   let snapAnimationConfig: AdaptiveModalSnapAnimationConfig;
   let interpolationClampingConfig: AdaptiveModalClampingConfig;
   
-  // rename to undershootSnapPoint
-  let initialSnapPoint: AdaptiveModalSnapPointPreset;
+  let undershootSnapPoint: AdaptiveModalSnapPointPreset;
   let overshootSnapPoint: AdaptiveModalSnapPointPreset;
   
   let initialSnapPointIndex: Int;
@@ -47,7 +46,7 @@ struct AdaptiveModalConfig {
     
     if let snapPointFirst = self.baseSnapPoints.first {
       let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
-        fromSnapPointPreset: self.initialSnapPoint,
+        fromSnapPointPreset: self.undershootSnapPoint,
         fromBaseLayoutConfig: snapPointFirst.snapPoint
       );
       
@@ -106,7 +105,7 @@ struct AdaptiveModalConfig {
     snapAnimationConfig: AdaptiveModalSnapAnimationConfig = .default,
     interpolationClampingConfig: AdaptiveModalClampingConfig = .default,
     initialSnapPointIndex: Int = 1,
-    initialSnapPoint: AdaptiveModalSnapPointPreset? = nil,
+    undershootSnapPoint: AdaptiveModalSnapPointPreset? = nil,
     overshootSnapPoint: AdaptiveModalSnapPointPreset? = nil
   ) {
     self.baseSnapPoints = snapPoints;
@@ -119,7 +118,7 @@ struct AdaptiveModalConfig {
     
     self.initialSnapPointIndex = initialSnapPointIndex;
     
-    self.initialSnapPoint = initialSnapPoint
+    self.undershootSnapPoint = undershootSnapPoint
       ?? .getDefaultInitialSnapPoint(forDirection: snapDirection);
     
     self.overshootSnapPoint = overshootSnapPoint

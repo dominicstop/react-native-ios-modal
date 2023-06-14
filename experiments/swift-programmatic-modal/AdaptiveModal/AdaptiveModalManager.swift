@@ -39,7 +39,7 @@ class AdaptiveModalManager: NSObject {
   var backgroundDimmingView: UIView?;
   var backgroundVisualEffectView: UIVisualEffectView?;
   
-  var modalFrame: CGRect! {
+  private var modalFrame: CGRect! {
     set {
       guard let newValue = newValue else { return };
       self.prevModalFrame = dummyModalView.frame;
@@ -52,7 +52,7 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var layoutValueContext: RNILayoutValueContext {
+  private var layoutValueContext: RNILayoutValueContext {
     if let targetVC = self.targetViewController {
       return .init(fromTargetViewController: targetVC) ?? .default;
     };
@@ -188,6 +188,9 @@ class AdaptiveModalManager: NSObject {
     
     return CGPoint(x: nextX, y: nextY);
   };
+  
+  // MARK: -  Properties - Flags
+  // ---------------------------
   
   // MARK: -  Properties
   // -------------------
@@ -1004,7 +1007,6 @@ class AdaptiveModalManager: NSObject {
     animator.startAnimation();
   };
   
-  
   @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
@@ -1020,7 +1022,7 @@ class AdaptiveModalManager: NSObject {
         self.modalAnimator?.stopAnimation(true);
         
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
-        self.onModalWillSnap();
+        self.notifyOnModalWillSnap();
         
       case .cancelled, .ended:
         guard self.enableSnapping else {
@@ -1032,7 +1034,7 @@ class AdaptiveModalManager: NSObject {
         
         self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
           self.endDisplayLink();
-          self.onModalDidSnap();
+          self.notifyOnModalDidSnap();
         };
         
         self.clearGestureValues();
@@ -1158,13 +1160,13 @@ class AdaptiveModalManager: NSObject {
     let nextInterpolationPoint =
       self.interpolationSteps[nextIndex];
       
-    self.onModalWillSnap();
+    self.notifyOnModalWillSnap();
   
     self.animateModal(to: nextInterpolationPoint) { _ in
       self.currentInterpolationIndex = nextIndex;
       self.nextInterpolationIndex = nil;
       
-      self.onModalDidSnap();
+      self.notifyOnModalDidSnap();
       completion?();
     };
   };
@@ -1221,9 +1223,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func showModal(
-    completion: (() -> Void)? = nil
-  ) {
+  func showModal(completion: (() -> Void)? = nil) {
     let nextIndex = self.modalConfig.initialSnapPointIndex;
     self.snapTo(interpolationIndex: nextIndex, completion: completion);
   };
@@ -1231,7 +1231,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Event Functions
   // -----------------------
   
-  func onModalWillSnap(){
+  private func notifyOnModalWillSnap(){
     let interpolationSteps = self.interpolationSteps!;
     let prevIndex = self.currentInterpolationIndex;
     
@@ -1256,7 +1256,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func onModalDidSnap(){
+  private func notifyOnModalDidSnap(){
     self.eventDelegate?.notifyOnModalDidSnap(
       prevSnapPointIndex:
         interpolationSteps[self.prevInterpolationIndex].snapPointIndex,
