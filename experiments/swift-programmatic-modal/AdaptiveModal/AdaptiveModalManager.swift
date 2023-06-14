@@ -88,13 +88,13 @@ class AdaptiveModalManager: NSObject {
     self.modalConfig.sortInterpolationSteps(self.rawInterpolationSteps);
   };
   
-  var interpolationRangeInput: [CGFloat]! {
+  private var interpolationRangeInput: [CGFloat]! {
     self.interpolationSteps.map {
       $0.percent
     };
   };
   
-  var interpolationRangeMaxInput: CGFloat? {
+  private var interpolationRangeMaxInput: CGFloat? {
     guard let targetView = self.targetView else { return nil };
     return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
   };
@@ -102,15 +102,15 @@ class AdaptiveModalManager: NSObject {
   // MARK: -  Properties - Animation-Related
   // ---------------------------------------
   
-  var modalAnimator: UIViewPropertyAnimator?;
+  private var modalAnimator: UIViewPropertyAnimator?;
 
-  var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
-  var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
+  private var backgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
+  private var modalBackgroundVisualEffectAnimator: AdaptiveModalRangePropertyAnimator?;
   
-  var displayLink: CADisplayLink?;
-  var displayLinkStartTimestamp: CFTimeInterval?;
+  private var displayLink: CADisplayLink?;
+  private var displayLinkStartTimestamp: CFTimeInterval?;
   
-  var displayLinkEndTimestamp: CFTimeInterval? {
+  private var displayLinkEndTimestamp: CFTimeInterval? {
     guard let animator = self.modalAnimator,
           let displayLinkStartTimestamp = self.displayLinkStartTimestamp
     else { return nil };
@@ -121,16 +121,18 @@ class AdaptiveModalManager: NSObject {
   // MARK: -  Properties - Gesture-Related
   // -------------------------------------
   
-  var gestureOffset: CGPoint?;
-  var gestureVelocity: CGPoint?;
-  var gestureInitialPoint: CGPoint?;
-  var gesturePoint: CGPoint?;
+  private var gestureOffset: CGPoint?;
+  private var gestureVelocity: CGPoint?;
+  private var gestureInitialPoint: CGPoint?;
+  private var gesturePoint: CGPoint?;
   
-  var gestureInitialVelocity: CGVector? {
+  private var gestureInitialVelocity: CGVector {
     guard let gestureInitialPoint = self.gestureInitialPoint,
           let gestureFinalPoint   = self.gesturePoint,
           let gestureVelocity     = self.gestureVelocity
-    else { return nil };
+    else {
+      return .zero;
+    };
   
     let gestureInitialCoord =
       gestureInitialPoint[keyPath: self.modalConfig.inputValueKeyForPoint];
@@ -162,7 +164,7 @@ class AdaptiveModalManager: NSObject {
   /// where would it eventually "stop" (i.e. it's final position) if it were to
   /// decelerate over time
   ///
-  var gestureFinalPoint: CGPoint? {
+  private var gestureFinalPoint: CGPoint? {
     guard let gesturePoint = self.gesturePoint,
           let gestureVelocity = self.gestureVelocity
     else { return nil };
@@ -376,7 +378,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Interpolation-Related Helpers
   // -------------------------------------------------
   
-  func interpolate(
+  private func interpolate(
     inputValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
     rangeOutput: [AdaptiveModalInterpolationPoint]? = nil,
@@ -400,7 +402,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func interpolateColor(
+  private func interpolateColor(
     inputValue: CGFloat,
     rangeInput: [CGFloat]? = nil,
     rangeOutput: [AdaptiveModalInterpolationPoint]? = nil,
@@ -424,7 +426,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func getInterpolationStepRange(
+  private func getInterpolationStepRange(
    forInputPercentValue inputPercentValue: CGFloat
   ) -> (
     rangeStart: AdaptiveModalInterpolationPoint,
@@ -479,7 +481,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Value Interpolators
   // ---------------------------------------
   
-  func interpolateModalRect(
+  private func interpolateModalRect(
     forInputPercentValue inputPercentValue: CGFloat
   ) -> CGRect? {
   
@@ -527,7 +529,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func interpolateModalTransform(
+  private func interpolateModalTransform(
     forInputPercentValue inputPercentValue: CGFloat
   ) -> CGAffineTransform? {
 
@@ -601,7 +603,7 @@ class AdaptiveModalManager: NSObject {
     return nextTransform;
   };
 
-  func interpolateModalBorderRadius(
+  private func interpolateModalBorderRadius(
     forInputPercentValue inputPercentValue: CGFloat
   ) -> CGFloat? {
   
@@ -614,7 +616,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Property Interpolators
   // ------------------------------------------
   
-  func applyInterpolationToModalBackgroundVisualEffect(
+  private func applyInterpolationToModalBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
   
@@ -658,7 +660,7 @@ class AdaptiveModalManager: NSObject {
     animator.setFractionComplete(forInputPercentValue: inputPercentValue);
   };
 
-  func applyInterpolationToBackgroundVisualEffect(
+  private func applyInterpolationToBackgroundVisualEffect(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
   
@@ -705,7 +707,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Apply Interpolators
   // ----------------------------------------
   
-  func applyInterpolationToModal(
+  private func applyInterpolationToModal(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
     guard let modalView = self.modalView else { return };
@@ -802,7 +804,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func applyInterpolationToModal(forPoint point: CGPoint){
+  private func applyInterpolationToModal(forPoint point: CGPoint){
     guard let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
@@ -824,7 +826,7 @@ class AdaptiveModalManager: NSObject {
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
   
-  func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
+  private func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
     guard let gestureInitialPoint = self.gestureInitialPoint
     else { return };
     
@@ -867,70 +869,7 @@ class AdaptiveModalManager: NSObject {
     self.modalBackgroundVisualEffectAnimator = nil;
   };
   
-  func animateModal(
-    to interpolationPoint: AdaptiveModalInterpolationPoint,
-    duration: CGFloat? = nil,
-    completion: ((UIViewAnimatingPosition) -> Void)? = nil
-  ) {
-    guard let modalView = self.modalView else { return };
-    
-    let animator: UIViewPropertyAnimator = {
-      // A - Animation based on duration
-      if let duration = duration {
-        return UIViewPropertyAnimator(
-          duration: duration,
-          curve: .easeInOut
-        );
-      };
-      
-      // B - Spring Animation, based on gesture velocity
-      if let gestureInitialVelocity = self.gestureInitialVelocity {
-        let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
-        
-        let springTiming = UISpringTimingParameters(
-          dampingRatio: snapAnimationConfig.springDampingRatio,
-          initialVelocity: gestureInitialVelocity
-        );
-
-        return UIViewPropertyAnimator(
-          duration: snapAnimationConfig.springAnimationSettlingTime,
-          timingParameters: springTiming
-        );
-      };
-      
-      // C - Default
-      return UIViewPropertyAnimator(
-        duration: 0.3,
-        curve: .easeInOut
-      );
-    }();
-    
-    self.modalAnimator = animator;
-    
-    animator.addAnimations {
-      interpolationPoint.apply(toModalView: modalView);
-      interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
-      
-      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
-      interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
-      interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
-      
-      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView);
-      interpolationPoint.apply(toBackgroundVisualEffectView: self.backgroundVisualEffectView);
-    };
-    
-    if let completion = completion {
-      animator.addCompletion(completion);
-    };
-    
-    animator.addCompletion { _ in
-      self.modalAnimator = nil;
-    };
-
-    animator.startAnimation();
-  };
-  
-  func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
+  private func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
     interpolationIndex: Int,
     snapPointConfig: AdaptiveModalSnapPointConfig,
     interpolationPoint: AdaptiveModalInterpolationPoint,
@@ -963,7 +902,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func getClosestSnapPoint(
+  private func getClosestSnapPoint(
     forRect currentRect: CGRect
   ) -> (
     interpolationIndex: Int,
@@ -1001,7 +940,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func adjustInterpolationIndex(for nextIndex: Int) -> Int {
+  private func adjustInterpolationIndex(for nextIndex: Int) -> Int {
     if nextIndex == 0 {
       return self.shouldSnapToInitialSnapPoint
         ? nextIndex
@@ -1019,7 +958,54 @@ class AdaptiveModalManager: NSObject {
     return nextIndex;
   };
   
-  @objc func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
+  private func animateModal(
+    to interpolationPoint: AdaptiveModalInterpolationPoint,
+    completion: ((UIViewAnimatingPosition) -> Void)? = nil
+  ) {
+    guard let modalView = self.modalView else { return };
+    
+    let animator: UIViewPropertyAnimator = {
+      let gestureInitialVelocity = self.gestureInitialVelocity;
+      let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
+        
+      let springTiming = UISpringTimingParameters(
+        dampingRatio: snapAnimationConfig.springDampingRatio,
+        initialVelocity: gestureInitialVelocity
+      );
+
+      return UIViewPropertyAnimator(
+        duration: snapAnimationConfig.springAnimationSettlingTime,
+        timingParameters: springTiming
+      );
+    }();
+    
+    self.modalAnimator = animator;
+    
+    animator.addAnimations {
+      interpolationPoint.apply(toModalView: modalView);
+      interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
+      
+      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
+      interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
+      interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
+      
+      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView);
+      interpolationPoint.apply(toBackgroundVisualEffectView: self.backgroundVisualEffectView);
+    };
+    
+    if let completion = completion {
+      animator.addCompletion(completion);
+    };
+    
+    animator.addCompletion { _ in
+      self.modalAnimator = nil;
+    };
+
+    animator.startAnimation();
+  };
+  
+  
+  @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
     
@@ -1163,9 +1149,28 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
+  func snapTo(
+    interpolationIndex nextIndex: Int,
+    completion: (() -> Void)? = nil
+  ) {
+    self.nextInterpolationIndex = nextIndex;
+  
+    let nextInterpolationPoint =
+      self.interpolationSteps[nextIndex];
+      
+    self.onModalWillSnap();
+  
+    self.animateModal(to: nextInterpolationPoint) { _ in
+      self.currentInterpolationIndex = nextIndex;
+      self.nextInterpolationIndex = nil;
+      
+      self.onModalDidSnap();
+      completion?();
+    };
+  };
+  
   func snapToClosestSnapPoint(
     forPoint point: CGPoint,
-    duration: CGFloat? = nil,
     completion: (() -> Void)? = nil
   ) {
     let coord = point[keyPath: self.modalConfig.inputValueKeyForPoint];
@@ -1181,35 +1186,14 @@ class AdaptiveModalManager: NSObject {
     let nextFrame = nextInterpolationPoint.computedRect;
     
     guard prevFrame != nextFrame else { return };
-    
-    self.nextInterpolationIndex = nextInterpolationIndex;
-    
-    let defaultDuration: CGFloat? = {
-      guard self.gestureVelocity == nil,
-            let targetView = self.targetView
-      else { return nil };
-      
-      let interpolatedValue = AdaptiveModalUtilities.interpolate(
-        inputValue: closestSnapPoint.snapDistance,
-        rangeInput: [0, targetView.frame.height],
-        rangeOutput: [0.2, 0.7]
-      );
-      
-      return interpolatedValue;
-    }();
-    
-    self.animateModal(
-      to: nextInterpolationPoint,
-      duration: duration ?? defaultDuration
-    ) { _ in
-      self.currentInterpolationIndex = nextInterpolationIndex;
-      self.nextInterpolationIndex = nil;
-      
-      completion?();
-    };
+   
+    self.snapTo(
+      interpolationIndex: nextInterpolationIndex,
+      completion: completion
+    );
   };
   
-  func snapToClosestSnapPoint(){
+  func snapToClosestSnapPoint(completion: (() -> Void)? = nil){
     let closestSnapPoint = self.getClosestSnapPoint(forRect: self.modalFrame);
     
     let nextInterpolationIndex =
@@ -1221,34 +1205,27 @@ class AdaptiveModalManager: NSObject {
     let prevFrame = self.modalFrame;
     let nextFrame = nextInterpolationPoint.computedRect;
     
-    guard prevFrame != nextFrame else { return };
+    guard nextInterpolationIndex != self.currentInterpolationIndex,
+          prevFrame != nextFrame
+    else { return };
     
-    self.animateModal(
-      to: nextInterpolationPoint
+    self.snapTo(interpolationIndex: nextInterpolationIndex){
+      completion?();
+    };
+  };
+  
+  func snapToCurrentIndex(completion: (() -> Void)? = nil){
+    self.snapTo(
+      interpolationIndex: self.currentInterpolationIndex,
+      completion: completion
     );
   };
   
-  func snapToCurrentIndex(){
-    self.animateModal(to: self.currentInterpolationStep);
-  };
-  
   func showModal(
-    completion: ((UIViewAnimatingPosition) -> Void)? = nil
+    completion: (() -> Void)? = nil
   ) {
-    let prevIndex = self.currentInterpolationIndex;
     let nextIndex = self.modalConfig.initialSnapPointIndex;
-    
-    self.nextInterpolationIndex = nextIndex;
-    self.onModalWillSnap();
-    
-    let nextPoint = self.interpolationSteps[nextIndex];
-    
-    self.animateModal(to: nextPoint) { [unowned self] in
-      self.currentInterpolationIndex = nextIndex;
-      self.onModalDidSnap();
-      
-      completion?($0);
-    };
+    self.snapTo(interpolationIndex: nextIndex, completion: completion);
   };
   
   // MARK: - Event Functions
