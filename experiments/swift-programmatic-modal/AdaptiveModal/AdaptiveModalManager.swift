@@ -938,9 +938,16 @@ class AdaptiveModalManager: NSObject {
     
     let inputCoord = coord ??
       inputRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+    let inputCoordAdj = inputCoord < 0
+      ? min(inputCoord, 0)
+      : inputCoord;
     
     let delta = self.interpolationSteps.map {
-      abs($0.computedRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint] - inputCoord);
+      let origin = $0.computedRect.origin;
+      let coord = origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+      return abs(coord - inputCoordAdj);
     };
     
     let deltaSorted = delta.enumerated().sorted {
@@ -1076,7 +1083,6 @@ class AdaptiveModalManager: NSObject {
     
       case .changed:
         self.modalAnimator?.stopAnimation(true);
-        
         self.applyInterpolationToModal(forGesturePoint: gesturePoint);
         self.notifyOnModalWillSnap();
         
@@ -1086,7 +1092,12 @@ class AdaptiveModalManager: NSObject {
           return;
         };
         
-        let gestureFinalPoint = self.gestureFinalPoint ?? gesturePoint;
+        let gestureFinalPointRaw = self.gestureFinalPoint ?? gesturePoint;
+        
+        let gestureFinalPoint = CGPoint(
+          x: gestureFinalPointRaw.x - self.gestureOffset!.x,
+          y: gestureFinalPointRaw.y - self.gestureOffset!.y
+        );
         
         self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
           self.endDisplayLink();
@@ -1169,7 +1180,7 @@ class AdaptiveModalManager: NSObject {
     let interpolationSteps = self.interpolationSteps!;
     let prevIndex = self.currentInterpolationIndex;
     
-    let nextIndex: Int = {
+    let nextIndexRaw: Int = {
       guard let nextIndex = self.nextInterpolationIndex else {
         let closestSnapPoint = self.getClosestSnapPoint();
         return closestSnapPoint.interpolationPoint.snapPointIndex;
@@ -1178,6 +1189,7 @@ class AdaptiveModalManager: NSObject {
       return nextIndex;
     }();
     
+    let nextIndex = self.adjustInterpolationIndex(for: nextIndexRaw);
     let nextPoint = self.interpolationSteps[nextIndex];
     
     guard prevIndex != nextIndex else { return };
