@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
 
   func animationController(

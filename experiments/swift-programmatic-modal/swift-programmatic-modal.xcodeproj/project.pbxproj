@@ -18,6 +18,7 @@
 		886AFCAD2A3209D5004AC9FB /* RNILayoutValueMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */; };
 		886AFCAF2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */; };
 		886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */; };
+		88A2EF742A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
 		88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0F029C593F400490628 /* SceneDelegate.swift */; };
 		88B7D0F829C593F600490628 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88B7D0F729C593F600490628 /* Assets.xcassets */; };
@@ -114,6 +115,7 @@
 		886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueMode.swift; sourceTree = "<group>"; };
 		886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValuePercentTarget.swift; sourceTree = "<group>"; };
 		886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueContext.swift; sourceTree = "<group>"; };
+		88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalConfigTestPresets.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B7D0EE29C593F400490628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88B7D0F029C593F400490628 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 		88D0168B2A173093004664D2 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */,
 				88D0168C2A1730B1004664D2 /* RNILayoutTestViewController.swift */,
 				88D0169D2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift */,
 				88D0187B2A1B32E6004664D2 /* TestRoutes.swift */,
@@ -669,6 +672,7 @@
 				88D018772A1B3030004664D2 /* RNIComputableValue.swift in Sources */,
 				884A18FA2A3146CA0044AA66 /* AdaptiveModalManager+UIViewControllerTransitioningDelegate.swift in Sources */,
 				88C2F45C2A275B2800DA7450 /* AdaptiveModalSnapPointPreset.swift in Sources */,
+				88A2EF742A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift in Sources */,
 				88E8C01C2A23203E008C2FF8 /* RNILayoutPreset.swift in Sources */,
 				88C2F4602A2CA8CF00DA7450 /* RoundedViewTestViewController.swift in Sources */,
 				88D018292A1B3030004664D2 /* RNICleanupMode.swift in Sources */,

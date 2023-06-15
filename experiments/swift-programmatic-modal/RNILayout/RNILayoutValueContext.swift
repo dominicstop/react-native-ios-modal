@@ -70,7 +70,6 @@ extension RNILayoutValueContext {
     self.windowSize = targetView.window?.bounds.size;
     
     self.safeAreaInsets = targetView.window?.safeAreaInsets;
-    
     self.currentSize = currentSize;
   };
 };

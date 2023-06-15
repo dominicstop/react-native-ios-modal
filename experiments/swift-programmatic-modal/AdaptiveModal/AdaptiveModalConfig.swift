@@ -36,6 +36,7 @@ struct AdaptiveModalConfig {
   let undershootSnapPoint: AdaptiveModalSnapPointPreset;
   let overshootSnapPoint: AdaptiveModalSnapPointPreset;
   
+  // the first snap point to snap to when the modal is first shown
   let initialSnapPointIndex: Int;
   
   // let entranceConfig: AdaptiveModalEntranceConfig;
