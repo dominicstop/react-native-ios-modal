@@ -1045,6 +1045,7 @@ class AdaptiveModalManager: NSObject {
       );
     }();
     
+    self.modalAnimator?.stopAnimation(true);
     self.modalAnimator = animator;
     
     animator.addAnimations {
@@ -1064,10 +1065,12 @@ class AdaptiveModalManager: NSObject {
     };
     
     animator.addCompletion { _ in
+      self.endDisplayLink();
       self.modalAnimator = nil;
     };
-
+  
     animator.startAnimation();
+    self.startDisplayLink();
   };
   
   @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
@@ -1095,17 +1098,15 @@ class AdaptiveModalManager: NSObject {
         let gestureFinalPointRaw = self.gestureFinalPoint ?? gesturePoint;
         
         let gestureFinalPoint = CGPoint(
-          x: gestureFinalPointRaw.x - self.gestureOffset!.x,
-          y: gestureFinalPointRaw.y - self.gestureOffset!.y
+          x: gestureFinalPointRaw.x - (self.gestureOffset?.x ?? 0),
+          y: gestureFinalPointRaw.y - (self.gestureOffset?.y ?? 0)
         );
         
         self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
-          self.endDisplayLink();
           self.notifyOnModalDidSnap();
         };
         
         self.clearGestureValues();
-        self.startDisplayLink();
         
       default:
         break;

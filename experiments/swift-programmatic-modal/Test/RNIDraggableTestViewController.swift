@@ -65,35 +65,12 @@ class RNIDraggableTestViewController : UIViewController {
     return view;
   }();
 
-  lazy var dummyBackgroundView: UIView = {
-    let view = UIView();
-    
-    let imageView = UIImageView(
-      image: UIImage(named: "DummyBackgroundImage")
-    );
-    
-    imageView.contentMode = .scaleAspectFill;
-    
-    view.addSubview(imageView);
-    
-    imageView.translatesAutoresizingMaskIntoConstraints = false;
-    
-    NSLayoutConstraint.activate([
-      imageView.topAnchor.constraint(equalTo: view.topAnchor),
-      imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-    ]);
-    
-    return view;
-  }();
-  
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
     
     let dummyBackgroundView: UIView = {
       let imageView = UIImageView(
-        image: UIImage(named: "DummyBackgroundImage")
+        image: UIImage(named: "DummyBackgroundImage3")
       );
       
       imageView.contentMode = .scaleAspectFill;
