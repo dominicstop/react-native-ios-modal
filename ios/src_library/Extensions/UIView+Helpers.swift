@@ -47,10 +47,10 @@ extension UIView {
         
         constraintItems.forEach {
           guard ($0 as? UIView) === self else { return };
-          ancestorView!.removeConstraint(ancestorConstraint);
+          ancestorView?.removeConstraint(ancestorConstraint);
         };
         
-        ancestorView = ancestorView!.superview;
+        ancestorView = ancestorView?.superview;
       };
     };
     

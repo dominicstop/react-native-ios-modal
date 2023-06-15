@@ -17,7 +17,7 @@ class AdaptiveModalManager: NSObject {
   var enableSnapping = true;
   
   var shouldSnapToOvershootSnapPoint = false;
-  var shouldSnapToUnderShootSnapPoint = false;
+  var shouldSnapToUnderShootSnapPoint = true;
   
   // MARK: -  Properties - Layout-Related
   // ------------------------------------
@@ -239,7 +239,7 @@ class AdaptiveModalManager: NSObject {
     modalVC.transitioningDelegate = self;
   };
   
-  private func setupInitViews(){
+  private func setupInitViews() {
     self.modalBackgroundView = UIView();
     self.modalBackgroundVisualEffectView = UIVisualEffectView();
     
@@ -247,7 +247,7 @@ class AdaptiveModalManager: NSObject {
     self.backgroundVisualEffectView = UIVisualEffectView();
   };
   
-  private func setupGestureHandler(){
+  private func setupGestureHandler() {
     guard let modalView = self.modalView else { return };
     
     modalView.gestureRecognizers?.removeAll();
@@ -260,7 +260,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  private func setupDummyModalView(){
+  private func setupDummyModalView() {
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
     
@@ -274,7 +274,7 @@ class AdaptiveModalManager: NSObject {
     targetView.addSubview(dummyModalView);
   };
   
-  private func setupAddViews(){
+  private func setupAddViews() {
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -284,6 +284,7 @@ class AdaptiveModalManager: NSObject {
       
       bgVisualEffectView.clipsToBounds = true;
       bgVisualEffectView.backgroundColor = .clear;
+      bgVisualEffectView.isUserInteractionEnabled = false;
     };
     
     if let bgDimmingView = self.backgroundDimmingView {
@@ -319,7 +320,7 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
-  private func setupViewConstraints(){
+  private func setupViewConstraints() {
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -807,7 +808,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  private func applyInterpolationToModal(forPoint point: CGPoint){
+  private func applyInterpolationToModal(forPoint point: CGPoint) {
     guard let interpolationRangeMaxInput = self.interpolationRangeMaxInput
     else { return };
     
@@ -829,7 +830,7 @@ class AdaptiveModalManager: NSObject {
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
   
-  private func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint){
+  private func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint) {
     guard let gestureInitialPoint = self.gestureInitialPoint
     else { return };
     
@@ -857,14 +858,14 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Cleanup-Related
   // -----------------------------------
   
-  private func clearGestureValues(){
+  private func clearGestureValues() {
     self.gestureOffset = nil;
     self.gestureInitialPoint = nil;
     self.gestureVelocity = nil;
     self.gesturePoint = nil;
   };
   
-  private func clearAnimators(){
+  private func clearAnimators() {
     self.backgroundVisualEffectAnimator?.clear();
     self.backgroundVisualEffectAnimator = nil;
     
@@ -875,10 +876,10 @@ class AdaptiveModalManager: NSObject {
     self.modalAnimator = nil;
   };
   
-  private func cleanupViews(){
-    let viewsToCleanup = [
+  private func cleanupViews() {
+    let viewsToCleanup: [UIView?] = [
       self.modalWrapperView,
-      self.modalView,
+      self.dummyModalView,
       self.modalBackgroundView,
       self.modalBackgroundVisualEffectView,
       self.backgroundDimmingView,
@@ -886,19 +887,32 @@ class AdaptiveModalManager: NSObject {
     ];
     
     viewsToCleanup.forEach {
-      guard let view = $0,
-            view.superview != nil
-      else { return };
+      guard let view = $0 else { return };
       
       view.removeAllAncestorConstraints();
       view.removeFromSuperview();
     };
+    
+    self.modalView = nil;
+    self.targetView = nil;
+    
+    self.modalBackgroundView = nil;
+    self.modalBackgroundVisualEffectView = nil;
+    self.backgroundDimmingView = nil;
+    self.backgroundVisualEffectView = nil;
   };
   
-  private func cleanup(){
+  private func cleanup() {
     self.clearGestureValues();
     self.clearAnimators();
     self.cleanupViews();
+    
+    print(
+      "\n - self.backgroundVisualEffectView: \(self.backgroundVisualEffectView)",
+      "\n - self.backgroundDimmingView: \(self.backgroundDimmingView)",
+      "\n - self.modalBackgroundVisualEffectView: \(self.modalBackgroundVisualEffectView)",
+      "\n - self.modalBackgroundView: \(self.modalBackgroundView)"
+    );
   };
   
   // MARK: - Functions
@@ -915,7 +929,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  private func updateModal(){
+  private func updateModal() {
     guard !self.isAnimating else { return };
         
     if let gesturePoint = self.gesturePoint {
@@ -1177,7 +1191,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Event Functions
   // -----------------------
   
-  private func notifyOnModalWillSnap(){
+  private func notifyOnModalWillSnap() {
     let interpolationSteps = self.interpolationSteps!;
     let prevIndex = self.currentInterpolationIndex;
     
@@ -1201,9 +1215,13 @@ class AdaptiveModalManager: NSObject {
       snapPointConfig: self.modalConfig.snapPoints[nextPoint.snapPointIndex],
       interpolationPoint: nextPoint
     );
+    
+    if nextIndex == 0 {
+      self.notifyOnModalWillHide();
+    };
   };
   
-  private func notifyOnModalDidSnap(){
+  private func notifyOnModalDidSnap() {
     self.eventDelegate?.notifyOnModalDidSnap(
       prevSnapPointIndex:
         interpolationSteps[self.prevInterpolationIndex].snapPointIndex,
@@ -1214,6 +1232,18 @@ class AdaptiveModalManager: NSObject {
       snapPointConfig: self.currentSnapPointConfig,
       interpolationPoint: self.currentInterpolationStep
     );
+    
+    if self.currentInterpolationIndex == 0 {
+      self.notifyOnModalDidHide();
+    };
+  };
+  
+  private func notifyOnModalWillHide(){
+    // wip
+  };
+  
+  private func notifyOnModalDidHide(){
+    self.cleanup();
   };
   
   // MARK: - User-Invoked Functions
@@ -1248,7 +1278,7 @@ class AdaptiveModalManager: NSObject {
     self.updateModal();
   };
   
-  func notifyDidLayoutSubviews(){
+  func notifyDidLayoutSubviews() {
     self.computeSnapPoints();
     self.updateModal();
   };
@@ -1297,7 +1327,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  func snapToClosestSnapPoint(completion: (() -> Void)? = nil){
+  func snapToClosestSnapPoint(completion: (() -> Void)? = nil) {
     let closestSnapPoint = self.getClosestSnapPoint(forRect: self.modalFrame);
     
     let nextInterpolationIndex =
@@ -1313,12 +1343,12 @@ class AdaptiveModalManager: NSObject {
           prevFrame != nextFrame
     else { return };
     
-    self.snapTo(interpolationIndex: nextInterpolationIndex){
+    self.snapTo(interpolationIndex: nextInterpolationIndex) {
       completion?();
     };
   };
   
-  func snapToCurrentIndex(completion: (() -> Void)? = nil){
+  func snapToCurrentIndex(completion: (() -> Void)? = nil) {
     self.snapTo(
       interpolationIndex: self.currentInterpolationIndex,
       completion: completion
