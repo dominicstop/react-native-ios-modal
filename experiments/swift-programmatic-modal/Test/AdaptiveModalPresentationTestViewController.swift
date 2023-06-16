@@ -7,9 +7,81 @@
 
 import UIKit
 
-class TestModalViewController: UIViewController {
+class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
+
+  weak var modalManager: AdaptiveModalManager?;
+
+  lazy var floatingViewLabel: UILabel = {
+    let label = UILabel();
+    
+    label.text = "\(self.modalManager?.currentInterpolationIndex ?? -1)";
+    label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5);
+    label.font = .boldSystemFont(ofSize: 22);
+
+    return label;
+  }();
+  
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
+    
+    let presentButton: UIButton = {
+      let button = UIButton();
+      
+      button.setTitle("Dismiss Modal", for: .normal);
+      button.configuration = .filled();
+      
+      button.addTarget(
+        self,
+        action: #selector(self.onPressButtonDismiss(_:)),
+        for: .touchUpInside
+      );
+      
+      return button;
+    }();
+    
+    let stackView: UIStackView = {
+      let stack = UIStackView();
+      
+      stack.axis = .vertical;
+      stack.distribution = .equalSpacing;
+      stack.alignment = .center;
+      stack.spacing = 15;
+      
+      stack.addArrangedSubview(self.floatingViewLabel);
+      stack.addArrangedSubview(presentButton);
+      
+      return stack;
+    }();
+    
+    stackView.translatesAutoresizingMaskIntoConstraints = false;
+    self.view.addSubview(stackView);
+    
+    NSLayoutConstraint.activate([
+      stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+      stackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+    ]);
+  };
+  
+  @objc func onPressButtonDismiss(_ sender: UIButton){
+    self.dismiss(animated: true);
+  };
+  
+  func notifyOnModalWillSnap(
+    prevSnapPointIndex: Int?,
+    nextSnapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    interpolationPoint: AdaptiveModalInterpolationPoint
+  ) {
+    self.floatingViewLabel.text = "\(nextSnapPointIndex)";
+  };
+  
+  func notifyOnModalDidSnap(
+    prevSnapPointIndex: Int?,
+    currentSnapPointIndex: Int,
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    interpolationPoint: AdaptiveModalInterpolationPoint
+  ) {
+    self.floatingViewLabel.text = "\(currentSnapPointIndex)";
   };
 };
 
@@ -70,10 +142,13 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   @objc func onPressButtonPresentViewController(_ sender: UIButton) {
     let testVC = TestModalViewController();
     
+    self.adaptiveModalManager.eventDelegate = testVC;
+    testVC.modalManager = self.adaptiveModalManager;
+    
     self.adaptiveModalManager.prepareForPresentation(
       presentingViewController: testVC
     );
-
+    
     self.present(testVC, animated: true);
   };
 };
