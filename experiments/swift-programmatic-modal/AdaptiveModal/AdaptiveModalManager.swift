@@ -35,6 +35,7 @@ class AdaptiveModalManager: NSObject {
   lazy var dummyModalView = UIView();
   lazy var modalWrapperView = UIView();
   lazy var modalWrapperTransformView = UIView();
+  lazy var modalWrapperShadowView = UIView();
   
   var prevModalFrame: CGRect = .zero;
   
@@ -305,15 +306,24 @@ class AdaptiveModalManager: NSObject {
       bgDimmingView.alpha = 0;
     };
     
-    let modalWrapperView = self.modalWrapperView;
-    targetView.addSubview(modalWrapperView);
+    let wrapperViews = [
+      self.modalWrapperView,
+      self.modalWrapperTransformView,
+      self.modalWrapperShadowView,
+      modalView,
+    ];
     
-    let modalWrapperTransformView = self.modalWrapperTransformView;
-    modalWrapperView.addSubview(modalWrapperTransformView);
+    wrapperViews.enumerated().forEach {
+      guard let prev = wrapperViews[safeIndex: $0.offset - 1] else {
+        targetView.addSubview($0.element);
+        return;
+      };
+      
+      prev.addSubview($0.element);
+    };
     
     modalView.clipsToBounds = true;
     modalView.backgroundColor = .clear;
-    modalWrapperTransformView.addSubview(modalView);
     
     if let modalBackgroundView = self.modalBackgroundView {
       modalView.addSubview(modalBackgroundView);
@@ -349,25 +359,21 @@ class AdaptiveModalManager: NSObject {
       ]);
     };
     
-    if let parentView = self.modalWrapperTransformView.superview {
-      self.modalWrapperTransformView.translatesAutoresizingMaskIntoConstraints = false;
-      
-      NSLayoutConstraint.activate([
-        self.modalWrapperTransformView.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
-        self.modalWrapperTransformView.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
-        self.modalWrapperTransformView.widthAnchor  .constraint(equalTo: parentView.widthAnchor  ),
-        self.modalWrapperTransformView.heightAnchor .constraint(equalTo: parentView.heightAnchor ),
-      ]);
-    };
+    let wrapperViews = [
+      self.modalWrapperTransformView,
+      self.modalWrapperShadowView,
+      modalView,
+    ];
     
-    if let parentView = modalView.superview {
-      modalView.translatesAutoresizingMaskIntoConstraints = false;
+    wrapperViews.forEach {
+      guard let parentView = $0.superview else { return };
+      $0.translatesAutoresizingMaskIntoConstraints = false;
       
       NSLayoutConstraint.activate([
-        modalView.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
-        modalView.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
-        modalView.widthAnchor  .constraint(equalTo: parentView.widthAnchor  ),
-        modalView.heightAnchor .constraint(equalTo: parentView.heightAnchor ),
+        $0.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
+        $0.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
+        $0.widthAnchor  .constraint(equalTo: parentView.widthAnchor  ),
+        $0.heightAnchor .constraint(equalTo: parentView.heightAnchor ),
       ]);
     };
     
@@ -904,8 +910,11 @@ class AdaptiveModalManager: NSObject {
   
   private func cleanupViews() {
     let viewsToCleanup: [UIView?] = [
-      self.modalWrapperView,
       self.dummyModalView,
+      self.modalWrapperView,
+      // self.modalWrapperTransformView,
+      // self.nodalView,
+      self.modalWrapperShadowView,
       self.modalBackgroundView,
       self.modalBackgroundVisualEffectView,
       self.backgroundDimmingView,
