@@ -43,6 +43,7 @@ enum RNILayoutPreset {
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .bottom,
+          marginTop: .constant(0),
           marginBottom: .percent(
             relativeTo: .currentHeight,
             percentValue: -1
@@ -56,7 +57,8 @@ enum RNILayoutPreset {
           marginTop: .percent(
             relativeTo: .currentHeight,
             percentValue: -1
-          )
+          ),
+          marginBottom: .constant(0)
         );
       
       case .offscreenLeft:
@@ -66,13 +68,15 @@ enum RNILayoutPreset {
           marginLeft: .percent(
             relativeTo: .currentWidth,
             percentValue: -1
-          )
+          ),
+          marginRight: .constant(0)
         );
       
       case .offscreenRight:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .right,
+          marginLeft: .constant(0),
           marginRight: .percent(
             relativeTo: .currentWidth,
             percentValue: 1
@@ -89,7 +93,8 @@ enum RNILayoutPreset {
         return .init(
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .top,
-          marginTop: .percent(
+          marginTop: .constant(0),
+          marginBottom: .percent(
             relativeTo: .currentHeight,
             percentValue: 0.5
           )
@@ -100,9 +105,10 @@ enum RNILayoutPreset {
           derivedFrom: baseLayoutConfig,
           verticalAlignment: .top,
           marginTop: .percent(
-              relativeTo: .currentHeight,
-              percentValue: -0.5
-            )
+            relativeTo: .currentHeight,
+            percentValue: -0.5
+          ),
+          marginBottom: .constant(0)
         );
         
       case .halfOffscreenLeft:
@@ -112,13 +118,15 @@ enum RNILayoutPreset {
           marginLeft: .percent(
             relativeTo: .currentWidth,
             percentValue: -0.5
-          )
+          ),
+          marginRight: .constant(0)
         );
         
       case .halfOffscreenRight:
         return .init(
           derivedFrom: baseLayoutConfig,
           horizontalAlignment: .right,
+          marginLeft: .constant(0),
           marginRight: .percent(
             relativeTo: .currentWidth,
             percentValue: 0.5

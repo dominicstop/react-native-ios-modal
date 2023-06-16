@@ -23,7 +23,7 @@ struct AdaptiveModalSnapPointConfig {
     fromSnapPointPreset snapPointPreset: AdaptiveModalSnapPointPreset,
     fromBaseLayoutConfig baseLayoutConfig: RNILayout
   ) {
-    let snapPointLayoutPreset = snapPointPreset.snapPointPreset;
+    let snapPointLayoutPreset = snapPointPreset.layoutPreset;
     
     let snapPointLayout = snapPointLayoutPreset.getLayoutConfig(
       fromBaseLayoutConfig: baseLayoutConfig
@@ -34,16 +34,36 @@ struct AdaptiveModalSnapPointConfig {
   };
 };
 
-//extension AdaptiveModalSnapPointConfig {
-//
-//  static func deriveSnapPoints(
-//    initialSnapPoint: AdaptiveModalSnapPointPreset,
-//    inBetweenSnapPoints: [AdaptiveModalSnapPointConfig],
-//    overshootSnapPoint: AdaptiveModalSnapPointPreset
-//  ) -> [AdaptiveModalSnapPointConfig] {
-//
-//    var snapPoints: [AdaptiveModalSnapPointConfig] = [];
-//
-//    return snapPoints;
-//  };
-//};
+extension AdaptiveModalSnapPointConfig {
+
+  static func deriveSnapPoints(
+    undershootSnapPoint: AdaptiveModalSnapPointPreset,
+    inBetweenSnapPoints: [AdaptiveModalSnapPointConfig],
+    overshootSnapPoint: AdaptiveModalSnapPointPreset
+  ) -> [AdaptiveModalSnapPointConfig] {
+
+    var items: [AdaptiveModalSnapPointConfig] = [];
+    
+    if let snapPointFirst = inBetweenSnapPoints.first {
+      let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: undershootSnapPoint,
+        fromBaseLayoutConfig: snapPointFirst.snapPoint
+      );
+      
+      items.append(initialSnapPointConfig);
+    };
+    
+    items += inBetweenSnapPoints;
+    
+    if let snapPointLast = inBetweenSnapPoints.last {
+      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: overshootSnapPoint,
+        fromBaseLayoutConfig: snapPointLast.snapPoint
+      );
+      
+      items.append(overshootSnapPointConfig);
+    };
+    
+    return items;
+  };
+};

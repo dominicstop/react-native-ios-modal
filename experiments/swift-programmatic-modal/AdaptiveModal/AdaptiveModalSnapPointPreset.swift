@@ -9,14 +9,14 @@ import Foundation
 
 struct AdaptiveModalSnapPointPreset {
 
-  let snapPointPreset: RNILayoutPreset;
+  let layoutPreset: RNILayoutPreset;
   let animationKeyframe: AdaptiveModalAnimationConfig?;
   
   init(
-    snapPoint: RNILayoutPreset,
+    layoutPreset: RNILayoutPreset,
     animationKeyframe: AdaptiveModalAnimationConfig? = nil
   ) {
-    self.snapPointPreset = snapPoint;
+    self.layoutPreset = layoutPreset;
     self.animationKeyframe = animationKeyframe;
   };
 };
@@ -26,7 +26,7 @@ extension AdaptiveModalSnapPointPreset {
     forDirection direction: AdaptiveModalConfig.Direction
   ) -> Self {
   
-    let snapPoint: RNILayoutPreset = {
+    let layoutPreset: RNILayoutPreset = {
       switch direction {
         case .bottomToTop: return .edgeTop;
         case .topToBottom: return .edgeBottom;
@@ -35,14 +35,14 @@ extension AdaptiveModalSnapPointPreset {
       };
     }();
   
-    return self.init(snapPoint: snapPoint);
+    return self.init(layoutPreset: layoutPreset);
   };
   
   static func getDefaultInitialSnapPoint(
     forDirection direction: AdaptiveModalConfig.Direction
   ) -> Self {
   
-    let snapPoint: RNILayoutPreset = {
+    let layoutPreset: RNILayoutPreset = {
       switch direction {
         case .bottomToTop: return .offscreenBottom;
         case .topToBottom: return .offscreenTop;
@@ -51,6 +51,6 @@ extension AdaptiveModalSnapPointPreset {
       };
     }();
   
-    return self.init(snapPoint: snapPoint);
+    return self.init(layoutPreset: layoutPreset);
   };
 };

@@ -149,7 +149,7 @@ public struct RNILayout {
           rect.setPoint(minY: context.targetRect.minY);
           
         case .bottom:
-          rect.setPoint(maxY: context.targetRect.maxY);
+          rect.origin.y = context.targetRect.height - rect.height;
       };
     };
     
@@ -205,7 +205,7 @@ public struct RNILayout {
     let computedMarginHorizontal =
       (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
       
-    let computedMargiVertical =
+    let computedMarginVertical =
       (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
    
     // Margin - X-Axis
@@ -238,14 +238,14 @@ public struct RNILayout {
     
     let shouldRecomputeXAxis: Bool = {
       switch self.width.mode {
-        case .stretch: return true;
+        case .stretch: return abs(computedMarginHorizontal) < rect.width;
         default: return false;
       };
     }();
     
     let shouldRecomputeYAxis: Bool = {
       switch self.height.mode {
-        case .stretch: return true;
+        case .stretch: return abs(computedMarginVertical) < rect.height;
         default: return false;
       };
     }();
@@ -255,7 +255,7 @@ public struct RNILayout {
     };
     
     if shouldRecomputeYAxis {
-      rect.size.height = rect.size.height - computedMargiVertical;
+      rect.size.height = rect.size.height - computedMarginVertical;
     };
     
     if shouldRecomputeXAxis || shouldRecomputeYAxis {

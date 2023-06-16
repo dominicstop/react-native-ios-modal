@@ -45,7 +45,7 @@ class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
       stack.axis = .vertical;
       stack.distribution = .equalSpacing;
       stack.alignment = .center;
-      stack.spacing = 15;
+      stack.spacing = 10;
       
       stack.addArrangedSubview(self.floatingViewLabel);
       stack.addArrangedSubview(presentButton);

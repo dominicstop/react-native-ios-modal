@@ -122,6 +122,11 @@ class AdaptiveModalManager: NSObject {
     return displayLinkStartTimestamp + animator.duration;
   };
   
+  private var rangeAnimators: [AdaptiveModalRangePropertyAnimator?] {[
+    self.backgroundVisualEffectAnimator,
+    self.modalBackgroundVisualEffectAnimator
+  ]};
+  
   // MARK: -  Properties - Gesture-Related
   // -------------------------------------
   
@@ -910,7 +915,7 @@ class AdaptiveModalManager: NSObject {
     
     self.didTriggerSetup = false;
   };
-  
+ 
   private func cleanup() {
     self.clearGestureValues();
     self.clearAnimators();
@@ -1320,12 +1325,13 @@ class AdaptiveModalManager: NSObject {
   
   func snapTo(
     interpolationIndex nextIndex: Int,
+    interpolationPoint: AdaptiveModalInterpolationPoint? = nil,
     completion: (() -> Void)? = nil
   ) {
     self.nextInterpolationIndex = nextIndex;
   
-    let nextInterpolationPoint =
-      self.interpolationSteps[nextIndex];
+    let nextInterpolationPoint = interpolationPoint
+      ?? self.interpolationSteps[nextIndex];
       
     self.notifyOnModalWillSnap();
   
@@ -1395,8 +1401,37 @@ class AdaptiveModalManager: NSObject {
     self.snapTo(interpolationIndex: nextIndex, completion: completion);
   };
   
-  func dismissModal(completion: (() -> Void)? = nil){
+  func dismissModal(
+    useInBetweenSnapPoints: Bool = false,
+    completion: (() -> Void)? = nil
+  ){
+  
     let nextIndex = 0;
-    self.snapTo(interpolationIndex: nextIndex, completion: completion);
+    
+    if useInBetweenSnapPoints {
+      self.snapTo(interpolationIndex: nextIndex, completion: completion);
+    
+    } else {
+      let currentSnapPointConfig = self.currentSnapPointConfig;
+  
+      let undershootSnapPointConfig = AdaptiveModalSnapPointConfig(
+        fromSnapPointPreset: self.modalConfig.undershootSnapPoint,
+        fromBaseLayoutConfig: currentSnapPointConfig.snapPoint
+      );
+      
+      let undershootInterpolationPoint = AdaptiveModalInterpolationPoint(
+        usingModalConfig: self.modalConfig,
+        snapPointIndex: nextIndex,
+        layoutValueContext: self.layoutValueContext,
+        snapPointConfig: undershootSnapPointConfig,
+        prevInterpolationPoint: self.currentInterpolationStep
+      );
+      
+      self.snapTo(
+        interpolationIndex: nextIndex,
+        interpolationPoint: undershootInterpolationPoint,
+        completion: completion
+      );
+    };
   };
 };

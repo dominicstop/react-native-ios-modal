@@ -43,29 +43,11 @@ struct AdaptiveModalConfig {
   // let snapSwipeVelocityThreshold: CGFloat = 0;
   
   var snapPoints: [AdaptiveModalSnapPointConfig] {
-    var items: [AdaptiveModalSnapPointConfig] = [];
-    
-    if let snapPointFirst = self.baseSnapPoints.first {
-      let initialSnapPointConfig = AdaptiveModalSnapPointConfig(
-        fromSnapPointPreset: self.undershootSnapPoint,
-        fromBaseLayoutConfig: snapPointFirst.snapPoint
-      );
-      
-      items.append(initialSnapPointConfig);
-    };
-    
-    items += self.baseSnapPoints;
-    
-    if let snapPointLast = self.baseSnapPoints.last {
-      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
-        fromSnapPointPreset: self.overshootSnapPoint,
-        fromBaseLayoutConfig: snapPointLast.snapPoint
-      );
-      
-      items.append(overshootSnapPointConfig);
-    };
-    
-    return items;
+    .Element.deriveSnapPoints(
+      undershootSnapPoint: self.undershootSnapPoint,
+      inBetweenSnapPoints: self.baseSnapPoints,
+      overshootSnapPoint: self.overshootSnapPoint
+    );
   };
   
   var snapPointLastIndex: Int {

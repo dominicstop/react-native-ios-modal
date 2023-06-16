@@ -85,7 +85,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         ],
         snapDirection: .bottomToTop,
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
-          snapPoint: .fitScreenVertically
+          layoutPreset: .fitScreenVertically
         )
       );
     
@@ -314,7 +314,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           shouldClampModalLastX: true
         ),
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
-          snapPoint: .fitScreen
+          layoutPreset: .fitScreen
         )
       );
     };
