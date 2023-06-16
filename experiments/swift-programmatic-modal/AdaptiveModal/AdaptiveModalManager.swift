@@ -232,14 +232,14 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Functions - Setup
   // -------------------------
   
-  private func setupViewControllers() {
+  func setupViewControllers() {
     guard let modalVC = self.modalViewController else { return };
   
     modalVC.modalPresentationStyle = .custom;
     modalVC.transitioningDelegate = self;
   };
   
-  private func setupInitViews() {
+  func setupInitViews() {
     self.modalBackgroundView = UIView();
     self.modalBackgroundVisualEffectView = UIVisualEffectView();
     
@@ -247,7 +247,7 @@ class AdaptiveModalManager: NSObject {
     self.backgroundVisualEffectView = UIVisualEffectView();
   };
   
-  private func setupGestureHandler() {
+  func setupGestureHandler() {
     guard let modalView = self.modalView else { return };
     
     modalView.gestureRecognizers?.removeAll();
@@ -260,7 +260,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  private func setupDummyModalView() {
+  func setupDummyModalView() {
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
     
@@ -274,7 +274,7 @@ class AdaptiveModalManager: NSObject {
     targetView.addSubview(dummyModalView);
   };
   
-  private func setupAddViews() {
+  func setupAddViews() {
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -320,7 +320,7 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
-  private func setupViewConstraints() {
+  func setupViewConstraints() {
     guard let modalView = self.modalView,
           let targetView = self.targetView
     else { return };
@@ -906,13 +906,6 @@ class AdaptiveModalManager: NSObject {
     self.clearGestureValues();
     self.clearAnimators();
     self.cleanupViews();
-    
-    print(
-      "\n - self.backgroundVisualEffectView: \(self.backgroundVisualEffectView)",
-      "\n - self.backgroundDimmingView: \(self.backgroundDimmingView)",
-      "\n - self.modalBackgroundVisualEffectView: \(self.modalBackgroundVisualEffectView)",
-      "\n - self.modalBackgroundView: \(self.modalBackgroundView)"
-    );
   };
   
   // MARK: - Functions
@@ -1127,6 +1120,23 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
+  func debug(prefix: String? = ""){
+    print(
+        "\n - AdaptiveModalManager.debug - \(prefix ?? "N/A")"
+      + "\n - modalView: \(self.modalView?.debugDescription ?? "N/A")"
+      + "\n - modalView frame: \(self.modalView?.frame.debugDescription ?? "N/A")"
+      + "\n - modalView superview: \(self.modalView?.superview.debugDescription ?? "N/A")"
+      + "\n - targetView: \(self.targetView?.debugDescription ?? "N/A")"
+      + "\n - targetView frame: \(self.targetView?.frame.debugDescription ?? "N/A")"
+      + "\n - targetView superview: \(self.targetView?.superview.debugDescription ?? "N/A")"
+      + "\n - modalViewController: \(self.modalViewController?.debugDescription ?? "N/A")"
+      + "\n - targetViewController: \(self.targetViewController?.debugDescription ?? "N/A")"
+      + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
+      + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
+      + "\n"
+    );
+  };
+  
   // MARK: - Functions - DisplayLink-Related
   // ---------------------------------------
     
@@ -1250,32 +1260,37 @@ class AdaptiveModalManager: NSObject {
   // ------------------------------
   
   func prepareForPresentation(
-    modalView: UIView,
-    targetView: UIView
+    modalView: UIView? = nil,
+    targetView: UIView? = nil
   ) {
-    let didViewsChange =
-      modalView !== self.modalView || targetView !== self.targetView;
-      
-    if didViewsChange {
-      self.cleanup();
-    };
+    guard let modalView = modalView ?? self.modalView,
+          let targetView = targetView ?? self.targetView
+    else { return };
+
+    self.cleanup();
     
     self.modalView = modalView;
     self.targetView = targetView;
   
     self.computeSnapPoints();
-    self.setupViewControllers();
     
-    if didViewsChange {
-      self.setupInitViews();
-      self.setupDummyModalView();
-      self.setupGestureHandler();
-      
-      self.setupAddViews();
-      self.setupViewConstraints();
-    };
-
+    self.setupInitViews();
+    self.setupDummyModalView();
+    self.setupGestureHandler();
+    
+    self.setupAddViews();
+    self.setupViewConstraints();
+    
     self.updateModal();
+  };
+  
+  func prepareForPresentation(
+    presentingViewController presentingVC: UIViewController
+  ) {
+    self.modalViewController = presentingVC;
+    self.modalView = presentingVC.view;
+    
+    self.setupViewControllers();
   };
   
   func notifyDidLayoutSubviews() {

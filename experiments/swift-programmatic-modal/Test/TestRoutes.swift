@@ -8,7 +8,7 @@
 import UIKit
 
 enum TestRoutes {
-  static let rootRouteKey: Self = .RNIDraggableTest;
+  static let rootRouteKey: Self = .AdaptiveModalPresentationTest;
 
   case RNILayoutTest;
   case RNIDraggableTest;

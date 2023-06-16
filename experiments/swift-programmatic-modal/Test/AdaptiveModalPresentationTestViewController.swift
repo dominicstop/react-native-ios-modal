@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TestViewController: UIViewController {
+class TestModalViewController: UIViewController {
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
   };
@@ -68,7 +68,11 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   };
   
   @objc func onPressButtonPresentViewController(_ sender: UIButton) {
-    let testVC = TestViewController();
+    let testVC = TestModalViewController();
+    
+    self.adaptiveModalManager.prepareForPresentation(
+      presentingViewController: testVC
+    );
 
     self.present(testVC, animated: true);
   };

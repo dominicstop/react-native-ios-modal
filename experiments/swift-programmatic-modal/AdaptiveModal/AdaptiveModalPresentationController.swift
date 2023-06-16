@@ -24,11 +24,26 @@ class AdaptiveModalPresentationController: UIPresentationController {
     self.modalManager = modalManager;
   };
   
-  override func presentationTransitionWillBegin() {
+   override func presentationTransitionWillBegin() {
+    print(
+        "AdaptiveModalPresentationController.presentationTransitionWillBegin"
+      + "\n - presentedViewController: \(self.presentedViewController)"
+      + "\n - presenting: \(self.presentingViewController)"
+      + "\n - presentedViewController - frame: \(self.presentedViewController.view.frame)"
+      + "\n - presenting - frame: \(self.presentingViewController.view.frame)"
+      + "\n - presentedViewController - superview: \(self.presentedViewController.view.superview)"
+      + "\n - presenting - superview: \(self.presentingViewController.view.superview)"
+      + "\n"
+    );
 
-  };
+   };
   
-  override func presentationTransitionDidEnd(_ completed: Bool) {
-    
-  };
+   override func presentationTransitionDidEnd(_ completed: Bool) {
+    print(
+        "AdaptiveModalPresentationController.presentationTransitionDidEnd"
+      + "\n - presentedViewController: \(self.presentedViewController)"
+      + "\n - presenting: \(self.presentingViewController)"
+      + "\n"
+    );
+   };
 };
