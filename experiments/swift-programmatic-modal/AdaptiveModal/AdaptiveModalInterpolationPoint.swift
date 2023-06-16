@@ -19,40 +19,40 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   // MARK: - Properties
   // ------------------
 
-  let percent: CGFloat;
-  let snapPointIndex: Int;
+  var percent: CGFloat;
+  var snapPointIndex: Int;
 
   /// The computed frames of the modal based on the snap points
-  let computedRect: CGRect;
+  var computedRect: CGRect;
   
   // MARK: - Properties - Keyframes
   // ------------------------------
   
-  let modalRotation: CGFloat;
+  var modalRotation: CGFloat;
   
-  let modalScaleX: CGFloat;
-  let modalScaleY: CGFloat;
+  var modalScaleX: CGFloat;
+  var modalScaleY: CGFloat;
 
-  let modalTranslateX: CGFloat;
-  let modalTranslateY: CGFloat;
+  var modalTranslateX: CGFloat;
+  var modalTranslateY: CGFloat;
   
-  let modalOpacity: CGFloat;
-  let modalBackgroundColor: UIColor;
-  let modalBackgroundOpacity: CGFloat;
+  var modalOpacity: CGFloat;
+  var modalBackgroundColor: UIColor;
+  var modalBackgroundOpacity: CGFloat;
   
-  let modalCornerRadius: CGFloat;
-  let modalMaskedCorners: CACornerMask;
+  var modalCornerRadius: CGFloat;
+  var modalMaskedCorners: CACornerMask;
   
-  let modalBackgroundVisualEffect: UIVisualEffect?;
-  let modalBackgroundVisualEffectOpacity: CGFloat;
-  let modalBackgroundVisualEffectIntensity: CGFloat;
+  var modalBackgroundVisualEffect: UIVisualEffect?;
+  var modalBackgroundVisualEffectOpacity: CGFloat;
+  var modalBackgroundVisualEffectIntensity: CGFloat;
   
-  let backgroundColor: UIColor;
-  let backgroundOpacity: CGFloat;
+  var backgroundColor: UIColor;
+  var backgroundOpacity: CGFloat;
   
-  let backgroundVisualEffect: UIVisualEffect?;
-  let backgroundVisualEffectOpacity: CGFloat;
-  let backgroundVisualEffectIntensity: CGFloat;
+  var backgroundVisualEffect: UIVisualEffect?;
+  var backgroundVisualEffectOpacity: CGFloat;
+  var backgroundVisualEffectIntensity: CGFloat;
   
   // MARK: - Computed Properties
   // ---------------------------

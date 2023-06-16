@@ -1310,7 +1310,8 @@ class AdaptiveModalManager: NSObject {
   };
   
   func prepareForPresentation(
-    presentingViewController presentingVC: UIViewController
+    viewControllerToPresent presentingVC: UIViewController,
+    presentingViewController presentedVC: UIViewController
   ) {
     self.modalViewController = presentingVC;
     self.modalView = presentingVC.view;
@@ -1401,7 +1402,7 @@ class AdaptiveModalManager: NSObject {
     self.snapTo(interpolationIndex: nextIndex, completion: completion);
   };
   
-  func dismissModal(
+  func hideModal(
     useInBetweenSnapPoints: Bool = false,
     completion: (() -> Void)? = nil
   ){
@@ -1413,19 +1414,22 @@ class AdaptiveModalManager: NSObject {
     
     } else {
       let currentSnapPointConfig = self.currentSnapPointConfig;
+      let currentInterpolationStep = self.currentInterpolationStep;
   
       let undershootSnapPointConfig = AdaptiveModalSnapPointConfig(
         fromSnapPointPreset: self.modalConfig.undershootSnapPoint,
         fromBaseLayoutConfig: currentSnapPointConfig.snapPoint
       );
       
-      let undershootInterpolationPoint = AdaptiveModalInterpolationPoint(
+      var undershootInterpolationPoint = AdaptiveModalInterpolationPoint(
         usingModalConfig: self.modalConfig,
         snapPointIndex: nextIndex,
         layoutValueContext: self.layoutValueContext,
-        snapPointConfig: undershootSnapPointConfig,
-        prevInterpolationPoint: self.currentInterpolationStep
+        snapPointConfig: undershootSnapPointConfig
       );
+      
+      undershootInterpolationPoint.modalCornerRadius =
+        currentInterpolationStep.modalCornerRadius;
       
       self.snapTo(
         interpolationIndex: nextIndex,
@@ -1433,5 +1437,23 @@ class AdaptiveModalManager: NSObject {
         completion: completion
       );
     };
+  };
+  
+  public func presentModal(
+    viewControllerToPresent modalVC: UIViewController,
+    presentingViewController targetVC: UIViewController,
+    animated: Bool = true,
+    completion: (() -> Void)? = nil
+  ) {
+    self.prepareForPresentation(
+      viewControllerToPresent: modalVC,
+      presentingViewController: targetVC
+    );
+    
+    targetVC.present(
+      modalVC,
+      animated: animated,
+      completion: completion
+    );
   };
 };

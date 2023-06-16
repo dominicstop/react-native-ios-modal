@@ -34,7 +34,7 @@ extension AdaptiveModalManager: UIViewControllerAnimatedTransitioning {
         };
       
       case .dismissing:
-        self.dismissModal(){
+        self.hideModal(){
           transitionContext.completeTransition(true);
         };
         

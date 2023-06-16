@@ -145,10 +145,10 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     self.adaptiveModalManager.eventDelegate = testVC;
     testVC.modalManager = self.adaptiveModalManager;
     
-    self.adaptiveModalManager.prepareForPresentation(
-      presentingViewController: testVC
-    );
     
-    self.present(testVC, animated: true);
+    self.adaptiveModalManager.presentModal(
+      viewControllerToPresent: testVC,
+      presentingViewController: self
+    );
   };
 };
