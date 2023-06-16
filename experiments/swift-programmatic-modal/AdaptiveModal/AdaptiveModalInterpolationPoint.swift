@@ -9,13 +9,13 @@ import UIKit
 
 struct AdaptiveModalInterpolationPoint: Equatable {
 
-  private static let DefaultMaskedCorners: CACornerMask = [
+  static let DefaultMaskedCorners: CACornerMask = [
     .layerMaxXMinYCorner,
     .layerMinXMinYCorner,
     .layerMaxXMaxYCorner,
     .layerMinXMaxYCorner,
   ];
-
+  
   // MARK: - Properties
   // ------------------
 
@@ -39,6 +39,14 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   var modalOpacity: CGFloat;
   var modalBackgroundColor: UIColor;
   var modalBackgroundOpacity: CGFloat;
+  
+  var modalBorderWidth: CGFloat;
+  var modalBorderColor: UIColor;
+  
+  var modalShadowColor: UIColor;
+  var modalShadowOffset: CGSize;
+  var modalShadowOpacity: CGFloat;
+  var modalShadowRadius: CGFloat;
   
   var modalCornerRadius: CGFloat;
   var modalMaskedCorners: CACornerMask;
@@ -81,8 +89,105 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     };
   };
   
-  // MARK: - Init
-  // ------------
+  // MARK: - Functions
+  // -----------------
+  
+  func getModalTransform(
+    shouldApplyRotation: Bool = true,
+    shouldApplyScale: Bool = true,
+    shouldApplyTranslate: Bool = true
+  ) -> CGAffineTransform {
+  
+    var transforms: [CGAffineTransform] = [];
+    
+    if shouldApplyRotation,
+       self.modalRotation != 0 {
+       
+      transforms.append(
+        .init(rotationAngle: self.modalRotation)
+      );
+    };
+    
+    if shouldApplyScale,
+      self.modalScaleX != 1 && self.modalScaleY != 1 {
+      
+      transforms.append(
+        .init(scaleX: self.modalScaleX, y: self.modalScaleY)
+      );
+    };
+    
+    if shouldApplyTranslate,
+       self.modalTranslateX != 0 && self.modalTranslateY != 0 {
+       
+      transforms.append(
+        .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
+      );
+    };
+    
+    if transforms.isEmpty {
+      return .identity;
+    };
+    
+    return transforms.reduce(.identity){
+      $0.concatenating($1);
+    };
+  };
+  
+  func apply(toModalView modalView: UIView){
+    modalView.alpha = self.modalOpacity;
+    
+    modalView.layer.cornerRadius = self.modalCornerRadius;
+    modalView.layer.maskedCorners = self.modalMaskedCorners;
+  };
+  
+  func apply(toModalWrapperView modalWrapperView: UIView){
+    modalWrapperView.frame = self.computedRect;
+  };
+  
+  func apply(toModalWrapperTransformView view: UIView?){
+    view?.transform = self.modalTransform;
+  };
+  
+  func apply(toModalWrapperShadowView view: UIView?){
+    guard let view = view else { return };
+    
+    // border
+    view.layer.borderWidth = self.modalBorderWidth;
+    view.layer.borderColor = self.modalBorderColor.cgColor;
+
+    // shadow
+    view.layer.shadowColor = self.modalShadowColor.cgColor;
+    view.layer.shadowOffset = self.modalShadowOffset;
+    view.layer.shadowOpacity = Float(self.modalShadowOpacity);
+    view.layer.shadowRadius = self.modalShadowRadius;
+  };
+  
+  func apply(toDummyModalView dummyModalView: UIView){
+    dummyModalView.frame = self.computedRect;
+  };
+  
+  func apply(toModalBackgroundView modalBgView: UIView?){
+    modalBgView?.alpha = self.modalBackgroundOpacity;
+    modalBgView?.backgroundColor = self.modalBackgroundColor;
+  };
+  
+  func apply(toModalBackgroundEffectView effectView: UIVisualEffectView?){
+    effectView?.alpha = self.modalBackgroundVisualEffectOpacity;
+  };
+  
+  func apply(toBackgroundView bgView: UIView?){
+    bgView?.alpha = self.backgroundOpacity;
+  };
+  
+  func apply(toBackgroundVisualEffectView effectView: UIView?){
+    effectView?.alpha = self.backgroundVisualEffectOpacity;
+  };
+};
+
+// MARK: - Init
+// ------------
+
+extension AdaptiveModalInterpolationPoint {
 
   init(
     usingModalConfig modalConfig: AdaptiveModalConfig,
@@ -157,6 +262,30 @@ struct AdaptiveModalInterpolationPoint: Equatable {
     self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
       ?? keyframePrev?.modalBackgroundOpacity
       ?? 1;
+      
+    self.modalBorderWidth = keyframeCurrent?.modalBorderWidth
+      ?? keyframePrev?.modalBorderWidth
+      ?? 0;
+    
+    self.modalBorderColor = keyframeCurrent?.modalBorderColor
+      ?? keyframePrev?.modalBorderColor
+      ?? .black;
+    
+    self.modalShadowColor = keyframeCurrent?.modalShadowColor
+      ?? keyframePrev?.modalShadowColor
+      ?? .black;
+    
+    self.modalShadowOffset = keyframeCurrent?.modalShadowOffset
+      ?? keyframePrev?.modalShadowOffset
+      ?? .zero;
+    
+    self.modalShadowOpacity = keyframeCurrent?.modalShadowOpacity
+      ?? keyframePrev?.modalShadowOpacity
+      ?? 0;
+    
+    self.modalShadowRadius = keyframeCurrent?.modalShadowRadius
+      ?? keyframePrev?.modalShadowRadius
+      ?? 0;
     
     self.modalCornerRadius = keyframeCurrent?.modalCornerRadius
       ?? keyframePrev?.modalCornerRadius
@@ -196,87 +325,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
       ?? keyframePrev?.backgroundVisualEffectIntensity
       ?? (isFirstSnapPoint ? 0 : 1);
   };
-  
-  // MARK: - Functions
-  // -----------------
-  
-  func getModalTransform(
-    shouldApplyRotation: Bool = true,
-    shouldApplyScale: Bool = true,
-    shouldApplyTranslate: Bool = true
-  ) -> CGAffineTransform {
-  
-    var transforms: [CGAffineTransform] = [];
-    
-    if shouldApplyRotation,
-       self.modalRotation != 0 {
-       
-      transforms.append(
-        .init(rotationAngle: self.modalRotation)
-      );
-    };
-    
-    if shouldApplyScale,
-      self.modalScaleX != 1 && self.modalScaleY != 1 {
-      
-      transforms.append(
-        .init(scaleX: self.modalScaleX, y: self.modalScaleY)
-      );
-    };
-    
-    if shouldApplyTranslate,
-       self.modalTranslateX != 0 && self.modalTranslateY != 0 {
-       
-      transforms.append(
-        .init(translationX: self.modalTranslateX, y: self.modalTranslateY)
-      );
-    };
-    
-    if transforms.isEmpty {
-      return .identity;
-    };
-    
-    return transforms.reduce(.identity){
-      $0.concatenating($1);
-    };
-  };
-  
-  func apply(toModalView modalView: UIView){
-    modalView.alpha = self.modalOpacity;
-    
-    modalView.layer.cornerRadius = self.modalCornerRadius;
-    modalView.layer.maskedCorners = self.modalMaskedCorners;
-  };
-  
-  func apply(toModalWrapperView modalWrapperView: UIView){
-    modalWrapperView.frame = self.computedRect;
-  };
-  
-  func apply(toModalWrapperTransformView view: UIView?){
-    view?.transform = self.modalTransform;
-  };
-  
-  func apply(toDummyModalView dummyModalView: UIView){
-    dummyModalView.frame = self.computedRect;
-  };
-  
-  func apply(toModalBackgroundView modalBgView: UIView?){
-    modalBgView?.alpha = self.modalBackgroundOpacity;
-    modalBgView?.backgroundColor = self.modalBackgroundColor;
-  };
-  
-  func apply(toModalBackgroundEffectView effectView: UIVisualEffectView?){
-    effectView?.alpha = self.modalBackgroundVisualEffectOpacity;
-  };
-  
-  func apply(toBackgroundView bgView: UIView?){
-    bgView?.alpha = self.backgroundOpacity;
-  };
-  
-  func apply(toBackgroundVisualEffectView effectView: UIView?){
-    effectView?.alpha = self.backgroundVisualEffectOpacity;
-  };
 };
+
+// MARK: - Helpers
+// ---------------
 
 extension AdaptiveModalInterpolationPoint {
 

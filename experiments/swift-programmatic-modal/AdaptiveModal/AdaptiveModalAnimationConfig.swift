@@ -9,31 +9,39 @@ import UIKit
 
 
 struct AdaptiveModalAnimationConfig {
-  let modalRotation: CGFloat?;
+  var modalRotation: CGFloat?;
   
-  let modalScaleX: CGFloat?;
-  let modalScaleY: CGFloat?;
+  var modalScaleX: CGFloat?;
+  var modalScaleY: CGFloat?;
 
-  let modalTranslateX: CGFloat?;
-  let modalTranslateY: CGFloat?;
+  var modalTranslateX: CGFloat?;
+  var modalTranslateY: CGFloat?;
   
-  let modalOpacity: CGFloat?;
-  let modalBackgroundColor: UIColor?;
-  let modalBackgroundOpacity: CGFloat?;
+  var modalOpacity: CGFloat?;
+  var modalBackgroundColor: UIColor?;
+  var modalBackgroundOpacity: CGFloat?;
   
-  let modalCornerRadius: CGFloat?;
-  let modalMaskedCorners: CACornerMask?;
+  var modalBorderWidth: CGFloat?;
+  var modalBorderColor: UIColor?;
   
-  let modalBackgroundVisualEffect: UIVisualEffect?;
-  let modalBackgroundVisualEffectOpacity: CGFloat?;
-  let modalBackgroundVisualEffectIntensity: CGFloat?;
+  var modalShadowColor: UIColor?;
+  var modalShadowOffset: CGSize?;
+  var modalShadowOpacity: CGFloat?;
+  var modalShadowRadius: CGFloat?;
   
-  let backgroundColor: UIColor?;
-  let backgroundOpacity: CGFloat?;
+  var modalCornerRadius: CGFloat?;
+  var modalMaskedCorners: CACornerMask?;
   
-  let backgroundVisualEffect: UIVisualEffect?;
-  let backgroundVisualEffectOpacity: CGFloat?;
-  let backgroundVisualEffectIntensity: CGFloat?;
+  var modalBackgroundVisualEffect: UIVisualEffect?;
+  var modalBackgroundVisualEffectOpacity: CGFloat?;
+  var modalBackgroundVisualEffectIntensity: CGFloat?;
+  
+  var backgroundColor: UIColor?;
+  var backgroundOpacity: CGFloat?;
+  
+  var backgroundVisualEffect: UIVisualEffect?;
+  var backgroundVisualEffectOpacity: CGFloat?;
+  var backgroundVisualEffectIntensity: CGFloat?;
   
   init(
      modalRotation: CGFloat? = nil,
@@ -44,6 +52,12 @@ struct AdaptiveModalAnimationConfig {
      modalOpacity: CGFloat? = nil,
      modalBackgroundColor: UIColor? = nil,
      modalBackgroundOpacity: CGFloat? = nil,
+     modalBorderWidth: CGFloat? = nil,
+     modalBorderColor: UIColor? = nil,
+     modalShadowColor: UIColor? = nil,
+     modalShadowOffset: CGSize? = nil,
+     modalShadowOpacity: CGFloat? = nil,
+     modalShadowRadius: CGFloat? = nil,
      modalCornerRadius: CGFloat? = nil,
      modalMaskedCorners: CACornerMask? = nil,
      modalBackgroundVisualEffect: UIVisualEffect? = nil,
@@ -66,6 +80,14 @@ struct AdaptiveModalAnimationConfig {
     self.modalOpacity = modalOpacity;
     self.modalBackgroundColor = modalBackgroundColor;
     self.modalBackgroundOpacity = modalBackgroundOpacity;
+    
+    self.modalBorderWidth = modalBorderWidth;
+    self.modalBorderColor = modalBorderColor;
+    
+    self.modalShadowColor = modalShadowColor;
+    self.modalShadowOffset = modalShadowOffset;
+    self.modalShadowOpacity = modalShadowOpacity;
+    self.modalShadowRadius = modalShadowRadius;
     
     self.modalCornerRadius = modalCornerRadius;
     self.modalMaskedCorners = modalMaskedCorners;

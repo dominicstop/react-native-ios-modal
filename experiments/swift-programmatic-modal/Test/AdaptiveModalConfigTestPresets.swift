@@ -9,9 +9,10 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .testModalTransform01;
+  static let `default`: Self = .testModalBorderAndShadow01;
   
   case testModalTransform01;
+  case testModalBorderAndShadow01;
 
   case test01;
   case test02;
@@ -80,6 +81,79 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalScaleY: 1
               //modalTranslateX: 0,
               //modalTranslateY: 0
+            )
+          ),
+        ],
+        snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .fitScreenVertically
+        )
+      );
+      
+      case .testModalBorderAndShadow01: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 0
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.2)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBorderWidth: 2,
+              modalBorderColor: .blue,
+              modalShadowColor: .blue,
+              modalShadowOffset: .init(width: 3, height: 3),
+              modalShadowOpacity: 0.4,
+              modalShadowRadius: 4.0
+            )
+          ),
+          
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.4)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBorderWidth: 4,
+              modalBorderColor: .cyan,
+              modalShadowColor: .green,
+              modalShadowOffset: .init(width: 6, height: 6),
+              modalShadowOpacity: 0.5,
+              modalShadowRadius: 5
+            )
+          ),
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.9)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.7)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalBorderWidth: 8,
+              modalBorderColor: .green,
+              modalShadowColor: .purple,
+              modalShadowOffset: .init(width: 9, height: 9),
+              modalShadowOpacity: 0.9,
+              modalShadowRadius: 7
             )
           ),
         ],

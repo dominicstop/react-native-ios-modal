@@ -638,6 +638,27 @@ class AdaptiveModalManager: NSObject {
  
     return nextTransform;
   };
+  
+  private func interpolateModalShadowOffset(
+    forInputPercentValue inputPercentValue: CGFloat
+  ) -> CGSize? {
+
+    let nextWidth = self.interpolate(
+      inputValue: inputPercentValue,
+      rangeOutputKey: \.modalShadowOffset.width
+    );
+    
+    let nextHeight = self.interpolate(
+      inputValue: inputPercentValue,
+      rangeOutputKey: \.modalShadowOffset.height
+    );
+    
+    guard let nextWidth = nextWidth,
+          let nextHeight = nextHeight
+    else { return nil };
+
+    return CGSize(width: nextWidth, height: nextHeight);
+  };
 
   private func interpolateModalBorderRadius(
     forInputPercentValue inputPercentValue: CGFloat
@@ -766,6 +787,72 @@ class AdaptiveModalManager: NSObject {
       withValue:  self.interpolate(
         inputValue: inputPercentValue,
         rangeOutputKey: \.modalOpacity
+      )
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.borderWidth,
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalBorderWidth
+      )
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.borderColor,
+      withValue: {
+        let color = self.interpolateColor(
+          inputValue: inputPercentValue,
+          rangeOutputKey: \.modalBorderColor
+        );
+        
+        return color?.cgColor;
+      }()
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.shadowColor,
+      withValue:  {
+        let color = self.interpolateColor(
+          inputValue: inputPercentValue,
+          rangeOutputKey: \.modalShadowColor
+        );
+        
+        return color?.cgColor;
+      }()
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.shadowOffset,
+      withValue:  self.interpolateModalShadowOffset(
+        forInputPercentValue: inputPercentValue
+      )
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.shadowOpacity,
+      withValue: {
+        let value = self.interpolate(
+          inputValue: inputPercentValue,
+          rangeOutputKey: \.modalShadowOpacity
+        );
+        
+        guard let value = value else { return nil };
+        return Float(value);
+      }()
+    );
+    
+    AdaptiveModalUtilities.unwrapAndSetProperty(
+      forObject: self.modalWrapperShadowView,
+      forPropertyKey: \.layer.shadowRadius,
+      withValue:  self.interpolate(
+        inputValue: inputPercentValue,
+        rangeOutputKey: \.modalShadowRadius
       )
     );
     
@@ -1097,6 +1184,7 @@ class AdaptiveModalManager: NSObject {
       
       interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
       interpolationPoint.apply(toModalWrapperTransformView: self.modalWrapperTransformView);
+      interpolationPoint.apply(toModalWrapperShadowView: self.modalWrapperShadowView);
       
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);

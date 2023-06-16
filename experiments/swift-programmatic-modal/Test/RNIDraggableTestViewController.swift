@@ -17,8 +17,6 @@ class RNIDraggableTestViewController : UIViewController {
     );
     
     manager.eventDelegate = self;
-    //manager.shouldSnapToUnderShootSnapPoint = false;
-    
     return manager;
   }();
   
