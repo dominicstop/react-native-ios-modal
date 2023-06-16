@@ -19,38 +19,27 @@ extension AdaptiveModalManager: UIViewControllerAnimatedTransitioning {
   func animateTransition(
     using transitionContext: UIViewControllerContextTransitioning
   ) {
-    guard let fromVC = transitionContext.viewController(forKey: .from),
-          let toVC = transitionContext.viewController(forKey: .to)
-    else { return }
+    guard let fromVC = transitionContext.viewController(forKey: .from)
+    else { return };
     
-    self.targetView = transitionContext.containerView;
-    self.targetViewController = fromVC;
-    
-    self.prepareForPresentation();
-    self.showModal() {
-      transitionContext.completeTransition(true);
+    switch self.presentationState {
+      case .presenting:
+        self.targetView = transitionContext.containerView;
+        self.targetViewController = fromVC;
+        
+        self.prepareForPresentation();
+        
+        self.showModal() {
+          transitionContext.completeTransition(true);
+        };
+      
+      case .dismissing:
+        self.dismissModal(){
+          transitionContext.completeTransition(true);
+        };
+        
+      case .none:
+        break;
     };
-    
-    self.debug(prefix: "AdaptiveModalPresentationController.animateTransition");
-    
-    
-    
-    
-    // if self.currentInterpolationIndex == 0 {
-    //   self.prepareForPresentation(
-    //     presentingViewController: fromVC,
-    //     presentedViewController: toVC
-    //   );
-    // };
-    //
-    // self.showModal(){
-    //   transitionContext.completeTransition(true);
-    // };
-    
-    print(
-      "AdaptiveModalPresentationController.animateTransition"
-      + "\n - fromVC: \(fromVC)"
-      + "\n - toVC: \(toVC)"
-    );
   };
 };

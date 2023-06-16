@@ -9,6 +9,10 @@ import UIKit
 
 class AdaptiveModalManager: NSObject {
 
+  enum PresentationState {
+    case presenting, dismissing, none;
+  };
+
   // MARK: -  Properties - Config-Related
   // ------------------------------------
   
@@ -193,6 +197,7 @@ class AdaptiveModalManager: NSObject {
   // -------------------
   
   private var didTriggerSetup = false;
+  var presentationState: PresentationState = .none;
   
   weak var eventDelegate: AdaptiveModalEventNotifiable?;
 
@@ -1387,6 +1392,11 @@ class AdaptiveModalManager: NSObject {
   
   func showModal(completion: (() -> Void)? = nil) {
     let nextIndex = self.modalConfig.initialSnapPointIndex;
+    self.snapTo(interpolationIndex: nextIndex, completion: completion);
+  };
+  
+  func dismissModal(completion: (() -> Void)? = nil){
+    let nextIndex = 0;
     self.snapTo(interpolationIndex: nextIndex, completion: completion);
   };
 };

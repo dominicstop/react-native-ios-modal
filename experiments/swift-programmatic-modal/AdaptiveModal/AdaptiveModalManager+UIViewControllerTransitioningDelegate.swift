@@ -32,18 +32,6 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
       modalManager: self
     );
     
-    print(
-        "AdaptiveModalManager+UIViewControllerTransitioningDelegate"
-      + "\n - presentationController"
-      + "\n - presented: \(presented)"
-      + "\n - presented.view.frame: \(presented.view.frame)"
-      + "\n - presenting: \(presenting)"
-      + "\n - presenting.view.frame: \(presenting?.view.frame)"
-      + "\n - source: \(source)"
-      + "\n - source.view.frame: \(source.view.frame)"
-      + "\n"
-    );
-    
     presentationController.delegate = self;
     return presentationController;
   };
@@ -53,14 +41,16 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
     presenting: UIViewController,
     source: UIViewController
   ) -> UIViewControllerAnimatedTransitioning? {
-  
+    
+    self.presentationState = .presenting;
     return self;
   };
 
   func animationController(
     forDismissed dismissed: UIViewController
   ) -> UIViewControllerAnimatedTransitioning? {
-  
+    
+    self.presentationState = .dismissing;
     return self;
   };
 };
