@@ -88,7 +88,7 @@ class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
 class AdaptiveModalPresentationTestViewController : UIViewController {
 
   lazy var adaptiveModalManager = AdaptiveModalManager(
-    modalConfig: AdaptiveModalConfigTestPresets.test03.config
+    modalConfig: AdaptiveModalConfigTestPresets.default.config
   );
   
   override func viewDidLoad() {

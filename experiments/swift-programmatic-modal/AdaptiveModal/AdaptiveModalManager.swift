@@ -34,6 +34,7 @@ class AdaptiveModalManager: NSObject {
   
   lazy var dummyModalView = UIView();
   lazy var modalWrapperView = UIView();
+  lazy var modalWrapperTransformView = UIView();
   
   var prevModalFrame: CGRect = .zero;
   
@@ -276,16 +277,13 @@ class AdaptiveModalManager: NSObject {
     guard let targetView = self.targetView else { return };
     let dummyModalView = self.dummyModalView;
     
-    dummyModalView.removeAllAncestorConstraints();
-    dummyModalView.removeFromSuperview();
-    
     dummyModalView.backgroundColor = .clear;
     dummyModalView.alpha = 0.1;
     dummyModalView.isUserInteractionEnabled = false;
     
     targetView.addSubview(dummyModalView);
   };
-  
+
   func setupAddViews() {
     guard let modalView = self.modalView,
           let targetView = self.targetView
@@ -310,9 +308,12 @@ class AdaptiveModalManager: NSObject {
     let modalWrapperView = self.modalWrapperView;
     targetView.addSubview(modalWrapperView);
     
+    let modalWrapperTransformView = self.modalWrapperTransformView;
+    modalWrapperView.addSubview(modalWrapperTransformView);
+    
     modalView.clipsToBounds = true;
     modalView.backgroundColor = .clear;
-    modalWrapperView.addSubview(modalView);
+    modalWrapperTransformView.addSubview(modalView);
     
     if let modalBackgroundView = self.modalBackgroundView {
       modalView.addSubview(modalBackgroundView);
@@ -348,15 +349,28 @@ class AdaptiveModalManager: NSObject {
       ]);
     };
     
-    modalView.translatesAutoresizingMaskIntoConstraints = false;
+    if let parentView = self.modalWrapperTransformView.superview {
+      self.modalWrapperTransformView.translatesAutoresizingMaskIntoConstraints = false;
       
-    NSLayoutConstraint.activate([
-      modalView.centerXAnchor.constraint(equalTo: self.modalWrapperView.centerXAnchor),
-      modalView.centerYAnchor.constraint(equalTo: self.modalWrapperView.centerYAnchor),
-      modalView.widthAnchor  .constraint(equalTo: self.modalWrapperView.widthAnchor  ),
-      modalView.heightAnchor .constraint(equalTo: self.modalWrapperView.heightAnchor ),
-    ]);
-  
+      NSLayoutConstraint.activate([
+        self.modalWrapperTransformView.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
+        self.modalWrapperTransformView.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
+        self.modalWrapperTransformView.widthAnchor  .constraint(equalTo: parentView.widthAnchor  ),
+        self.modalWrapperTransformView.heightAnchor .constraint(equalTo: parentView.heightAnchor ),
+      ]);
+    };
+    
+    if let parentView = modalView.superview {
+      modalView.translatesAutoresizingMaskIntoConstraints = false;
+      
+      NSLayoutConstraint.activate([
+        modalView.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
+        modalView.centerYAnchor.constraint(equalTo: parentView.centerYAnchor),
+        modalView.widthAnchor  .constraint(equalTo: parentView.widthAnchor  ),
+        modalView.heightAnchor .constraint(equalTo: parentView.heightAnchor ),
+      ]);
+    };
+    
     if let bgDimmingView = self.backgroundDimmingView {
       bgDimmingView.translatesAutoresizingMaskIntoConstraints = false;
       
@@ -733,7 +747,7 @@ class AdaptiveModalManager: NSObject {
     );
     
     AdaptiveModalUtilities.unwrapAndSetProperty(
-      forObject: modalView,
+      forObject: self.modalWrapperTransformView,
       forPropertyKey: \.transform,
       withValue:  self.interpolateModalTransform(
         forInputPercentValue: inputPercentValue
@@ -1071,7 +1085,9 @@ class AdaptiveModalManager: NSObject {
     
     animator.addAnimations {
       interpolationPoint.apply(toModalView: modalView);
+      
       interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
+      interpolationPoint.apply(toModalWrapperTransformView: self.modalWrapperTransformView);
       
       interpolationPoint.apply(toDummyModalView: self.dummyModalView);
       interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
@@ -1079,6 +1095,7 @@ class AdaptiveModalManager: NSObject {
       
       interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView);
       interpolationPoint.apply(toBackgroundVisualEffectView: self.backgroundVisualEffectView);
+      
     };
     
     if let completion = completion {
