@@ -192,6 +192,8 @@ class AdaptiveModalManager: NSObject {
   // MARK: -  Properties
   // -------------------
   
+  private var didTriggerSetup = false;
+  
   weak var eventDelegate: AdaptiveModalEventNotifiable?;
 
   // MARK: - Computed Properties
@@ -900,6 +902,8 @@ class AdaptiveModalManager: NSObject {
     self.modalBackgroundVisualEffectView = nil;
     self.backgroundDimmingView = nil;
     self.backgroundVisualEffectView = nil;
+    
+    self.didTriggerSetup = false;
   };
   
   private func cleanup() {
@@ -1254,6 +1258,7 @@ class AdaptiveModalManager: NSObject {
   
   private func notifyOnModalDidHide(){
     self.cleanup();
+    self.modalViewController?.dismiss(animated: false);
   };
   
   // MARK: - User-Invoked Functions
@@ -1266,22 +1271,32 @@ class AdaptiveModalManager: NSObject {
     guard let modalView = modalView ?? self.modalView,
           let targetView = targetView ?? self.targetView
     else { return };
-
-    self.cleanup();
     
+    let didViewsChange =
+      modalView !== self.modalView || targetView !== self.targetView;
+      
+    let shouldReset = !self.didTriggerSetup || didViewsChange;
+    
+    if shouldReset {
+      self.cleanup();
+    };
+
     self.modalView = modalView;
     self.targetView = targetView;
   
     self.computeSnapPoints();
     
-    self.setupInitViews();
-    self.setupDummyModalView();
-    self.setupGestureHandler();
-    
-    self.setupAddViews();
-    self.setupViewConstraints();
+    if shouldReset {
+      self.setupInitViews();
+      self.setupDummyModalView();
+      self.setupGestureHandler();
+      
+      self.setupAddViews();
+      self.setupViewConstraints();
+    };
     
     self.updateModal();
+    self.didTriggerSetup = true;
   };
   
   func prepareForPresentation(
