@@ -113,10 +113,10 @@ struct AdaptiveModalConfig {
   
   func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
     switch self.snapDirection {
-      case .bottomToTop, .rightToLeft:
+      case .bottomToTop, .leftToRight:
         return array;
         
-      case .topToBottom, .leftToRight:
+      case .topToBottom, .rightToLeft:
         return array.reversed();
     };
   };
