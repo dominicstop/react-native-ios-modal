@@ -64,6 +64,15 @@ struct AdaptiveModalConfig {
     };
   };
   
+  var inputValueKeyForRect: KeyPath<CGRect, CGFloat> {
+    switch self.snapDirection {
+      case .bottomToTop: return \.minY;
+      case .topToBottom: return \.maxY;
+      case .leftToRight: return \.maxX;
+      case .rightToLeft: return \.minX;
+    };
+  };
+  
   var maxInputRangeKeyForRect: KeyPath<CGRect, CGFloat> {
     switch self.snapDirection {
       case .bottomToTop, .topToBottom: return \.height;

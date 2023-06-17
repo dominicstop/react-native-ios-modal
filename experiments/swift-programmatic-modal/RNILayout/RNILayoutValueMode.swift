@@ -22,7 +22,7 @@ public enum RNILayoutValueMode {
     insetKey: KeyPath<UIEdgeInsets, CGFloat>
   );
   
-  case multipleValues(_ values: [RNILayoutValueMode]);
+  case multipleValues(_ values: [Self]);
   
   // MARK: Functions
   // ---------------

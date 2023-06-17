@@ -200,6 +200,41 @@ class AdaptiveModalManager: NSObject {
     return CGPoint(x: nextX, y: nextY);
   };
   
+  private var computedGestureOffset: CGPoint? {
+    guard let gestureInitialPoint = self.gestureInitialPoint,
+          let modalRect = self.modalFrame
+    else { return nil };
+    
+    if let gestureOffset = self.gestureOffset {
+      return gestureOffset;
+    };
+    
+    let xOffset: CGFloat = {
+      switch self.modalConfig.snapDirection {
+        case .bottomToTop, .rightToLeft:
+          return gestureInitialPoint.x - modalRect.minX;
+          
+        case .topToBottom, .leftToRight:
+          return modalRect.maxX - gestureInitialPoint.x;
+      };
+    }();
+    
+    let yOffset: CGFloat = {
+      switch self.modalConfig.snapDirection {
+        case .bottomToTop, .rightToLeft:
+          return gestureInitialPoint.y - modalRect.minY;
+          
+        case .topToBottom, .leftToRight:
+          return modalRect.maxY - gestureInitialPoint.y;
+      };
+    }();
+  
+    let offset = CGPoint(x: xOffset, y: yOffset);
+    self.gestureOffset = offset;
+    
+    return offset;
+  };
+  
   // MARK: -  Properties
   // -------------------
   
@@ -945,31 +980,38 @@ class AdaptiveModalManager: NSObject {
     let percentAdj = shouldInvertPercent
       ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
+      
+    print(
+        "applyInterpolationToModal"
+      + "\n - inputValue: \(inputValue)"
+      + "\n - interpolationRangeMaxInput: \(interpolationRangeMaxInput)"
+      + "\n - percent: \(percent)"
+      + "\n - interpolationRangeInput: \(self.interpolationRangeInput!)"
+      + "\n"
+    );
     
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
   
   private func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint) {
-    guard let gestureInitialPoint = self.gestureInitialPoint
+    guard let computedGestureOffset = self.computedGestureOffset
     else { return };
     
-    let modalRect = self.modalFrame!;
-
-    let gestureOffset = self.gestureOffset ?? {
-      return CGPoint(
-        x: gestureInitialPoint.x - modalRect.origin.x,
-        y: gestureInitialPoint.y - modalRect.origin.y
-      );
+    let gestureInputPoint: CGPoint = {
+      switch self.modalConfig.snapDirection {
+        case .bottomToTop, .rightToLeft:
+          return CGPoint(
+            x: gesturePoint.x - computedGestureOffset.x,
+            y: gesturePoint.y - computedGestureOffset.y
+          );
+          
+        case .topToBottom, .leftToRight:
+          return CGPoint(
+            x: gesturePoint.x + computedGestureOffset.x,
+            y: gesturePoint.y + computedGestureOffset.y
+          );
+      };
     }();
-    
-    if self.gestureOffset == nil {
-      self.gestureOffset = gestureOffset;
-    };
-      
-    let gestureInputPoint = CGPoint(
-      x: gesturePoint.x - gestureOffset.x,
-      y: gesturePoint.y - gestureOffset.y
-    );
   
     self.applyInterpolationToModal(forPoint: gestureInputPoint);
   };
