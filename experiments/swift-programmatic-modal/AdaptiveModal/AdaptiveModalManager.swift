@@ -1115,7 +1115,7 @@ class AdaptiveModalManager: NSObject {
       let origin = $0.computedRect.origin;
       let coord = origin[keyPath: self.modalConfig.inputValueKeyForPoint];
       
-      return abs(coord - inputCoordAdj);
+      return abs(inputCoordAdj - coord);
     };
     
     let deltaSorted = delta.enumerated().sorted {
@@ -1127,6 +1127,23 @@ class AdaptiveModalManager: NSObject {
     
     let interpolationPoint = interpolationSteps[closestInterpolationIndex];
     let snapPointIndex = interpolationPoint.snapPointIndex;
+    
+    let coords = self.interpolationSteps.map {
+      let origin = $0.computedRect.origin;
+      let coord = origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      
+      return coord;
+    };
+    
+    print(
+        "getClosestSnapPoint"
+      + "\n - inputCoordAdj: \(inputCoordAdj)"
+      + "\n - coords: \(coords)"
+      + "\n - delta: \(delta)"
+      + "\n - deltaSorted: \(deltaSorted)"
+      + "\n - closestInterpolationIndex: \(closestInterpolationIndex)"
+      + "\n"
+    );
     
     return (
       interpolationIndex: closestInterpolationIndex,
@@ -1272,6 +1289,15 @@ class AdaptiveModalManager: NSObject {
         let gestureFinalPoint = CGPoint(
           x: gestureFinalPointRaw.x - (self.gestureOffset?.x ?? 0),
           y: gestureFinalPointRaw.y - (self.gestureOffset?.y ?? 0)
+        );
+        
+        print(
+            "onDragPanGesture"
+          + "\n - gesturePoint: \(gesturePoint)"
+          + "\n - gestureVelocity: \(gestureVelocity)"
+          + "\n - gestureFinalPointRaw: \(gestureFinalPointRaw)"
+          + "\n - gestureFinalPoint: \(gestureFinalPoint)"
+          + "\n"
         );
         
         self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
@@ -1531,6 +1557,16 @@ class AdaptiveModalManager: NSObject {
   ) {
     let coord = point[keyPath: self.modalConfig.inputValueKeyForPoint];
     let closestSnapPoint = self.getClosestSnapPoint(forCoord: coord);
+    
+    print(
+        "snapToClosestSnapPoint"
+      + "\n - coord: \(coord)"
+      + "\n - closestSnapPoint.interpolationIndex: \(closestSnapPoint.interpolationIndex)"
+      + "\n - closestSnapPoint.snapDistance: \(closestSnapPoint.snapDistance)"
+      + "\n - closestSnapPoint.interpolationPoint: \(closestSnapPoint.interpolationPoint)"
+      + "\n - closestSnapPoint.snapPointConfig: \(closestSnapPoint.snapPointConfig)"
+      + "\n"
+    );
     
     let nextInterpolationIndex =
       self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);
