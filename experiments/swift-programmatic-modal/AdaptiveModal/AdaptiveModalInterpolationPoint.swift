@@ -212,7 +212,7 @@ extension AdaptiveModalInterpolationPoint {
             context.targetRect[keyPath: modalConfig.maxInputRangeKeyForRect];
           
           let inputValue =
-            computedRect.origin[keyPath: modalConfig.inputValueKeyForPoint];
+            computedRect[keyPath: modalConfig.inputValueKeyForRect];
             
           let percent = inputValue / maxRangeInput;
           

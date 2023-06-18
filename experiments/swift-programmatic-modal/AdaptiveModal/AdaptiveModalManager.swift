@@ -749,7 +749,9 @@ class AdaptiveModalManager: NSObject {
     guard let animator = animator else { return };
     self.modalBackgroundVisualEffectAnimator = animator;
     
-    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
+    animator.setFractionComplete(
+      forInputPercentValue: inputPercentValue.clamped(min: 0, max: 1)
+    );
   };
 
   private func applyInterpolationToBackgroundVisualEffect(
@@ -793,7 +795,9 @@ class AdaptiveModalManager: NSObject {
     guard let animator = animator else { return };
     self.backgroundVisualEffectAnimator = animator;
     
-    animator.setFractionComplete(forInputPercentValue: inputPercentValue);
+    animator.setFractionComplete(
+      forInputPercentValue: inputPercentValue.clamped(min: 0, max: 1)
+    );
   };
   
   // MARK: - Functions - Apply Interpolators
@@ -980,15 +984,6 @@ class AdaptiveModalManager: NSObject {
     let percentAdj = shouldInvertPercent
       ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
-      
-    print(
-        "applyInterpolationToModal"
-      + "\n - inputValue: \(inputValue)"
-      + "\n - interpolationRangeMaxInput: \(interpolationRangeMaxInput)"
-      + "\n - percent: \(percent)"
-      + "\n - interpolationRangeInput: \(self.interpolationRangeInput!)"
-      + "\n"
-    );
     
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
@@ -1348,14 +1343,13 @@ class AdaptiveModalManager: NSObject {
     guard prevModalFrame != nextModalFrame else { return };
     
     let inputCoord =
-      nextModalFrame.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      nextModalFrame[keyPath: self.modalConfig.inputValueKeyForRect];
       
     let percent = inputCoord / interpolationRangeMaxInput;
     
     let percentAdj = self.modalConfig.shouldInvertPercent
       ? AdaptiveModalUtilities.invertPercent(percent)
       : percent;
-    
     
     self.applyInterpolationToBackgroundVisualEffect(
       forInputPercentValue: percentAdj
@@ -1404,10 +1398,10 @@ class AdaptiveModalManager: NSObject {
   private func notifyOnModalDidSnap() {
     self.eventDelegate?.notifyOnModalDidSnap(
       prevSnapPointIndex:
-        interpolationSteps[self.prevInterpolationIndex].snapPointIndex,
+        self.interpolationSteps[self.prevInterpolationIndex].snapPointIndex,
         
       currentSnapPointIndex:
-        interpolationSteps[self.currentInterpolationIndex].snapPointIndex,
+        self.interpolationSteps[self.currentInterpolationIndex].snapPointIndex,
         
       snapPointConfig: self.currentSnapPointConfig,
       interpolationPoint: self.currentInterpolationStep

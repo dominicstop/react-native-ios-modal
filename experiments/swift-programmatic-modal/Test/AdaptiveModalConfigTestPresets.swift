@@ -9,19 +9,26 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .testLeftToRight;
+  static let `default`: Self = .demo03;
   
   case testModalTransform01;
+  case testModalTransformScale;
   case testModalBorderAndShadow01;
   case testLeftToRight;
 
   case test01;
   case test02;
-  case test03;
-  case test04;
+  
+  case demo01;
+  case demo02;
+  case demo03;
   
   var config: AdaptiveModalConfig {
     switch self {
+    
+      // MARK: - Tests
+      // -------------
+    
       case .testModalTransform01: return AdaptiveModalConfig(
         snapPoints: [
           // snap point - 0
@@ -87,6 +94,74 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           ),
         ],
         snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .fitScreenVertically
+        )
+      );
+      
+      case .testModalTransformScale: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 0
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.2)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalScaleX: 1,
+              modalScaleY: 1
+            )
+          ),
+          
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.4)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalScaleX: 0.5,
+              modalScaleY: 1
+            )
+          ),
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.8)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.6)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalScaleX: 1.5,
+              modalScaleY: 1.5
+            )
+          ),
+        ],
+        snapDirection: .bottomToTop,
+        undershootSnapPoint: .init(
+          layoutPreset: .offscreenBottom,
+          animationKeyframe: .init(
+            modalScaleX: 0.25,
+            modalScaleY: 0.25
+          )
+        ),
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
           layoutPreset: .fitScreenVertically
         )
@@ -247,6 +322,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           ),
         ],
         snapDirection: .bottomToTop
+        //snapPercentStrategy: .index
       );
       
       case .test02: return AdaptiveModalConfig(
@@ -306,7 +382,10 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         )
       );
       
-      case .test03: return AdaptiveModalConfig(
+      // MARK: - Demos
+      // -------------
+      
+      case .demo01: return AdaptiveModalConfig(
         snapPoints: [
           // Snap Point 1
           AdaptiveModalSnapPointConfig(
@@ -447,7 +526,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         )
       );
       
-      case .test04: return AdaptiveModalConfig(
+      case .demo02: return AdaptiveModalConfig(
         snapPoints: [
           // snap point - 1
           AdaptiveModalSnapPointConfig(
@@ -525,6 +604,63 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         snapDirection: .bottomToTop,
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
           layoutPreset: .fitScreenVertically
+        )
+      );
+      
+      case .demo03: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .left,
+              verticalAlignment: .center,
+              width: RNILayoutValue(
+                mode: .percent(percentValue: 0.5)
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.65)
+              ),
+              marginLeft: .constant(15)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalScaleX: 1,
+              modalScaleY: 1,
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
+            )
+          ),
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: RNILayoutValue(
+                mode: .stretch
+              ),
+              height: RNILayoutValue(
+                mode: .percent(percentValue: 0.85)
+              ),
+              marginLeft: .constant(20),
+              marginRight: .constant(20)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0.5
+            )
+          ),
+        ],
+        snapDirection: .leftToRight,
+        undershootSnapPoint: .init(
+          layoutPreset: .offscreenLeft,
+          animationKeyframe: .init(
+            modalScaleX: 0.5,
+            modalScaleY: 0.5,
+            backgroundVisualEffect: UIBlurEffect(style: .regular),
+            backgroundVisualEffectIntensity: 0
+          )
+        ),
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .edgeRight
         )
       );
     };
