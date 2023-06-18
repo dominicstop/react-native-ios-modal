@@ -1426,7 +1426,8 @@ class AdaptiveModalManager: NSObject {
   
   func prepareForPresentation(
     modalView: UIView? = nil,
-    targetView: UIView? = nil
+    targetView: UIView? = nil,
+    shouldForceReset: Bool = false
   ) {
     guard let modalView = modalView ?? self.modalView,
           let targetView = targetView ?? self.targetView
@@ -1435,7 +1436,8 @@ class AdaptiveModalManager: NSObject {
     let didViewsChange =
       modalView !== self.modalView || targetView !== self.targetView;
       
-    let shouldReset = !self.didTriggerSetup || didViewsChange;
+    let shouldReset =
+      !self.didTriggerSetup || didViewsChange || shouldForceReset;
     
     if shouldReset {
       self.cleanup();

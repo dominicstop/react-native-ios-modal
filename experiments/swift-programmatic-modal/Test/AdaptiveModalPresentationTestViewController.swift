@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
+fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
 
   weak var modalManager: AdaptiveModalManager?;
 
@@ -88,8 +88,20 @@ class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
 class AdaptiveModalPresentationTestViewController : UIViewController {
 
   lazy var adaptiveModalManager = AdaptiveModalManager(
-    modalConfig: AdaptiveModalConfigTestPresets.default.config
+    modalConfig: self.currentModalConfigPreset.config
   );
+  
+  let modalConfigs: [AdaptiveModalConfigTestPresets] = [
+    .demo01,
+    .demo02,
+    .demo03
+  ];
+  
+  var currentModalConfigPresetIndex = 0;
+  
+  var currentModalConfigPreset: AdaptiveModalConfigTestPresets {
+    self.modalConfigs[self.currentModalConfigPresetIndex % self.modalConfigs.count];
+  };
   
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
@@ -126,12 +138,40 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
       return button;
     }();
     
-    self.view.addSubview(presentButton);
-    presentButton.translatesAutoresizingMaskIntoConstraints = false;
+    let nextConfigButton: UIButton = {
+      let button = UIButton();
+      button.setTitle("Next Modal Config", for: .normal);
+      
+      button.addTarget(
+        self,
+        action: #selector(self.onPressButtonNextConfig(_:)),
+        for: .touchUpInside
+      );
+      
+      return button;
+    }();
+    
+    
+    let stackView: UIStackView = {
+      let stack = UIStackView();
+      
+      stack.axis = .vertical;
+      stack.distribution = .equalSpacing;
+      stack.alignment = .center;
+      stack.spacing = 7;
+      
+      stack.addArrangedSubview(presentButton);
+      stack.addArrangedSubview(nextConfigButton);
+      
+      return stack;
+    }();
+    
+    stackView.translatesAutoresizingMaskIntoConstraints = false;
+    self.view.addSubview(stackView);
     
     NSLayoutConstraint.activate([
-      presentButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-      presentButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+      stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+      stackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
     ]);
   };
   
@@ -150,5 +190,10 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
       viewControllerToPresent: testVC,
       presentingViewController: self
     );
+  };
+  
+  @objc func onPressButtonNextConfig(_ sender: UIButton) {
+    self.currentModalConfigPresetIndex += 1;
+    self.adaptiveModalManager.modalConfig = self.currentModalConfigPreset.config;
   };
 };
