@@ -32,7 +32,14 @@ public struct RNIComputableOffset {
   public var offset: Double;
   public var offsetOperation: OffsetOperation;
   
-  public func compute(withValue value: Double) -> Double {
+  public func compute(
+    withValue value: Double,
+    isValueOnRHS: Bool = false
+  ) -> Double {
+    if isValueOnRHS {
+      return self.offsetOperation.compute(a: value, b: self.offset);
+    };
+    
     return self.offsetOperation.compute(a: self.offset, b: value);
   };
 };

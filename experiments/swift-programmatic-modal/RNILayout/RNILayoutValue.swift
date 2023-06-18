@@ -66,7 +66,7 @@ public struct RNILayoutValue {
       offsetOperation: self.offsetOperation ?? .add
     );
     
-    return computableOffset.compute(withValue: value);
+    return computableOffset.compute(withValue: value, isValueOnRHS: true);
   };
   
   public func clampValue(

@@ -20,8 +20,11 @@ class AdaptiveModalManager: NSObject {
   
   var enableSnapping = true;
   
-  var shouldSnapToOvershootSnapPoint = false;
   var shouldSnapToUnderShootSnapPoint = true;
+  var shouldSnapToOvershootSnapPoint = false;
+  
+  var shouldDismissModalOnSnapToUnderShootSnapPoint = true;
+  var shouldDismissModalOnSnapToOverShootSnapPoint = false;
   
   // MARK: -  Properties - Layout-Related
   // ------------------------------------
@@ -1062,6 +1065,8 @@ class AdaptiveModalManager: NSObject {
     self.clearGestureValues();
     self.clearAnimators();
     self.cleanupViews();
+    
+    self.currentInterpolationIndex = 0;
   };
   
   // MARK: - Functions
@@ -1293,6 +1298,7 @@ class AdaptiveModalManager: NSObject {
       + "\n - targetViewController: \(self.targetViewController?.debugDescription ?? "N/A")"
       + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
       + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
+      + "\n - interpolationSteps.computedRect: \(self.interpolationSteps.map({ $0.computedRect }))"
       + "\n"
     );
   };
@@ -1385,7 +1391,18 @@ class AdaptiveModalManager: NSObject {
       interpolationPoint: nextPoint
     );
     
-    if nextIndex == 0 {
+    let shouldDismissOnSnapToUnderShootSnapPoint =
+      nextIndex == 0 && self.shouldDismissModalOnSnapToUnderShootSnapPoint;
+      
+    let shouldDismissOnSnapToOverShootSnapPoint =
+      nextIndex == self.modalConfig.overshootSnapPointIndex &&
+      self.shouldDismissModalOnSnapToOverShootSnapPoint;
+    
+    let shouldDismiss =
+      shouldDismissOnSnapToUnderShootSnapPoint ||
+      shouldDismissOnSnapToOverShootSnapPoint;
+    
+    if shouldDismiss {
       self.notifyOnModalWillHide();
     };
   };
@@ -1402,15 +1419,20 @@ class AdaptiveModalManager: NSObject {
       interpolationPoint: self.currentInterpolationStep
     );
     
-    if self.currentInterpolationIndex == 0 {
+    let shouldDismissOnSnapToUnderShootSnapPoint =
+      self.currentInterpolationIndex == 0 && self.shouldDismissModalOnSnapToUnderShootSnapPoint;
+      
+    let shouldDismissOnSnapToOverShootSnapPoint =
+      self.currentInterpolationIndex == self.modalConfig.overshootSnapPointIndex &&
+      self.shouldDismissModalOnSnapToOverShootSnapPoint;
+    
+    let shouldDismiss =
+      shouldDismissOnSnapToUnderShootSnapPoint ||
+      shouldDismissOnSnapToOverShootSnapPoint;
+    
+    if shouldDismiss {
       self.notifyOnModalDidHide();
     };
-    
-    print(
-      "self.interpolationSteps.computedRect: \n -",
-      self.interpolationSteps.map({ $0.computedRect }),
-      "\n"
-    );
   };
   
   private func notifyOnModalWillHide(){

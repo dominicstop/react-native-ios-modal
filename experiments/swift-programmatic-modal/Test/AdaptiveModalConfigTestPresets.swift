@@ -23,6 +23,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
   case demo01;
   case demo02;
   case demo03;
+  case demo04;
+  case demo05;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -686,6 +688,130 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             modalScaleX: 0.5,
             modalScaleY: 0.5,
             modalCornerRadius: 5,
+            backgroundVisualEffectIntensity: 0
+          )
+        ),
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .edgeRight
+        )
+      );
+      
+      case .demo04: return AdaptiveModalConfig(
+        snapPoints: [
+          // 1
+          .init(
+            snapPoint: .init(
+              horizontalAlignment: .center,
+              verticalAlignment: .top,
+              width: .stretch,
+              height: .percent(percentValue: 0.2),
+              marginLeft: .constant(10),
+              marginRight: .constant(10),
+              marginTop: .multipleValues([
+                .safeAreaInsets(insetKey: \.top),
+                .constant(10)
+              ])
+            ),
+            animationKeyframe: .init(
+              modalScaleX: 1,
+              modalScaleY: 1,
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 10,
+              modalCornerRadius: 10
+            )
+          ),
+          
+          // 2
+          .init(
+            snapPoint: .init(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: .stretch,
+              height: .percent(percentValue: 0.5),
+              marginLeft: .constant(15),
+              marginRight: .constant(15)
+            ),
+            animationKeyframe: .init(
+              modalShadowOffset: .init(width: 2, height: 2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 5,
+              modalCornerRadius: 15,
+              backgroundOpacity: 0.25
+            )
+          )
+        ],
+        snapDirection: .topToBottom,
+        undershootSnapPoint: .init(
+          layoutPreset: .offscreenTop,
+          animationKeyframe: .init(
+            modalScaleX: 0.75,
+            modalScaleY: 0.75
+          )
+        ),
+        overshootSnapPoint: .init(
+          layoutPreset: .offscreenBottom,
+          animationKeyframe: .init(
+            modalScaleX: 0.9,
+            modalScaleY: 0.9,
+            modalOpacity: 0.8,
+            backgroundOpacity: 0
+          )
+        )
+      );
+      
+      case .demo05: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .left,
+              verticalAlignment: .center,
+              width: .percent(percentValue: 0.7),
+              height: .stretch
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 1, height: 0),
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 8,
+              modalBackgroundOpacity: 0.87,
+              modalBackgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalBackgroundVisualEffectIntensity: 1,
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0.04
+            )
+          ),
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: .stretch,
+              height: .stretch(
+                offsetValue: .multipleValues([
+                  .safeAreaInsets(insetKey: \.top),
+                  .safeAreaInsets(insetKey: \.bottom),
+                  .constant(40),
+                ]),
+                offsetOperation: .subtract
+              ),
+              marginLeft: .constant(20),
+              marginRight: .constant(20)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 2, height: 2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 15,
+              modalCornerRadius: 15,
+              modalBackgroundOpacity: 0.9,
+              modalBackgroundVisualEffectIntensity: 0.5,
+              backgroundVisualEffectIntensity: 0.5
+            )
+          ),
+        ],
+        snapDirection: .leftToRight,
+        undershootSnapPoint: .init(
+          layoutPreset: .offscreenLeft,
+          animationKeyframe: .init(
             backgroundVisualEffectIntensity: 0
           )
         ),

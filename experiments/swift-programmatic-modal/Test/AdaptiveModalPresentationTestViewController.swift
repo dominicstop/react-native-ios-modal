@@ -94,7 +94,9 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   let modalConfigs: [AdaptiveModalConfigTestPresets] = [
     .demo01,
     .demo02,
-    .demo03
+    .demo03,
+    .demo04,
+    .demo05,
   ];
   
   var currentModalConfigPresetCounter = 0;
@@ -104,8 +106,43 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   };
   
   var currentModalConfigPreset: AdaptiveModalConfigTestPresets {
-    //self.modalConfigs[self.currentModalConfigPresetIndex];
-    AdaptiveModalConfigTestPresets.default;
+    self.modalConfigs[self.currentModalConfigPresetIndex];
+    //AdaptiveModalConfigTestPresets.default;
+  };
+  
+  var currentModalManagerAdjustmentBlock: () -> Void {
+    let defaultBlock = {
+      self.adaptiveModalManager.shouldSnapToUnderShootSnapPoint = true;
+      self.adaptiveModalManager.shouldSnapToOvershootSnapPoint = false;
+      
+      self.adaptiveModalManager.shouldDismissModalOnSnapToUnderShootSnapPoint = true;
+      self.adaptiveModalManager.shouldDismissModalOnSnapToOverShootSnapPoint = false;
+    };
+  
+    switch self.currentModalConfigPreset {
+      case .demo01: return {
+        defaultBlock();
+      };
+      
+      case .demo02: return {
+        defaultBlock();
+      };
+      
+      case .demo03: return {
+        defaultBlock();
+      };
+      
+      case .demo04: return {
+        self.adaptiveModalManager.shouldSnapToOvershootSnapPoint = true;
+        self.adaptiveModalManager.shouldDismissModalOnSnapToOverShootSnapPoint = true;
+      };
+      
+      case .demo05: return {
+        defaultBlock();
+      };
+      
+      default: return defaultBlock;
+    };
   };
   
   var counterLabel: UILabel?;
@@ -217,5 +254,6 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     self.counterLabel!.text = "\(self.currentModalConfigPresetIndex)";
     
     self.adaptiveModalManager.modalConfig = self.currentModalConfigPreset.config;
+    self.currentModalManagerAdjustmentBlock();
   };
 };

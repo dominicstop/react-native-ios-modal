@@ -49,8 +49,9 @@ struct AdaptiveModalConfig {
       overshootSnapPoint: self.overshootSnapPoint
     );
   };
+
   
-  var snapPointLastIndex: Int {
+  var overshootSnapPointIndex: Int {
     self.snapPoints.count - 1;
   };
   
