@@ -36,10 +36,6 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   var modalTranslateX: CGFloat;
   var modalTranslateY: CGFloat;
   
-  var modalOpacity: CGFloat;
-  var modalBackgroundColor: UIColor;
-  var modalBackgroundOpacity: CGFloat;
-  
   var modalBorderWidth: CGFloat;
   var modalBorderColor: UIColor;
   
@@ -50,6 +46,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   
   var modalCornerRadius: CGFloat;
   var modalMaskedCorners: CACornerMask;
+  
+  var modalOpacity: CGFloat;
+  var modalBackgroundColor: UIColor;
+  var modalBackgroundOpacity: CGFloat;
   
   var modalBackgroundVisualEffect: UIVisualEffect?;
   var modalBackgroundVisualEffectOpacity: CGFloat;
@@ -251,18 +251,6 @@ extension AdaptiveModalInterpolationPoint {
       ?? keyframePrev?.modalTranslateY
       ?? 0;
       
-    self.modalOpacity = keyframeCurrent?.modalOpacity
-      ?? keyframePrev?.modalOpacity
-      ?? 1;
-      
-    self.modalBackgroundColor = keyframeCurrent?.modalBackgroundColor
-      ?? keyframePrev?.modalBackgroundColor
-      ?? .systemBackground;
-      
-    self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
-      ?? keyframePrev?.modalBackgroundOpacity
-      ?? 1;
-      
     self.modalBorderWidth = keyframeCurrent?.modalBorderWidth
       ?? keyframePrev?.modalBorderWidth
       ?? 0;
@@ -294,6 +282,18 @@ extension AdaptiveModalInterpolationPoint {
     self.modalMaskedCorners = keyframeCurrent?.modalMaskedCorners
       ?? keyframePrev?.modalMaskedCorners
       ?? Self.DefaultMaskedCorners;
+      
+    self.modalOpacity = keyframeCurrent?.modalOpacity
+      ?? keyframePrev?.modalOpacity
+      ?? 1;
+      
+    self.modalBackgroundColor = keyframeCurrent?.modalBackgroundColor
+      ?? keyframePrev?.modalBackgroundColor
+      ?? .systemBackground;
+      
+    self.modalBackgroundOpacity = keyframeCurrent?.modalBackgroundOpacity
+      ?? keyframePrev?.modalBackgroundOpacity
+      ?? 1;
       
     self.modalBackgroundVisualEffect = keyframeCurrent?.modalBackgroundVisualEffect
       ?? keyframePrev?.modalBackgroundVisualEffect;

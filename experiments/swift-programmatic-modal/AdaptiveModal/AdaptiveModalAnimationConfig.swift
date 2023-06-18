@@ -17,10 +17,6 @@ struct AdaptiveModalAnimationConfig {
   var modalTranslateX: CGFloat?;
   var modalTranslateY: CGFloat?;
   
-  var modalOpacity: CGFloat?;
-  var modalBackgroundColor: UIColor?;
-  var modalBackgroundOpacity: CGFloat?;
-  
   var modalBorderWidth: CGFloat?;
   var modalBorderColor: UIColor?;
   
@@ -31,6 +27,10 @@ struct AdaptiveModalAnimationConfig {
   
   var modalCornerRadius: CGFloat?;
   var modalMaskedCorners: CACornerMask?;
+  
+  var modalOpacity: CGFloat?;
+  var modalBackgroundColor: UIColor?;
+  var modalBackgroundOpacity: CGFloat?;
   
   var modalBackgroundVisualEffect: UIVisualEffect?;
   var modalBackgroundVisualEffectOpacity: CGFloat?;
@@ -49,9 +49,6 @@ struct AdaptiveModalAnimationConfig {
      modalScaleY: CGFloat? = nil,
      modalTranslateX: CGFloat? = nil,
      modalTranslateY: CGFloat? = nil,
-     modalOpacity: CGFloat? = nil,
-     modalBackgroundColor: UIColor? = nil,
-     modalBackgroundOpacity: CGFloat? = nil,
      modalBorderWidth: CGFloat? = nil,
      modalBorderColor: UIColor? = nil,
      modalShadowColor: UIColor? = nil,
@@ -60,6 +57,9 @@ struct AdaptiveModalAnimationConfig {
      modalShadowRadius: CGFloat? = nil,
      modalCornerRadius: CGFloat? = nil,
      modalMaskedCorners: CACornerMask? = nil,
+     modalOpacity: CGFloat? = nil,
+     modalBackgroundColor: UIColor? = nil,
+     modalBackgroundOpacity: CGFloat? = nil,
      modalBackgroundVisualEffect: UIVisualEffect? = nil,
      modalBackgroundVisualEffectOpacity: CGFloat? = nil,
      modalBackgroundVisualEffectIntensity: CGFloat? = nil,
@@ -77,10 +77,6 @@ struct AdaptiveModalAnimationConfig {
     self.modalTranslateX = modalTranslateX;
     self.modalTranslateY = modalTranslateY;
     
-    self.modalOpacity = modalOpacity;
-    self.modalBackgroundColor = modalBackgroundColor;
-    self.modalBackgroundOpacity = modalBackgroundOpacity;
-    
     self.modalBorderWidth = modalBorderWidth;
     self.modalBorderColor = modalBorderColor;
     
@@ -91,6 +87,10 @@ struct AdaptiveModalAnimationConfig {
     
     self.modalCornerRadius = modalCornerRadius;
     self.modalMaskedCorners = modalMaskedCorners;
+    
+    self.modalOpacity = modalOpacity;
+    self.modalBackgroundColor = modalBackgroundColor;
+    self.modalBackgroundOpacity = modalBackgroundOpacity;
     
     self.modalBackgroundVisualEffect = modalBackgroundVisualEffect;
     self.modalBackgroundVisualEffectOpacity = modalBackgroundVisualEffectOpacity;

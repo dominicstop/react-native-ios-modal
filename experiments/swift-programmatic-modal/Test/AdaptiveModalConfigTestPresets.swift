@@ -401,7 +401,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 1,
-              modalBackgroundOpacity: 0.9,
               modalShadowOffset: .init(width: 0, height: -2),
               modalShadowOpacity: 0.2,
               modalShadowRadius: 7,
@@ -410,6 +409,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner
               ],
+              modalBackgroundOpacity: 0.9,
               modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
               modalBackgroundVisualEffectIntensity: 1,
               backgroundOpacity: 0,
@@ -436,7 +436,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 0.5,
               //modalBackgroundColor: .red,
-              modalBackgroundOpacity: 0.85,
               modalShadowOffset: .init(width: 2, height: 2),
               modalShadowOpacity: 0.2,
               modalShadowRadius: 15,
@@ -447,6 +446,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMaxYCorner,
                 .layerMaxXMaxYCorner
               ],
+              modalBackgroundOpacity: 0.85,
               modalBackgroundVisualEffectIntensity: 0.6,
               //backgroundColor: .red,
               backgroundOpacity: 0.1,
@@ -469,7 +469,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalBackgroundOpacity: 0.8,
               modalShadowOffset: .init(width: 2, height: 2),
               modalShadowOpacity: 0.3,
               modalShadowRadius: 10,
@@ -480,6 +479,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMaxXMinYCorner,
                 .layerMaxXMaxYCorner
               ],
+              modalBackgroundOpacity: 0.8,
               modalBackgroundVisualEffectIntensity: 1,
               backgroundOpacity: 0,
               //backgroundVisualEffectOpacity: 0.5,
@@ -501,7 +501,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               marginTop: .safeAreaInsets(insetKey: \.top)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              modalBackgroundOpacity: 0.83,
               modalShadowOffset: .init(width: 0, height: -1),
               modalShadowOpacity: 0.4,
               modalShadowRadius: 10,
@@ -510,6 +509,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner,
               ],
+              modalBackgroundOpacity: 0.83,
               modalBackgroundVisualEffectIntensity: 1,
               backgroundVisualEffectIntensity: 1
             )
@@ -625,8 +625,15 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalScaleX: 1,
               modalScaleY: 1,
+              modalShadowOffset: .init(width: 1, height: 1),
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 8,
+              modalCornerRadius: 10,
+              modalBackgroundOpacity: 0.87,
+              modalBackgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalBackgroundVisualEffectIntensity: 1,
               backgroundVisualEffect: UIBlurEffect(style: .regular),
-              backgroundVisualEffectIntensity: 0
+              backgroundVisualEffectIntensity: 0.04
             )
           ),
           // snap point - 2
@@ -644,7 +651,12 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               marginRight: .constant(20)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              modalShadowOffset: .init(width: 2, height: 2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 15,
+              modalCornerRadius: 15,
+              modalBackgroundOpacity: 0.9,
+              modalBackgroundVisualEffectIntensity: 0.5,
               backgroundVisualEffectIntensity: 0.5
             )
           ),
@@ -655,7 +667,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           animationKeyframe: .init(
             modalScaleX: 0.5,
             modalScaleY: 0.5,
-            backgroundVisualEffect: UIBlurEffect(style: .regular),
+            modalCornerRadius: 5,
             backgroundVisualEffectIntensity: 0
           )
         ),
