@@ -9,10 +9,13 @@ import UIKit
 
 public struct RNILayoutValue {
 
+  // MARK: - Types
+  // -------------
+
   public enum Axis {
     case horizontal, vertical;
   };
-    
+  
   // MARK: - Properties
   // ------------------
   

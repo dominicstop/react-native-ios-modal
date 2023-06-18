@@ -9,12 +9,13 @@ import UIKit
 
 enum AdaptiveModalConfigTestPresets: CaseIterable {
   
-  static let `default`: Self = .demo03;
+  static let `default`: Self = .testTopToBottom;
   
   case testModalTransform01;
   case testModalTransformScale;
   case testModalBorderAndShadow01;
   case testLeftToRight;
+  case testTopToBottom;
 
   case test01;
   case test02;
@@ -279,6 +280,23 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         snapDirection: .leftToRight,
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
           layoutPreset: .edgeRight
+        )
+      );
+      
+      case .testTopToBottom: return AdaptiveModalConfig(
+        snapPoints: [
+          .init(
+            snapPoint: .init(
+              horizontalAlignment: .center,
+              verticalAlignment: .top,
+              width: .stretch,
+              height: .percent(percentValue: 0.2)
+            )
+          )
+        ],
+        snapDirection: .topToBottom,
+        overshootSnapPoint: .init(
+          layoutPreset: .fitScreenVertically
         )
       );
     

@@ -97,11 +97,18 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     .demo03
   ];
   
-  var currentModalConfigPresetIndex = 0;
+  var currentModalConfigPresetCounter = 0;
+  
+  var currentModalConfigPresetIndex: Int {
+    self.currentModalConfigPresetCounter % self.modalConfigs.count
+  };
   
   var currentModalConfigPreset: AdaptiveModalConfigTestPresets {
-    self.modalConfigs[self.currentModalConfigPresetIndex % self.modalConfigs.count];
+    //self.modalConfigs[self.currentModalConfigPresetIndex];
+    AdaptiveModalConfigTestPresets.default;
   };
+  
+  var counterLabel: UILabel?;
   
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
@@ -124,6 +131,18 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
       dummyBackgroundView.leadingAnchor .constraint(equalTo: self.view.leadingAnchor ),
       dummyBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
     ]);
+    
+    let counterLabel: UILabel = {
+      let label = UILabel();
+      
+      label.text = "\(self.currentModalConfigPresetIndex)";
+      label.font = .systemFont(ofSize: 24, weight: .bold);
+      label.textColor = .white;
+      
+      self.counterLabel = label;
+
+      return label;
+    }();
     
     let presentButton: UIButton = {
       let button = UIButton();
@@ -160,6 +179,7 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
       stack.alignment = .center;
       stack.spacing = 7;
       
+      stack.addArrangedSubview(counterLabel);
       stack.addArrangedSubview(presentButton);
       stack.addArrangedSubview(nextConfigButton);
       
@@ -193,7 +213,9 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   };
   
   @objc func onPressButtonNextConfig(_ sender: UIButton) {
-    self.currentModalConfigPresetIndex += 1;
+    self.currentModalConfigPresetCounter += 1;
+    self.counterLabel!.text = "\(self.currentModalConfigPresetIndex)";
+    
     self.adaptiveModalManager.modalConfig = self.currentModalConfigPreset.config;
   };
 };

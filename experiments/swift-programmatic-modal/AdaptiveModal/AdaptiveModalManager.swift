@@ -74,7 +74,7 @@ class AdaptiveModalManager: NSObject {
   // ------------------------------------------
   
  /// The computed frames of the modal based on the snap points
-  private(set) var rawInterpolationSteps: [AdaptiveModalInterpolationPoint]!;
+  private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]!;
   
   var prevInterpolationIndex = 0;
   var nextInterpolationIndex: Int?;
@@ -87,11 +87,6 @@ class AdaptiveModalManager: NSObject {
   
   var currentInterpolationStep: AdaptiveModalInterpolationPoint {
     self.interpolationSteps[self.currentInterpolationIndex];
-  };
-  
-  // sorted based on the modal direction
-  var interpolationSteps: [AdaptiveModalInterpolationPoint]! {
-    self.modalConfig.sortInterpolationSteps(self.rawInterpolationSteps);
   };
   
   private var interpolationRangeInput: [CGFloat]! {
@@ -1077,7 +1072,7 @@ class AdaptiveModalManager: NSObject {
   ) {
     let context = context ?? self.layoutValueContext;
     
-    self.rawInterpolationSteps = .Element.compute(
+    self.interpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,
       layoutValueContext: context
     );
@@ -1410,6 +1405,12 @@ class AdaptiveModalManager: NSObject {
     if self.currentInterpolationIndex == 0 {
       self.notifyOnModalDidHide();
     };
+    
+    print(
+      "self.interpolationSteps.computedRect: \n -",
+      self.interpolationSteps.map({ $0.computedRect }),
+      "\n"
+    );
   };
   
   private func notifyOnModalWillHide(){
