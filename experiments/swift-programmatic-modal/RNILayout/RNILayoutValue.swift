@@ -78,7 +78,7 @@ public struct RNILayoutValue {
       preferredSizeKey: nil
     );
       
-    let computedMaxValue = self.minValue?.compute(
+    let computedMaxValue = self.maxValue?.compute(
       usingLayoutValueContext: context,
       preferredSizeKey: nil
     );

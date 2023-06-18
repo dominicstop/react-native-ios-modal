@@ -167,8 +167,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   };
   
   func apply(toModalBackgroundView modalBgView: UIView?){
-    modalBgView?.alpha = self.modalBackgroundOpacity;
-    modalBgView?.backgroundColor = self.modalBackgroundColor;
+    guard let modalBgView = modalBgView else { return };
+    
+    modalBgView.alpha = self.modalBackgroundOpacity;
+    modalBgView.backgroundColor = self.modalBackgroundColor;
   };
   
   func apply(toModalBackgroundEffectView effectView: UIVisualEffectView?){
@@ -176,7 +178,10 @@ struct AdaptiveModalInterpolationPoint: Equatable {
   };
   
   func apply(toBackgroundView bgView: UIView?){
-    bgView?.alpha = self.backgroundOpacity;
+    guard let bgView = bgView else { return };
+    
+    bgView.alpha = self.backgroundOpacity;
+    bgView.backgroundColor = self.backgroundColor;
   };
   
   func apply(toBackgroundVisualEffectView effectView: UIView?){

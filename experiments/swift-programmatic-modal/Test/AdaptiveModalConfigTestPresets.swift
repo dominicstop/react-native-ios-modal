@@ -25,6 +25,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
   case demo03;
   case demo04;
   case demo05;
+  case demo06;
+  case demo07;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -177,12 +179,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .percent(percentValue: 0.8)
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.2)
-              )
+              width: .percent(percentValue: 0.8),
+              height: .percent(percentValue: 0.2)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBorderWidth: 2,
@@ -199,12 +197,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .percent(percentValue: 0.8)
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.4)
-              )
+              width: .percent(percentValue: 0.8),
+              height: .percent(percentValue: 0.4)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBorderWidth: 4,
@@ -220,12 +214,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .percent(percentValue: 0.9)
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.7)
-              )
+              width: .percent(percentValue: 0.9),
+              height: .percent(percentValue: 0.7)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalBorderWidth: 8,
@@ -250,12 +240,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .left,
               verticalAlignment: .center,
-              width: RNILayoutValue(
-                mode: .percent(percentValue: 0.5)
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.65)
-              ),
+              width: .percent(percentValue: 0.5),
+              height: .percent(percentValue: 0.65),
               marginLeft: .constant(15)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
@@ -266,12 +252,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .center,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.85)
-              ),
+              width: .stretch,
+              height: .percent(percentValue: 0.85),
               marginLeft: .constant(20),
               marginRight: .constant(20)
             ),
@@ -306,43 +288,30 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         snapPoints:  [
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
-                horizontalAlignment: .center,
-                verticalAlignment: .bottom,
-                width: RNILayoutValue(
-                  mode: .stretch
-                ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.1)
-              )
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .stretch,
+              height: .percent(percentValue: 0.1)
             )
           ),
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.3)
-              )
+              width: .stretch,
+              height: .percent(percentValue: 0.3)
             )
           ),
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.7)
-              )
+              width: .stretch,
+              height: .percent(percentValue: 0.7)
             )
           ),
         ],
         snapDirection: .bottomToTop
-        //snapPercentStrategy: .index
       );
       
       case .test02: return AdaptiveModalConfig(
@@ -351,12 +320,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.3)
-              )
+              width: .stretch,
+              height: .percent(percentValue: 0.3)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalCornerRadius: 15,
@@ -412,12 +377,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.3)
-              )
+              width: .stretch,
+              height: .percent(percentValue: 0.3)
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               //modalOpacity: 1,
@@ -443,19 +404,16 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
-              width: RNILayoutValue(
-                mode: .stretch
-              ),
-              height: RNILayoutValue(
-                mode: .percent(percentValue: 0.5)
-              ),
+              width: .stretch,
+              height: .percent(percentValue: 0.5),
               marginLeft: .constant(15),
               marginRight: .constant(15),
-              marginBottom: .constant(15)
+              marginBottom: .init(
+                mode: .safeAreaInsets(insetKey: \.bottom),
+                minValue: .constant(15)
+              )
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
-              //modalOpacity: 0.5,
-              //modalBackgroundColor: .red,
               modalShadowOffset: .init(width: 2, height: 2),
               modalShadowOpacity: 0.2,
               modalShadowRadius: 15,
@@ -468,7 +426,6 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               ],
               modalBackgroundOpacity: 0.85,
               modalBackgroundVisualEffectIntensity: 0.6,
-              //backgroundColor: .red,
               backgroundOpacity: 0.1,
               backgroundVisualEffectIntensity: 0.075
             )
@@ -812,6 +769,165 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
         undershootSnapPoint: .init(
           layoutPreset: .offscreenLeft,
           animationKeyframe: .init(
+            backgroundVisualEffectIntensity: 0
+          )
+        ),
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .edgeRight
+        )
+      );
+      
+      case .demo06: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .percent(percentValue: 0.8),
+              height: .percent(percentValue: 0.2),
+              marginBottom: .init(
+                mode: .safeAreaInsets(insetKey: \.bottom),
+                minValue: .constant(15)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 0, height: -2),
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 7,
+              modalCornerRadius: 10,
+              backgroundOpacity: 0,
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
+            )
+          ),
+          
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .percent(percentValue: 0.85),
+              height: .percent(percentValue: 0.4),
+              marginBottom: .init(
+                mode: .safeAreaInsets(insetKey: \.bottom),
+                minValue: .constant(15)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 1, height: 1),
+              modalShadowOpacity: 0.4,
+              modalShadowRadius: 7,
+              modalCornerRadius: 15,
+              backgroundOpacity: 0.1
+            )
+          ),
+          
+          // snap point - 3
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .percent(percentValue: 0.87),
+              height: .percent(percentValue: 0.7),
+              marginBottom: .init(
+                mode: .safeAreaInsets(insetKey: \.bottom),
+                minValue: .constant(15)
+              )
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 2, height: 2),
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 8,
+              backgroundOpacity: 0.3,
+              backgroundVisualEffectIntensity: 0.3
+            )
+          ),
+        ],
+        snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .layoutConfig(
+            .init(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: .percent(percentValue: 0.87),
+              height: .stretch,
+              marginTop: .init(
+                mode: .safeAreaInsets(insetKey: \.top),
+                minValue: .constant(15)
+              ),
+              marginBottom: .init(
+                mode: .safeAreaInsets(insetKey: \.bottom),
+                minValue: .constant(15)
+              )
+            )
+          ),
+          animationKeyframe: AdaptiveModalAnimationConfig(
+            modalShadowOffset: .init(width: 3, height: 3),
+            modalShadowOpacity: 0.35,
+            modalShadowRadius: 15
+          )
+        )
+      );
+      
+      case .demo07: return AdaptiveModalConfig(
+        snapPoints: [
+          // snap point - 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .left,
+              verticalAlignment: .center,
+              width: .percent(percentValue: 0.7),
+              height: .percent(percentValue: 0.65),
+              marginLeft: .constant(15)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalScaleX: 1,
+              modalScaleY: 1,
+              modalShadowOffset: .init(width: 1, height: 1),
+              modalShadowOpacity: 0.3,
+              modalShadowRadius: 10,
+              modalCornerRadius: 15,
+              modalBackgroundOpacity: 0.85,
+              modalBackgroundVisualEffectIntensity: 0.9,
+              backgroundColor: .black,
+              backgroundOpacity: 0.15,
+              backgroundVisualEffectIntensity: 0.05
+            )
+          ),
+          
+          // snap point - 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .center,
+              width: .percent(percentValue: 0.9),
+              height: .percent(percentValue: 0.85)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .zero,
+              modalShadowOpacity: 0,
+              modalShadowRadius: 0,
+              modalBackgroundOpacity: 0,
+              modalBackgroundVisualEffectOpacity: 0,
+              modalBackgroundVisualEffectIntensity: 0,
+              backgroundColor: .white,
+              backgroundOpacity: 0.5,
+              backgroundVisualEffectIntensity: 1
+            )
+          ),
+        ],
+        snapDirection: .leftToRight,
+        undershootSnapPoint: .init(
+          layoutPreset: .offscreenLeft,
+          animationKeyframe: .init(
+            modalScaleX: 0.5,
+            modalScaleY: 0.5,
+            modalCornerRadius: 10,
+            modalBackgroundOpacity: 1,
+            modalBackgroundVisualEffect: UIBlurEffect(style: .regular),
+            modalBackgroundVisualEffectIntensity: 0,
+            backgroundVisualEffect: UIBlurEffect(style: .regular),
             backgroundVisualEffectIntensity: 0
           )
         ),

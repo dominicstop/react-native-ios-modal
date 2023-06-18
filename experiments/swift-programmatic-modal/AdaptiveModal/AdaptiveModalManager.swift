@@ -1299,6 +1299,9 @@ class AdaptiveModalManager: NSObject {
       + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
       + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
       + "\n - interpolationSteps.computedRect: \(self.interpolationSteps.map({ $0.computedRect }))"
+      + "\n - interpolationSteps.percent: \(self.interpolationSteps.map({ $0.percent }))"
+      + "\n - interpolationSteps.backgroundVisualEffectIntensity: \(self.interpolationSteps.map({ $0.backgroundVisualEffectIntensity }))"
+      + "\n - interpolationSteps.backgroundVisualEffect: \(self.interpolationSteps.map({ $0.backgroundVisualEffect }))"
       + "\n"
     );
   };
@@ -1433,6 +1436,8 @@ class AdaptiveModalManager: NSObject {
     if shouldDismiss {
       self.notifyOnModalDidHide();
     };
+    
+    self.debug();
   };
   
   private func notifyOnModalWillHide(){

@@ -97,6 +97,8 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     .demo03,
     .demo04,
     .demo05,
+    .demo06,
+    .demo07,
   ];
   
   var currentModalConfigPresetCounter = 0;

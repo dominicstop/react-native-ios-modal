@@ -79,7 +79,7 @@ enum RNILayoutPreset {
           marginLeft: .constant(0),
           marginRight: .percent(
             relativeTo: .currentWidth,
-            percentValue: 1
+            percentValue: -1
           )
         );
       

@@ -26,10 +26,10 @@ public struct RNILayout {
   public let width : RNILayoutValue;
   public let height: RNILayoutValue;
   
-  public let marginLeft  : RNILayoutValueMode?;
-  public let marginRight : RNILayoutValueMode?;
-  public let marginTop   : RNILayoutValueMode?;
-  public let marginBottom: RNILayoutValueMode?;
+  public let marginLeft  : RNILayoutValue?;
+  public let marginRight : RNILayoutValue?;
+  public let marginTop   : RNILayoutValue?;
+  public let marginBottom: RNILayoutValue?;
   
   // MARK: - Init
   // ------------
@@ -41,10 +41,10 @@ public struct RNILayout {
     width : RNILayoutValue,
     height: RNILayoutValue,
     
-    marginLeft  : RNILayoutValueMode? = nil,
-    marginRight : RNILayoutValueMode? = nil,
-    marginTop   : RNILayoutValueMode? = nil,
-    marginBottom: RNILayoutValueMode? = nil
+    marginLeft  : RNILayoutValue? = nil,
+    marginRight : RNILayoutValue? = nil,
+    marginTop   : RNILayoutValue? = nil,
+    marginBottom: RNILayoutValue? = nil
   ) {
     self.horizontalAlignment = horizontalAlignment;
     self.verticalAlignment   = verticalAlignment;
@@ -66,10 +66,10 @@ public struct RNILayout {
     width : RNILayoutValue? = nil,
     height: RNILayoutValue? = nil,
     
-    marginLeft  : RNILayoutValueMode? = nil,
-    marginRight : RNILayoutValueMode? = nil,
-    marginTop   : RNILayoutValueMode? = nil,
-    marginBottom: RNILayoutValueMode? = nil
+    marginLeft  : RNILayoutValue? = nil,
+    marginRight : RNILayoutValue? = nil,
+    marginTop   : RNILayoutValue? = nil,
+    marginBottom: RNILayoutValue? = nil
   ) {
     self.horizontalAlignment = horizontalAlignment ?? prev.horizontalAlignment;
     self.verticalAlignment   = verticalAlignment   ?? prev.verticalAlignment;
@@ -156,6 +156,54 @@ public struct RNILayout {
     return rect;
   };
   
+  public func computeMargins(
+    usingLayoutValueContext context: RNILayoutValueContext
+  ) -> (
+    left  : CGFloat?,
+    right : CGFloat?,
+    top   : CGFloat?,
+    bottom: CGFloat?,
+    
+    horizontal: CGFloat,
+    vertical  : CGFloat
+  ) {
+    let computedMarginLeft = self.marginLeft?.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.width
+    );
+    
+    let computedMarginRight = self.marginRight?.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.width
+    );
+    
+    let computedMarginTop = self.marginTop?.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.height
+    );
+    
+    let computedMarginBottom = self.marginBottom?.computeValue(
+      usingLayoutValueContext: context,
+      preferredSizeKey: \.height
+    );
+    
+    let computedMarginHorizontal =
+      (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
+      
+    let computedMarginVertical =
+      (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
+      
+    return (
+      left  : computedMarginLeft   ?? 0,
+      right : computedMarginRight  ?? 0,
+      top   : computedMarginTop    ?? 0,
+      bottom: computedMarginBottom ?? 0,
+      
+      horizontal: computedMarginHorizontal,
+      vertical  : computedMarginVertical
+    );
+  };
+  
   // MARK: - Functions
   // -----------------
   
@@ -182,40 +230,16 @@ public struct RNILayout {
   
     var rect = self.computeRawRectOrigin(usingLayoutValueContext: context);
     
-    let computedMarginLeft = self.marginLeft?.compute(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.width
-    );
-    
-    let computedMarginRight = self.marginRight?.compute(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.width
-    );
-    
-    let computedMarginTop = self.marginTop?.compute(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.height
-    );
-    
-    let computedMarginBottom = self.marginBottom?.compute(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.height
-    );
-    
-    let computedMarginHorizontal =
-      (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
-      
-    let computedMarginVertical =
-      (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
+    let computedMargins = self.computeMargins(usingLayoutValueContext: context);
    
     // Margin - X-Axis
     switch self.horizontalAlignment {
       case .left:
-        guard let marginLeft = computedMarginLeft else { break };
+        guard let marginLeft = computedMargins.left else { break };
         rect.origin.x = rect.origin.x + marginLeft;
         
       case .right:
-        guard let marginRight = computedMarginRight else { break };
+        guard let marginRight = computedMargins.right else { break };
         rect.origin.x = rect.origin.x - marginRight;
         
       case .center:
@@ -225,11 +249,11 @@ public struct RNILayout {
     // Margin - Y-Axis
     switch self.verticalAlignment {
       case .top:
-        guard let marginTop = computedMarginTop else { break };
+        guard let marginTop = computedMargins.top else { break };
         rect.origin.y = rect.origin.y + marginTop;
         
       case .bottom:
-        guard let marginBottom = computedMarginBottom else { break };
+        guard let marginBottom = computedMargins.bottom else { break };
         rect.origin.y = rect.origin.y - marginBottom;
         
       case .center:
@@ -238,24 +262,24 @@ public struct RNILayout {
     
     let shouldRecomputeXAxis: Bool = {
       switch self.width.mode {
-        case .stretch: return abs(computedMarginHorizontal) < rect.width;
+        case .stretch: return abs(computedMargins.horizontal) < rect.width;
         default: return false;
       };
     }();
     
     let shouldRecomputeYAxis: Bool = {
       switch self.height.mode {
-        case .stretch: return abs(computedMarginVertical) < rect.height;
+        case .stretch: return abs(computedMargins.vertical) < rect.height;
         default: return false;
       };
     }();
     
     if shouldRecomputeXAxis {
-      rect.size.width = rect.size.width - computedMarginHorizontal;
+      rect.size.width = rect.size.width - computedMargins.horizontal;
     };
     
     if shouldRecomputeYAxis {
-      rect.size.height = rect.size.height - computedMarginVertical;
+      rect.size.height = rect.size.height - computedMargins.vertical;
     };
     
     if shouldRecomputeXAxis || shouldRecomputeYAxis {
