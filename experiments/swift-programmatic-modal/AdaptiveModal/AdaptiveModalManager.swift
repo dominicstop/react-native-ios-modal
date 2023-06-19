@@ -987,26 +987,10 @@ class AdaptiveModalManager: NSObject {
   };
   
   private func applyInterpolationToModal(forGesturePoint gesturePoint: CGPoint) {
-    guard let computedGestureOffset = self.computedGestureOffset
-    else { return };
-    
-    let gestureInputPoint: CGPoint = {
-      switch self.modalConfig.snapDirection {
-        case .bottomToTop, .rightToLeft:
-          return CGPoint(
-            x: gesturePoint.x - computedGestureOffset.x,
-            y: gesturePoint.y - computedGestureOffset.y
-          );
-          
-        case .topToBottom, .leftToRight:
-          return CGPoint(
-            x: gesturePoint.x + computedGestureOffset.x,
-            y: gesturePoint.y + computedGestureOffset.y
-          );
-      };
-    }();
+    let gesturePointWithOffset =
+      self.applyGestureOffsets(forGesturePoint: gesturePoint);
   
-    self.applyInterpolationToModal(forPoint: gestureInputPoint);
+    self.applyInterpolationToModal(forPoint: gesturePointWithOffset);
   };
   
   // MARK: - Functions - Cleanup-Related
@@ -1112,8 +1096,8 @@ class AdaptiveModalManager: NSObject {
       : inputCoord;
     
     let delta = self.interpolationSteps.map {
-      let origin = $0.computedRect.origin;
-      let coord = origin[keyPath: self.modalConfig.inputValueKeyForPoint];
+      let coord =
+        $0.computedRect[keyPath: self.modalConfig.inputValueKeyForRect];
       
       return abs(inputCoordAdj - coord);
     };
@@ -1129,14 +1113,12 @@ class AdaptiveModalManager: NSObject {
     let snapPointIndex = interpolationPoint.snapPointIndex;
     
     let coords = self.interpolationSteps.map {
-      let origin = $0.computedRect.origin;
-      let coord = origin[keyPath: self.modalConfig.inputValueKeyForPoint];
-      
-      return coord;
+      $0.computedRect[keyPath: self.modalConfig.inputValueKeyForRect];
     };
     
     print(
         "getClosestSnapPoint"
+      + "\n - inputRect: \(inputRect)"
       + "\n - inputCoordAdj: \(inputCoordAdj)"
       + "\n - coords: \(coords)"
       + "\n - delta: \(delta)"
@@ -1262,6 +1244,26 @@ class AdaptiveModalManager: NSObject {
     self.startDisplayLink();
   };
   
+  private func applyGestureOffsets(
+    forGesturePoint gesturePoint: CGPoint
+  ) -> CGPoint {
+  
+    guard let computedGestureOffset = self.computedGestureOffset
+    else { return gesturePoint };
+    
+    switch self.modalConfig.snapDirection {
+      case .bottomToTop, .rightToLeft: return CGPoint(
+        x: gesturePoint.x - computedGestureOffset.x,
+        y: gesturePoint.y - computedGestureOffset.y
+      );
+        
+      case .topToBottom, .leftToRight: return CGPoint(
+        x: gesturePoint.x + computedGestureOffset.x,
+        y: gesturePoint.y + computedGestureOffset.y
+      );
+    };
+  };
+  
   @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
@@ -1286,10 +1288,8 @@ class AdaptiveModalManager: NSObject {
         
         let gestureFinalPointRaw = self.gestureFinalPoint ?? gesturePoint;
         
-        let gestureFinalPoint = CGPoint(
-          x: gestureFinalPointRaw.x - (self.gestureOffset?.x ?? 0),
-          y: gestureFinalPointRaw.y - (self.gestureOffset?.y ?? 0)
-        );
+        let gestureFinalPoint =
+          self.applyGestureOffsets(forGesturePoint: gestureFinalPointRaw);
         
         print(
             "onDragPanGesture"
