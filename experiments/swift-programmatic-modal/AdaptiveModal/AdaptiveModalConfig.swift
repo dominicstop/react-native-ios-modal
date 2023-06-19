@@ -40,6 +40,9 @@ struct AdaptiveModalConfig {
   // let entranceConfig: AdaptiveModalEntranceConfig;
   // let snapSwipeVelocityThreshold: CGFloat = 0;
   
+  // MARK: - Computed Properties
+  // ---------------------------
+  
   var snapPoints: [AdaptiveModalSnapPointConfig] {
     .Element.deriveSnapPoints(
       undershootSnapPoint: self.undershootSnapPoint,

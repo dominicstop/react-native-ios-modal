@@ -951,14 +951,39 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalShadowOffset: .init(width: 0, height: -2),
               modalShadowOpacity: 0.2,
               modalShadowRadius: 7,
-              modalCornerRadius: 25,
+              modalCornerRadius: 0,
               modalMaskedCorners: [
                 .layerMinXMinYCorner,
                 .layerMaxXMinYCorner
               ],
               modalBackgroundOpacity: 0.9,
               modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
-              modalBackgroundVisualEffectIntensity: 1
+              modalBackgroundVisualEffectIntensity: 1,
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
+            )
+          ),
+          
+          // Snap Point 2
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .stretch,
+              height: .percent(percentValue: 0.75)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 0, height: -2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 7,
+              modalCornerRadius: 15,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner
+              ],
+              modalBackgroundOpacity: 0.85,
+              modalBackgroundVisualEffectIntensity: 0.25,
+              backgroundVisualEffectIntensity: 0.75
             )
           )
         ],

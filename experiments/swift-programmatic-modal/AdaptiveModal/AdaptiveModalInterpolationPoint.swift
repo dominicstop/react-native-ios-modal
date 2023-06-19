@@ -339,12 +339,14 @@ extension AdaptiveModalInterpolationPoint {
 
   static func compute(
     usingModalConfig modalConfig: AdaptiveModalConfig,
+    snapPoints: [AdaptiveModalSnapPointConfig]? = nil,
     layoutValueContext context: RNILayoutValueContext
   ) -> [Self] {
-
+  
+    let snapPoints = snapPoints ?? modalConfig.snapPoints;
     var items: [AdaptiveModalInterpolationPoint] = [];
     
-    for (index, snapConfig) in modalConfig.snapPoints.enumerated() {
+    for (index, snapConfig) in snapPoints.enumerated() {
       items.append(
         AdaptiveModalInterpolationPoint(
           usingModalConfig: modalConfig,

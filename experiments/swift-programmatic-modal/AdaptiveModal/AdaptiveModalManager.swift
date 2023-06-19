@@ -74,11 +74,30 @@ class AdaptiveModalManager: NSObject {
     return .default;
   };
   
+  // MARK: -  Properties - Config Interpolation Points
+  // -------------------------------------------------
+  
+  /// The computed frames of the modal based on the snap points
+  private(set) var configInterpolationSteps: [AdaptiveModalInterpolationPoint]!;
+  
+  var currentConfigInterpolationStep: AdaptiveModalInterpolationPoint {
+    self.interpolationSteps[self.currentInterpolationIndex];
+  };
+  
+  private var configInterpolationRangeInput: [CGFloat]! {
+    self.interpolationSteps.map { $0.percent };
+  };
+  
+  // MARK: -  Properties - Override Interpolation Points
+  // ---------------------------------------------------
+  
+  private var isOverridingSnapPoints = false;
+  
+  private var overrideSnapPoints: [AdaptiveModalSnapPointConfig]?;
+  private var overrideInterpolationPoints: [AdaptiveModalInterpolationPoint]?;
+  
   // MARK: -  Properties - Interpolation Points
   // ------------------------------------------
-  
- /// The computed frames of the modal based on the snap points
-  private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]!;
   
   var prevInterpolationIndex = 0;
   var nextInterpolationIndex: Int?;
@@ -89,20 +108,23 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
+  var interpolationSteps: [AdaptiveModalInterpolationPoint]! {
+    self.configInterpolationSteps
+  };
+  
   var currentInterpolationStep: AdaptiveModalInterpolationPoint {
     self.interpolationSteps[self.currentInterpolationIndex];
   };
   
   private var interpolationRangeInput: [CGFloat]! {
-    self.interpolationSteps.map {
-      $0.percent
-    };
+    self.interpolationSteps.map { $0.percent };
   };
   
   private var interpolationRangeMaxInput: CGFloat? {
     guard let targetView = self.targetView else { return nil };
     return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
   };
+  
   
   // MARK: -  Properties - Animation-Related
   // ---------------------------------------
@@ -1054,13 +1076,82 @@ class AdaptiveModalManager: NSObject {
     
     self.didTriggerSetup = false;
   };
+  
+  private func cleanupSnapPointOverride(){
+    self.isOverridingSnapPoints = false;
+    self.overrideSnapPoints = nil;
+    self.overrideInterpolationPoints = nil;
+  };
  
   private func cleanup() {
     self.clearGestureValues();
     self.clearAnimators();
     self.cleanupViews();
+    self.cleanupSnapPointOverride();
     
     self.currentInterpolationIndex = 0;
+  };
+  
+  // MARK: - Functions - Helpers/Utilities
+  // -------------------------------------
+  
+  private func adjustInterpolationIndex(for nextIndex: Int) -> Int {
+    if nextIndex == 0 {
+      return self.shouldSnapToUnderShootSnapPoint
+        ? nextIndex
+        : 1;
+    };
+    
+    let lastIndex = self.interpolationSteps.count - 1;
+    
+    if nextIndex == lastIndex {
+      return self.shouldSnapToOvershootSnapPoint
+        ? nextIndex
+        : lastIndex - 1;
+    };
+    
+    return nextIndex;
+  };
+  
+  private func applyGestureOffsets(
+    forGesturePoint gesturePoint: CGPoint
+  ) -> CGPoint {
+  
+    guard let computedGestureOffset = self.computedGestureOffset
+    else { return gesturePoint };
+    
+    switch self.modalConfig.snapDirection {
+      case .bottomToTop, .rightToLeft: return CGPoint(
+        x: gesturePoint.x - computedGestureOffset.x,
+        y: gesturePoint.y - computedGestureOffset.y
+      );
+        
+      case .topToBottom, .leftToRight: return CGPoint(
+        x: gesturePoint.x + computedGestureOffset.x,
+        y: gesturePoint.y + computedGestureOffset.y
+      );
+    };
+  };
+  
+  func debug(prefix: String? = ""){
+    print(
+        "\n - AdaptiveModalManager.debug - \(prefix ?? "N/A")"
+      + "\n - modalView: \(self.modalView?.debugDescription ?? "N/A")"
+      + "\n - modalView frame: \(self.modalView?.frame.debugDescription ?? "N/A")"
+      + "\n - modalView superview: \(self.modalView?.superview.debugDescription ?? "N/A")"
+      + "\n - targetView: \(self.targetView?.debugDescription ?? "N/A")"
+      + "\n - targetView frame: \(self.targetView?.frame.debugDescription ?? "N/A")"
+      + "\n - targetView superview: \(self.targetView?.superview.debugDescription ?? "N/A")"
+      + "\n - modalViewController: \(self.modalViewController?.debugDescription ?? "N/A")"
+      + "\n - targetViewController: \(self.targetViewController?.debugDescription ?? "N/A")"
+      + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
+      + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
+      + "\n - interpolationSteps.computedRect: \(self.interpolationSteps.map({ $0.computedRect }))"
+      + "\n - interpolationSteps.percent: \(self.interpolationSteps.map({ $0.percent }))"
+      + "\n - interpolationSteps.backgroundVisualEffectIntensity: \(self.interpolationSteps.map({ $0.backgroundVisualEffectIntensity }))"
+      + "\n - interpolationSteps.backgroundVisualEffect: \(self.interpolationSteps.map({ $0.backgroundVisualEffect }))"
+      + "\n"
+    );
   };
   
   // MARK: - Functions
@@ -1071,7 +1162,7 @@ class AdaptiveModalManager: NSObject {
   ) {
     let context = context ?? self.layoutValueContext;
     
-    self.interpolationSteps = .Element.compute(
+    self.configInterpolationSteps = .Element.compute(
       usingModalConfig: self.modalConfig,
       layoutValueContext: context
     );
@@ -1099,17 +1190,13 @@ class AdaptiveModalManager: NSObject {
     let inputRect = self.modalFrame!;
     
     let inputCoord = coord ??
-      inputRect.origin[keyPath: self.modalConfig.inputValueKeyForPoint];
-      
-    let inputCoordAdj = inputCoord < 0
-      ? min(inputCoord, 0)
-      : inputCoord;
+      inputRect[keyPath: self.modalConfig.inputValueKeyForRect];
     
     let delta = self.interpolationSteps.map {
       let coord =
         $0.computedRect[keyPath: self.modalConfig.inputValueKeyForRect];
       
-      return abs(inputCoordAdj - coord);
+      return abs(inputCoord - coord);
     };
     
     let deltaSorted = delta.enumerated().sorted {
@@ -1168,24 +1255,6 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  private func adjustInterpolationIndex(for nextIndex: Int) -> Int {
-    if nextIndex == 0 {
-      return self.shouldSnapToUnderShootSnapPoint
-        ? nextIndex
-        : 1;
-    };
-    
-    let lastIndex = self.interpolationSteps.count - 1;
-    
-    if nextIndex == lastIndex {
-      return self.shouldSnapToOvershootSnapPoint
-        ? nextIndex
-        : lastIndex - 1;
-    };
-    
-    return nextIndex;
-  };
-  
   private func animateModal(
     to interpolationPoint: AdaptiveModalInterpolationPoint,
     completion: ((UIViewAnimatingPosition) -> Void)? = nil
@@ -1239,26 +1308,6 @@ class AdaptiveModalManager: NSObject {
     self.startDisplayLink();
   };
   
-  private func applyGestureOffsets(
-    forGesturePoint gesturePoint: CGPoint
-  ) -> CGPoint {
-  
-    guard let computedGestureOffset = self.computedGestureOffset
-    else { return gesturePoint };
-    
-    switch self.modalConfig.snapDirection {
-      case .bottomToTop, .rightToLeft: return CGPoint(
-        x: gesturePoint.x - computedGestureOffset.x,
-        y: gesturePoint.y - computedGestureOffset.y
-      );
-        
-      case .topToBottom, .leftToRight: return CGPoint(
-        x: gesturePoint.x + computedGestureOffset.x,
-        y: gesturePoint.y + computedGestureOffset.y
-      );
-    };
-  };
-  
   @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
@@ -1295,27 +1344,6 @@ class AdaptiveModalManager: NSObject {
       default:
         break;
     };
-  };
-  
-  func debug(prefix: String? = ""){
-    print(
-        "\n - AdaptiveModalManager.debug - \(prefix ?? "N/A")"
-      + "\n - modalView: \(self.modalView?.debugDescription ?? "N/A")"
-      + "\n - modalView frame: \(self.modalView?.frame.debugDescription ?? "N/A")"
-      + "\n - modalView superview: \(self.modalView?.superview.debugDescription ?? "N/A")"
-      + "\n - targetView: \(self.targetView?.debugDescription ?? "N/A")"
-      + "\n - targetView frame: \(self.targetView?.frame.debugDescription ?? "N/A")"
-      + "\n - targetView superview: \(self.targetView?.superview.debugDescription ?? "N/A")"
-      + "\n - modalViewController: \(self.modalViewController?.debugDescription ?? "N/A")"
-      + "\n - targetViewController: \(self.targetViewController?.debugDescription ?? "N/A")"
-      + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
-      + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
-      + "\n - interpolationSteps.computedRect: \(self.interpolationSteps.map({ $0.computedRect }))"
-      + "\n - interpolationSteps.percent: \(self.interpolationSteps.map({ $0.percent }))"
-      + "\n - interpolationSteps.backgroundVisualEffectIntensity: \(self.interpolationSteps.map({ $0.backgroundVisualEffectIntensity }))"
-      + "\n - interpolationSteps.backgroundVisualEffect: \(self.interpolationSteps.map({ $0.backgroundVisualEffect }))"
-      + "\n"
-    );
   };
   
   // MARK: - Functions - DisplayLink-Related
@@ -1670,5 +1698,64 @@ class AdaptiveModalManager: NSObject {
       animated: animated,
       completion: completion
     );
+  };
+  
+  public func snapTo(
+    snapPointConfig: AdaptiveModalSnapPointConfig,
+    overshootSnapPointPreset: AdaptiveModalSnapPointPreset? = nil,
+    fallbackSnapPointKey: AdaptiveModalSnapPointConfig.SnapPointKey? = nil,
+    animated: Bool = true,
+    completion: (() -> Void)? = nil
+  ) {
+    var snapPoints = [
+      self.currentSnapPointConfig,
+      snapPointConfig
+    ];
+    
+    let interpolationPoint = AdaptiveModalInterpolationPoint(
+      usingModalConfig: self.modalConfig,
+      snapPointIndex: self.currentInterpolationIndex + 1,
+      layoutValueContext: self.layoutValueContext,
+      snapPointConfig: snapPointConfig,
+      prevInterpolationPoint: self.currentInterpolationStep
+    );
+    
+    var interpolationPoints = [
+      self.currentInterpolationStep,
+      interpolationPoint
+    ];
+    
+    if let overshootSnapPointPreset = overshootSnapPointPreset {
+      let overshootSnapPointConfig = AdaptiveModalSnapPointConfig(
+        key: .overshootPoint,
+        fromSnapPointPreset: overshootSnapPointPreset,
+        fromBaseLayoutConfig: snapPointConfig.snapPoint
+      );
+      
+      let overshootInterpolationPoint = AdaptiveModalInterpolationPoint(
+        usingModalConfig: self.modalConfig,
+        snapPointIndex: self.currentInterpolationIndex + 2,
+        layoutValueContext: self.layoutValueContext,
+        snapPointConfig: overshootSnapPointConfig,
+        prevInterpolationPoint: interpolationPoints.last!
+      );
+      
+      snapPoints.append(overshootSnapPointConfig);
+      interpolationPoints.append(overshootInterpolationPoint);
+    };
+    
+    self.isOverridingSnapPoints = true;
+    self.overrideSnapPoints = snapPoints;
+    self.overrideInterpolationPoints = interpolationPoints;
+    
+    print(
+      "\n - interpolationPoints.percent:", interpolationPoints.map({$0.percent}),
+      "\n - interpolationPoints.snapPointIndex:", interpolationPoints.map({$0.snapPointIndex}),
+      "\n - interpolationPoints.computedRect:", interpolationPoints.map({$0.computedRect})
+    );
+    
+    self.animateModal(to: interpolationPoint) { _ in
+      completion?();
+    };
   };
 };

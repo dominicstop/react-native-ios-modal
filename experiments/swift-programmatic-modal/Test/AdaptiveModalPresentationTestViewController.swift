@@ -10,6 +10,9 @@ import UIKit
 fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventNotifiable {
 
   weak var modalManager: AdaptiveModalManager?;
+  
+  var showDismissButton = false;
+  var showCustomSnapPointButton = true;
 
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
@@ -24,7 +27,7 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
   override func viewDidLoad() {
     self.view.backgroundColor = .white;
     
-    let presentButton: UIButton = {
+    let dismissButton: UIButton = {
       let button = UIButton();
       
       button.setTitle("Dismiss Modal", for: .normal);
@@ -33,6 +36,21 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
       button.addTarget(
         self,
         action: #selector(self.onPressButtonDismiss(_:)),
+        for: .touchUpInside
+      );
+      
+      return button;
+    }();
+    
+    let customSnapPointButton: UIButton = {
+      let button = UIButton();
+      
+      button.setTitle("Custom Snap Point", for: .normal);
+      button.configuration = .filled();
+      
+      button.addTarget(
+        self,
+        action: #selector(self.onPressButtonCustomSnapPoint(_:)),
         for: .touchUpInside
       );
       
@@ -48,7 +66,14 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
       stack.spacing = 10;
       
       stack.addArrangedSubview(self.floatingViewLabel);
-      stack.addArrangedSubview(presentButton);
+      
+      if self.showDismissButton {
+        stack.addArrangedSubview(dismissButton);
+      };
+      
+      if self.showCustomSnapPointButton {
+        stack.addArrangedSubview(customSnapPointButton);
+      };
       
       return stack;
     }();
@@ -64,6 +89,26 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
   
   @objc func onPressButtonDismiss(_ sender: UIButton){
     self.dismiss(animated: true);
+  };
+  
+  @objc func onPressButtonCustomSnapPoint(_ sender: UIButton){
+    let snapPoint = AdaptiveModalSnapPointConfig(
+      key: .string("custom"),
+      snapPoint: .init(
+        horizontalAlignment: .center,
+        verticalAlignment: .center,
+        width: .stretch,
+        height: .stretch,
+        marginLeft: .constant(15),
+        marginRight: .constant(15),
+        marginBottom: .constant(100)
+      )
+    );
+  
+    //self.dismiss(animated: true);
+    self.modalManager?.snapTo(
+      snapPointConfig: snapPoint
+    );
   };
   
   func notifyOnModalWillSnap(
@@ -99,6 +144,7 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     .demo05,
     .demo06,
     .demo07,
+    .demo08,
   ];
   
   var currentModalConfigPresetCounter = 0;
