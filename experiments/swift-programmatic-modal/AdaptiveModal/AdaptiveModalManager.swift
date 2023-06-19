@@ -19,6 +19,7 @@ class AdaptiveModalManager: NSObject {
   var modalConfig: AdaptiveModalConfig;
   
   var enableSnapping = true;
+  var enableOverShooting = true;
   
   var shouldSnapToUnderShootSnapPoint = true;
   var shouldSnapToOvershootSnapPoint = false;
@@ -282,7 +283,7 @@ class AdaptiveModalManager: NSObject {
   func setupViewControllers() {
     guard let modalVC = self.modalViewController else { return };
   
-    modalVC.modalPresentationStyle = .custom;
+    modalVC.modalPresentationStyle = .overCurrentContext;
     modalVC.transitioningDelegate = self;
   };
   
@@ -979,10 +980,19 @@ class AdaptiveModalManager: NSObject {
     
     let percent = inputValue / interpolationRangeMaxInput;
     
-    let percentAdj = shouldInvertPercent
-      ? AdaptiveModalUtilities.invertPercent(percent)
-      : percent;
+    let percentClamped: CGFloat = {
+      guard !self.enableOverShooting else { return percent };
+      
+      let secondToLastIndex = self.modalConfig.overshootSnapPointIndex - 1;
+      let maxPercent = self.interpolationRangeInput[secondToLastIndex];
+      
+      return percent.clamped(max: maxPercent);
+    }();
     
+    let percentAdj = shouldInvertPercent
+      ? AdaptiveModalUtilities.invertPercent(percentClamped)
+      : percentClamped;
+      
     self.applyInterpolationToModal(forInputPercentValue: percentAdj);
   };
   
@@ -1111,21 +1121,6 @@ class AdaptiveModalManager: NSObject {
     
     let interpolationPoint = interpolationSteps[closestInterpolationIndex];
     let snapPointIndex = interpolationPoint.snapPointIndex;
-    
-    let coords = self.interpolationSteps.map {
-      $0.computedRect[keyPath: self.modalConfig.inputValueKeyForRect];
-    };
-    
-    print(
-        "getClosestSnapPoint"
-      + "\n - inputRect: \(inputRect)"
-      + "\n - inputCoordAdj: \(inputCoordAdj)"
-      + "\n - coords: \(coords)"
-      + "\n - delta: \(delta)"
-      + "\n - deltaSorted: \(deltaSorted)"
-      + "\n - closestInterpolationIndex: \(closestInterpolationIndex)"
-      + "\n"
-    );
     
     return (
       interpolationIndex: closestInterpolationIndex,
@@ -1291,15 +1286,6 @@ class AdaptiveModalManager: NSObject {
         let gestureFinalPoint =
           self.applyGestureOffsets(forGesturePoint: gestureFinalPointRaw);
         
-        print(
-            "onDragPanGesture"
-          + "\n - gesturePoint: \(gesturePoint)"
-          + "\n - gestureVelocity: \(gestureVelocity)"
-          + "\n - gestureFinalPointRaw: \(gestureFinalPointRaw)"
-          + "\n - gestureFinalPoint: \(gestureFinalPoint)"
-          + "\n"
-        );
-        
         self.snapToClosestSnapPoint(forPoint: gestureFinalPoint) {
           self.notifyOnModalDidSnap();
         };
@@ -1430,9 +1416,14 @@ class AdaptiveModalManager: NSObject {
     let shouldDismiss =
       shouldDismissOnSnapToUnderShootSnapPoint ||
       shouldDismissOnSnapToOverShootSnapPoint;
-    
+      
+    let isPresenting = self.currentInterpolationIndex == 0 && nextIndex == 1;
+      
     if shouldDismiss {
       self.notifyOnModalWillHide();
+      
+    } else if isPresenting {
+      self.notifyOnModalWillShow();
     };
   };
   
@@ -1458,16 +1449,34 @@ class AdaptiveModalManager: NSObject {
     let shouldDismiss =
       shouldDismissOnSnapToUnderShootSnapPoint ||
       shouldDismissOnSnapToOverShootSnapPoint;
+      
+    let wasPresented =
+      self.currentInterpolationIndex == 1 && self.prevInterpolationIndex == 0;
     
     if shouldDismiss {
       self.notifyOnModalDidHide();
+      
+    } else if wasPresented {
+      self.notifyOnModalDidShow();
     };
-    
-    self.debug();
+  };
+  
+  private func notifyOnModalWillShow(){
+    // wip
+  };
+  
+  private func notifyOnModalDidShow(){
+    // wip
+    //UIView.animate(withDuration: 1){
+    //  self.targetViewController?.view.transform = .init(scaleX: 0.5, y: 0.5);
+    //};
   };
   
   private func notifyOnModalWillHide(){
     // wip
+    //UIView.animate(withDuration: 1){
+    //  self.targetViewController?.view.transform = .identity;
+    //};
   };
   
   private func notifyOnModalDidHide(){
@@ -1557,16 +1566,6 @@ class AdaptiveModalManager: NSObject {
   ) {
     let coord = point[keyPath: self.modalConfig.inputValueKeyForPoint];
     let closestSnapPoint = self.getClosestSnapPoint(forCoord: coord);
-    
-    print(
-        "snapToClosestSnapPoint"
-      + "\n - coord: \(coord)"
-      + "\n - closestSnapPoint.interpolationIndex: \(closestSnapPoint.interpolationIndex)"
-      + "\n - closestSnapPoint.snapDistance: \(closestSnapPoint.snapDistance)"
-      + "\n - closestSnapPoint.interpolationPoint: \(closestSnapPoint.interpolationPoint)"
-      + "\n - closestSnapPoint.snapPointConfig: \(closestSnapPoint.snapPointConfig)"
-      + "\n"
-    );
     
     let nextInterpolationIndex =
       self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);

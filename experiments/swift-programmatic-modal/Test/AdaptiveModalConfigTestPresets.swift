@@ -27,6 +27,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
   case demo05;
   case demo06;
   case demo07;
+  case demo08;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -890,7 +891,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalCornerRadius: 15,
               modalBackgroundOpacity: 0.85,
               modalBackgroundVisualEffectIntensity: 0.9,
-              backgroundColor: .black,
+              backgroundColor: .white,
               backgroundOpacity: 0.15,
               backgroundVisualEffectIntensity: 0.05
             )
@@ -901,8 +902,8 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
             snapPoint: RNILayout(
               horizontalAlignment: .center,
               verticalAlignment: .center,
-              width: .percent(percentValue: 0.9),
-              height: .percent(percentValue: 0.85)
+              width: .stretch,
+              height: .stretch
             ),
             animationKeyframe: AdaptiveModalAnimationConfig(
               modalShadowOffset: .zero,
@@ -912,7 +913,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               modalBackgroundVisualEffectOpacity: 0,
               modalBackgroundVisualEffectIntensity: 0,
               backgroundColor: .white,
-              backgroundOpacity: 0.5,
+              backgroundOpacity: 0.75,
               backgroundVisualEffectIntensity: 1
             )
           ),
@@ -932,7 +933,38 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
           )
         ),
         overshootSnapPoint: AdaptiveModalSnapPointPreset(
-          layoutPreset: .edgeRight
+          layoutPreset: .offscreenRight
+        )
+      );
+      
+      case .demo08: return AdaptiveModalConfig(
+        snapPoints: [
+          // Snap Point 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .stretch,
+              height: .percent(percentValue: 0.3)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 0, height: -2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 7,
+              modalCornerRadius: 25,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner
+              ],
+              modalBackgroundOpacity: 0.9,
+              modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
+              modalBackgroundVisualEffectIntensity: 1
+            )
+          )
+        ],
+        snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .fitScreen
         )
       );
     };

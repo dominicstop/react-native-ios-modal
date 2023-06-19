@@ -38,7 +38,7 @@ extension AdaptiveModalSnapPointPreset {
     return self.init(layoutPreset: layoutPreset);
   };
   
-  static func getDefaultInitialSnapPoint(
+  static func getDefaultUnderShootSnapPoint(
     forDirection direction: AdaptiveModalConfig.Direction
   ) -> Self {
   

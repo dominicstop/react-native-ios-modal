@@ -29,4 +29,10 @@ class AdaptiveModalPresentationController: UIPresentationController {
   
    override func presentationTransitionDidEnd(_ completed: Bool) {
    };
+   
+  override func viewWillTransition(
+    to size: CGSize,
+    with coordinator: UIViewControllerTransitionCoordinator
+  ) {
+  }
 };

@@ -176,8 +176,16 @@ class AdaptiveModalUtilities {
   };
   
   static func invertPercent(_ percent: CGFloat) -> CGFloat {
-    let offset = percent > 1 ? abs(percent - 1) : 0;
-    return 1 - percent + offset;
+    if percent >= 0 && percent <= 1 {
+      return 1 - percent;
+    };
+    
+    if percent < 0 {
+      return abs(percent) + 1;
+    };
+    
+    // percent > 1
+    return -(percent - 1);
   };
   
   static func unwrapAndSetProperty<O: AnyObject, T>(
