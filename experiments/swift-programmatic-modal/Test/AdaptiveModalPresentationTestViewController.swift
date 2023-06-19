@@ -101,7 +101,14 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
         height: .stretch,
         marginLeft: .constant(15),
         marginRight: .constant(15),
-        marginBottom: .constant(100)
+        marginTop: .multipleValues([
+          .safeAreaInsets(insetKey: \.top),
+          .constant(15),
+        ]),
+        marginBottom: .multipleValues([
+          .safeAreaInsets(insetKey: \.bottom),
+          .constant(15),
+        ])
       )
     );
   
