@@ -372,14 +372,42 @@ class AdaptiveModalManager: NSObject {
     
     super.init();
     self.computeSnapPoints();
+    self.setupObservers();
   };
   
   deinit {
     self.clearAnimators();
+    self.removeObservers();
   };
   
   // MARK: - Functions - Setup
   // -------------------------
+  
+  private func setupObservers(){
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardWillShow(notification:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    );
+    
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardDidShow(notification:)),
+      name: UIResponder.keyboardDidShowNotification,
+      object: nil
+    );
+
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardWillHide(notification:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    );
+    
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardDidHide(notification:)),
+      name: UIResponder.keyboardDidHideNotification,
+      object: nil
+    );
+  };
   
   func setupViewControllers() {
     guard let modalVC = self.modalViewController else { return };
@@ -544,6 +572,90 @@ class AdaptiveModalManager: NSObject {
         modalBGVisualEffectView.heightAnchor .constraint(equalTo: modalView.heightAnchor ),
       ]);
     };
+  };
+  
+  // MARK: - Functions - Cleanup-Related
+  // -----------------------------------
+  
+  private func clearGestureValues() {
+    self.gestureOffset = nil;
+    self.gestureInitialPoint = nil;
+    self.gestureVelocity = nil;
+    self.gesturePoint = nil;
+  };
+  
+  private func clearAnimators() {
+    self.backgroundVisualEffectAnimator?.clear();
+    self.backgroundVisualEffectAnimator = nil;
+    
+    self.modalBackgroundVisualEffectAnimator?.clear();
+    self.modalBackgroundVisualEffectAnimator = nil;
+    
+    self.modalAnimator?.stopAnimation(true);
+    self.modalAnimator = nil;
+  };
+  
+  private func removeObservers(){
+    let notificationNames = [
+      UIResponder.keyboardWillShowNotification,
+      UIResponder.keyboardDidShowNotification,
+      UIResponder.keyboardWillHideNotification,
+      UIResponder.keyboardDidHideNotification
+    ];
+    
+    notificationNames.forEach {
+      NotificationCenter.default.removeObserver(self, name: $0, object: nil);
+    };
+  };
+  
+  private func cleanupViews() {
+    let viewsToCleanup: [UIView?] = [
+      self.dummyModalView,
+      self.modalWrapperView,
+      // self.modalWrapperTransformView,
+      // self.nodalView,
+      self.modalWrapperShadowView,
+      self.modalBackgroundView,
+      self.modalBackgroundVisualEffectView,
+      self.backgroundDimmingView,
+      self.backgroundVisualEffectView
+    ];
+    
+    viewsToCleanup.forEach {
+      guard let view = $0 else { return };
+      
+      view.removeAllAncestorConstraints();
+      view.removeFromSuperview();
+    };
+    
+    self.modalView = nil;
+    self.targetView = nil;
+    
+    self.modalBackgroundView = nil;
+    self.modalBackgroundVisualEffectView = nil;
+    self.backgroundDimmingView = nil;
+    self.backgroundVisualEffectView = nil;
+    
+    self.didTriggerSetup = false;
+  };
+  
+  private func cleanupSnapPointOverride(){
+    self.isOverridingSnapPoints = false;
+    self.overrideSnapPoints = nil;
+    self.overrideInterpolationPoints = nil;
+    
+    self.prevOverrideInterpolationIndex = 0;
+    self.nextOverrideInterpolationIndex = nil;
+    self.currentOverrideInterpolationIndex = 0;
+  };
+ 
+  private func cleanup() {
+    self.clearGestureValues();
+    self.clearAnimators();
+    self.cleanupViews();
+    self.cleanupSnapPointOverride();
+    
+    self.currentInterpolationIndex = 0;
   };
 
   // MARK: - Functions - Interpolation-Related Helpers
@@ -1104,77 +1216,6 @@ class AdaptiveModalManager: NSObject {
     self.applyInterpolationToModal(forPoint: gesturePointWithOffset);
   };
   
-  // MARK: - Functions - Cleanup-Related
-  // -----------------------------------
-  
-  private func clearGestureValues() {
-    self.gestureOffset = nil;
-    self.gestureInitialPoint = nil;
-    self.gestureVelocity = nil;
-    self.gesturePoint = nil;
-  };
-  
-  private func clearAnimators() {
-    self.backgroundVisualEffectAnimator?.clear();
-    self.backgroundVisualEffectAnimator = nil;
-    
-    self.modalBackgroundVisualEffectAnimator?.clear();
-    self.modalBackgroundVisualEffectAnimator = nil;
-    
-    self.modalAnimator?.stopAnimation(true);
-    self.modalAnimator = nil;
-  };
-  
-  private func cleanupViews() {
-    let viewsToCleanup: [UIView?] = [
-      self.dummyModalView,
-      self.modalWrapperView,
-      // self.modalWrapperTransformView,
-      // self.nodalView,
-      self.modalWrapperShadowView,
-      self.modalBackgroundView,
-      self.modalBackgroundVisualEffectView,
-      self.backgroundDimmingView,
-      self.backgroundVisualEffectView
-    ];
-    
-    viewsToCleanup.forEach {
-      guard let view = $0 else { return };
-      
-      view.removeAllAncestorConstraints();
-      view.removeFromSuperview();
-    };
-    
-    self.modalView = nil;
-    self.targetView = nil;
-    
-    self.modalBackgroundView = nil;
-    self.modalBackgroundVisualEffectView = nil;
-    self.backgroundDimmingView = nil;
-    self.backgroundVisualEffectView = nil;
-    
-    self.didTriggerSetup = false;
-  };
-  
-  private func cleanupSnapPointOverride(){
-    self.isOverridingSnapPoints = false;
-    self.overrideSnapPoints = nil;
-    self.overrideInterpolationPoints = nil;
-    
-    self.prevOverrideInterpolationIndex = 0;
-    self.nextOverrideInterpolationIndex = nil;
-    self.currentOverrideInterpolationIndex = 0;
-  };
- 
-  private func cleanup() {
-    self.clearGestureValues();
-    self.clearAnimators();
-    self.cleanupViews();
-    self.cleanupSnapPointOverride();
-    
-    self.currentInterpolationIndex = 0;
-  };
-  
   // MARK: - Functions - Helpers/Utilities
   // -------------------------------------
   
@@ -1214,6 +1255,18 @@ class AdaptiveModalManager: NSObject {
         y: gesturePoint.y + computedGestureOffset.y
       );
     };
+  };
+  
+  private func getKeyboardRect(
+    fromNotification notification: NSNotification
+  ) -> CGRect? {
+  
+    guard let userInfo = notification.userInfo,
+          let keyboardFrameRaw = userInfo[UIResponder.keyboardFrameEndUserInfoKey],
+          let keyboardFrame = keyboardFrameRaw as? NSValue
+    else { return nil };
+    
+    return keyboardFrame.cgRectValue;
   };
   
   func debug(prefix: String? = ""){
@@ -1391,6 +1444,9 @@ class AdaptiveModalManager: NSObject {
     self.startDisplayLink();
   };
   
+  // MARK: - Functions - Handlers
+  // ----------------------------
+  
   @objc private func onDragPanGesture(_ sender: UIPanGestureRecognizer) {
     let gesturePoint = sender.location(in: self.targetView);
     self.gesturePoint = gesturePoint;
@@ -1429,6 +1485,47 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
+  @objc func onKeyboardWillShow(notification: NSNotification) {
+    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    else { return };
+    
+    print(
+      "onKeyboardWillShow",
+      "\n - keyboardRect:", keyboardRect
+    );
+  };
+  
+  @objc func onKeyboardDidShow(notification: NSNotification) {
+    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    else { return };
+    
+    print(
+      "onKeyboardDidShow",
+      "\n - keyboardRect:", keyboardRect
+    );
+  };
+
+
+  @objc func onKeyboardWillHide(notification: NSNotification) {
+    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    else { return };
+    
+    print(
+      "onKeyboardWillHide",
+      "\n - keyboardRect:", keyboardRect
+    );
+  };
+  
+  @objc func onKeyboardDidHide(notification: NSNotification) {
+    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    else { return };
+    
+    print(
+      "onKeyboardDidHide",
+      "\n - keyboardRect:", keyboardRect
+    );
+  };
+
   // MARK: - Functions - DisplayLink-Related
   // ---------------------------------------
     

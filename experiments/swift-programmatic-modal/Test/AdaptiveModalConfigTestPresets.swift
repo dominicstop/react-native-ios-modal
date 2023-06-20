@@ -28,6 +28,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
   case demo06;
   case demo07;
   case demo08;
+  case demo09;
   
   var config: AdaptiveModalConfig {
     switch self {
@@ -987,6 +988,39 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               backgroundVisualEffectIntensity: 0.75
             )
           )
+        ],
+        snapDirection: .bottomToTop,
+        overshootSnapPoint: AdaptiveModalSnapPointPreset(
+          layoutPreset: .fitScreen
+        )
+      );
+      
+      case .demo09: return AdaptiveModalConfig(
+        snapPoints: [
+          // Snap Point 1
+          AdaptiveModalSnapPointConfig(
+            snapPoint: RNILayout(
+              horizontalAlignment: .center,
+              verticalAlignment: .bottom,
+              width: .stretch,
+              height: .percent(percentValue: 0.3)
+            ),
+            animationKeyframe: AdaptiveModalAnimationConfig(
+              modalShadowOffset: .init(width: 0, height: -2),
+              modalShadowOpacity: 0.2,
+              modalShadowRadius: 7,
+              modalCornerRadius: 0,
+              modalMaskedCorners: [
+                .layerMinXMinYCorner,
+                .layerMaxXMinYCorner
+              ],
+              modalBackgroundOpacity: 0.9,
+              modalBackgroundVisualEffect: UIBlurEffect(style: .systemUltraThinMaterial),
+              modalBackgroundVisualEffectIntensity: 1,
+              backgroundVisualEffect: UIBlurEffect(style: .regular),
+              backgroundVisualEffectIntensity: 0
+            )
+          ),
         ],
         snapDirection: .bottomToTop,
         overshootSnapPoint: AdaptiveModalSnapPointPreset(

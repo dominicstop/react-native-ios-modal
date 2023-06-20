@@ -13,6 +13,7 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
   
   var showDismissButton = true;
   var showCustomSnapPointButton = false;
+  var showTextInputField = false;
 
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
@@ -57,6 +58,21 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
       return button;
     }();
     
+    let textInputField: UITextField = {
+      let textField = UITextField();
+    
+      textField.placeholder = "Enter text here";
+      textField.font = UIFont.systemFont(ofSize: 15);
+      textField.borderStyle = UITextField.BorderStyle.roundedRect;
+      textField.autocorrectionType = UITextAutocorrectionType.no;
+      textField.keyboardType = UIKeyboardType.default;
+      textField.returnKeyType = UIReturnKeyType.done;
+      textField.clearButtonMode = UITextField.ViewMode.whileEditing;
+      textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center;
+      
+      return textField;
+    }();
+    
     let stackView: UIStackView = {
       let stack = UIStackView();
       
@@ -66,6 +82,10 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
       stack.spacing = 10;
       
       stack.addArrangedSubview(self.floatingViewLabel);
+      
+      if self.showTextInputField {
+        stack.addArrangedSubview(textInputField);
+      };
       
       if self.showDismissButton {
         stack.addArrangedSubview(dismissButton);
@@ -163,6 +183,7 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     .demo06,
     .demo07,
     .demo08,
+    .demo09,
   ];
   
   var currentModalConfigPresetCounter = 0;
@@ -296,8 +317,11 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     let testVC = TestModalViewController();
     
     switch self.currentModalConfigPreset {
-      case .demo08, .demo07:
+      case .demo07, .demo08:
         testVC.showCustomSnapPointButton = true;
+        
+      case .demo09:
+        testVC.showTextInputField = true;
       
       default: break;
     };
