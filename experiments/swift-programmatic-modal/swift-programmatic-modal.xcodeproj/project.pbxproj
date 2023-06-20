@@ -19,6 +19,7 @@
 		886AFCAD2A3209D5004AC9FB /* RNILayoutValueMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */; };
 		886AFCAF2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */; };
 		886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */; };
+		887AA0572A4253050089F517 /* RNILayoutKeyboardValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */; };
 		88A2EF742A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
 		88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0F029C593F400490628 /* SceneDelegate.swift */; };
@@ -116,6 +117,7 @@
 		886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueMode.swift; sourceTree = "<group>"; };
 		886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValuePercentTarget.swift; sourceTree = "<group>"; };
 		886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueContext.swift; sourceTree = "<group>"; };
+		887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutKeyboardValues.swift; sourceTree = "<group>"; };
 		88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalConfigTestPresets.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B7D0EE29C593F400490628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				886AFCAC2A3209D5004AC9FB /* RNILayoutValueMode.swift */,
 				886AFCAE2A320DED004AC9FB /* RNILayoutValuePercentTarget.swift */,
 				8849B6A62A3F7A7700A5F412 /* RNILayoutValue+StaticInit.swift */,
+				887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */,
 			);
 			path = RNILayout;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 			files = (
 				88D018742A1B3030004664D2 /* RNIModalFocusState.swift in Sources */,
 				88D0186A2A1B3030004664D2 /* RNIModalData.swift in Sources */,
+				887AA0572A4253050089F517 /* RNILayoutKeyboardValues.swift in Sources */,
 				88D0185D2A1B3030004664D2 /* RNIIdentifiable.swift in Sources */,
 				88D0169E2A1B0DD3004664D2 /* RNIDraggableTestViewController.swift in Sources */,
 				88C2F4642A2D8D3400DA7450 /* AdaptiveModalKeyframePropertyAnimator.swift in Sources */,

@@ -62,6 +62,8 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
+  private var layoutKeyboardValues: RNILayoutKeyboardValues?;
+  
   private var layoutValueContext: RNILayoutValueContext {
     if let targetVC = self.targetViewController {
       return .init(fromTargetViewController: targetVC) ?? .default;
@@ -406,6 +408,18 @@ class AdaptiveModalManager: NSObject {
       name: UIResponder.keyboardDidHideNotification,
       object: nil
     );
+    
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardWillChange(notification:)),
+      name: UIResponder.keyboardWillChangeFrameNotification,
+      object: nil
+    );
+    
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onKeyboardDidChange(notification:)),
+      name: UIResponder.keyboardDidChangeFrameNotification,
+      object: nil
+    );
   };
   
   func setupViewControllers() {
@@ -599,7 +613,9 @@ class AdaptiveModalManager: NSObject {
       UIResponder.keyboardWillShowNotification,
       UIResponder.keyboardDidShowNotification,
       UIResponder.keyboardWillHideNotification,
-      UIResponder.keyboardDidHideNotification
+      UIResponder.keyboardDidHideNotification,
+      UIResponder.keyboardWillChangeFrameNotification,
+      UIResponder.keyboardDidChangeFrameNotification,
     ];
     
     notificationNames.forEach {
@@ -1260,66 +1276,6 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
-  func getKeyboardValues(
-    fromNotification notification: NSNotification
-  ) -> (
-    rect: CGRect,
-    frameEnd: CGRect,
-    animationDuration: CGFloat,
-    animationCurve: UIView.AnimationCurve
-    
-  )? {
-    guard let userInfo = notification.userInfo else { return nil };
-    
-    func extract<T>(key: String) throws -> T {
-      guard let rawValue = userInfo[key],
-            let value = rawValue as? T
-      else { throw NSError() };
-      
-      return value;
-    };
-    
-    func extractValue<T>(
-      userInfoKey: String,
-      valueKey: KeyPath<NSValue, T>
-    ) throws -> T {
-      guard let rawValue: NSValue = try? extract(key: userInfoKey)
-      else { throw NSError() };
-      
-      return rawValue[keyPath: valueKey];
-    };
-    
-    do {
-      return (
-        rect: try extractValue(
-          userInfoKey: UIResponder.keyboardFrameEndUserInfoKey,
-          valueKey: \.cgRectValue
-        ),
-        frameEnd: try extractValue(
-          userInfoKey: UIResponder.keyboardFrameEndUserInfoKey,
-          valueKey: \.cgRectValue
-        ),
-        animationDuration: try extract(
-          key: UIResponder.keyboardAnimationDurationUserInfoKey
-        ),
-        animationCurve: try {
-          let curveValue: Int = try extract(
-            key: UIResponder.keyboardAnimationCurveUserInfoKey
-          );
-        
-          guard let curve = UIView.AnimationCurve(rawValue: curveValue) else {
-            throw NSError();
-          };
-          
-          return curve;
-        }()
-      );
-    
-    } catch {
-      return nil;
-    };
-  };
-  
   func debug(prefix: String? = ""){
     print(
         "\n - AdaptiveModalManager.debug - \(prefix ?? "N/A")"
@@ -1537,45 +1493,107 @@ class AdaptiveModalManager: NSObject {
   };
   
   @objc func onKeyboardWillShow(notification: NSNotification) {
-    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
     
     print(
       "onKeyboardWillShow",
-      "\n - keyboardRect:", keyboardValues.rect
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
     );
   };
   
   @objc func onKeyboardDidShow(notification: NSNotification) {
-    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
     
     print(
       "onKeyboardDidShow",
-      "\n - keyboardRect:", keyboardValues.rect
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
     );
   };
 
   @objc func onKeyboardWillHide(notification: NSNotification) {
-    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
     
     print(
       "onKeyboardWillHide",
-      "\n - keyboardRect:", keyboardValues.rect
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
     );
   };
   
   @objc func onKeyboardDidHide(notification: NSNotification) {
-    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
     
     print(
       "onKeyboardDidHide",
-      "\n - keyboardRect:", keyboardValues.rect
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
     );
   };
-
+  
+  @objc func onKeyboardWillChange(notification: NSNotification) {
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
+    else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
+    
+    print(
+      "onKeyboardWillChange",
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
+    );
+  };
+  
+  @objc func onKeyboardDidChange(notification: NSNotification) {
+    guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
+    else { return };
+    
+    self.layoutKeyboardValues = keyboardValues;
+    
+    print(
+      "onKeyboardDidChange",
+      "\n - frameBegin:", keyboardValues.frameBegin,
+      "\n - frameEnd:", keyboardValues.frameEnd,
+      "\n - animationDuration:", keyboardValues.animationDuration,
+      "\n - animationCurve:", keyboardValues.animationCurve,
+      "\n - notification:", notification,
+      "\n"
+    );
+  };
+  
   // MARK: - Functions - DisplayLink-Related
   // ---------------------------------------
     
