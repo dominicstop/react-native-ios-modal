@@ -372,7 +372,6 @@ class AdaptiveModalManager: NSObject {
     
     super.init();
     self.computeSnapPoints();
-    self.setupObservers();
   };
   
   deinit {
@@ -606,6 +605,8 @@ class AdaptiveModalManager: NSObject {
     notificationNames.forEach {
       NotificationCenter.default.removeObserver(self, name: $0, object: nil);
     };
+    
+    NotificationCenter.default.removeObserver(self);
   };
   
   private func cleanupViews() {
@@ -652,8 +653,10 @@ class AdaptiveModalManager: NSObject {
   private func cleanup() {
     self.clearGestureValues();
     self.clearAnimators();
+    
     self.cleanupViews();
     self.cleanupSnapPointOverride();
+    self.removeObservers();
     
     self.currentInterpolationIndex = 0;
   };
@@ -1257,16 +1260,64 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
-  private func getKeyboardRect(
+  func getKeyboardValues(
     fromNotification notification: NSNotification
-  ) -> CGRect? {
-  
-    guard let userInfo = notification.userInfo,
-          let keyboardFrameRaw = userInfo[UIResponder.keyboardFrameEndUserInfoKey],
-          let keyboardFrame = keyboardFrameRaw as? NSValue
-    else { return nil };
+  ) -> (
+    rect: CGRect,
+    frameEnd: CGRect,
+    animationDuration: CGFloat,
+    animationCurve: UIView.AnimationCurve
     
-    return keyboardFrame.cgRectValue;
+  )? {
+    guard let userInfo = notification.userInfo else { return nil };
+    
+    func extract<T>(key: String) throws -> T {
+      guard let rawValue = userInfo[key],
+            let value = rawValue as? T
+      else { throw NSError() };
+      
+      return value;
+    };
+    
+    func extractValue<T>(
+      userInfoKey: String,
+      valueKey: KeyPath<NSValue, T>
+    ) throws -> T {
+      guard let rawValue: NSValue = try? extract(key: userInfoKey)
+      else { throw NSError() };
+      
+      return rawValue[keyPath: valueKey];
+    };
+    
+    do {
+      return (
+        rect: try extractValue(
+          userInfoKey: UIResponder.keyboardFrameEndUserInfoKey,
+          valueKey: \.cgRectValue
+        ),
+        frameEnd: try extractValue(
+          userInfoKey: UIResponder.keyboardFrameEndUserInfoKey,
+          valueKey: \.cgRectValue
+        ),
+        animationDuration: try extract(
+          key: UIResponder.keyboardAnimationDurationUserInfoKey
+        ),
+        animationCurve: try {
+          let curveValue: Int = try extract(
+            key: UIResponder.keyboardAnimationCurveUserInfoKey
+          );
+        
+          guard let curve = UIView.AnimationCurve(rawValue: curveValue) else {
+            throw NSError();
+          };
+          
+          return curve;
+        }()
+      );
+    
+    } catch {
+      return nil;
+    };
   };
   
   func debug(prefix: String? = ""){
@@ -1486,43 +1537,42 @@ class AdaptiveModalManager: NSObject {
   };
   
   @objc func onKeyboardWillShow(notification: NSNotification) {
-    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
     else { return };
     
     print(
       "onKeyboardWillShow",
-      "\n - keyboardRect:", keyboardRect
+      "\n - keyboardRect:", keyboardValues.rect
     );
   };
   
   @objc func onKeyboardDidShow(notification: NSNotification) {
-    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
     else { return };
     
     print(
       "onKeyboardDidShow",
-      "\n - keyboardRect:", keyboardRect
+      "\n - keyboardRect:", keyboardValues.rect
     );
   };
 
-
   @objc func onKeyboardWillHide(notification: NSNotification) {
-    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
     else { return };
     
     print(
       "onKeyboardWillHide",
-      "\n - keyboardRect:", keyboardRect
+      "\n - keyboardRect:", keyboardValues.rect
     );
   };
   
   @objc func onKeyboardDidHide(notification: NSNotification) {
-    guard let keyboardRect = self.getKeyboardRect(fromNotification: notification)
+    guard let keyboardValues = self.getKeyboardValues(fromNotification: notification)
     else { return };
     
     print(
       "onKeyboardDidHide",
-      "\n - keyboardRect:", keyboardRect
+      "\n - keyboardRect:", keyboardValues.rect
     );
   };
 
@@ -1732,6 +1782,7 @@ class AdaptiveModalManager: NSObject {
       
       self.setupAddViews();
       self.setupViewConstraints();
+      self.setupObservers();
     };
     
     self.updateModal();
