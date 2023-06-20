@@ -11,8 +11,8 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
 
   weak var modalManager: AdaptiveModalManager?;
   
-  var showDismissButton = false;
-  var showCustomSnapPointButton = true;
+  var showDismissButton = true;
+  var showCustomSnapPointButton = false;
 
   lazy var floatingViewLabel: UILabel = {
     let label = UILabel();
@@ -109,6 +109,17 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
           .safeAreaInsets(insetKey: \.bottom),
           .constant(15),
         ])
+      ),
+      animationKeyframe: .init(
+        modalCornerRadius: 15,
+        modalMaskedCorners: [
+          .layerMaxXMaxYCorner,
+          .layerMaxXMinYCorner,
+          .layerMinXMaxYCorner,
+          .layerMinXMinYCorner,
+        ],
+        modalBackgroundOpacity: 0.9,
+        backgroundOpacity: 0
       )
     );
   
@@ -283,6 +294,13 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
   
   @objc func onPressButtonPresentViewController(_ sender: UIButton) {
     let testVC = TestModalViewController();
+    
+    switch self.currentModalConfigPreset {
+      case .demo08, .demo07:
+        testVC.showCustomSnapPointButton = true;
+      
+      default: break;
+    };
     
     self.adaptiveModalManager.eventDelegate = testVC;
     testVC.modalManager = self.adaptiveModalManager;

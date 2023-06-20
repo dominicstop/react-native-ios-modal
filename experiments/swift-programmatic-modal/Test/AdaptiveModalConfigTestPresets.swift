@@ -738,6 +738,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               backgroundVisualEffectIntensity: 0.04
             )
           ),
+          
           // snap point - 2
           AdaptiveModalSnapPointConfig(
             snapPoint: RNILayout(
@@ -809,7 +810,7 @@ enum AdaptiveModalConfigTestPresets: CaseIterable {
               horizontalAlignment: .center,
               verticalAlignment: .bottom,
               width: .percent(percentValue: 0.85),
-              height: .percent(percentValue: 0.4),
+              height: .percent(percentValue: 0.5),
               marginBottom: .init(
                 mode: .safeAreaInsets(insetKey: \.bottom),
                 minValue: .constant(15)
