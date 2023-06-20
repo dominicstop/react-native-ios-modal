@@ -8,11 +8,14 @@
 import UIKit
 
 public struct RNILayoutValueContext {
+
   static let `default`: Self = .init(
     targetRect: .zero,
     windowSize: nil,
     currentSize: nil,
-    safeAreaInsets: nil
+    safeAreaInsets: nil,
+    keyboardScreenRect: nil,
+    keyboardRelativeSize: nil
   );
 
   let targetRect: CGRect;
@@ -21,6 +24,9 @@ public struct RNILayoutValueContext {
   let currentSize: CGSize?;
   
   let safeAreaInsets: UIEdgeInsets?;
+  
+  let keyboardScreenRect: CGRect?;
+  let keyboardRelativeSize: CGSize?;
   
   var targetSize: CGSize {
     self.targetRect.size;
@@ -31,25 +37,46 @@ public struct RNILayoutValueContext {
   };
 };
 
+// MARK: - Init
+// ------------
+
 extension RNILayoutValueContext {
+
   init(
     derivedFrom prev: Self,
+    targetView: UIView? = nil,
     targetRect: CGRect? = nil,
     windowSize: CGSize? = nil,
     currentSize: CGSize? = nil,
-    safeAreaInsets: UIEdgeInsets? = nil
+    safeAreaInsets: UIEdgeInsets? = nil,
+    keyboardValues: RNILayoutKeyboardValues? = nil
   ) {
     
     self.targetRect  = targetRect  ?? prev.targetRect;
-  
     self.windowSize  = windowSize  ?? prev.windowSize;
     self.currentSize = currentSize ?? prev.currentSize;
     
     self.safeAreaInsets = safeAreaInsets ?? prev.safeAreaInsets;
+    self.keyboardScreenRect = keyboardValues?.frameEnd ?? prev.keyboardScreenRect;
+    
+    self.keyboardRelativeSize = {
+      guard let targetView = targetView,
+            let keyboardValues = keyboardValues
+      else {
+        return prev.keyboardRelativeSize;
+      };
+      
+      let keyboardSize = keyboardValues.computeKeyboardSize(
+        relativeToView: targetView
+      );
+      
+      return keyboardSize ?? prev.keyboardRelativeSize;
+    }();
   };
   
   init?(
     fromTargetViewController targetVC: UIViewController,
+    keyboardValues: RNILayoutKeyboardValues? = nil,
     currentSize: CGSize? = nil
   ) {
     guard let targetView = targetVC.view else { return nil };
@@ -58,12 +85,17 @@ extension RNILayoutValueContext {
     self.windowSize = targetView.window?.bounds.size;
     
     self.safeAreaInsets = targetView.window?.safeAreaInsets;
-    
     self.currentSize = currentSize;
+    
+    self.keyboardScreenRect = keyboardValues?.frameEnd;
+    
+    self.keyboardRelativeSize =
+      keyboardValues?.computeKeyboardSize(relativeToView: targetView);
   };
   
   init?(
     fromTargetView targetView: UIView,
+    keyboardValues: RNILayoutKeyboardValues? = nil,
     currentSize: CGSize? = nil
   ) {
     self.targetRect = targetView.frame;
@@ -71,5 +103,10 @@ extension RNILayoutValueContext {
     
     self.safeAreaInsets = targetView.window?.safeAreaInsets;
     self.currentSize = currentSize;
+    
+    self.keyboardScreenRect = keyboardValues?.frameEnd;
+    
+    self.keyboardRelativeSize =
+      keyboardValues?.computeKeyboardSize(relativeToView: targetView);
   };
 };

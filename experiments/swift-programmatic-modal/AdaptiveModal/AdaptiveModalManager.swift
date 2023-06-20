@@ -65,15 +65,25 @@ class AdaptiveModalManager: NSObject {
   private var layoutKeyboardValues: RNILayoutKeyboardValues?;
   
   private var layoutValueContext: RNILayoutValueContext {
-    if let targetVC = self.targetViewController {
-      return .init(fromTargetViewController: targetVC) ?? .default;
-    };
+    let context: RNILayoutValueContext? = {
+      if let targetVC = self.targetViewController {
+        return .init(
+          fromTargetViewController: targetVC,
+          keyboardValues: self.layoutKeyboardValues
+        );
+      };
+      
+      if let targetView = self.targetView {
+        return .init(
+          fromTargetView: targetView,
+          keyboardValues: self.layoutKeyboardValues
+        );
+      };
+      
+      return nil;
+    }();
     
-    if let targetView = self.targetView {
-      return .init(fromTargetView: targetView) ?? .default;
-    };
-    
-    return .default;
+    return context ?? .default;
   };
   
   // MARK: -  Properties - Config Interpolation Points
@@ -608,6 +618,10 @@ class AdaptiveModalManager: NSObject {
     self.modalAnimator = nil;
   };
   
+  private func clearLayoutKeyboardValues(){
+    self.layoutKeyboardValues = nil;
+  };
+  
   private func removeObservers(){
     let notificationNames = [
       UIResponder.keyboardWillShowNotification,
@@ -669,6 +683,7 @@ class AdaptiveModalManager: NSObject {
   private func cleanup() {
     self.clearGestureValues();
     self.clearAnimators();
+    self.clearLayoutKeyboardValues();
     
     self.cleanupViews();
     self.cleanupSnapPointOverride();

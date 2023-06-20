@@ -13,6 +13,21 @@ struct RNILayoutKeyboardValues {
   
   var animationDuration: CGFloat;
   var animationCurve: UIView.AnimationCurve;
+  
+  func computeKeyboardSize(relativeToView targetView: UIView) -> CGSize? {
+    guard let window = targetView.window else { return nil };
+    
+    // Get keyboard height.
+    let keyboardFrameInView = targetView.convert(
+      self.frameEnd,
+      from: window
+    );
+    
+    let intersection = targetView.bounds.intersection(keyboardFrameInView);
+    
+    guard !intersection.isNull else { return nil };
+    return intersection.size;
+  };
 };
 
 extension RNILayoutKeyboardValues {
