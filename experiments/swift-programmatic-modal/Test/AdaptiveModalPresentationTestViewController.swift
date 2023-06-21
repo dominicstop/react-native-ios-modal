@@ -184,6 +184,7 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
     .demo07,
     .demo08,
     .demo09,
+    .demo10,
   ];
   
   var currentModalConfigPresetCounter = 0;
@@ -321,7 +322,11 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
         testVC.showCustomSnapPointButton = true;
         
       case .demo09:
+        //testVC.showCustomSnapPointButton = true;
         testVC.showTextInputField = true;
+        
+      case .demo10:
+        testVC.showCustomSnapPointButton = true;
       
       default: break;
     };

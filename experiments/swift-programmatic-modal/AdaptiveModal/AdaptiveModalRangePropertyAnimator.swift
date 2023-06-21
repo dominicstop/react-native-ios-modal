@@ -8,15 +8,18 @@
 import UIKit
 
 
-struct AdaptiveModalRangePropertyAnimator {
+public struct AdaptiveModalRangePropertyAnimator {
+
+  // MARK: - Properties
+  // ------------------
   
-  var interpolationRangeStart: AdaptiveModalInterpolationPoint;
-  var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
+  public var interpolationRangeStart: AdaptiveModalInterpolationPoint;
+  public var interpolationRangeEnd: AdaptiveModalInterpolationPoint;
   
-  let interpolationOutputKey:
+  public let interpolationOutputKey:
     KeyPath<AdaptiveModalInterpolationPoint, CGFloat>?;
   
-  var animator: UIViewPropertyAnimator;
+  public var animator: UIViewPropertyAnimator;
   
   private weak var component: AnyObject?;
   
@@ -25,7 +28,10 @@ struct AdaptiveModalRangePropertyAnimator {
     self.interpolationRangeEnd
   ]};
   
-  init<T: UIView>(
+  // MARK: - Init
+  // ------------
+  
+  public init<T: UIView>(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint,
     forComponent component: T,
@@ -54,7 +60,10 @@ struct AdaptiveModalRangePropertyAnimator {
     self.animator = animator;
   };
   
-  func didRangeChange(
+  // MARK: - Functions
+  // -----------------
+  
+  public func didRangeChange(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint
   ) -> Bool {
@@ -65,7 +74,7 @@ struct AdaptiveModalRangePropertyAnimator {
     return didChange;
   };
   
-  mutating func update(
+  public mutating func update(
     interpolationRangeStart: AdaptiveModalInterpolationPoint,
     interpolationRangeEnd: AdaptiveModalInterpolationPoint
   ){
@@ -79,11 +88,11 @@ struct AdaptiveModalRangePropertyAnimator {
     self.interpolationRangeEnd = interpolationRangeEnd;
   };
   
-  func setFractionComplete(forPercent percent: CGFloat) {
+  public func setFractionComplete(forPercent percent: CGFloat) {
     self.animator.fractionComplete = percent;
   };
   
-  func setFractionComplete(
+  public func setFractionComplete(
     forInputPercentValue inputPercentValue: CGFloat
   ) {
     let rangeOutput: [CGFloat] = {
@@ -108,7 +117,7 @@ struct AdaptiveModalRangePropertyAnimator {
     self.setFractionComplete(forPercent: percent);
   };
   
-  func clear(){
+  public func clear(){
     self.animator.stopAnimation(true);
   };
 };

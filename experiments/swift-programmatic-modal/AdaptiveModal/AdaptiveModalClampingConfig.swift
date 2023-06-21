@@ -7,37 +7,37 @@
 
 import Foundation
 
-struct AdaptiveModalClampingConfig {
-  static let `default`: Self = .init();
+public struct AdaptiveModalClampingConfig {
+  public static let `default`: Self = .init();
 
-  let shouldClampModalInitHeight: Bool;
-  let shouldClampModalLastHeight: Bool;
+  public let shouldClampModalInitHeight: Bool;
+  public let shouldClampModalLastHeight: Bool;
   
-  let shouldClampModalInitWidth: Bool;
-  let shouldClampModalLastWidth: Bool;
+  public let shouldClampModalInitWidth: Bool;
+  public let shouldClampModalLastWidth: Bool;
   
-  let shouldClampModalInitX: Bool;
-  let shouldClampModalLastX: Bool;
+  public let shouldClampModalInitX: Bool;
+  public let shouldClampModalLastX: Bool;
   
-  let shouldClampModalInitY: Bool;
-  let shouldClampModalLastY: Bool;
+  public let shouldClampModalInitY: Bool;
+  public let shouldClampModalLastY: Bool;
   
-  let shouldClampModalInitRotation: Bool;
-  let shouldClampModalLastRotation: Bool;
+  public let shouldClampModalInitRotation: Bool;
+  public let shouldClampModalLastRotation: Bool;
   
-  let shouldClampModalInitScaleX: Bool;
-  let shouldClampModalLastScaleX: Bool;
+  public let shouldClampModalInitScaleX: Bool;
+  public let shouldClampModalLastScaleX: Bool;
   
-  let shouldClampModalInitScaleY: Bool;
-  let shouldClampModalLastScaleY: Bool;
+  public let shouldClampModalInitScaleY: Bool;
+  public let shouldClampModalLastScaleY: Bool;
   
-  let shouldClampModalInitTranslateX: Bool;
-  let shouldClampModalLastTranslateX: Bool;
+  public let shouldClampModalInitTranslateX: Bool;
+  public let shouldClampModalLastTranslateX: Bool;
   
-  let shouldClampModalInitTranslateY: Bool;
-  let shouldClampModalLastTranslateY: Bool;
+  public let shouldClampModalInitTranslateY: Bool;
+  public let shouldClampModalLastTranslateY: Bool;
   
-  init(
+  public init(
     shouldClampModalInitHeight: Bool = false,
     shouldClampModalLastHeight: Bool = false,
     shouldClampModalInitWidth: Bool = false,

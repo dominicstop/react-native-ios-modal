@@ -7,12 +7,12 @@
 
 import UIKit
 
-struct AdaptiveModalSnapPointConfig {
+public struct AdaptiveModalSnapPointConfig {
 
   // MARK: Types
   // -----------
 
-  enum SnapPointKey: Equatable {
+  public enum SnapPointKey: Equatable {
     case undershootPoint, overshootPoint, unspecified;
     case string(_ stringKey: String);
     case index(_ indexKey: Int);
@@ -21,15 +21,15 @@ struct AdaptiveModalSnapPointConfig {
   // MARK: Properties
   // ----------------
 
-  let key: SnapPointKey;
+  public let key: SnapPointKey;
   
-  let snapPoint: RNILayout;
-  let animationKeyframe: AdaptiveModalAnimationConfig?;
+  public let snapPoint: RNILayout;
+  public let animationKeyframe: AdaptiveModalAnimationConfig?;
   
   // MARK: Init
   // ----------
   
-  init(
+  public init(
     key: SnapPointKey = .unspecified,
     snapPoint: RNILayout,
     animationKeyframe: AdaptiveModalAnimationConfig? = nil
@@ -39,7 +39,7 @@ struct AdaptiveModalSnapPointConfig {
     self.animationKeyframe = animationKeyframe;
   };
   
-  init(
+  public init(
     key: SnapPointKey = .unspecified,
     fromSnapPointPreset snapPointPreset: AdaptiveModalSnapPointPreset,
     fromBaseLayoutConfig baseLayoutConfig: RNILayout
@@ -55,7 +55,7 @@ struct AdaptiveModalSnapPointConfig {
     self.animationKeyframe = snapPointPreset.animationKeyframe;
   };
   
-  init(
+  public init(
     fromBase base: Self,
     newKey: SnapPointKey,
     newSnapPoint: RNILayout? = nil,

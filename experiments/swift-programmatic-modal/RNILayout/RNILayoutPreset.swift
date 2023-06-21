@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum RNILayoutPreset {
+public enum RNILayoutPreset {
   case offscreenBottom,
        offscreenTop,
        offscreenLeft,
@@ -34,7 +34,7 @@ enum RNILayoutPreset {
   // MARK: Functions
   // ---------------
   
-  func getLayoutConfig(
+  public func getLayoutConfig(
     fromBaseLayoutConfig baseLayoutConfig: RNILayout
   ) -> RNILayout {
   

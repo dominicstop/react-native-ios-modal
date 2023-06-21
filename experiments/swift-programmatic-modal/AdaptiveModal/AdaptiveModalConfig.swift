@@ -7,15 +7,19 @@
 
 import UIKit
 
-struct AdaptiveModalConfig {
-  enum Direction {
+public struct AdaptiveModalConfig {
+
+  // MARK: - Types
+  // -------------
+
+  public enum Direction {
     case bottomToTop;
     case topToBottom;
     case leftToRight;
     case rightToLeft;
   };
   
-  enum SnapPercentStrategy {
+  public enum SnapPercentStrategy {
     case index;
     case position;
   };
@@ -23,19 +27,19 @@ struct AdaptiveModalConfig {
   // MARK: - Properties
   // ------------------
   
-  let baseSnapPoints: [AdaptiveModalSnapPointConfig];
-  let snapDirection: Direction;
+  public let baseSnapPoints: [AdaptiveModalSnapPointConfig];
+  public let snapDirection: Direction;
   
-  let snapPercentStrategy: SnapPercentStrategy;
+  public let snapPercentStrategy: SnapPercentStrategy;
   
-  let snapAnimationConfig: AdaptiveModalSnapAnimationConfig;
-  let interpolationClampingConfig: AdaptiveModalClampingConfig;
+  public let snapAnimationConfig: AdaptiveModalSnapAnimationConfig;
+  public let interpolationClampingConfig: AdaptiveModalClampingConfig;
   
-  let undershootSnapPoint: AdaptiveModalSnapPointPreset;
-  let overshootSnapPoint: AdaptiveModalSnapPointPreset;
+  public let undershootSnapPoint: AdaptiveModalSnapPointPreset;
+  public let overshootSnapPoint: AdaptiveModalSnapPointPreset;
   
   // the first snap point to snap to when the modal is first shown
-  let initialSnapPointIndex: Int;
+  public let initialSnapPointIndex: Int;
   
   // let entranceConfig: AdaptiveModalEntranceConfig;
   // let snapSwipeVelocityThreshold: CGFloat = 0;
@@ -43,7 +47,7 @@ struct AdaptiveModalConfig {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var snapPoints: [AdaptiveModalSnapPointConfig] {
+  public var snapPoints: [AdaptiveModalSnapPointConfig] {
     .Element.deriveSnapPoints(
       undershootSnapPoint: self.undershootSnapPoint,
       inBetweenSnapPoints: self.baseSnapPoints,
@@ -51,21 +55,21 @@ struct AdaptiveModalConfig {
     );
   };
   
-  var overshootSnapPointIndex: Int {
+  public var overshootSnapPointIndex: Int {
     self.snapPoints.count - 1;
   };
   
   /// Defines which axis of the gesture point to use to drive the interpolation
   /// of the modal snap points
   ///
-  var inputValueKeyForPoint: KeyPath<CGPoint, CGFloat> {
+  public var inputValueKeyForPoint: KeyPath<CGPoint, CGFloat> {
     switch self.snapDirection {
       case .topToBottom, .bottomToTop: return \.y;
       case .leftToRight, .rightToLeft: return \.x;
     };
   };
   
-  var inputValueKeyForRect: KeyPath<CGRect, CGFloat> {
+  public var inputValueKeyForRect: KeyPath<CGRect, CGFloat> {
     switch self.snapDirection {
       case .bottomToTop: return \.minY;
       case .topToBottom: return \.maxY;
@@ -74,14 +78,14 @@ struct AdaptiveModalConfig {
     };
   };
   
-  var maxInputRangeKeyForRect: KeyPath<CGRect, CGFloat> {
+  public var maxInputRangeKeyForRect: KeyPath<CGRect, CGFloat> {
     switch self.snapDirection {
       case .bottomToTop, .topToBottom: return \.height;
       case .leftToRight, .rightToLeft: return \.width;
     };
   };
   
-  var shouldInvertPercent: Bool {
+  public var shouldInvertPercent: Bool {
     switch self.snapDirection {
       case .bottomToTop, .rightToLeft: return true;
       default: return false;
@@ -91,7 +95,7 @@ struct AdaptiveModalConfig {
   // MARK: - Init
   // ------------
   
-  init(
+  public init(
     snapPoints: [AdaptiveModalSnapPointConfig],
     snapDirection: Direction,
     snapPercentStrategy: SnapPercentStrategy = .position,
@@ -121,7 +125,7 @@ struct AdaptiveModalConfig {
   // MARK: - Functions
   // -----------------
   
-  func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
+  public func sortInterpolationSteps<T>(_ array: [T]) -> [T] {
     switch self.snapDirection {
       case .bottomToTop, .leftToRight:
         return array;

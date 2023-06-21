@@ -8,7 +8,8 @@
 import UIKit
 
 extension AdaptiveModalManager: UIAdaptivePresentationControllerDelegate {
-  func adaptivePresentationStyle(
+
+  public func adaptivePresentationStyle(
     for controller: UIPresentationController,
     traitCollection: UITraitCollection
   ) -> UIModalPresentationStyle {
@@ -20,7 +21,7 @@ extension AdaptiveModalManager: UIAdaptivePresentationControllerDelegate {
 
 extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
   
-  func presentationController(
+  public func presentationController(
     forPresented presented: UIViewController,
     presenting: UIViewController?,
     source: UIViewController
@@ -36,7 +37,7 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
     return presentationController;
   };
   
-  func animationController(
+  public func animationController(
     forPresented presented: UIViewController,
     presenting: UIViewController,
     source: UIViewController
@@ -46,7 +47,7 @@ extension AdaptiveModalManager: UIViewControllerTransitioningDelegate {
     return self;
   };
 
-  func animationController(
+  public func animationController(
     forDismissed dismissed: UIViewController
   ) -> UIViewControllerAnimatedTransitioning? {
     

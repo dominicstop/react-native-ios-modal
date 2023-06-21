@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIBezierPath {
+public extension UIBezierPath {
 
   convenience init(
     shouldRoundRect rect: CGRect,

@@ -9,14 +9,14 @@ import UIKit
 
 extension AdaptiveModalManager: UIViewControllerAnimatedTransitioning {
 
-  func transitionDuration(
+  public func transitionDuration(
     using transitionContext: UIViewControllerContextTransitioning?
   ) -> TimeInterval {
   
     return self.modalConfig.snapAnimationConfig.springAnimationSettlingTime;
   };
   
-  func animateTransition(
+  public func animateTransition(
     using transitionContext: UIViewControllerContextTransitioning
   ) {
     guard let fromVC = transitionContext.viewController(forKey: .from)

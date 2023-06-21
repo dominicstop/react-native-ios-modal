@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension RNILayoutValue {
+public extension RNILayoutValue {
  
   static let stretch: Self = .init(mode: .stretch);
   
@@ -62,6 +62,40 @@ extension RNILayoutValue {
   
     return .init(
       mode: .safeAreaInsets(insetKey: insetKey),
+      offsetValue: offsetValue,
+      offsetOperation: offsetOperation,
+      minValue: minValue,
+      maxValue: maxValue
+    );
+  };
+  
+  static func keyboardScreenRect(
+    rectKey: KeyPath<CGRect, CGFloat>,
+    offsetValue: RNILayoutValueMode? = nil,
+    offsetOperation: RNIComputableOffset.OffsetOperation? = nil,
+    minValue: RNILayoutValueMode? = nil,
+    maxValue: RNILayoutValueMode? = nil
+  ) -> Self {
+  
+    return .init(
+      mode: .keyboardScreenRect(rectKey: rectKey),
+      offsetValue: offsetValue,
+      offsetOperation: offsetOperation,
+      minValue: minValue,
+      maxValue: maxValue
+    );
+  };
+  
+  static func keyboardRelativeSize(
+    sizeKey: KeyPath<CGSize, CGFloat>,
+    offsetValue: RNILayoutValueMode? = nil,
+    offsetOperation: RNIComputableOffset.OffsetOperation? = nil,
+    minValue: RNILayoutValueMode? = nil,
+    maxValue: RNILayoutValueMode? = nil
+  ) -> Self {
+  
+    return .init(
+      mode: .keyboardRelativeSize(sizeKey: sizeKey),
       offsetValue: offsetValue,
       offsetOperation: offsetOperation,
       minValue: minValue,

@@ -7,14 +7,34 @@
 
 import UIKit
 
-struct RNILayoutKeyboardValues {
-  var frameBegin: CGRect;
-  var frameEnd: CGRect;
+public struct RNILayoutKeyboardValues {
+
+  // MARK: - Properties
+  // ------------------
+
+  public var frameBegin: CGRect;
+  public var frameEnd: CGRect;
   
-  var animationDuration: CGFloat;
-  var animationCurve: UIView.AnimationCurve;
+  public var animationDuration: CGFloat;
+  public var animationCurve: UIView.AnimationCurve;
   
-  func computeKeyboardSize(relativeToView targetView: UIView) -> CGSize? {
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  var keyboardAnimator: UIViewPropertyAnimator {
+    UIViewPropertyAnimator(
+      duration: self.animationDuration,
+      curve: self.animationCurve
+    );
+  };
+  
+  // MARK: - Functions
+  // ------------------
+  
+  public func computeKeyboardSize(
+    relativeToView targetView: UIView
+  ) -> CGSize? {
+  
     guard let window = targetView.window else { return nil };
     
     // Get keyboard height.
@@ -30,7 +50,11 @@ struct RNILayoutKeyboardValues {
   };
 };
 
-extension RNILayoutKeyboardValues {
+// MARK: - Init
+// ------------
+
+public extension RNILayoutKeyboardValues {
+
   init?(fromNotification notification: NSNotification) {
     guard let userInfo = notification.userInfo else { return nil };
     

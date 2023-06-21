@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct AdaptiveModalSnapPointPreset {
+public struct AdaptiveModalSnapPointPreset {
 
-  let layoutPreset: RNILayoutPreset;
-  let animationKeyframe: AdaptiveModalAnimationConfig?;
+  public let layoutPreset: RNILayoutPreset;
+  public let animationKeyframe: AdaptiveModalAnimationConfig?;
   
   init(
     layoutPreset: RNILayoutPreset,

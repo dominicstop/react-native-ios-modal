@@ -7,14 +7,14 @@
 
 import UIKit
 
-struct AdaptiveModalSnapAnimationConfig {
-  static let `default`: Self = .init(
+public struct AdaptiveModalSnapAnimationConfig {
+  public static let `default`: Self = .init(
     springDampingRatio: 0.9,
     springAnimationSettlingTime: 0.4,
     maxGestureVelocity: 15
   );
 
-  let springDampingRatio: CGFloat;
-  let springAnimationSettlingTime: CGFloat;
-  let maxGestureVelocity: CGFloat;
+  public let springDampingRatio: CGFloat;
+  public let springAnimationSettlingTime: CGFloat;
+  public let maxGestureVelocity: CGFloat;
 };

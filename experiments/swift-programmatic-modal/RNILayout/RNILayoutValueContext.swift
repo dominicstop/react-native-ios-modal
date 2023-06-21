@@ -9,7 +9,7 @@ import UIKit
 
 public struct RNILayoutValueContext {
 
-  static let `default`: Self = .init(
+  public static let `default`: Self = .init(
     targetRect: .zero,
     windowSize: nil,
     currentSize: nil,
@@ -18,21 +18,21 @@ public struct RNILayoutValueContext {
     keyboardRelativeSize: nil
   );
 
-  let targetRect: CGRect;
+  public let targetRect: CGRect;
 
-  let windowSize: CGSize?;
-  let currentSize: CGSize?;
+  public let windowSize: CGSize?;
+  public let currentSize: CGSize?;
   
-  let safeAreaInsets: UIEdgeInsets?;
+  public let safeAreaInsets: UIEdgeInsets?;
   
-  let keyboardScreenRect: CGRect?;
-  let keyboardRelativeSize: CGSize?;
+  public let keyboardScreenRect: CGRect?;
+  public let keyboardRelativeSize: CGSize?;
   
-  var targetSize: CGSize {
+  public var targetSize: CGSize {
     self.targetRect.size;
   };
   
-  var screenSize: CGSize {
+  public var screenSize: CGSize {
     UIScreen.main.bounds.size;
   };
 };
@@ -40,7 +40,7 @@ public struct RNILayoutValueContext {
 // MARK: - Init
 // ------------
 
-extension RNILayoutValueContext {
+public extension RNILayoutValueContext {
 
   init(
     derivedFrom prev: Self,

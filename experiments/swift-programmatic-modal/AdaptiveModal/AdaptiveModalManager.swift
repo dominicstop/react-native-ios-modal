@@ -7,49 +7,49 @@
 
 import UIKit
 
-class AdaptiveModalManager: NSObject {
+public class AdaptiveModalManager: NSObject {
 
-  enum PresentationState {
+  public enum PresentationState {
     case presenting, dismissing, none;
   };
 
   // MARK: -  Properties - Config-Related
   // ------------------------------------
   
-  var modalConfig: AdaptiveModalConfig;
+  public var modalConfig: AdaptiveModalConfig;
   
-  var enableSnapping = true;
-  var enableOverShooting = true;
+  public var enableSnapping = true;
+  public var enableOverShooting = true;
   
-  var shouldSnapToUnderShootSnapPoint = true;
-  var shouldSnapToOvershootSnapPoint = false;
+  public var shouldSnapToUnderShootSnapPoint = true;
+  public var shouldSnapToOvershootSnapPoint = false;
   
-  var shouldDismissModalOnSnapToUnderShootSnapPoint = true;
-  var shouldDismissModalOnSnapToOverShootSnapPoint = false;
+  public var shouldDismissModalOnSnapToUnderShootSnapPoint = true;
+  public var shouldDismissModalOnSnapToOverShootSnapPoint = false;
   
   // MARK: -  Properties - Layout-Related
   // ------------------------------------
   
-  weak var modalViewController: UIViewController?;
-  weak var targetViewController: UIViewController?;
+  public weak var modalViewController: UIViewController?;
+  public weak var targetViewController: UIViewController?;
   
-  weak var targetView: UIView?;
-  weak var modalView: UIView?;
+  public weak var targetView: UIView?;
+  public weak var modalView: UIView?;
   
-  lazy var dummyModalView = UIView();
-  lazy var modalWrapperView = UIView();
-  lazy var modalWrapperTransformView = UIView();
-  lazy var modalWrapperShadowView = UIView();
+  public lazy var dummyModalView = UIView();
+  public lazy var modalWrapperView = UIView();
+  public lazy var modalWrapperTransformView = UIView();
+  public lazy var modalWrapperShadowView = UIView();
   
-  var prevModalFrame: CGRect = .zero;
+  public private(set) var prevModalFrame: CGRect = .zero;
   
-  var modalBackgroundView: UIView?;
-  var modalBackgroundVisualEffectView: UIVisualEffectView?;
+  public private(set) var modalBackgroundView: UIView?;
+  public private(set) var modalBackgroundVisualEffectView: UIVisualEffectView?;
   
-  var backgroundDimmingView: UIView?;
-  var backgroundVisualEffectView: UIVisualEffectView?;
+  public private(set) var backgroundDimmingView: UIView?;
+  public private(set) var backgroundVisualEffectView: UIVisualEffectView?;
   
-  private var modalFrame: CGRect! {
+  public private(set) var modalFrame: CGRect! {
     set {
       guard let newValue = newValue else { return };
       self.prevModalFrame = dummyModalView.frame;
@@ -140,7 +140,7 @@ class AdaptiveModalManager: NSObject {
   // MARK: -  Properties - Interpolation Points
   // ------------------------------------------
   
-  var prevInterpolationIndex: Int {
+  public private(set) var prevInterpolationIndex: Int {
     get {
       self.shouldSnapToOvershootSnapPoint
         ? self.prevOverrideInterpolationIndex
@@ -156,7 +156,7 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var nextInterpolationIndex: Int? {
+  public private(set) var nextInterpolationIndex: Int? {
     get {
       self.shouldSnapToOvershootSnapPoint
         ? self.nextOverrideInterpolationIndex
@@ -172,7 +172,7 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var currentInterpolationIndex: Int {
+  public private(set) var currentInterpolationIndex: Int {
     get {
       self.shouldSnapToOvershootSnapPoint
         ? self.currentOverrideInterpolationIndex
@@ -188,7 +188,7 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var interpolationSteps: [AdaptiveModalInterpolationPoint]! {
+  public private(set) var interpolationSteps: [AdaptiveModalInterpolationPoint]! {
     get {
       self.shouldUseOverrideSnapPoints
         ? self.overrideInterpolationPoints
@@ -204,20 +204,20 @@ class AdaptiveModalManager: NSObject {
     }
   };
   
-  var currentInterpolationStep: AdaptiveModalInterpolationPoint {
+  public var currentInterpolationStep: AdaptiveModalInterpolationPoint {
     self.interpolationSteps[self.currentInterpolationIndex];
   };
   
-  private var interpolationRangeInput: [CGFloat]! {
+  public var interpolationRangeInput: [CGFloat]! {
     self.interpolationSteps.map { $0.percent };
   };
   
-  private var interpolationRangeMaxInput: CGFloat? {
+  public var interpolationRangeMaxInput: CGFloat? {
     guard let targetView = self.targetView else { return nil };
     return targetView.frame[keyPath: self.modalConfig.maxInputRangeKeyForRect];
   };
   
-  var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
+  public var currentSnapPointConfig: AdaptiveModalSnapPointConfig {
     self.modalConfig.snapPoints[
       self.currentInterpolationStep.snapPointIndex
     ];
@@ -364,22 +364,22 @@ class AdaptiveModalManager: NSObject {
   // MARK: - Computed Properties
   // ---------------------------
   
-  var isSwiping: Bool {
+  public var isSwiping: Bool {
     self.gestureInitialPoint != nil
   };
   
-  var isAnimating: Bool {
+  public var isAnimating: Bool {
      self.modalAnimator != nil || (self.modalAnimator?.isRunning ?? false);
   };
   
-  var currentSnapPointIndex: Int {
+  public var currentSnapPointIndex: Int {
     self.currentInterpolationStep.snapPointIndex
   };
 
   // MARK: - Init
   // ------------
   
-  init(modalConfig: AdaptiveModalConfig) {
+  public init(modalConfig: AdaptiveModalConfig) {
     self.modalConfig = modalConfig;
     
     super.init();
@@ -1341,7 +1341,6 @@ class AdaptiveModalManager: NSObject {
   
   private func getClosestSnapPoint(forCoord coord: CGFloat? = nil) -> (
     interpolationIndex: Int,
-    snapPointConfig: AdaptiveModalSnapPointConfig,
     interpolationPoint: AdaptiveModalInterpolationPoint,
     snapDistance: CGFloat
   ) {
@@ -1369,7 +1368,6 @@ class AdaptiveModalManager: NSObject {
     
     return (
       interpolationIndex: closestInterpolationIndex,
-      snapPointConfig: self.modalConfig.snapPoints[snapPointIndex],
       interpolationPoint: interpolationPoint,
       snapDistance: closestSnapPoint.element
     );
@@ -1415,11 +1413,13 @@ class AdaptiveModalManager: NSObject {
   
   private func animateModal(
     to interpolationPoint: AdaptiveModalInterpolationPoint,
+    animator: UIViewPropertyAnimator? = nil,
+    extraAnimation: (() -> Void)? = nil,
     completion: ((UIViewAnimatingPosition) -> Void)? = nil
   ) {
     guard let modalView = self.modalView else { return };
     
-    let animator: UIViewPropertyAnimator = {
+    let animator: UIViewPropertyAnimator = animator ?? {
       let gestureInitialVelocity = self.gestureInitialVelocity;
       let snapAnimationConfig = self.modalConfig.snapAnimationConfig;
         
@@ -1438,19 +1438,19 @@ class AdaptiveModalManager: NSObject {
     self.modalAnimator = animator;
     
     animator.addAnimations {
-      interpolationPoint.apply(toModalView: modalView);
+      extraAnimation?();
       
-      interpolationPoint.apply(toModalWrapperView: self.modalWrapperView);
-      interpolationPoint.apply(toModalWrapperTransformView: self.modalWrapperTransformView);
-      interpolationPoint.apply(toModalWrapperShadowView: self.modalWrapperShadowView);
-      
-      interpolationPoint.apply(toDummyModalView: self.dummyModalView);
-      interpolationPoint.apply(toModalBackgroundView: self.modalBackgroundView);
-      interpolationPoint.apply(toBackgroundView: self.backgroundDimmingView);
-      
-      interpolationPoint.apply(toModalBackgroundEffectView: self.modalBackgroundVisualEffectView);
-      interpolationPoint.apply(toBackgroundVisualEffectView: self.backgroundVisualEffectView);
-      
+      interpolationPoint.apply(
+        toModalView: modalView,
+        toModalWrapperView: self.modalWrapperView,
+        toModalWrapperTransformView: self.modalWrapperTransformView,
+        toModalWrapperShadowView: self.modalWrapperShadowView,
+        toDummyModalView: self.dummyModalView,
+        toModalBackgroundView: self.modalBackgroundView,
+        toBackgroundView: self.backgroundDimmingView,
+        toModalBackgroundEffectView: self.modalBackgroundVisualEffectView,
+        toBackgroundVisualEffectView: self.backgroundVisualEffectView
+      );
     };
     
     if let completion = completion {
@@ -1507,11 +1507,17 @@ class AdaptiveModalManager: NSObject {
     };
   };
   
-  @objc func onKeyboardWillShow(notification: NSNotification) {
+  @objc private func onKeyboardWillShow(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
     self.layoutKeyboardValues = keyboardValues;
+    self.computeSnapPoints();
+    
+    self.animateModal(
+      to: self.currentInterpolationStep,
+      animator: keyboardValues.keyboardAnimator
+    );
     
     print(
       "onKeyboardWillShow",
@@ -1524,7 +1530,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  @objc func onKeyboardDidShow(notification: NSNotification) {
+  @objc private func onKeyboardDidShow(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
@@ -1541,11 +1547,17 @@ class AdaptiveModalManager: NSObject {
     );
   };
 
-  @objc func onKeyboardWillHide(notification: NSNotification) {
+  @objc private func onKeyboardWillHide(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
-    self.layoutKeyboardValues = keyboardValues;
+    self.clearLayoutKeyboardValues();
+    self.computeSnapPoints();
+    
+    self.animateModal(
+      to: self.currentInterpolationStep,
+      animator: keyboardValues.keyboardAnimator
+    );
     
     print(
       "onKeyboardWillHide",
@@ -1558,7 +1570,7 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  @objc func onKeyboardDidHide(notification: NSNotification) {
+  @objc private func onKeyboardDidHide(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
@@ -1575,11 +1587,12 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  @objc func onKeyboardWillChange(notification: NSNotification) {
+  @objc private func onKeyboardWillChange(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
     self.layoutKeyboardValues = keyboardValues;
+    self.computeSnapPoints();
     
     print(
       "onKeyboardWillChange",
@@ -1592,11 +1605,12 @@ class AdaptiveModalManager: NSObject {
     );
   };
   
-  @objc func onKeyboardDidChange(notification: NSNotification) {
+  @objc private func onKeyboardDidChange(notification: NSNotification) {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
     self.layoutKeyboardValues = keyboardValues;
+    self.computeSnapPoints();
     
     print(
       "onKeyboardDidChange",
@@ -1781,62 +1795,9 @@ class AdaptiveModalManager: NSObject {
     self.modalViewController?.dismiss(animated: false);
   };
   
-  // MARK: - User-Invoked Functions
-  // ------------------------------
-  
-  func prepareForPresentation(
-    modalView: UIView? = nil,
-    targetView: UIView? = nil,
-    shouldForceReset: Bool = false
-  ) {
-    guard let modalView = modalView ?? self.modalView,
-          let targetView = targetView ?? self.targetView
-    else { return };
+  // MARK: - Functions
+  // -----------------
     
-    let didViewsChange =
-      modalView !== self.modalView || targetView !== self.targetView;
-      
-    let shouldReset =
-      !self.didTriggerSetup || didViewsChange || shouldForceReset;
-    
-    if shouldReset {
-      self.cleanup();
-    };
-
-    self.modalView = modalView;
-    self.targetView = targetView;
-  
-    self.computeSnapPoints();
-    
-    if shouldReset {
-      self.setupInitViews();
-      self.setupDummyModalView();
-      self.setupGestureHandler();
-      
-      self.setupAddViews();
-      self.setupViewConstraints();
-      self.setupObservers();
-    };
-    
-    self.updateModal();
-    self.didTriggerSetup = true;
-  };
-  
-  func prepareForPresentation(
-    viewControllerToPresent presentingVC: UIViewController,
-    presentingViewController presentedVC: UIViewController
-  ) {
-    self.modalViewController = presentingVC;
-    self.modalView = presentingVC.view;
-    
-    self.setupViewControllers();
-  };
-  
-  func notifyDidLayoutSubviews() {
-    self.computeSnapPoints();
-    self.updateModal();
-  };
-  
   func snapTo(
     interpolationIndex nextIndex: Int,
     interpolationPoint: AdaptiveModalInterpolationPoint? = nil,
@@ -1849,13 +1810,13 @@ class AdaptiveModalManager: NSObject {
       
     self.notifyOnModalWillSnap();
   
-    self.animateModal(to: nextInterpolationPoint) { _ in
+    self.animateModal(to: nextInterpolationPoint, completion: { _ in
       self.currentInterpolationIndex = nextIndex;
       self.nextInterpolationIndex = nil;
       
       self.notifyOnModalDidSnap();
       completion?();
-    };
+    });
   };
   
   func snapToClosestSnapPoint(
@@ -1878,34 +1839,6 @@ class AdaptiveModalManager: NSObject {
    
     self.snapTo(
       interpolationIndex: nextInterpolationIndex,
-      completion: completion
-    );
-  };
-  
-  func snapToClosestSnapPoint(completion: (() -> Void)? = nil) {
-    let closestSnapPoint = self.getClosestSnapPoint(forRect: self.modalFrame);
-    
-    let nextInterpolationIndex =
-      self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);
-    
-    let nextInterpolationPoint =
-      self.interpolationSteps[nextInterpolationIndex];
-    
-    let prevFrame = self.modalFrame;
-    let nextFrame = nextInterpolationPoint.computedRect;
-    
-    guard nextInterpolationIndex != self.currentInterpolationIndex,
-          prevFrame != nextFrame
-    else { return };
-    
-    self.snapTo(interpolationIndex: nextInterpolationIndex) {
-      completion?();
-    };
-  };
-  
-  func snapToCurrentIndex(completion: (() -> Void)? = nil) {
-    self.snapTo(
-      interpolationIndex: self.currentInterpolationIndex,
       completion: completion
     );
   };
@@ -1950,6 +1883,90 @@ class AdaptiveModalManager: NSObject {
         completion: completion
       );
     };
+  };
+  
+  // MARK: - User-Invoked Functions
+  // ------------------------------
+  
+  public func prepareForPresentation(
+    modalView: UIView? = nil,
+    targetView: UIView? = nil,
+    shouldForceReset: Bool = false
+  ) {
+    guard let modalView = modalView ?? self.modalView,
+          let targetView = targetView ?? self.targetView
+    else { return };
+    
+    let didViewsChange =
+      modalView !== self.modalView || targetView !== self.targetView;
+      
+    let shouldReset =
+      !self.didTriggerSetup || didViewsChange || shouldForceReset;
+    
+    if shouldReset {
+      self.cleanup();
+    };
+
+    self.modalView = modalView;
+    self.targetView = targetView;
+  
+    self.computeSnapPoints();
+    
+    if shouldReset {
+      self.setupInitViews();
+      self.setupDummyModalView();
+      self.setupGestureHandler();
+      
+      self.setupAddViews();
+      self.setupViewConstraints();
+      self.setupObservers();
+    };
+    
+    self.updateModal();
+    self.didTriggerSetup = true;
+  };
+  
+  public func prepareForPresentation(
+    viewControllerToPresent presentingVC: UIViewController,
+    presentingViewController presentedVC: UIViewController
+  ) {
+    self.modalViewController = presentingVC;
+    self.modalView = presentingVC.view;
+    
+    self.setupViewControllers();
+  };
+  
+  public func notifyDidLayoutSubviews() {
+    self.computeSnapPoints();
+    self.updateModal();
+  };
+  
+  public func snapToClosestSnapPoint(completion: (() -> Void)? = nil) {
+    let closestSnapPoint = self.getClosestSnapPoint(forRect: self.modalFrame);
+    
+    let nextInterpolationIndex =
+      self.adjustInterpolationIndex(for: closestSnapPoint.interpolationIndex);
+    
+    let nextInterpolationPoint =
+      self.interpolationSteps[nextInterpolationIndex];
+    
+    let prevFrame = self.modalFrame;
+    let nextFrame = nextInterpolationPoint.computedRect;
+    
+    guard nextInterpolationIndex != self.currentInterpolationIndex,
+          prevFrame != nextFrame
+    else { return };
+    
+    self.snapTo(interpolationIndex: nextInterpolationIndex) {
+      completion?();
+    };
+  };
+  
+  public func snapToCurrentIndex(completion: (() -> Void)? = nil) {
+    self.snapTo(
+      interpolationIndex: self.currentInterpolationIndex,
+      completion: completion
+    );
   };
   
   public func presentModal(
@@ -2046,8 +2063,8 @@ class AdaptiveModalManager: NSObject {
     self.overrideSnapPoints = snapPoints;
     self.overrideInterpolationPoints = interpolationPoints;
     
-    self.animateModal(to: nextInterpolationPoint) { _ in
+    self.animateModal(to: nextInterpolationPoint, completion: { _ in
       completion?();
-    };
+    });
   };
 };

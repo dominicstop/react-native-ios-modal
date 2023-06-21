@@ -30,7 +30,7 @@ public struct RNILayoutValue {
   // MARK: - Init
   // ------------
   
-  init(
+  public init(
     mode: RNILayoutValueMode,
     offsetValue: RNILayoutValueMode? = nil,
     offsetOperation: RNIComputableOffset.OffsetOperation? = nil,

@@ -22,6 +22,14 @@ public enum RNILayoutValueMode {
     insetKey: KeyPath<UIEdgeInsets, CGFloat>
   );
   
+  case keyboardScreenRect(
+    rectKey: KeyPath<CGRect, CGFloat>
+  );
+  
+  case keyboardRelativeSize(
+    sizeKey: KeyPath<CGSize, CGFloat>
+  );
+  
   case multipleValues(_ values: [Self]);
   
   // MARK: Functions
@@ -54,6 +62,12 @@ public enum RNILayoutValueMode {
       case let .safeAreaInsets(insetKey):
         return context.safeAreaInsets?[keyPath: insetKey];
         
+      case let .keyboardScreenRect(rectKey):
+        return context.keyboardScreenRect?[keyPath: rectKey];
+        
+      case let .keyboardRelativeSize(sizeKey):
+        return context.keyboardRelativeSize?[keyPath: sizeKey];
+        
       case let .multipleValues(computableValues):
         return computableValues.reduce(0) {
           let computedValue = $1.compute(
@@ -61,8 +75,7 @@ public enum RNILayoutValueMode {
             preferredSizeKey: preferredSizeKey
           );
           
-          guard let computedValue = computedValue else { return 0 };
-          return $0 + computedValue;
+          return $0 + (computedValue ?? 0);
         };
     };
   };

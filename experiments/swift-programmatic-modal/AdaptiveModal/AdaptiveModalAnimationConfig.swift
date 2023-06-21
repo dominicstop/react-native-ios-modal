@@ -7,43 +7,42 @@
 
 import UIKit
 
+public struct AdaptiveModalAnimationConfig {
+  public var modalRotation: CGFloat?;
+  
+  public var modalScaleX: CGFloat?;
+  public var modalScaleY: CGFloat?;
 
-struct AdaptiveModalAnimationConfig {
-  var modalRotation: CGFloat?;
+  public var modalTranslateX: CGFloat?;
+  public var modalTranslateY: CGFloat?;
   
-  var modalScaleX: CGFloat?;
-  var modalScaleY: CGFloat?;
-
-  var modalTranslateX: CGFloat?;
-  var modalTranslateY: CGFloat?;
+  public var modalBorderWidth: CGFloat?;
+  public var modalBorderColor: UIColor?;
   
-  var modalBorderWidth: CGFloat?;
-  var modalBorderColor: UIColor?;
+  public var modalShadowColor: UIColor?;
+  public var modalShadowOffset: CGSize?;
+  public var modalShadowOpacity: CGFloat?;
+  public var modalShadowRadius: CGFloat?;
   
-  var modalShadowColor: UIColor?;
-  var modalShadowOffset: CGSize?;
-  var modalShadowOpacity: CGFloat?;
-  var modalShadowRadius: CGFloat?;
+  public var modalCornerRadius: CGFloat?;
+  public var modalMaskedCorners: CACornerMask?;
   
-  var modalCornerRadius: CGFloat?;
-  var modalMaskedCorners: CACornerMask?;
+  public var modalOpacity: CGFloat?;
+  public var modalBackgroundColor: UIColor?;
+  public var modalBackgroundOpacity: CGFloat?;
   
-  var modalOpacity: CGFloat?;
-  var modalBackgroundColor: UIColor?;
-  var modalBackgroundOpacity: CGFloat?;
+  public var modalBackgroundVisualEffect: UIVisualEffect?;
+  public var modalBackgroundVisualEffectOpacity: CGFloat?;
+  public var modalBackgroundVisualEffectIntensity: CGFloat?;
   
-  var modalBackgroundVisualEffect: UIVisualEffect?;
-  var modalBackgroundVisualEffectOpacity: CGFloat?;
-  var modalBackgroundVisualEffectIntensity: CGFloat?;
+  public var backgroundColor: UIColor?;
+  public var backgroundOpacity: CGFloat?;
   
-  var backgroundColor: UIColor?;
-  var backgroundOpacity: CGFloat?;
+  public var backgroundVisualEffect: UIVisualEffect?;
+  public var backgroundVisualEffectOpacity: CGFloat?;
+  public var backgroundVisualEffectIntensity: CGFloat?;
   
-  var backgroundVisualEffect: UIVisualEffect?;
-  var backgroundVisualEffectOpacity: CGFloat?;
-  var backgroundVisualEffectIntensity: CGFloat?;
-  
-  init(
+  public init(
      modalRotation: CGFloat? = nil,
      modalScaleX: CGFloat? = nil,
      modalScaleY: CGFloat? = nil,

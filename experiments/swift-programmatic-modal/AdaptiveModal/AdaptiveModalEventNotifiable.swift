@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol AdaptiveModalEventNotifiable: AnyObject {
+public protocol AdaptiveModalEventNotifiable: AnyObject {
   
   func notifyOnModalWillSnap(
     prevSnapPointIndex: Int?,

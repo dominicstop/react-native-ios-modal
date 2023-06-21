@@ -8,13 +8,13 @@
 import UIKit
 
 
-struct AdaptiveModalKeyframePropertyAnimator {
+public struct AdaptiveModalKeyframePropertyAnimator {
 
-  var animator: UIViewPropertyAnimator;
+  public var animator: UIViewPropertyAnimator;
   
   private weak var component: UIView?;
   
-  init<T: UIView>(
+  public init<T: UIView>(
     interpolationPoints: [AdaptiveModalInterpolationPoint],
     forComponent component: T,
     animation: @escaping (
@@ -46,11 +46,11 @@ struct AdaptiveModalKeyframePropertyAnimator {
     };
   };
   
-  func setFractionComplete(forPercent percent: CGFloat) {
+  public func setFractionComplete(forPercent percent: CGFloat) {
     self.animator.fractionComplete = 0;
   };
   
-  func clear(){
+  public func clear(){
     self.animator.stopAnimation(true);
   };
 };
