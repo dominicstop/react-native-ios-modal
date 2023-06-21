@@ -8,6 +8,9 @@
 import UIKit
 
 public struct RNILayout {
+
+  // MARK: - Public Types
+  // --------------------
   
   public enum HorizontalAlignment: String {
     case left, right, center;
@@ -156,54 +159,6 @@ public struct RNILayout {
     return rect;
   };
   
-  public func computeMargins(
-    usingLayoutValueContext context: RNILayoutValueContext
-  ) -> (
-    left  : CGFloat?,
-    right : CGFloat?,
-    top   : CGFloat?,
-    bottom: CGFloat?,
-    
-    horizontal: CGFloat,
-    vertical  : CGFloat
-  ) {
-    let computedMarginLeft = self.marginLeft?.computeValue(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.width
-    );
-    
-    let computedMarginRight = self.marginRight?.computeValue(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.width
-    );
-    
-    let computedMarginTop = self.marginTop?.computeValue(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.height
-    );
-    
-    let computedMarginBottom = self.marginBottom?.computeValue(
-      usingLayoutValueContext: context,
-      preferredSizeKey: \.height
-    );
-    
-    let computedMarginHorizontal =
-      (computedMarginLeft ?? 0) + (computedMarginRight ?? 0);
-      
-    let computedMarginVertical =
-      (computedMarginTop ?? 0) + (computedMarginBottom ?? 0);
-      
-    return (
-      left  : computedMarginLeft   ?? 0,
-      right : computedMarginRight  ?? 0,
-      top   : computedMarginTop    ?? 0,
-      bottom: computedMarginBottom ?? 0,
-      
-      horizontal: computedMarginHorizontal,
-      vertical  : computedMarginVertical
-    );
-  };
-  
   // MARK: - Functions
   // -----------------
   
@@ -230,57 +185,174 @@ public struct RNILayout {
   
     var rect = self.computeRawRectOrigin(usingLayoutValueContext: context);
     
-    let computedMargins = self.computeMargins(usingLayoutValueContext: context);
-   
-    // Margin - X-Axis
-    switch self.horizontalAlignment {
-      case .left:
-        guard let marginLeft = computedMargins.left else { break };
-        rect.origin.x = rect.origin.x + marginLeft;
-        
-      case .right:
-        guard let marginRight = computedMargins.right else { break };
-        rect.origin.x = rect.origin.x - marginRight;
-        
-      case .center:
-        break;
+    let computedMargins = RNILayoutMargins(
+      usingLayoutConfig: self,
+      usingLayoutValueContext: context
+    );
+    
+    let marginRects = RNILayoutMarginRects(
+      margins: computedMargins,
+      viewRect: rect,
+      targetRect: context.targetRect
+    );
+    
+    let shouldResizeWidth: Bool = {
+      if computedMargins.horizontal == 0 {
+        return false;
+      };
+      
+      if self.width.mode == .stretch &&
+         !computedMargins.hasNegativeHorizontalMargins {
+         
+        return true;
+      };
+    
+      return (
+           computedMargins.left       > 0
+        && computedMargins.right      > 0
+        && computedMargins.horizontal > rect.width
+      );
+    }();
+       
+    let shouldResizeHeight: Bool = {
+      if computedMargins.vertical == 0 {
+        return false;
+      };
+      
+      if self.height.mode == .stretch &&
+         !computedMargins.hasNegativeVerticalMargins {
+         
+        return true;
+      };
+    
+      return (
+           computedMargins.top > 0
+        && computedMargins.bottom > 0
+        && computedMargins.vertical > rect.height
+      );
+    }();
+
+    if shouldResizeWidth {
+      let offsetWidth = self.width.mode == .stretch
+        ? computedMargins.horizontal
+        : computedMargins.horizontal - rect.width;
+      
+      rect.size.width -= offsetWidth;
     };
     
-    // Margin - Y-Axis
-    switch self.verticalAlignment {
-      case .top:
-        guard let marginTop = computedMargins.top else { break };
-        rect.origin.y = rect.origin.y + marginTop;
+    if shouldResizeHeight {
+      let offsetHeight = self.height.mode == .stretch
+        ? computedMargins.vertical
+        : computedMargins.vertical - rect.height;
+      
+      rect.size.height -= offsetHeight;
+    };
+    
+    let shouldOffsetX: Bool = {
+      switch self.horizontalAlignment {
+        case .left, .right:
+          return true;
+          
+        case .center:
+          return
+            marginRects.left.maxX > rect.minX ||
+            marginRects.right.minX < rect.maxX;
+      };
+    }();
+    
+    let shouldOffsetY: Bool = {
+      switch self.verticalAlignment {
+        case .top, .bottom:
+          return true;
+          
+        case .center:
+          return
+            marginRects.top.maxY > rect.minY ||
+            marginRects.bottom.minY < rect.maxY;
+      };
+    }();
+      
+    if shouldOffsetX {
+      let offsetLeft = computedMargins.left - rect.minX;
+      
+      let shouldApplyNegativeLeftMargin =
+        self.horizontalAlignment == .left &&
+        computedMargins.left < 0;
+      
+      if offsetLeft > 0 {
+        rect.origin.x += offsetLeft;
         
-      case .bottom:
-        guard let marginBottom = computedMargins.bottom else { break };
-        rect.origin.y = rect.origin.y - marginBottom;
+      } else if shouldApplyNegativeLeftMargin {
+        rect.origin.x -= abs(computedMargins.left);
+      };
+      
+      let offsetRight: CGFloat = {
+        let marginRightX = context.targetRect.maxX - computedMargins.right;
+        return rect.maxX - marginRightX;
+      }();
+      
+      let shouldApplyNegativeRightMargin =
+        self.horizontalAlignment == .right &&
+        computedMargins.right < 0;
         
-      case .center:
-        break;
+      if offsetRight > 0 {
+        rect.origin.x -= offsetRight;
+        
+      } else if shouldApplyNegativeRightMargin {
+        rect.origin.x += abs(computedMargins.right);
+      };
+    };
+    
+    if shouldOffsetY {
+      let offsetTop = computedMargins.top - rect.minY;
+      
+      let shouldApplyNegativeTopMargin =
+        self.verticalAlignment == .top &&
+        computedMargins.top < 0;
+      
+      if offsetTop > 0 {
+        rect.origin.y += offsetTop;
+        
+      } else if shouldApplyNegativeTopMargin {
+        rect.origin.y -= abs(computedMargins.top); 
+      };
+      
+      let offsetBottom: CGFloat = {
+        let marginBottomY = context.targetRect.maxY - computedMargins.bottom;
+        return rect.maxY - marginBottomY;
+      }();
+      
+      let shouldApplyNegativeBottomMargin =
+        self.verticalAlignment == .bottom &&
+        computedMargins.bottom < 0;
+        
+      if offsetBottom > 0 {
+        rect.origin.y -= offsetBottom;
+        
+      } else if shouldApplyNegativeBottomMargin {
+         rect.origin.y += abs(computedMargins.bottom);
+      };
     };
     
     let shouldRecomputeXAxis: Bool = {
-      switch self.width.mode {
-        case .stretch: return abs(computedMargins.horizontal) < rect.width;
-        default: return false;
+      switch self.horizontalAlignment {
+        case .center:
+          return !shouldOffsetX && shouldResizeWidth
+      
+        default:
+          return false;
       };
     }();
     
     let shouldRecomputeYAxis: Bool = {
-      switch self.height.mode {
-        case .stretch: return abs(computedMargins.vertical) < rect.height;
-        default: return false;
+      switch self.verticalAlignment {
+        case .center:
+          return !shouldOffsetY && shouldResizeHeight
+      
+        default:
+          return false;
       };
     }();
-    
-    if shouldRecomputeXAxis {
-      rect.size.width = rect.size.width - computedMargins.horizontal;
-    };
-    
-    if shouldRecomputeYAxis {
-      rect.size.height = rect.size.height - computedMargins.vertical;
-    };
     
     if shouldRecomputeXAxis || shouldRecomputeYAxis {
       // re-compute origin

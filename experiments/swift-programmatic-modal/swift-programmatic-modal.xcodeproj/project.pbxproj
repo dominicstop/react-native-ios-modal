@@ -21,6 +21,8 @@
 		886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */; };
 		887AA0572A4253050089F517 /* RNILayoutKeyboardValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */; };
 		887C3BE22A42F9E00026B57C /* CACornerMask+StaticAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887C3BE12A42F9E00026B57C /* CACornerMask+StaticAlias.swift */; };
+		887C3BE42A43C4FF0026B57C /* RNILayoutMargins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887C3BE32A43C4FF0026B57C /* RNILayoutMargins.swift */; };
+		887C3BE62A43C5460026B57C /* RNILayoutMarginRects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887C3BE52A43C5460026B57C /* RNILayoutMarginRects.swift */; };
 		88A2EF742A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */; };
 		88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0EE29C593F400490628 /* AppDelegate.swift */; };
 		88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B7D0F029C593F400490628 /* SceneDelegate.swift */; };
@@ -120,6 +122,8 @@
 		886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutValueContext.swift; sourceTree = "<group>"; };
 		887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutKeyboardValues.swift; sourceTree = "<group>"; };
 		887C3BE12A42F9E00026B57C /* CACornerMask+StaticAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CACornerMask+StaticAlias.swift"; sourceTree = "<group>"; };
+		887C3BE32A43C4FF0026B57C /* RNILayoutMargins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutMargins.swift; sourceTree = "<group>"; };
+		887C3BE52A43C5460026B57C /* RNILayoutMarginRects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNILayoutMarginRects.swift; sourceTree = "<group>"; };
 		88A2EF732A3A98F6006B5235 /* AdaptiveModalConfigTestPresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModalConfigTestPresets.swift; sourceTree = "<group>"; };
 		88B7D0EB29C593F400490628 /* swift-programmatic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-programmatic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B7D0EE29C593F400490628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -433,6 +437,8 @@
 			children = (
 				88D017D72A1B302F004664D2 /* RNILayout.swift */,
 				88E8C01B2A23203E008C2FF8 /* RNILayoutPreset.swift */,
+				887C3BE32A43C4FF0026B57C /* RNILayoutMargins.swift */,
+				887C3BE52A43C5460026B57C /* RNILayoutMarginRects.swift */,
 				886AFCAA2A31FF40004AC9FB /* RNILayoutValue.swift */,
 				887AA0562A4253050089F517 /* RNILayoutKeyboardValues.swift */,
 				886AFCB02A325B6F004AC9FB /* RNILayoutValueContext.swift */,
@@ -689,11 +695,13 @@
 				88D016602A14C86B004664D2 /* RootViewController.swift in Sources */,
 				88D0183E2A1B3030004664D2 /* CAAnimation+Block.swift in Sources */,
 				88D0184C2A1B3030004664D2 /* RNIAnimator.swift in Sources */,
+				887C3BE42A43C4FF0026B57C /* RNILayoutMargins.swift in Sources */,
 				88D018362A1B3030004664D2 /* CGSize+Init.swift in Sources */,
 				886AFCB12A325B6F004AC9FB /* RNILayoutValueContext.swift in Sources */,
 				88B7D0EF29C593F400490628 /* AppDelegate.swift in Sources */,
 				88D018222A1B3030004664D2 /* UIImage+Init.swift in Sources */,
 				88D018702A1B3030004664D2 /* RNIModalFlags.swift in Sources */,
+				887C3BE62A43C5460026B57C /* RNILayoutMarginRects.swift in Sources */,
 				88E8C01E2A234B0A008C2FF8 /* UIBezierPath+VariadicCornerRadius.swift in Sources */,
 				88B7D0F129C593F400490628 /* SceneDelegate.swift in Sources */,
 				88D0187E2A1B6CB3004664D2 /* BlurEffectTestViewController.swift in Sources */,

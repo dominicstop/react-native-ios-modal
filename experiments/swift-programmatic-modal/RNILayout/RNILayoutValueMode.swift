@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum RNILayoutValueMode {
+public enum RNILayoutValueMode: Equatable {
 
   case stretch;
   

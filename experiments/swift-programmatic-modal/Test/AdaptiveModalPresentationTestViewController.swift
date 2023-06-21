@@ -127,6 +127,7 @@ fileprivate class TestModalViewController: UIViewController, AdaptiveModalEventN
         ]),
         marginBottom: .multipleValues([
           .safeAreaInsets(insetKey: \.bottom),
+          .keyboardRelativeSize(sizeKey: \.height),
           .constant(15),
         ])
       ),
@@ -322,7 +323,7 @@ class AdaptiveModalPresentationTestViewController : UIViewController {
         testVC.showCustomSnapPointButton = true;
         
       case .demo09:
-        //testVC.showCustomSnapPointButton = true;
+        testVC.showCustomSnapPointButton = true;
         testVC.showTextInputField = true;
         
       case .demo10:

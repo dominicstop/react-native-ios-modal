@@ -136,19 +136,22 @@ public enum RNILayoutPreset {
       case .edgeTop:
         return .init(
           derivedFrom: baseLayoutConfig,
-          verticalAlignment: .top
+          verticalAlignment: .top,
+          marginTop: .constant(0)
         );
       
       case .edgeLeft:
         return .init(
           derivedFrom: baseLayoutConfig,
-          horizontalAlignment: .left
+          horizontalAlignment: .left,
+          marginLeft: .constant(0)
         );
       
       case .edgeRight:
         return .init(
           derivedFrom: baseLayoutConfig,
-          horizontalAlignment: .right
+          horizontalAlignment: .right,
+          marginRight: .constant(0)
         );
       
       case .center:
@@ -190,8 +193,7 @@ public enum RNILayoutPreset {
           height: RNILayoutValue(
             mode: .stretch
           ),
-          marginTop: .constant(0),
-          marginBottom: .constant(0)
+          marginTop: .constant(0)
         );
       
       case let .layoutConfig(config):

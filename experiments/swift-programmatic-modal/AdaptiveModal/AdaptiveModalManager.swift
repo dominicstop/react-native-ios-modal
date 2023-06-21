@@ -126,6 +126,10 @@ public class AdaptiveModalManager: NSObject {
   var overrideSnapPoints: [AdaptiveModalSnapPointConfig]?;
   var overrideInterpolationPoints: [AdaptiveModalInterpolationPoint]?;
   
+  var currentOverrideInterpolationStep: AdaptiveModalInterpolationPoint? {
+    self.overrideInterpolationPoints?[self.currentOverrideInterpolationIndex];
+  };
+  
   private var shouldUseOverrideSnapPoints: Bool {
        self.isOverridingSnapPoints
     && self.overrideSnapPoints          != nil
@@ -133,8 +137,9 @@ public class AdaptiveModalManager: NSObject {
   };
   
   private var shouldClearOverrideSnapPoints: Bool {
-    self.shouldUseOverrideSnapPoints &&
-    self.currentOverrideInterpolationIndex < overrideInterpolationPoints!.count - 2;
+       self.shouldUseOverrideSnapPoints
+    && self.currentOverrideInterpolationIndex < overrideInterpolationPoints!.count - 2
+    && self.presentationState != .dismissing
   };
   
   // MARK: -  Properties - Interpolation Points
@@ -174,12 +179,12 @@ public class AdaptiveModalManager: NSObject {
   
   public private(set) var currentInterpolationIndex: Int {
     get {
-      self.shouldSnapToOvershootSnapPoint
+      self.shouldUseOverrideSnapPoints
         ? self.currentOverrideInterpolationIndex
         : self.currentConfigInterpolationIndex;
     }
     set {
-      if self.shouldSnapToOvershootSnapPoint {
+      if self.shouldUseOverrideSnapPoints {
         self.currentOverrideInterpolationIndex = newValue;
         
       } else {
@@ -1303,8 +1308,20 @@ public class AdaptiveModalManager: NSObject {
       + "\n - modalViewController: \(self.modalViewController?.debugDescription ?? "N/A")"
       + "\n - targetViewController: \(self.targetViewController?.debugDescription ?? "N/A")"
       + "\n - currentInterpolationIndex: \(self.currentInterpolationIndex)"
+      + "\n - currentOverrideInterpolationIndex: \(self.currentOverrideInterpolationIndex)"
+      + "\n - currentConfigInterpolationIndex: \(self.currentConfigInterpolationIndex)"
+      + "\n - currentInterpolationStep: computedRect \(self.currentInterpolationStep.computedRect)"
+      + "\n - currentConfigInterpolationStep computedRect: \(self.currentConfigInterpolationStep.computedRect)"
+      + "\n - currentOverrideInterpolationStep computedRect: \(self.currentOverrideInterpolationStep?.computedRect.debugDescription ?? "N/A")"
       + "\n - modalView gestureRecognizers: \(self.modalView?.gestureRecognizers.debugDescription ?? "N/A")"
+      + "\n - isOverridingSnapPoints: \(self.isOverridingSnapPoints)"
+      + "\n - shouldUseOverrideSnapPoints: \(self.shouldUseOverrideSnapPoints)"
+      + "\n - shouldClearOverrideSnapPoints: \(self.shouldClearOverrideSnapPoints)"
+      + "\n - layoutKeyboardValues: \(self.layoutKeyboardValues.debugDescription )"
+      + "\n - presentationState: \(self.presentationState )"
       + "\n - interpolationSteps.computedRect: \(self.interpolationSteps.map({ $0.computedRect }))"
+      + "\n - configInterpolationSteps.computedRect: \(self.configInterpolationSteps.map({ $0.computedRect }))"
+      + "\n - overrideInterpolationPoints.computedRect: \((self.overrideInterpolationPoints ?? []).map({ $0.computedRect }))"
       + "\n - interpolationSteps.percent: \(self.interpolationSteps.map({ $0.percent }))"
       + "\n - interpolationSteps.backgroundVisualEffectIntensity: \(self.interpolationSteps.map({ $0.backgroundVisualEffectIntensity }))"
       + "\n - interpolationSteps.backgroundVisualEffect: \(self.interpolationSteps.map({ $0.backgroundVisualEffect }))"
@@ -1364,7 +1381,6 @@ public class AdaptiveModalManager: NSObject {
     let closestInterpolationIndex = closestSnapPoint.offset;
     
     let interpolationPoint = interpolationSteps[closestInterpolationIndex];
-    let snapPointIndex = interpolationPoint.snapPointIndex;
     
     return (
       interpolationIndex: closestInterpolationIndex,
@@ -1511,8 +1527,12 @@ public class AdaptiveModalManager: NSObject {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
-    self.layoutKeyboardValues = keyboardValues;
-    self.computeSnapPoints();
+    if self.presentationState != .dismissing {
+      self.layoutKeyboardValues = keyboardValues;
+      self.computeSnapPoints();
+    };
+    
+    
     
     self.animateModal(
       to: self.currentInterpolationStep,
@@ -1551,8 +1571,12 @@ public class AdaptiveModalManager: NSObject {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
+    self.debug(prefix: "onKeyboardWillHide - pre");
+    
     self.clearLayoutKeyboardValues();
     self.computeSnapPoints();
+    
+    
     
     self.animateModal(
       to: self.currentInterpolationStep,
@@ -1591,8 +1615,10 @@ public class AdaptiveModalManager: NSObject {
     guard let keyboardValues = RNILayoutKeyboardValues(fromNotification: notification)
     else { return };
     
-    self.layoutKeyboardValues = keyboardValues;
-    self.computeSnapPoints();
+    if self.presentationState == .dismissing {
+      self.layoutKeyboardValues = keyboardValues;
+      self.computeSnapPoints();
+    };
     
     print(
       "onKeyboardWillChange",
@@ -1690,6 +1716,8 @@ public class AdaptiveModalManager: NSObject {
     let interpolationSteps = self.interpolationSteps!;
     let prevIndex = self.currentInterpolationIndex;
     
+    self.debug(prefix: "notifyOnModalWillSnap");
+    
     let nextIndexRaw: Int = {
       guard let nextIndex = self.nextInterpolationIndex else {
         let closestSnapPoint = self.getClosestSnapPoint();
@@ -1736,6 +1764,8 @@ public class AdaptiveModalManager: NSObject {
     if self.shouldClearOverrideSnapPoints {
       self.cleanupSnapPointOverride();
     };
+    
+    //self.debug(prefix: "notifyOnModalDidSnap")
   
     self.eventDelegate?.notifyOnModalDidSnap(
       prevSnapPointIndex:
@@ -1855,10 +1885,14 @@ public class AdaptiveModalManager: NSObject {
   
     let nextIndex = 0;
     
+    self.debug(prefix: "hideModal");
+    
     if useInBetweenSnapPoints {
       self.snapTo(interpolationIndex: nextIndex, completion: completion);
     
     } else {
+      self.computeSnapPoints();
+      
       let currentSnapPointConfig = self.currentSnapPointConfig;
       let currentInterpolationStep = self.currentInterpolationStep;
   
@@ -2049,6 +2083,8 @@ public class AdaptiveModalManager: NSObject {
     
     interpolationPoints.append(nextInterpolationPoint);
     
+    let nextInterpolationPointIndex = interpolationPoints.count - 1;
+    
     let overshootSnapPoint = AdaptiveModalInterpolationPoint(
       usingModalConfig: self.modalConfig,
       snapPointIndex: interpolationPoints.count,
@@ -2062,8 +2098,20 @@ public class AdaptiveModalManager: NSObject {
     self.isOverridingSnapPoints = true;
     self.overrideSnapPoints = snapPoints;
     self.overrideInterpolationPoints = interpolationPoints;
+    self.currentOverrideInterpolationIndex = nextInterpolationPointIndex;
     
+    print(
+      "snapTo",
+      "\n - prevInterpolationPoints:", prevInterpolationPoints.count,
+      "\n - interpolationPoints:", interpolationPoints.count,
+      "\n - nextInterpolationPointIndex:", nextInterpolationPointIndex
+    );
+    
+    self.debug(prefix: "snapTo");
+    
+
     self.animateModal(to: nextInterpolationPoint, completion: { _ in
+      self.debug(prefix: "snapTo - completion");
       completion?();
     });
   };
