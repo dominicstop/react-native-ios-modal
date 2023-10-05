@@ -6,10 +6,6 @@
 
 ## TODO - Current Tasks
 
-<br>
-
-- [ ] `TODO:2023-10-05-12-25-42` - Refactor: Init projecr w/ template from expo modules.
-
 <br><br>
 
 ## TODO - Bugs
@@ -47,6 +43,8 @@
 <br><br>
 
 ## TODO - Completed
+
+- [x] `TODO:2023-10-05-12-25-42` - Refactor: Init projecr w/ template from expo modules.
 
 <br>
 
