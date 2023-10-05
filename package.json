@@ -1,0 +1,45 @@
+{
+  "name": "react-native-ios-modal",
+  "version": "2.0.0-3",
+  "description": "A react-native component for displaying a modal on iOS by natively wrapping a react-native view inside a UIViewController and presenting it.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "typescript": "tsc --noEmit --project tsconfig.build.json",
+    "typescript-example": "cd example && tsc --noEmit --project tsconfig.json",
+    "typescript-all": "yarn run typescript ; yarn run typescript-example",
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "react-native-ios-modal",
+    "ReactNativeIosModal"
+  ],
+  "repository": "https://github.com/dominicstop/react-native-ios-modal",
+  "bugs": {
+    "url": "https://github.com/dominicstop/react-native-ios-modal/issues"
+  },
+  "author": "Dominic Go <dominic@dominicgo.dev> (https://github.com/dominicstop)",
+  "license": "MIT",
+  "homepage": "https://github.com/dominicstop/react-native-ios-modal#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^18.0.25",
+    "expo-module-scripts": "^3.0.11",
+    "expo-modules-core": "^1.5.11"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}
