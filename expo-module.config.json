@@ -1,9 +1,9 @@
 {
-  "platforms": ["ios", "android", "web"],
+  "platforms": ["ios"],
   "ios": {
-    "modules": ["ReactNativeIosModalModule"]
-  },
-  "android": {
-    "modules": ["expo.modules.iosmodal.ReactNativeIosModalModule"]
+    "modules": [
+      "RNIModalViewModule"
+    ],
+    "podspecPath": "./ios/ReactNativeIosModal.podspec"
   }
 }
