@@ -4169,6 +4169,11 @@ react-is@^16.13.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-ios-utilities@4.0.0-3:
+  version "4.0.0-3"
+  resolved "https://registry.yarnpkg.com/react-native-ios-utilities/-/react-native-ios-utilities-4.0.0-3.tgz#4b8ac9d0226b1f5942efe0bb88e16736ef5fae48"
+  integrity sha512-zHPlD1yy+q1WUGTVAEKzr44kO5/WvalN6nULM/VpD2TU9zc2mFQ9K9W7HDcZfldktN450+ufnRZqrHnudGaYPg==
+
 react-refresh@^0.4.0:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.4.3.tgz#966f1750c191672e76e16c2efa569150cc73ab53"
