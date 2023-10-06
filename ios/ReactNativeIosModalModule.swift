@@ -1,3 +1,10 @@
+//
+//  ReactNativeIosModalModule.swift
+//  ReactNativeIosModal
+//
+//  Created by Dominic Go on 10/6/23.
+//
+
 import ExpoModulesCore
 
 public class ReactNativeIosModalModule: Module {
