@@ -1,9 +1,9 @@
 #import "IosModalView.h"
 
-#import <react/renderer/components/RNIosModalViewSpec/ComponentDescriptors.h>
-#import <react/renderer/components/RNIosModalViewSpec/EventEmitters.h>
-#import <react/renderer/components/RNIosModalViewSpec/Props.h>
-#import <react/renderer/components/RNIosModalViewSpec/RCTComponentViewHelpers.h>
+#import <react/renderer/components/RNIModalSpec/ComponentDescriptors.h>
+#import <react/renderer/components/RNIModalSpec/EventEmitters.h>
+#import <react/renderer/components/RNIModalSpec/Props.h>
+#import <react/renderer/components/RNIModalSpec/RCTComponentViewHelpers.h>
 
 #import "RCTFabricComponentsPlugins.h"
 
