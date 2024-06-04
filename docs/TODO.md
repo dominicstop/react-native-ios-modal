@@ -6,6 +6,62 @@
 
 ## TODO - Current Tasks
 
+<br>
+
+- [ ] `TODO:2023-10-02-21-28-31` - Refactor: Replace w/ template from expo modules.
+- [ ] `TODO:2023-05-05-07-05-20` - Impl: Update `RNIComputableSize` - Add `minSize`, and `maxSize`. 
+
+<br>
+
+- [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events.
+	- [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalView.onModalDidSnap` event.
+	- [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
+	- [x] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`.
+	- [x] **Subtask** - `TODO:2023-05-01-19-19-20` - Update `RNIModalView` event objects.
+	- [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples - Replace deprecated events usage.
+
+<br>
+
+- [ ] `TODO:2023-04-07-02-33-21` Refactor: Re-write "hide non-visible modal" logic (i.e. logic for temporarily hiding bottom-most  modals).
+	- [x] **Subtask** - `TODO:2023-04-07-02-39-15` - Disable `hideNonVisibleModals`-related logic from triggering.
+	- [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
+		* **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
+
+<br>
+
+- [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
+
+<br>
+
+- [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
+- [ ] `TODO:2023-04-22-05-29-50` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
+- [ ] `TODO:2023-04-22-05-30-00` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
+- [ ] `TODO:2023-04-22-05-29-50` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
+- [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
+	* Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
+
+<br>
+
+- [ ] `2023-03-24-00-37-23` Refactor: Use `react-native-utilities`
+
+  * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
+
+  <br>
+
+  - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
+  - [ ] **Subtask** - `TODO:2023-05-12-14-50-57` - Replace impl. of `RNIError` in `react-native-utilities`.
+  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` Refactor: Remove/Replace `UIWindow.key` extension.
+  - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove native iOS code in `ios/src_library/Temp` that was copied over from `react-native-ios-utilities` + update usage.
+  - [ ] **Subtask** - `TODO:2023-03-29-04-54-56` - Remove JS/TS code in `src/temp` that was copied over from `react-native-ios-utilities` + update usage.
+  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Refactor: Move `RNIModalManager` helper functions to `RNIUtilities`.
+  - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - Refactor: Remove `ViewModuleRelatedTypes`
+    * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
+
+
+<br>
+
+- [ ] `TODO:20230-03-04-12-58-40` Refactor: Types - Remove `KeyMapType` Usage.
+
 <br><br>
 
 ## TODO - Bugs
@@ -42,9 +98,18 @@
 
 <br><br>
 
-## TODO - Completed
+## TODO - Adaptive Modal
 
-- [x] `TODO:2023-10-05-12-25-42` - Refactor: Init projecr w/ template from expo modules.
+- [ ] `TODO:2023-06-04-23-45-31` - Impl: Adaptive Modal - `LayoutComputableValue`
+	* Layout value: "percentage relative to parent", "percentage relative to current window width/height", "percentage relative to screen width/height".
+	* Layout value: "dynamic constant - `safeAreaInsets` top/bottom/width/height", "dynamic constant -  current keyboard height/width", "constant value".
+	* Layout value should accept "array of computable layout values".
+	* Layout value should accept "offset + offset operation".
+	* Layout value should accept "min/max values".
+
+<br><br>
+
+## TODO - Completed
 
 <br>
 
@@ -251,70 +316,6 @@
 <br><br>
 
 ## Old/Archive
-
-- [ ] `TODO:2023-05-05-07-05-20` - Impl: Update `RNIComputableSize` - Add `minSize`, and `maxSize`. 
-
-<br>
-
-- [ ] `TODO:2023-05-01-19-12-26` - Implement: `ModalView` events.
-  - [x] **Subtask** - `TODO:2023-05-01-19-13-50` - Impl. `ModalView.onModalDidSnap` event.
-  - [x] **Subtask** - `TODO:2023-04-22-05-29-40` - Impl. modal event `onModalSwipeGestureStart` + `onModalSwipeGestureDidEnd`.
-  - [x] **Subtask** - `TODO:2023-04-05-15-35-49` - Impl. `onModalDismissWillCancel` and `onModalDismissDidCancel`.
-  - [x] **Subtask** - `TODO:2023-05-01-19-19-20` - Update `RNIModalView` event objects.
-  - [ ] **Subtask** - `TODO:2023-03-30-15-56-38` - Update examples - Replace deprecated events usage.
-
-<br>
-
-- [ ] `TODO:2023-04-07-02-33-21` Refactor: Re-write "hide non-visible modal" logic (i.e. logic for temporarily hiding bottom-most  modals).
-  - [x] **Subtask** - `TODO:2023-04-07-02-39-15` - Disable `hideNonVisibleModals`-related logic from triggering.
-  - [ ] **Subtask** - `TODO:2023-03-22-12-07-54` Refactor: Move to `RNIModalManager`
-    * **Desc**: Move `RNIModalView.setIsHiddenForViewBelowLevel` to `RNIModalManager`.
-
-<br>
-
-- [ ] `TODO:2023-03-04-13-02-45` Refactor: Rename `ModalView.autoCloseOnUnmount` prop to `shouldAutoCloseOnUnmount`.
-
-<br>
-
-- [ ] `TODO:2023-04-21-23-42-42` - Deprecate `presentViaMount`
-- [ ] `TODO:2023-04-22-05-29-50` - Deprecate `ModalView.setVisibility` + `childProps`, and replace with `ModalContext.modalContentProps`.
-- [ ] `TODO:2023-04-22-05-30-00` - Update `ModalView.setVisibility` - Add options params + `shouldTemporarilyDisableSwipeGestureWhileTransitioning`.
-- [ ] `TODO:2023-04-22-05-29-50` - Update `ModalView.getProps` - Match default values from `RNIModalView` native props.
-- [ ] `TODO:2023-04-21-23-42-49` - Add prop to disable user-interaction from modal
-  * Can be achieved via `UIView.userInteractionEnabled`, or via `RCTTouchHander.isEnabled`.
-
-<br>
-
-- [ ] `2023-03-24-00-37-23` Refactor: Use `react-native-utilities`
-
-  * **Desc**: Update `react-native-ios-modal` to use `react-native-utilities` as a peer dependency.
-
-  <br>
-
-  - [ ] **Subtask** -  `TODO:2023-03-24-01-14-26` - Move `UIView+Helpers` extension to `react-native-utilities`.
-  - [ ] **Subtask** - `TODO:2023-05-12-14-50-57` - Replace impl. of `RNIError` in `react-native-utilities`.
-  - [ ] **Subtask** - `TODO:2023-03-24-01-14-26` Refactor: Remove/Replace `UIWindow.key` extension.
-  - [ ] **Subtask** - `TODO:2023-03-28-18-58-47` - Remove native iOS code in `ios/src_library/Temp` that was copied over from `react-native-ios-utilities` + update usage.
-  - [ ] **Subtask** - `TODO:2023-03-29-04-54-56` - Remove JS/TS code in `src/temp` that was copied over from `react-native-ios-utilities` + update usage.
-  - [ ] **Subtask** - `TODO:2023-03-20-21-29-36`  - Refactor: Move `RNIModalManager` helper functions to `RNIUtilities`.
-  - [ ] **Subtask** - `TODO:2023-03-04-13-22-34` - Refactor: Remove `ViewModuleRelatedTypes`
-    * **Desc**: Move/Consolidate `src/types/ViewModuleRelatedTypes` to  `react-native-utilities` and remove.
-
-
-<br>
-
-- [ ] `TODO:20230-03-04-12-58-40` Refactor: Types - Remove `KeyMapType` Usage.
-
-<br>
-
-- [ ] `TODO:2023-06-04-23-45-31` - Impl: Adaptive Modal - `LayoutComputableValue`
-  * Layout value: "percentage relative to parent", "percentage relative to current window width/height", "percentage relative to screen width/height".
-  * Layout value: "dynamic constant - `safeAreaInsets` top/bottom/width/height", "dynamic constant -  current keyboard height/width", "constant value".
-  * Layout value should accept "array of computable layout values".
-  * Layout value should accept "offset + offset operation".
-  * Layout value should accept "min/max values".
-
-<br>
 
 
 - [x] Use Context to pass ref to functions

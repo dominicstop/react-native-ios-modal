@@ -1,9 +1,0 @@
-{
-  "platforms": ["ios"],
-  "ios": {
-    "modules": [
-      "RNIModalViewModule"
-    ],
-    "podspecPath": "./ios/ReactNativeIosModal.podspec"
-  }
-}

@@ -1,10 +1,16 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "../tsconfig.json",
+  "include": [
+    "./src",
+  ],
+  "exclude": [
+    "./node_modules",
+    "../src",
+  ],
   "compilerOptions": {
-    "strict": true,
-    "paths": {
-      "react-native-ios-modal": ["../src/index"],
-      "react-native-ios-modal/*": ["../src/*"]
-    }
+    "strict": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
   }
 }

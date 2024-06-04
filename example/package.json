@@ -1,28 +1,26 @@
 {
-  "name": "react-native-ios-modal-example",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "IosModalExample",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "pods": "pod-install --quiet"
   },
   "dependencies": {
-    "expo": "~49.0.13",
-    "react": "18.2.0",
-    "react-native": "0.72.5",
-    "react-native-ios-utilities": "4.0.0-3"
+    "@react-navigation/bottom-tabs": "^6.5.3",
+    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/native-stack": "^6.9.8",
+    "react": "18.1.0",
+    "react-native": "0.70.4",
+    "react-native-safe-area-context": "^4.5.0",
+    "react-native-screens": "^3.19.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@types/react": "~18.2.14",
-    "typescript": "^5.1.3"
-  },
-  "private": true,
-  "expo": {
-    "autolinking": {
-      "nativeModulesDir": ".."
-    }
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "metro-react-native-babel-preset": "0.72.3"
   }
 }
