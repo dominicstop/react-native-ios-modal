@@ -70,6 +70,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@dominicstop/ts-event-emitter": "^1.1.0",
     "@react-native/eslint-config": "^0.73.1",
     "@types/react": "^18.2.44",
     "del-cli": "^5.1.0",
@@ -80,11 +81,10 @@
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-builder-bob": "^0.20.0",
+    "react-native-ios-utilities": "next",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
-    "typescript": "^5.2.2",
-    "@dominicstop/ts-event-emitter": "^1.1.0",
-    "react-native-ios-utilities": "^5.0.0-0"
+    "typescript": "^5.2.2"
   },
   "resolutions": {
     "@types/react": "^18.2.44"
