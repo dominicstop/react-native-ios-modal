@@ -9,7 +9,9 @@
 
 #import "react-native-ios-modal/Swift.h"
 #import <react-native-ios-utilities/RNIBaseView.h>
+
 #import <react-native-ios-utilities/RNIContentViewParentDelegate.h>
+
 
 #import <react-native-ios-utilities/UIApplication+RNIHelpers.h>
 #import <react-native-ios-utilities/RNIObjcUtils.h>
@@ -69,8 +71,7 @@ using namespace facebook::react;
 
 + (Class)viewDelegateClass
 {
-  return nil;
-  //return [RNIDummyTestViewDelegate class];
+  return [RNIModalViewDelegate class];
 }
 
 // MARK: - Fabric

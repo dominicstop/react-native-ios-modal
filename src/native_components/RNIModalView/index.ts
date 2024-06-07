@@ -1,1 +1,2 @@
-export * from './RNIModalNativeView';
+export * from './RNIModalView';
+export * from './RNIModalViewTypes';

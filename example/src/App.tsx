@@ -1,12 +1,16 @@
 import * as React from 'react';
 
-import { StyleSheet, View } from 'react-native';
-import { IosModalView } from 'react-native-ios-modal';
+import { StyleSheet, View, Text } from 'react-native';
+import { RNIModalView } from 'react-native-ios-modal';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <IosModalView color="#32a852" style={styles.box} />
+      <RNIModalView style={{backgroundColor: 'red'}}>
+        <View>
+          <Text>Hello World</Text>
+        </View>
+      </RNIModalView>
     </View>
   );
 }

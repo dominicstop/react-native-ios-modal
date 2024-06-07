@@ -1,2 +1,2 @@
-export { default as IosModalView } from './IosModalViewNativeComponent';
-export * from './IosModalViewNativeComponent';
+// TEMP
+export * from './native_components/RNIModalView';
