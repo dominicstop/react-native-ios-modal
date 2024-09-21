@@ -8973,7 +8973,7 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.0
     react: 18.2.0
     react-native: 0.74.2
-    react-native-ios-utilities: next
+    react-native-ios-utilities: v5.0.0-44
   languageName: unknown
   linkType: soft
 
@@ -8992,7 +8992,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.74.2
     react-native-builder-bob: ^0.20.0
-    react-native-ios-utilities: next
+    react-native-ios-utilities: v5.0.0-44
     release-it: ^15.0.0
     turbo: ^1.10.7
     typescript: ^5.2.2
@@ -9003,13 +9003,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-ios-utilities@npm:next":
-  version: 5.0.0-0
-  resolution: "react-native-ios-utilities@npm:5.0.0-0"
+"react-native-ios-utilities@npm:v5.0.0-44":
+  version: 5.0.0-44
+  resolution: "react-native-ios-utilities@npm:5.0.0-44"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 0bc80c56878c3f0bddc654b311a8683517e2e995411feebd23fba65fdc1bb72314e20df4e7284f607e801858a460d91a2aa8e265c252da9c5adf41a195931c7a
+  checksum: f96505c95c3a3f8cf23b8d532d88ee79b598345b552dbd46c3b69d83fae4626f65bd80330d191cb1899c751a7669227908c63ba70f2d1981db18685222d6877b
   languageName: node
   linkType: hard
 
