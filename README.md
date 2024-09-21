@@ -1,31 +1,19 @@
 # react-native-ios-modal
 
-TBA
+## 🚧⚠️ Re-Write in Progress ⚠️🚧
 
-## Installation
+hello, this library is being re-written — please see the [`v2.x`](https://github.com/dominicstop/react-native-ios-modal/tree/v2.x) branch for the older version of this library + it's corresponding documentation.
 
-```sh
-npm install react-native-ios-modal
+* Support for iOS 15 sheet detents, and iOS 16 custom detents (+ all the related sheet-related customizations and events).
+* Typescript re-write for better auto-complete.
+* Streamlining the modal-related events, and exposing more events.
+* Better iPad support.
+* Etc.
+
+<br><br>
+
+Try out the wip version of the library:
+
 ```
-
-## Usage
-
-```js
-import { IosModalView } from "react-native-ios-modal";
-
-// ...
-
-<IosModalView color="tomato" />
+npm install react-native-ios-modal@next
 ```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
