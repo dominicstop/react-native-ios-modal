@@ -130,7 +130,7 @@
     ],
     "rules": {
       "prettier/prettier": [
-        "warn",
+        "ignore",
         {
           "quoteProps": "as-needed",
           "singleQuote": true,
