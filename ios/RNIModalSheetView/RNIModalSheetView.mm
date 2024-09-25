@@ -1,11 +1,11 @@
 //
-//  RNIModalView.mm
+//  RNIModalSheetView.mm
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 6/6/24.
 //
 
-#import "RNIModalView.h"
+#import "RNIModalSheetView.h"
 
 #import "react-native-ios-modal/Swift.h"
 #import <react-native-ios-utilities/RNIBaseView.h>
@@ -17,7 +17,7 @@
 #import <react-native-ios-utilities/RNIObjcUtils.h>
 
 #if RCT_NEW_ARCH_ENABLED
-#include "RNIModalViewComponentDescriptor.h"
+#include "RNIModalSheetViewComponentDescriptor.h"
 
 #include <react-native-ios-utilities/RNIBaseViewState.h>
 #include <react-native-ios-utilities/RNIBaseViewProps.h>
@@ -44,10 +44,10 @@ using namespace facebook::react;
 #endif
 
 
-@interface RNIModalView () <
+@interface RNIModalSheetView () <
   RNIContentViewParentDelegate,
 #ifdef RCT_NEW_ARCH_ENABLED
-  RCTRNIModalViewViewProtocol
+  RCTRNIModalSheetViewViewProtocol
 #else
   RCTInvalidating
 #endif
@@ -56,7 +56,7 @@ using namespace facebook::react;
 }
 @end
 
-@implementation RNIModalView {
+@implementation RNIModalSheetView {
 }
 
 // MARK: - Init
@@ -71,7 +71,7 @@ using namespace facebook::react;
 
 + (Class)viewDelegateClass
 {
-  return [RNIModalViewDelegate class];
+  return [RNIModalSheetViewDelegate class];
 }
 
 // MARK: - Fabric
@@ -80,12 +80,12 @@ using namespace facebook::react;
 #if RCT_NEW_ARCH_ENABLED
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNIModalViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNIModalSheetViewComponentDescriptor>();
 }
 
-Class<RCTComponentViewProtocol> RNIModalViewCls(void)
+Class<RCTComponentViewProtocol> RNIModalSheetViewCls(void)
 {
-  return RNIModalView.class;
+  return RNIModalSheetView.class;
 }
 #else
 

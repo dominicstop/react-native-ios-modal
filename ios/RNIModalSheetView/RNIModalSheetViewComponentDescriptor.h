@@ -1,5 +1,5 @@
 //
-//  RNIModalViewComponentDescriptor.h
+//  RNIModalSheetViewComponentDescriptor.h
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 6/6/24.
@@ -8,7 +8,7 @@
 #if __cplusplus
 #pragma once
 
-#include "RNIModalViewShadowNode.h"
+#include "RNIModalSheetViewShadowNode.h"
 #include "RNIBaseViewComponentDescriptor.h"
 
 #include <react-native-ios-utilities/RNIBaseViewState.h>
@@ -17,8 +17,10 @@
 
 namespace facebook::react {
 
-class RNIModalViewComponentDescriptor final
-  : public RNIBaseViewComponentDescriptor<RNIModalViewShadowNode> {
+class RNIModalSheetViewComponentDescriptor final : public RNIBaseViewComponentDescriptor<
+  RNIModalSheetViewShadowNode,
+  RNIModalSheetViewComponentName
+> {
   
 public:
   using RNIBaseViewComponentDescriptor::RNIBaseViewComponentDescriptor;

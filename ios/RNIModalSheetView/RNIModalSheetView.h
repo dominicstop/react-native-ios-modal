@@ -1,5 +1,5 @@
 //
-//  RNIModalView.h
+//  RNIModalSheetView.h
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 6/6/24.
@@ -22,6 +22,6 @@
 namespace react = facebook::react;
 #endif
 
-@interface RNIModalView : RNIBaseView
+@interface RNIModalSheetView : RNIBaseView
 
 @end

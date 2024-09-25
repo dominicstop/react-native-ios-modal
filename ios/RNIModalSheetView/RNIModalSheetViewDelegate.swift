@@ -1,5 +1,5 @@
 //
-//  RNIModalViewDelegate.swift
+//  RNIModalSheetViewDelegate.swift
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 6/6/24.
@@ -9,10 +9,10 @@ import UIKit
 import react_native_ios_utilities
 import DGSwiftUtilities
 
-@objc(RNIModalViewDelegate)
-public final class RNIModalViewDelegate: UIView, RNIContentView {
+@objc(RNIModalSheetViewDelegate)
+public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   
-  public static var propKeyPathMap: Dictionary<String, PartialKeyPath<RNIModalViewDelegate>> {
+  public static var propKeyPathMap: Dictionary<String, PartialKeyPath<RNIModalSheetViewDelegate>> {
     return [:];
   };
   
@@ -81,9 +81,9 @@ public final class RNIModalViewDelegate: UIView, RNIContentView {
   };
 };
 
-extension RNIModalViewDelegate: RNIContentViewDelegate {
+extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
 
-  public typealias KeyPathRoot = RNIModalViewDelegate;
+  public typealias KeyPathRoot = RNIModalSheetViewDelegate;
 
   // MARK: Paper + Fabric
   // --------------------

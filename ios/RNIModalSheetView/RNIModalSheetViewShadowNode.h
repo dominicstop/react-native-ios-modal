@@ -1,5 +1,5 @@
 //
-//  RNIModalViewShadowNode.h
+//  RNIModalSheetViewShadowNode.h
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 6/6/24.
@@ -21,10 +21,10 @@
 
 namespace facebook::react {
 
-JSI_EXPORT extern const char RNIModalViewComponentName[] = "RNIModalView";
+JSI_EXPORT extern const char RNIModalSheetViewComponentName[] = "RNIModalSheetView";
 
-class JSI_EXPORT RNIModalViewShadowNode final : public RNIBaseViewShadowNode<
-  RNIModalViewComponentName,
+class JSI_EXPORT RNIModalSheetViewShadowNode final : public RNIBaseViewShadowNode<
+  RNIModalSheetViewComponentName,
   RNIBaseViewProps,
   RNIBaseViewEventEmitter
 > {
