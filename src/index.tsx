@@ -1,2 +1,2 @@
-// TEMP
-export * from './native_components/RNIModalView';
+
+export * from './components/ModalSheetView';
