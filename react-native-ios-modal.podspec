@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
     '"${PODS_ROOT}/Headers/Public/hermes-engine"',
     '"${PODS_ROOT}/Headers/Private/React-Core"',
     '"${PODS_CONFIGURATION_BUILD_DIR}/react-native-ios-utilities/Swift Compatibility Header"',
-    '"${PODS_CONFIGURATION_BUILD_DIR}/react-native-ios-modal/Swift Compatibility Header"',
+    #'"${PODS_CONFIGURATION_BUILD_DIR}/react-native-ios-modal/Swift Compatibility Header"',
     #'"${PODS_ROOT}/Headers/Public/react-native-ios-utilities"',
     #'"${PODS_ROOT}/Headers/Private/react-native-ios-utilities"',
     #'"${PODS_CONFIGURATION_BUILD_DIR}/react-native-ios-utilities/Swift Compatibility Header"',
