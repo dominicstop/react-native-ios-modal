@@ -10,9 +10,15 @@
     "build:ios": "cd ios && xcodebuild -workspace IosModalExample.xcworkspace -scheme IosModalExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/native-stack": "^6.11.0",
     "react": "18.2.0",
     "react-native": "0.74.2",
-    "react-native-ios-utilities": "v5.0.0-44"
+    "react-native-codegen": "^0.70.7",
+    "react-native-ios-utilities": "v5.0.0-44",
+    "react-native-safe-area-context": "^4.11.0",
+    "react-native-screens": "^3.34.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
