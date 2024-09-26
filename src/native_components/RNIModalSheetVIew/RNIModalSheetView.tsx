@@ -30,6 +30,16 @@ export const RNIModalSheetView = React.forwardRef<
         /* commandArgs: */ commandArgs,
       );
     },
+    dismissModal: async (commandArgs) => {
+      if(viewID == null) return;
+      const module = Helpers.getRNIUtilitiesModule();
+
+      await module.viewCommandRequest(
+        /* viewID     : */ viewID,
+        /* commandName: */ 'dismissModal',
+        /* commandArgs: */ commandArgs,
+      );
+    },
   }));
 
   const reactChildrenCount = React.Children.count(props.children);
@@ -39,6 +49,7 @@ export const RNIModalSheetView = React.forwardRef<
       {...props}
       style={[
         styles.detachedView,
+        styles.detachedViewDebug,
         props.style,
       ]}
       reactChildrenCount={reactChildrenCount}

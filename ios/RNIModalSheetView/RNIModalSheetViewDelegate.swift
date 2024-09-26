@@ -23,12 +23,11 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // MARK: Properties
   // ----------------
   
-  var _didSendEvents = false;
-  
   // MARK: - Properties - RNIContentViewDelegate
   // -------------------------------------------
   
   public weak var parentReactView: RNIContentViewParentDelegate?;
+  public var modalSheetController: RNIModalSheetViewController?;
   
   public var detachedModalContentParentViews: [RNIContentViewParentDelegate] = [];
   
@@ -50,18 +49,9 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     fatalError("init(coder:) has not been implemented");
   }
   
-  // MARK: Functions
+  // MARK: - Methods
   // ---------------
   
-  public override func didMoveToWindow() {
-    guard self.window != nil,
-          let parentReactView = self.parentReactView
-    else { return };
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + 10){
-      parentReactView.setSize(.init(width: 300, height: 300));
-    };
-  };
 };
 
 extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
@@ -78,20 +68,14 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     superBlock: () -> Void
   ) {
   
-    guard let parentReactView = parentReactView else {
-      return;
-    };
-  
-    defer {
-      parentReactView.requestToRemoveReactSubview(childComponentView);
-      childComponentView.removeFromSuperview();
-    };
-  
     guard let reactView = childComponentView as? RNIContentViewParentDelegate,
           reactView.contentDelegate is RNIWrapperViewContent
     else {
       return;
     };
+    
+    reactView.removeFromSuperview();
+    reactView.attachReactTouchHandler();
     
     self.detachedModalContentParentViews.append(reactView);
   };
@@ -102,10 +86,7 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     index: NSInteger,
     superBlock: () -> Void
   ) {
-    #if !RCT_NEW_ARCH_ENABLED
-    superBlock();
-    #endif
-    
+    // no-op
   }
   
   public func notifyDidSetProps(sender: RNIContentViewParentDelegate) {
@@ -155,10 +136,27 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           );
           
           let modalVC = RNIModalSheetViewController();
+          self.modalSheetController = modalVC;
+          
           modalVC.mainSheetContentParent = mainSheetContentParent;
           modalVC.view.backgroundColor = .systemBackground;
           
           closestVC.present(modalVC, animated: isAnimated);
+          resolveBlock([:]);
+          
+        case "dismissModal":
+          guard let modalSheetController = self.modalSheetController else {
+            throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
+          };
+          
+          let isAnimated: Bool = commandArguments.getValueFromDictionary(
+            forKey: "isAnimated",
+            fallbackValue: true
+          );
+          
+          modalSheetController.dismiss(animated: isAnimated) {
+            self.modalSheetController = nil;
+          };
           
           resolveBlock([:]);
         
@@ -173,39 +171,12 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
   
   // MARK: Fabric Only
   // -----------------
-
+  
   #if RCT_NEW_ARCH_ENABLED
-  public func notifyOnUpdateProps(
-    sender: RNIContentViewParentDelegate,
-    oldProps: NSDictionary,
-    newProps: NSDictionary
-  ) {
-    // no-op
+  public func shouldRecycleContentDelegate(
+    sender: RNIContentViewParentDelegate
+  ) -> Bool {
+    return false;
   };
-  
-  public func notifyOnUpdateState(
-    sender: RNIContentViewParentDelegate,
-    oldState: NSDictionary?,
-    newState: NSDictionary
-  ) {
-    // no-op
-  };
-  
-  public func notifyOnFinalizeUpdates(
-    sender: RNIContentViewParentDelegate,
-    updateMaskRaw: Int,
-    updateMask: RNIComponentViewUpdateMask
-  ) {
-    // no-op
-  };
-  
-  public func notifyOnPrepareForReuse(sender: RNIContentViewParentDelegate) {
-    // no-op
-  };
-  #else
-  
-  // MARK: - Paper Only
-  // ------------------
-  
   #endif
 };

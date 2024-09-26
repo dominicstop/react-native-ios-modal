@@ -41,11 +41,11 @@ open class RNIModalSheetViewController: UIViewController {
     rootReactView.removeAllAncestorConstraints();
     #endif
     
-    self.view.addSubview(mainSheetContent);
-    mainSheetContent.translatesAutoresizingMaskIntoConstraints = false;
+    self.view.addSubview(mainSheetContentParent);
+    mainSheetContentParent.translatesAutoresizingMaskIntoConstraints = false;
         
     let constraints = self.positionConfigForMainSheetContent.createConstraints(
-      forView: mainSheetContent,
+      forView: mainSheetContentParent,
       attachingTo: self.view,
       enclosingView: self.view
     );
@@ -96,6 +96,13 @@ open class RNIModalSheetViewController: UIViewController {
 extension RNIModalSheetViewController: RNIViewLifecycle {
   
   public func notifyOnRequestForCleanup(sender: RNIContentViewParentDelegate) {
+    guard let mainSheetContentParent = self.mainSheetContentParent else {
+      return;
+    };
+    
+    mainSheetContentParent.detachReactTouchHandler();
+    self.mainSheetContentParent?.removeFromSuperview();
+    
     guard self.shouldTriggerDefaultCleanup,
           self.view.window != nil
     else {
@@ -103,7 +110,7 @@ extension RNIModalSheetViewController: RNIViewLifecycle {
     };
     
     if self.presentingViewController != nil {
-      self.dismiss(animated: true);
+      self.dismiss(animated: false);
       
     } else if self.parent != nil {
       self.willMove(toParent: nil);

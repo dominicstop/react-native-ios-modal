@@ -25,7 +25,8 @@ export function ModalSheetViewContent(
 
   const didDetach = 
        (props.isParentDetached ?? false)
-    || detachedSubviewEntry.didDetachFromOriginalParent;
+    || detachedSubviewEntry.didDetachFromOriginalParent
+    || true
 
   return (
     <RNIWrapperView

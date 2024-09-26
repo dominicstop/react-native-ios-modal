@@ -12,6 +12,10 @@ export type RNIModalSheetViewRef = {
   presentModal: (commandArgs: {
     isAnimated: boolean;
   }) => Promise<void>;
+
+  dismissModal: (commandArgs: {
+    isAnimated: boolean;
+  }) => Promise<void>;
 };
 
 export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheetNativeViewProps,

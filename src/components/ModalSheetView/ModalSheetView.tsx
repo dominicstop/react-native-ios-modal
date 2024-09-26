@@ -31,6 +31,16 @@ export const ModalSheetView = React.forwardRef<
         ...commandArgs,
       });
     },
+    dismissModal: async (commandArgs) => {
+      if(nativeRef.current == null) {
+        throw Error("Unable to get ref to native sheet");
+      };
+
+      await nativeRef.current.dismissModal({
+        isAnimated: true,
+        ...commandArgs,
+      });
+    },
   }));
 
   const shouldEnableDebugBackgroundColors = 
@@ -58,7 +68,6 @@ export const ModalSheetView = React.forwardRef<
 const styles = StyleSheet.create({
   nativeModalSheet: {
     position: 'absolute',
-    pointerEvents: 'none',
-    opacity: 0,
+    opacity: 0.01,
   },
 });
