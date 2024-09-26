@@ -40,7 +40,6 @@ export function ModalSheetViewContent(
           ? styles.wrapperViewDetached
           : styles.wrapperViewAttached
         ),
-        props.style,
       ]}
       onDidSetViewID={(event) => {
         props.onDidSetViewID?.(event);

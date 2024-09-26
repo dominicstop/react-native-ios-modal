@@ -1,7 +1,7 @@
 
 
 export * from './ModalSheetView';
-export * from './ModalSheetViewContent';
+export * from './ModalSheetViewMainContent';
 
 export type * from './ModalSheetViewTypes';
 export type * from './ModalSheetViewContentTypes';

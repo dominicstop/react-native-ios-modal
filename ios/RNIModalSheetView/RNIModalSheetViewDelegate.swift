@@ -11,6 +11,10 @@ import react_native_ios_utilities
 
 @objc(RNIModalSheetViewDelegate)
 public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
+
+  enum NativeIDKey: String {
+    case mainSheetContent;
+  };
   
   public static var propKeyPathMap: Dictionary<String, PartialKeyPath<RNIModalSheetViewDelegate>> {
     return [:];
@@ -23,13 +27,15 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // MARK: Properties
   // ----------------
   
+  public var detachedModalContentParentViews: [RNIContentViewParentDelegate] = [];
+  
+  public var modalSheetController: RNIModalSheetViewController?;
+  public var sheetMainContentParentView: RNIContentViewParentDelegate?;
+  
   // MARK: - Properties - RNIContentViewDelegate
   // -------------------------------------------
   
   public weak var parentReactView: RNIContentViewParentDelegate?;
-  public var modalSheetController: RNIModalSheetViewController?;
-  
-  public var detachedModalContentParentViews: [RNIContentViewParentDelegate] = [];
   
   // MARK: Properties - Props
   // ------------------------
@@ -68,16 +74,27 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     superBlock: () -> Void
   ) {
   
+    defer {
+      childComponentView.removeFromSuperview();
+    };
+  
     guard let reactView = childComponentView as? RNIContentViewParentDelegate,
-          reactView.contentDelegate is RNIWrapperViewContent
+          reactView.contentDelegate is RNIWrapperViewContent,
+          let nativeID = reactView.reactNativeID,
+          let nativeIDKey = NativeIDKey(rawValue: nativeID)
     else {
       return;
     };
     
-    reactView.removeFromSuperview();
-    reactView.attachReactTouchHandler();
+    defer {
+      reactView.attachReactTouchHandler();
+      self.detachedModalContentParentViews.append(reactView);
+    };
     
-    self.detachedModalContentParentViews.append(reactView);
+    switch nativeIDKey {
+      case .mainSheetContent:
+        self.sheetMainContentParentView = reactView;
+    };
   };
   
   public func notifyOnUnmountChildComponentView(
@@ -122,11 +139,8 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           guard let closestVC = closestVC else {
             throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
           };
-          
-          let mainSheetContentParent =
-            self.detachedModalContentParentViews.first;
 
-          guard let mainSheetContentParent = mainSheetContentParent else {
+          guard let mainSheetContentParent = self.sheetMainContentParentView else {
             throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
           };
           

@@ -1,5 +1,4 @@
 import type { ViewStyle } from 'react-native';
-
 import type { RNIWrapperViewProps } from 'react-native-ios-utilities';
 
 import type { RNIModalSheetViewProps } from "../../native_components/RNIModalSheetVIew";
@@ -8,6 +7,9 @@ import type { ModalSheetContentMap } from "./ModalSheetContentMap";
 
 export type ModalSheetViewContentInheritedProps = Pick<RNIModalSheetViewProps, 
   | 'shouldEnableDebugBackgroundColors'
+> & Pick<RNIWrapperViewProps,
+  | 'onDidSetViewID'
+  | 'nativeID'
 >;
 
 export type ModalSheetViewContentBaseProps = {
@@ -17,6 +19,5 @@ export type ModalSheetViewContentBaseProps = {
 };
 
 export type ModalSheetViewContentProps = 
-    RNIWrapperViewProps
   & ModalSheetViewContentInheritedProps
   & ModalSheetViewContentBaseProps;
