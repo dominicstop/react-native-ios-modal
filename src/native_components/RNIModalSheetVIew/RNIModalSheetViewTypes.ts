@@ -8,7 +8,10 @@ import type { RNIModalSheetNativeViewProps } from "./RNIModalSheetNativeView";
 export type RNIModalSheetViewRef = {
   getViewID: () => StateViewID;
   getReactTag: () => StateReactTag;
-  presentModal: () => Promise<void>;
+  
+  presentModal: (commandArgs: {
+    isAnimated: boolean;
+  }) => Promise<void>;
 };
 
 export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheetNativeViewProps,

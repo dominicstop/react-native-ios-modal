@@ -1,12 +1,17 @@
 import type { PropsWithChildren } from "react";
 import type { ViewProps } from "react-native";
+import type { RemapObject } from "react-native-ios-utilities";
 
-import type { RNIModalSheetViewProps } from "../../native_components/RNIModalSheetVIew";
+import type { RNIModalSheetViewProps, RNIModalSheetViewRef } from "../../native_components/RNIModalSheetVIew";
 
 
-export type ModalSheetViewRef = {
-  presentModal: () => Promise<void>;
-};
+export type ModalSheetViewRef = RemapObject<Pick<RNIModalSheetViewRef,
+  | 'presentModal'
+>, {
+  presentModal: (commandArgs?: {
+    isAnimated?: boolean;
+  }) => Promise<void>;
+}>;
 
 export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
   | 'onDidSetViewID'

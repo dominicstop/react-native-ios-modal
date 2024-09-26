@@ -20,14 +20,14 @@ export const RNIModalSheetView = React.forwardRef<
     getViewID: () => {
       return viewID;
     },
-    presentModal: async () => {
+    presentModal: async (commandArgs) => {
       if(viewID == null) return;
       const module = Helpers.getRNIUtilitiesModule();
 
       await module.viewCommandRequest(
         /* viewID     : */ viewID,
         /* commandName: */ 'presentModal',
-        /* commandArgs: */ {}
+        /* commandArgs: */ commandArgs,
       );
     },
   }));

@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import react_native_ios_utilities
 import DGSwiftUtilities
+import react_native_ios_utilities
 
 @objc(RNIModalSheetViewDelegate)
 public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
@@ -29,6 +29,8 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // -------------------------------------------
   
   public weak var parentReactView: RNIContentViewParentDelegate?;
+  
+  public var detachedModalContentParentViews: [RNIContentViewParentDelegate] = [];
   
   // MARK: Properties - Props
   // ------------------------
@@ -60,25 +62,6 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
       parentReactView.setSize(.init(width: 300, height: 300));
     };
   };
-  
-  func _setupContent(){
-    self.backgroundColor = .systemPink;
-  
-    let label = UILabel();
-    label.text = "Fabric View (sort of) in Swift";
-    
-    label.translatesAutoresizingMaskIntoConstraints = false;
-    self.addSubview(label);
-    
-    NSLayoutConstraint.activate([
-      label.centerXAnchor.constraint(
-        equalTo: self.centerXAnchor
-      ),
-      label.centerYAnchor.constraint(
-        equalTo: self.centerYAnchor
-      ),
-    ]);
-  };
 };
 
 extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
@@ -87,10 +70,6 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
 
   // MARK: Paper + Fabric
   // --------------------
-  
-  public func notifyOnInit(sender: RNIContentViewParentDelegate) {
-    self._setupContent();
-  };
     
   public func notifyOnMountChildComponentView(
     sender: RNIContentViewParentDelegate,
@@ -98,12 +77,23 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     index: NSInteger,
     superBlock: () -> Void
   ) {
-    #if !RCT_NEW_ARCH_ENABLED
-    superBlock();
-    #endif
+  
+    guard let parentReactView = parentReactView else {
+      return;
+    };
+  
+    defer {
+      parentReactView.requestToRemoveReactSubview(childComponentView);
+      childComponentView.removeFromSuperview();
+    };
+  
+    guard let reactView = childComponentView as? RNIContentViewParentDelegate,
+          reactView.contentDelegate is RNIWrapperViewContent
+    else {
+      return;
+    };
     
-    // Note: Window might not be available yet
-    self.addSubview(childComponentView);
+    self.detachedModalContentParentViews.append(reactView);
   };
   
   public func notifyOnUnmountChildComponentView(
@@ -137,7 +127,48 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     resolve resolveBlock: (NSDictionary) -> Void,
     reject rejectBlock: (String) -> Void
   ) {
-    // no-op
+    
+    do {
+      guard let commandArguments = commandArguments as? Dictionary<String, Any> else {
+        throw RNIUtilitiesError(errorCode: .guardCheckFailed);
+      };
+      
+      switch commandName {
+        case "presentModal":
+          let closestVC =
+            self.recursivelyFindNextResponder(withType: UIViewController.self);
+            
+          guard let closestVC = closestVC else {
+            throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
+          };
+          
+          let mainSheetContentParent =
+            self.detachedModalContentParentViews.first;
+
+          guard let mainSheetContentParent = mainSheetContentParent else {
+            throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
+          };
+          
+          let isAnimated: Bool = commandArguments.getValueFromDictionary(
+            forKey: "isAnimated",
+            fallbackValue: true
+          );
+          
+          let modalVC = RNIModalSheetViewController();
+          modalVC.mainSheetContentParent = mainSheetContentParent;
+          modalVC.view.backgroundColor = .systemBackground;
+          
+          closestVC.present(modalVC, animated: isAnimated);
+          
+          resolveBlock([:]);
+        
+        default:
+          throw RNIUtilitiesError(errorCode: .invalidValue);
+      };
+    
+    } catch {
+      rejectBlock(error.localizedDescription);
+    };
   };
   
   // MARK: Fabric Only

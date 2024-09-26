@@ -21,7 +21,15 @@ export const ModalSheetView = React.forwardRef<
   ] = React.useState<ModalSheetContentMap>({});
 
   React.useImperativeHandle(ref, () => ({
-    presentModal: async () => {
+    presentModal: async (commandArgs) => {
+      if(nativeRef.current == null) {
+        throw Error("Unable to get ref to native sheet");
+      };
+
+      await nativeRef.current.presentModal({
+        isAnimated: true,
+        ...commandArgs,
+      });
     },
   }));
 

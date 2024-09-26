@@ -8,8 +8,6 @@
 #import "RNIModalSheetView.h"
 #import <objc/runtime.h>
 
-#import "react-native-ios-utilities/RNIBaseViewUtils.h"
-
 #import "RCTBridge.h"
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
