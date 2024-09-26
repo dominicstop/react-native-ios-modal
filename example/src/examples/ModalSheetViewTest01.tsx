@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewContent, type ModalSheetViewRef } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewMainContent, type ModalSheetViewRef } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
 
@@ -38,7 +38,7 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
       <ModalSheetView
         ref={ref => modalSheetViewRef.current = ref}
       >
-        <ModalSheetViewContent
+        <ModalSheetViewMainContent
           contentContainerStyle={styles.modalContent}
         >
           <ExampleItemCard
@@ -61,7 +61,7 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
               }}
             />
           </ExampleItemCard>
-        </ModalSheetViewContent>
+        </ModalSheetViewMainContent>
       </ModalSheetView>
     </ExampleItemCard>
   );
