@@ -8,6 +8,7 @@ import { ModalSheetView, ModalSheetViewMainContent, type ModalSheetViewRef } fro
 import type { ExampleItemProps } from './SharedExampleTypes';
 import type { ModalMetrics } from '../../../src/types/ModalMetrics';
 
+let shouldEnableModalEventsLogging = false;
 
 export function ModalSheetViewTest01(props: ExampleItemProps) {
   const modalSheetViewRef = React.useRef<ModalSheetViewRef | null>(null);
@@ -136,6 +137,72 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
       </React.Fragment>
       <ModalSheetView
         ref={ref => modalSheetViewRef.current = ref}
+        onModalWillPresent={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalWillPresent",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalDidPresent={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalDidPresent",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalWillShow={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalWillShow",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalDidShow={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalDidShow",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalWillHide={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalWillHide",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalDidHide={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalDidHide",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
       >
         <ModalSheetViewMainContent
           contentContainerStyle={styles.modalContent}
