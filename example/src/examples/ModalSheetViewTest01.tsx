@@ -6,10 +6,16 @@ import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'reac
 import { ModalSheetView, ModalSheetViewMainContent, type ModalSheetViewRef } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
+import type { ModalMetrics } from '../../../src/types/ModalMetrics';
 
 
 export function ModalSheetViewTest01(props: ExampleItemProps) {
   const modalSheetViewRef = React.useRef<ModalSheetViewRef | null>(null);
+
+  const [
+    modalMetrics,
+    setModalMetrics
+  ] = React.useState<ModalMetrics | undefined>();
 
   const [
     shouldMountRecursiveContent,
@@ -18,6 +24,37 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
 
   const recursionLevel = 
     props.extraProps?.recursionLevel as any as number ?? 0;
+
+  let dataForDebugDisplay = {
+  };
+  
+  if(modalMetrics != null) {
+    const modalMetricsUpdated = {
+      ...modalMetrics,
+      modalViewControllerMetrics: {
+        ...modalMetrics.modalViewControllerMetrics,
+        instanceID: [
+          modalMetrics.modalViewControllerMetrics.instanceID
+        ],
+      },
+      presentationControllerMetrics: {
+        ...modalMetrics.presentationControllerMetrics,
+        instanceID: [
+          modalMetrics.presentationControllerMetrics?.instanceID
+        ],
+      },
+    };
+
+    dataForDebugDisplay = {
+      ...dataForDebugDisplay,
+      ...modalMetricsUpdated
+    };
+  };
+
+  const hasDataForDebugDisplay = 
+    Object.keys(dataForDebugDisplay).length > 0;
+
+  const isFirstRecursion = (recursionLevel == 0);
 
   return (
     <ExampleItemCard
@@ -30,7 +67,10 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
     >
       <ObjectPropertyDisplay
         recursiveStyle={styles.debugDisplayInner}
-        object={undefined}
+        object={hasDataForDebugDisplay 
+          ? dataForDebugDisplay 
+          : undefined
+        }
       />
       <CardButton
         title={'Present Sheet Modal'}
@@ -46,16 +86,49 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
         }}
       />
       <React.Fragment>
-        {(recursionLevel != 0) && (
+        {!isFirstRecursion && (
           <CardButton
             title={'Dismiss Modal'}
             subtitle={'Dismiss current modal'}
             onPress={async () => {
-              await modalSheetViewRef.current?.dismissModal();
+              const modalSheetViewRefPrev: ModalSheetViewRef | null = 
+                props.extraProps?.modalSheetViewRefPrev as any;
+              
+              if(modalSheetViewRefPrev == null){
+                return;
+              };
+
+              await modalSheetViewRefPrev.dismissModal();
               console.log(
                 'ModalSheetViewTest01',
                 '\n - dismiss modal completed',
                 `\n - recursionLevel: ${recursionLevel}`
+              );
+            }}
+          />
+        )}
+        {!isFirstRecursion && (
+          <CardButton
+            title={'Get modal metrics for prev. modal'}
+            subtitle={'invoke `getModalMetrics`'}
+            onPress={async () => {
+
+              const modalSheetViewRefPrev: ModalSheetViewRef | null = 
+                props.extraProps?.modalSheetViewRefPrev as any;
+              
+              if(modalSheetViewRefPrev == null){
+                return;
+              };
+
+              const modalMetrics = 
+                await modalSheetViewRefPrev.getModalMetrics();
+
+              setModalMetrics(modalMetrics);
+              console.log(
+                'ModalSheetViewTest01',
+                '\n - invoked getModalMetrics',
+                '\n',
+                modalMetrics,
               );
             }}
           />
@@ -77,6 +150,7 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
                 index={props.index}
                 extraProps={{
                   recursionLevel: recursionLevel + 1,
+                  modalSheetViewRefPrev: modalSheetViewRef.current,
                 }}
               />
             )}
