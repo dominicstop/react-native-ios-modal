@@ -31,11 +31,12 @@ export type ModalSheetViewRef =
   & ModalSheetViewRefInheritedRemapped;
 
 export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
-  | 'onDidSetViewID'
   | 'shouldEnableDebugBackgroundColors'
 >;
 
-export type ModalSheetViewBaseProps = {};
+export type ModalSheetViewBaseProps = {
+  isModalContentLazy?: boolean;
+};
 
 export type ModalSheetViewProps = PropsWithChildren<
     ModalSheetViewInheritedProps 

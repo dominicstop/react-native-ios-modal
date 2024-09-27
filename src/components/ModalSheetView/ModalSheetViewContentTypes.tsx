@@ -16,6 +16,7 @@ export type ModalSheetViewContentBaseProps = {
   contentContainerStyle?: ViewStyle;
   isParentDetached?: boolean;
   modalSheetContentMap?: ModalSheetContentMap;
+  shouldMountModalContent?: boolean;
 };
 
 export type ModalSheetViewContentProps = 

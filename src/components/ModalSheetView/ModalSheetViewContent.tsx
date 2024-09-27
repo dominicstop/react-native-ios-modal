@@ -19,6 +19,8 @@ export function ModalSheetViewContent(
     props.contentContainerStyle,
   ];
 
+  const shouldMountModalContent = props.shouldMountModalContent ?? false;
+
   const detachedSubviewEntry = 
        (viewID != null ? props.modalSheetContentMap?.[viewID] : undefined ) 
     ?? DEFAULT_SHEET_CONTENT_ENTRY;
@@ -50,13 +52,13 @@ export function ModalSheetViewContent(
       }}
     >
       {IS_USING_NEW_ARCH ? (
-        props.children
+        shouldMountModalContent && props.children
       ) : (
         <View style={[
           styles.innerWrapperContainerForPaper,
           ...wrapperStyle,
         ]}>
-          {props.children}
+          {shouldMountModalContent && props.children}
         </View>
       )}
     </RNIWrapperView>
