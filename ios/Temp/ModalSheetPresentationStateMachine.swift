@@ -17,6 +17,8 @@ public class ModalSheetPresentationStateMachine {
   public var didPresent = false;
   public var didDismissAfterPresented = false;
   
+  public var eventDelegates:
+    MulticastDelegate<ModalSheetPresentationStateEventsNotifiable> = .init();
     
   // MARK: - Methods
   // ---------------
@@ -39,6 +41,15 @@ public class ModalSheetPresentationStateMachine {
       );
     };
     #endif
+    
+    self.eventDelegates.invoke {
+      $0.onModalSheetStateWillChange(
+        sender: self,
+        prevState: prevState,
+        currentState: currentState,
+        nextState: nextState
+      );
+    };
   
     self.prevState = self.currentState;
     self.currentState = nextState;
@@ -71,6 +82,14 @@ public class ModalSheetPresentationStateMachine {
       );
     };
     #endif
+    
+    self.eventDelegates.invoke {
+      $0.onModalSheetStateDidChange(
+        sender: self,
+        prevState: self.prevState,
+        currentState: self.currentState
+      );
+    };
   };
   
   public func setState(nextState: ModalSheetState) {
