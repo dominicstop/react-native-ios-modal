@@ -216,7 +216,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
          + "\n - isTopMostModal: \($1.element.isTopMostModal)"
          + "\n - modalLevel: \($1.element.modalLevel?.description ?? "N/A")"
          + "\n - isUsingSheetPresentationController: \($1.element.isUsingSheetPresentationController)"
-         + "\n - modalPanGesture: \($1.element.modalPanGesture?.debugDescription ?? "N/A")";
+         + "\n - closestSheetPanGesture: \($1.element.closestSheetPanGesture?.debugDescription ?? "N/A")";
     };
     
     print(debugMessage);

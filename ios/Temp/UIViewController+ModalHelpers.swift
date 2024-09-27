@@ -30,7 +30,7 @@ extension UIViewController {
   // MARK: - Computed Properties
   // ---------------------------
 
-  public var modalPanGestureViaPresentationController: UIPanGestureRecognizer? {
+  public var closestSheetPanGestureViaPresentationController: UIPanGestureRecognizer? {
     guard let presentationController = self.presentationController,
           let presentedView = presentationController.presentedView,
           let gestureRecognizers = presentedView.gestureRecognizers
@@ -49,7 +49,7 @@ extension UIViewController {
     return match;
   };
   
-  public var modalPanGestureViaClimbingParentViews: UIPanGestureRecognizer? {
+  public var closestSheetPanGestureViaClimbingParentView: UIPanGestureRecognizer? {
     guard let targetClassName = PrivateSymbolString.classNameForDropShadowView.decodedString else {
       return nil;
     };
@@ -76,9 +76,9 @@ extension UIViewController {
     return matchingGestureRecognizer;
   };
   
-  public var modalPanGesture: UIPanGestureRecognizer? {
-       self.modalPanGestureViaPresentationController
-    ?? self.modalPanGestureViaClimbingParentViews;
+  public var closestSheetPanGesture: UIPanGestureRecognizer? {
+       self.closestSheetPanGestureViaPresentationController
+    ?? self.closestSheetPanGestureViaClimbingParentView;
   };
   
   public var modalRootScrollViewGestureRecognizer: UIPanGestureRecognizer? {
