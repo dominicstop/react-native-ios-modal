@@ -8,6 +8,7 @@
 import Foundation
 import DGSwiftUtilities
 
+
 public protocol UniqueIdentifierSynthesizing: AnyObject {
   
   var synthesizedIntID: UInt64 { get };
@@ -67,23 +68,18 @@ public extension UniqueIdentifierSynthesizing where Self: AnyObject {
 // MARK: - ObjectUniquelyIdentifiable+Default
 // ------------------------------------------
 
+fileprivate let atomicCounter: AtomicCounter = .init();
+
 fileprivate enum PropertyKeys: String {
-  case atomicCounter;
   case synthesizedIntID;
   case synthesizedUUID;
 };
 
 extension UniqueIdentifierSynthesizing where Self: ValueInjectable {
   
-  fileprivate var atomicCounter: AtomicCounter {
-    self.getInjectedValue(forKey: PropertyKeys.atomicCounter) {
-      .init();
-    };
-  };
-  
   public var synthesizedIntID: UInt64 {
     self.getInjectedValue(forKey: PropertyKeys.synthesizedIntID) {
-      self.atomicCounter.incrementAndGet();
+      atomicCounter.incrementAndGet();
     };
   };
   
