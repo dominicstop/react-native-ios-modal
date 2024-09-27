@@ -126,8 +126,8 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   // ---------------------
   
   #if DEBUG
-  public static var _debugShouldLogSheetEvents = true;
-  public static var _debugShouldLogGesture = true;
+  public static var _debugShouldLogSheetEvents = false;
+  public static var _debugShouldLogGesture = false;
   #endif
 };
 
