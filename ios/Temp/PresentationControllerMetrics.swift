@@ -9,7 +9,9 @@ import UIKit
 import DGSwiftUtilities
 
 
-public struct PresentationControllerMetrics: Encodable {
+public struct PresentationControllerMetrics: DictionaryRepresentationSynthesizing {
+
+  public var instanceID: String;
 
   public var frameOfPresentedViewInContainerView: CGRect;
   public var preferredContentSize: CGSize;
@@ -22,7 +24,32 @@ public struct PresentationControllerMetrics: Encodable {
   public var shouldPresentInFullscreen: Bool;
   public var shouldRemovePresentersView: Bool;
   
+  // MARK: - Init
+  // ------------
+  
+  public init(
+    instanceID: String,
+    frameOfPresentedViewInContainerView: CGRect,
+    preferredContentSize: CGSize,
+    presentedViewFrame: CGRect?,
+    containerViewFrame: CGRect?,
+    adaptivePresentationStyle: String,
+    shouldPresentInFullscreen: Bool,
+    shouldRemovePresentersView: Bool
+  ) {
+    self.instanceID = instanceID;
+    self.frameOfPresentedViewInContainerView = frameOfPresentedViewInContainerView;
+    self.preferredContentSize = preferredContentSize;
+    self.presentedViewFrame = presentedViewFrame;
+    self.containerViewFrame = containerViewFrame;
+    self.adaptivePresentationStyle = adaptivePresentationStyle;
+    self.shouldPresentInFullscreen = shouldPresentInFullscreen;
+    self.shouldRemovePresentersView = shouldRemovePresentersView;
+  };
+  
   public init(from presentationController: UIPresentationController) {
+    self.instanceID = presentationController.synthesizedStringID;
+  
     self.frameOfPresentedViewInContainerView =
       presentationController.frameOfPresentedViewInContainerView;
       
