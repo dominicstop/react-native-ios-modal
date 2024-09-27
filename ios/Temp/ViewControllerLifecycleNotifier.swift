@@ -187,11 +187,15 @@ open class ViewControllerLifecycleNotifier: UIViewController {
   // ---------------------
   
   #if DEBUG
-  public static var _debugShouldLog = true;
+  public static var _debugShouldLog = false;
   
   private var _debugDidAutoLogViewControllerMetrics = false;
 
   func debugLogViewControllerMetrics(invoker: String = #function){
+    guard Self._debugShouldLog else {
+      return;
+    };
+    
     var debugMessage =
         "ViewControllerLifecycleNotifier.logViewControllerMetrics"
       + "\n - invoker: \(invoker)"
