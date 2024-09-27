@@ -9,6 +9,6 @@ import Foundation
 import DGSwiftUtilities
 
 
-extension NSObject: UniqueIdentifierSynthesizing {
+extension UIViewController: UniqueIdentifierSynthesizing {
   // empty requirements
 };
