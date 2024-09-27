@@ -39,6 +39,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   
   public override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated);
+    self.setupSheetGestureIfNeeded();
   };
     
   // MARK: - Setup
@@ -55,14 +56,14 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
       self.presentationControllerDelegateProxy = self;
     };
     
-    self._setupSheetGesture();
-    
     presentationController.delegate = self;
     self._didSetup = true;
   };
   
-  private func _setupSheetGesture(){
-    guard let closestSheetPanGesture = self.closestSheetPanGesture else {
+  public func setupSheetGestureIfNeeded(){
+    guard self.sheetGesture == nil,
+          let closestSheetPanGesture = self.closestSheetPanGesture
+    else {
       return;
     };
     
