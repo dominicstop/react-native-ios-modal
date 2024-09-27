@@ -21,15 +21,15 @@ public protocol UniqueIdentifierSynthesizing: AnyObject {
 public extension UniqueIdentifierSynthesizing where Self: NSObject {
 
   var synthesizedStringID: String {
-    "\(self.className)-\(self.synthesizedIntID)";
+    "\(self.classNameTruncated)-\(self.synthesizedIntID)";
   };
   
   var synthesizedLongStringID: String {
-    "\(self.className)-\(self.synthesizedUUID)";
+    "\(self.classNameTruncated)-\(self.synthesizedUUID)";
   };
   
   var synthesizedVeryLongStringID: String {
-    "\(self.className)-\(self.synthesizedIntID)-\(self.synthesizedUUID)";
+    "\(self.classNameTruncated)-\(self.synthesizedIntID)-\(self.synthesizedUUID)";
   };
 };
 
@@ -37,19 +37,30 @@ public extension UniqueIdentifierSynthesizing where Self: NSObject {
 public extension UniqueIdentifierSynthesizing where Self: AnyObject {
 
   fileprivate var className: String {
-    String(describing: type(of: self));
+    return String(describing: type(of: self));
+  };
+
+  fileprivate var classNameTruncated: String {
+    let fullClassName = self.className;
+    let classNameComponents = fullClassName.components(separatedBy: ".");
+    
+    guard let className = classNameComponents.last else {
+      return fullClassName;
+    };
+    
+    return className;
   };
 
   var synthesizedStringID: String {
-    "\(self.className)-\(self.synthesizedIntID)";
+    "\(self.classNameTruncated)-\(self.synthesizedIntID)";
   };
   
   var synthesizedLongStringID: String {
-    "\(self.className)-\(self.synthesizedUUID)";
+    "\(self.classNameTruncated)-\(self.synthesizedUUID)";
   };
   
   var synthesizedVeryLongStringID: String {
-    "\(self.className)-\(self.synthesizedIntID)-\(self.synthesizedUUID)";
+    "\(self.classNameTruncated)-\(self.synthesizedIntID)-\(self.synthesizedUUID)";
   };
 };
 
