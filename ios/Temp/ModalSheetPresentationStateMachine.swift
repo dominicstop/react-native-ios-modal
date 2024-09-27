@@ -17,12 +17,28 @@ public class ModalSheetPresentationStateMachine {
   public var didPresent = false;
   public var didDismissAfterPresented = false;
   
-  public var eventDelegates:
-    MulticastDelegate<ModalSheetStateEventNotifiable> = .init();
+    
+  // MARK: - Methods
+  // ---------------
   
   public func setStateExplicit(nextState: ModalSheetState){
     let prevState = self.prevState;
     let currentState = self.currentState;
+    
+    #if DEBUG
+    if Self._debugShouldLog {
+      print(
+        "ModalSheetPresentationStateMachine.\(#function) - PRE",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - prevState:", prevState?.rawValue ?? "N/A",
+        "\n - currentState:", currentState,
+        "\n - arg, nextState:", nextState,
+        "\n - self.didPresent:", self.didPresent,
+        "\n - self.didDismissAfterPresented:", self.didDismissAfterPresented,
+        "\n"
+      );
+    };
+    #endif
   
     self.prevState = self.currentState;
     self.currentState = nextState;
@@ -41,9 +57,34 @@ public class ModalSheetPresentationStateMachine {
       default:
         break;
     };
+    
+    #if DEBUG
+    if Self._debugShouldLog {
+      print(
+        "ModalSheetPresentationStateMachine.\(#function) - POST",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - self.prevState:", self.prevState?.rawValue ?? "N/A",
+        "\n - self.currentState:", self.currentState,
+        "\n - self.didPresent:", self.didPresent,
+        "\n - self.didDismissAfterPresented:", self.didDismissAfterPresented,
+        "\n"
+      );
+    };
+    #endif
   };
   
-  public func setState(nextState: ModalSheetState){
+  public func setState(nextState: ModalSheetState) {
+    #if DEBUG
+    if Self._debugShouldLog {
+      print(
+        "ModalSheetPresentationStateMachine.\(#function)",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - arg, nextState:", nextState,
+        "\n"
+      );
+    };
+    #endif
+    
     switch (self.prevState, self.currentState, nextState) {
       
       default:
@@ -54,12 +95,29 @@ public class ModalSheetPresentationStateMachine {
   };
   
   public func reset(){
+    #if DEBUG
+    if Self._debugShouldLog {
+      print(
+        "ModalSheetPresentationStateMachine.\(#function)",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n"
+      );
+    };
+    #endif
+    
     self.prevState = nil;
     self.currentState = .dismissed;
     
     self.didPresent = false;
     self.didDismissAfterPresented = false;
   };
+  
+  // MARK: - Debug-Related
+  // ---------------------
+  
+  #if DEBUG
+  public static var _debugShouldLog = true;
+  #endif
 };
 
 extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable {
