@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DGSwiftUtilities
 import react_native_ios_utilities
 
 #if !RCT_NEW_ARCH_ENABLED
@@ -13,7 +14,7 @@ import React
 #endif
 
 
-open class RNIModalSheetViewController: UIViewController {
+open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifier {
 
   public var shouldTriggerDefaultCleanup = true;
   
@@ -43,6 +44,7 @@ open class RNIModalSheetViewController: UIViewController {
   // ---------------------------------
 
   public override func viewDidLoad() {
+    super.viewDidLoad();
   
     guard let mainSheetContentParent = self.mainSheetContentParent,
           let mainSheetContent = mainSheetContentParent.contentDelegate as? RNIWrapperViewContent
@@ -90,7 +92,9 @@ open class RNIModalSheetViewController: UIViewController {
     };
   };
 
-  public override func viewDidLayoutSubviews() {
+  public override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews();
+    
     guard let mainSheetContentParent = self.mainSheetContentParent else {
       return;
     };
