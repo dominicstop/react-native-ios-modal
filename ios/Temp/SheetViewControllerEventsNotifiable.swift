@@ -24,6 +24,12 @@ public protocol SheetViewControllerEventsNotifiable: AnyObject {
     sender: UIViewController,
     presentationController: UIPresentationController
   );
+  
+  func notifyOnSytemSheetPanGestureInvoked(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer,
+    gesturePoint: CGPoint
+  );
 };
 
 // MARK: - SheetViewControllerEventsNotifiable
@@ -48,6 +54,14 @@ public extension SheetViewControllerEventsNotifiable {
   func notifyOnSheetWillDismissViaGesture(
     sender: UIViewController,
     presentationController: UIPresentationController
+  ) {
+    // no-op
+  };
+  
+  func notifyOnSytemSheetPanGestureInvoked(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer,
+    gesturePoint: CGPoint
   ) {
     // no-op
   };
