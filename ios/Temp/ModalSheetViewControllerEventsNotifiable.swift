@@ -1,5 +1,5 @@
 //
-//  SheetViewControllerEventsNotifiable.swift
+//  ModalSheetViewControllerEventsNotifiable.swift
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 9/27/24.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-public protocol SheetViewControllerEventsNotifiable: AnyObject {
+public protocol ModalSheetViewControllerEventsNotifiable: AnyObject {
   
   func notifyOnSheetDidAttemptToDismissViaGesture(
     sender: UIViewController,
@@ -35,7 +35,7 @@ public protocol SheetViewControllerEventsNotifiable: AnyObject {
 // MARK: - SheetViewControllerEventsNotifiable
 // -------------------------------------------
 
-public extension SheetViewControllerEventsNotifiable {
+public extension ModalSheetViewControllerEventsNotifiable {
   
   func notifyOnSheetDidAttemptToDismissViaGesture(
     sender: UIViewController,

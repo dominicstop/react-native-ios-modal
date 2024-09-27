@@ -14,7 +14,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   private var _didSetup = false;
   
   private(set) public var sheetLifecycleEventDelegates:
-    MulticastDelegate<SheetViewControllerEventsNotifiable> = .init();
+    MulticastDelegate<ModalSheetViewControllerEventsNotifiable> = .init();
     
   /// The return value used for
   /// `UIAdaptivePresentationControllerDelegate.presentationControllerShouldDismiss`
@@ -80,7 +80,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   
   public override func addEventDelegate(_ delegate: AnyObject){
     super.addEventDelegate(delegate);
-    guard let delegate = delegate as? SheetViewControllerEventsNotifiable else {
+    guard let delegate = delegate as? ModalSheetViewControllerEventsNotifiable else {
       return;
     };
     
