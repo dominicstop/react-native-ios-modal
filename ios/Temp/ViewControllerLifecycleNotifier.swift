@@ -11,6 +11,8 @@ import DGSwiftUtilities
 
 open class ViewControllerLifecycleNotifier: UIViewController {
 
+  private(set) var isAppearingForTheFirstTime = true;
+
   private(set) public var lifecycleEventDelegates:
     MulticastDelegate<ViewControllerLifecycleNotifiable> = .init();
     
@@ -43,7 +45,11 @@ open class ViewControllerLifecycleNotifier: UIViewController {
 
   public override func viewWillAppear(_ animated: Bool) {
     self.lifecycleEventDelegates.invoke {
-      $0.notifyOnViewWillAppear(sender: self, isAnimated: animated);
+      $0.notifyOnViewWillAppear(
+        sender: self,
+        isAnimated: animated,
+        isFirstAppearance: self.isAppearingForTheFirstTime
+      );
     };
     
     #if DEBUG
@@ -54,6 +60,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
         "\n - className:", self.className,
         "\n - animated:", animated,
         "\n - isBeingPresented:", self.isBeingPresented,
+        "\n - isAppearingForTheFirstTime:", self.isAppearingForTheFirstTime,
         "\n"
       );
     };
@@ -62,7 +69,11 @@ open class ViewControllerLifecycleNotifier: UIViewController {
   
   public override func viewIsAppearing(_ animated: Bool) {
     self.lifecycleEventDelegates.invoke {
-      $0.notifyOnViewIsAppearing(sender: self, isAnimated: animated);
+      $0.notifyOnViewIsAppearing(
+        sender: self,
+        isAnimated: animated,
+        isFirstAppearance: self.isAppearingForTheFirstTime
+      );
     };
     
     #if DEBUG
@@ -73,6 +84,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
         "\n - className:", self.className,
         "\n - animated:", animated,
         "\n - isBeingPresented:", self.isBeingPresented,
+        "\n - isAppearingForTheFirstTime:", self.isAppearingForTheFirstTime,
         "\n"
       );
     };
@@ -80,8 +92,18 @@ open class ViewControllerLifecycleNotifier: UIViewController {
   };
   
   public override func viewDidAppear(_ animated: Bool) {
+    defer {
+      if self.isAppearingForTheFirstTime {
+        self.isAppearingForTheFirstTime = false;
+      };
+    };
+    
     self.lifecycleEventDelegates.invoke {
-      $0.notifyOnViewDidAppear(sender: self, isAnimated: animated);
+      $0.notifyOnViewDidAppear(
+        sender: self,
+        isAnimated: animated,
+        isFirstAppearance: self.isAppearingForTheFirstTime
+      );
     };
     
     #if DEBUG
@@ -92,6 +114,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
         "\n - className:", self.className,
         "\n - animated:", animated,
         "\n - isBeingPresented:", self.isPresentedAsModal,
+        "\n - isAppearingForTheFirstTime:", self.isAppearingForTheFirstTime,
         "\n"
       );
     };

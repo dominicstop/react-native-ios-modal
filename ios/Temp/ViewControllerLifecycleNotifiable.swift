@@ -14,17 +14,20 @@ public protocol ViewControllerLifecycleNotifiable: AnyObject {
 
   func notifyOnViewWillAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   );
   
   func notifyOnViewIsAppearing(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   );
   
   func notifyOnViewDidAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   );
   
   func notifyOnViewWillDisappear(
@@ -57,21 +60,24 @@ public extension ViewControllerLifecycleNotifiable {
 
   func notifyOnViewWillAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     // no-op
   };
   
   func notifyOnViewIsAppearing(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     // no-op
   };
   
   func notifyOnViewDidAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     // no-op
   };

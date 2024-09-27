@@ -147,7 +147,8 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
 
   public func notifyOnViewWillAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     
     self.setState(nextState: .presenting);
@@ -155,7 +156,8 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
   
   public func notifyOnViewIsAppearing(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     
     self.setState(nextState: .presenting);
@@ -163,7 +165,8 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
   
   public func notifyOnViewDidAppear(
     sender: UIViewController,
-    isAnimated: Bool
+    isAnimated: Bool,
+    isFirstAppearance: Bool
   ) {
     
     self.setState(nextState: .presented);
