@@ -9,7 +9,9 @@ import Foundation
 import DGSwiftUtilities
 
 
-public struct ModalViewControllerMetrics: Encodable {
+public struct ModalViewControllerMetrics: DictionaryRepresentationSynthesizing {
+  
+  public var instanceID: String;
   
   public var isBeingDismissed: Bool;
   public var isBeingPresented: Bool;
@@ -25,7 +27,37 @@ public struct ModalViewControllerMetrics: Encodable {
   public var modalPresentationStyle: String;
   public var isUsingSheetPresentationController: Bool;
   
+  // MARK: - Init
+  // ------------
+  
+  public init(
+    instanceID: String,
+    isBeingDismissed: Bool,
+    isBeingPresented: Bool,
+    isPresentedAsModal: Bool,
+    modalLevel: Int,
+    topmostModalLevel: Int,
+    isTopMostModal: Bool,
+    hasPanGesture: Bool,
+    isPanGestureEnabled: Bool,
+    modalPresentationStyle: String,
+    isUsingSheetPresentationController: Bool
+  ) {
+    self.instanceID = instanceID;
+    self.isBeingDismissed = isBeingDismissed;
+    self.isBeingPresented = isBeingPresented;
+    self.isPresentedAsModal = isPresentedAsModal;
+    self.modalLevel = modalLevel;
+    self.topmostModalLevel = topmostModalLevel;
+    self.isTopMostModal = isTopMostModal;
+    self.hasPanGesture = hasPanGesture;
+    self.isPanGestureEnabled = isPanGestureEnabled;
+    self.modalPresentationStyle = modalPresentationStyle;
+    self.isUsingSheetPresentationController = isUsingSheetPresentationController;
+  }
+  
   public init(viewController modalVC: UIViewController){
+    self.instanceID = modalVC.synthesizedStringID;
     
     self.isBeingDismissed = modalVC.isBeingDismissed
     self.isBeingPresented = modalVC.isBeingPresented
