@@ -11,10 +11,6 @@ import DGSwiftUtilities
 
 open class ViewControllerLifecycleNotifier: UIViewController {
 
-  #if DEBUG
-  public static var shouldLog = true;
-  #endif
-
   private(set) public var lifecycleEventDelegates:
     MulticastDelegate<ViewControllerLifecycleNotifiable> = .init();
     
@@ -34,7 +30,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
@@ -51,12 +47,13 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
         "\n - animated:", animated,
+        "\n - isBeingPresented:", self.isBeingPresented,
         "\n"
       );
     };
@@ -69,12 +66,13 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
         "\n - animated:", animated,
+        "\n - isBeingPresented:", self.isBeingPresented,
         "\n"
       );
     };
@@ -87,15 +85,18 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
         "\n - animated:", animated,
+        "\n - isBeingPresented:", self.isPresentedAsModal,
         "\n"
       );
     };
+    
+    self._debugLogViewControllerMetricsIfNeeded();
     #endif
   };
   
@@ -105,12 +106,13 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
         "\n - animated:", animated,
+        "\n - isBeingDismissed:", self.isBeingDismissed,
         "\n"
       );
     };
@@ -123,12 +125,13 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
         "\n - animated:", animated,
+        "\n - isBeingDismissed:", self.isBeingDismissed,
         "\n"
       );
     };
@@ -141,7 +144,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
@@ -158,7 +161,7 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     };
     
     #if DEBUG
-    if Self.shouldLog {
+    if Self._debugShouldLog {
       print(
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
@@ -179,4 +182,53 @@ open class ViewControllerLifecycleNotifier: UIViewController {
     
     self.lifecycleEventDelegates.add(delegate);
   };
+  
+  // MARK: - Debug-Related
+  // ---------------------
+  
+  #if DEBUG
+  public static var _debugShouldLog = true;
+  
+  private var _debugDidAutoLogViewControllerMetrics = false;
+
+  func debugLogViewControllerMetrics(invoker: String = #function){
+    var debugMessage =
+        "ViewControllerLifecycleNotifier.logViewControllerMetrics"
+      + "\n - invoker: \(invoker)"
+      + "\n - instance: \(Unmanaged.passUnretained(self).toOpaque())"
+      + "\n - className: \(self.className)"
+      + "\n - isBeingDismissed: \(self.isBeingDismissed)"
+      + "\n - isBeingPresented: \(self.isBeingPresented)"
+      + "\n - isPresentedAsModal: \(self.isPresentedAsModal)"
+      + "\n - modalLevel: \(self.modalLevel?.description ?? "N/A")"
+      + "\n - topmostModalLevel: \(self.topmostModalLevel?.description ?? "N/A")";
+      
+    let allPresentedVC = self.recursivelyGetAllPresentedViewControllers;
+    
+    debugMessage += "\n - allPresentedVC.count: \(allPresentedVC.count)";
+      
+    debugMessage += allPresentedVC.enumerated().reduce("") {
+      $0 + "\n -"
+         + "\n - presentedVC \($1.offset + 1) of \(allPresentedVC.count)"
+         + "\n - instance: \(Unmanaged.passUnretained($1.element).toOpaque())"
+         + "\n - className: \($1.element.className)"
+         + "\n - isPresentedAsModal: \($1.element.isPresentedAsModal)"
+         + "\n - isTopMostModal: \($1.element.isTopMostModal)"
+         + "\n - modalLevel: \($1.element.modalLevel?.description ?? "N/A")"
+         + "\n - isUsingSheetPresentationController: \($1.element.isUsingSheetPresentationController)"
+         + "\n - modalPanGesture: \($1.element.modalPanGesture?.debugDescription ?? "N/A")";
+    };
+    
+    print(debugMessage);
+  };
+  
+  private func _debugLogViewControllerMetricsIfNeeded(invoker: String = #function){
+    guard !self._debugDidAutoLogViewControllerMetrics else {
+      return;
+    };
+    
+    self._debugDidAutoLogViewControllerMetrics = true;
+    self.debugLogViewControllerMetrics(invoker: invoker);
+  };
+  #endif
 };
