@@ -32,6 +32,17 @@ export type ModalSheetViewRef =
 
 export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
   | 'shouldEnableDebugBackgroundColors'
+
+  // common view events
+  | 'onDidSetViewID'
+
+  // common modal presentation events
+  | 'onModalWillPresent'
+  | 'onModalDidPresent'
+  | 'onModalWillShow'
+  | 'onModalDidShow'
+  | 'onModalWillHide'
+  | 'onModalDidHide'
 >;
 
 export type ModalSheetViewBaseProps = {

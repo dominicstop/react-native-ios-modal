@@ -26,6 +26,14 @@ export type RNIModalSheetViewRef = {
 export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheetNativeViewProps,
   // shared/internal events
   | 'onDidSetViewID'
+  
+  // common modal presentation events
+  | 'onModalWillPresent'
+  | 'onModalDidPresent'
+  | 'onModalWillShow'
+  | 'onModalDidShow'
+  | 'onModalWillHide'
+  | 'onModalDidHide'
 >>;
 
 export type RNIModalSheetViewBaseProps = {

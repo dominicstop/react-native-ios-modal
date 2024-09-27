@@ -1,4 +1,5 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+
 import type { BubblingEventHandler, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { HostComponent, ViewProps } from 'react-native';
 
@@ -6,6 +7,14 @@ import type { HostComponent, ViewProps } from 'react-native';
 export interface NativeProps extends ViewProps {
   // common/shared events
   onDidSetViewID?: BubblingEventHandler<{}>;
+
+  onModalWillPresent?: BubblingEventHandler<{}>;
+  onModalDidPresent?: BubblingEventHandler<{}>;
+
+  onModalWillShow?: BubblingEventHandler<{}>;
+  onModalDidShow?: BubblingEventHandler<{}>;
+  onModalWillHide?: BubblingEventHandler<{}>;
+  onModalDidHide?: BubblingEventHandler<{}>;
 
   // value prop stubs
   reactChildrenCount: Int32;
