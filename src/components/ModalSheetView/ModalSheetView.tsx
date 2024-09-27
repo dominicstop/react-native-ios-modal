@@ -41,6 +41,9 @@ export const ModalSheetView = React.forwardRef<
         ...commandArgs,
       });
     },
+    getCachedModalMetrics: () => {
+      return nativeRef.current?.getCachedModalMetrics();
+    },
     getModalMetrics: async () => {
       if(nativeRef.current == null) {
         throw Error("Unable to get ref to native sheet");

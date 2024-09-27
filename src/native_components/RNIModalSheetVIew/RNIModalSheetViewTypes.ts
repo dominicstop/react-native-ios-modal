@@ -19,6 +19,7 @@ export type RNIModalSheetViewRef = {
     isAnimated: boolean;
   }) => Promise<void>;
 
+  getCachedModalMetrics: () => ModalMetrics | undefined;
   getModalMetrics: () => Promise<ModalMetrics>;
 };
 

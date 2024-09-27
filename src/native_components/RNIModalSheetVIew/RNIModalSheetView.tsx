@@ -13,6 +13,11 @@ export const RNIModalSheetView = React.forwardRef<
 >((props, ref) => {
   const [viewID, setViewID] = React.useState<StateViewID>();
   const [reactTag, setReactTag] = React.useState<StateReactTag>();
+  
+  const [
+    cachedModalMetrics, 
+    setCachedModalMetrics
+  ] = React.useState<ModalMetrics | undefined>();
 
   React.useImperativeHandle(ref, () => ({
     getReactTag: () => {
@@ -41,6 +46,9 @@ export const RNIModalSheetView = React.forwardRef<
         /* commandArgs: */ commandArgs,
       );
     },
+    getCachedModalMetrics: () => {
+      return cachedModalMetrics;
+    },
     getModalMetrics: async () => {
       if(viewID == null) return;
       const module = Helpers.getRNIUtilitiesModule();
@@ -51,6 +59,7 @@ export const RNIModalSheetView = React.forwardRef<
         /* commandArgs: */ {},
       );
 
+      setCachedModalMetrics(result as any);
       return result as any;
     },
   }));

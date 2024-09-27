@@ -6,6 +6,7 @@ import type { RNIModalSheetViewProps, RNIModalSheetViewRef } from "../../native_
 
 
 type ModalSheetViewRefInherited = Pick<RNIModalSheetViewRef,
+  | 'getCachedModalMetrics'
   | 'getModalMetrics'
 >;
 
