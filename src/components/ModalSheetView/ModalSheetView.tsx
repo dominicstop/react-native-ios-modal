@@ -36,7 +36,6 @@ export const ModalSheetView = React.forwardRef<
     setModalSheetContentMap
   ] = React.useState<ModalSheetContentMap>({});
 
-
   const isModalContentLazy = props.isModalContentLazy ?? true;
 
   const shouldMountModalContents = 
@@ -91,8 +90,6 @@ export const ModalSheetView = React.forwardRef<
   const shouldEnableDebugBackgroundColors = 
     props.shouldEnableDebugBackgroundColors ?? false;
 
-  
-
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(
       child as React.ReactElement<ModalSheetViewContentProps>, 
@@ -105,6 +102,7 @@ export const ModalSheetView = React.forwardRef<
 
   return (
     <RNIModalSheetView
+      {...props}
       ref={ref => nativeRef.current = ref}
       style={styles.nativeModalSheet}
     >

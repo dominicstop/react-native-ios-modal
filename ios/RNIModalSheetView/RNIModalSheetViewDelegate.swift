@@ -25,9 +25,9 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case onModalDidHide;
   };
   
-  public enum Events: String, CaseIterable {
-    case placeholderEvent;
-  }
+  public static var propKeyPathMap: PropKeyPathMap {
+    return [:];
+  };
   
   // MARK: Properties
   // ----------------
@@ -120,20 +120,8 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     index: NSInteger,
     superBlock: () -> Void
   ) {
-    // no-op
+    childComponentView.removeFromSuperview();
   }
-  
-  public func notifyDidSetProps(sender: RNIContentViewParentDelegate) {
-    // no-op
-  };
-  
-  public func notifyOnUpdateLayoutMetrics(
-    sender: RNIContentViewParentDelegate,
-    oldLayoutMetrics: RNILayoutMetrics,
-    newLayoutMetrics: RNILayoutMetrics
-  ) {
-    // no-op
-  };
   
   public func notifyOnViewCommandRequest(
     sender: RNIContentViewParentDelegate,
