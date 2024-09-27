@@ -4,17 +4,31 @@ import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenT
 // MARK: Event Objects
 // -------------------
 
-export type OnModalWillPresentPayload = Readonly<{}>;
+export type OnModalWillPresentPayload = Readonly<{
+  isAnimated: boolean;
+}>;
 
-export type OnModalDidPresentEventPayload = Readonly<{}>;
+export type OnModalDidPresentEventPayload = Readonly<{
+  isAnimated: boolean;
+}>;
 
-export type OnModalWillShowEventPayload = Readonly<{}>;
+export type OnModalWillShowEventPayload = Readonly<{
+  isAnimated: boolean;
+  isFirstAppearance: boolean;
+}>;
 
-export type OnModalDidShowEventPayload = Readonly<{}>;
+export type OnModalDidShowEventPayload = Readonly<{
+  isAnimated: boolean;
+  isFirstAppearance: boolean;
+}>;
 
-export type OnModalWillHideEventPayload = Readonly<{}>;
+export type OnModalWillHideEventPayload = Readonly<{
+  isAnimated: boolean;
+}>;
 
-export type OnModalDidHideEventPayload = Readonly<{}>;
+export type OnModalDidHideEventPayload = Readonly<{
+  isAnimated: boolean;
+}>;
 
 // MARK: Events
 // ------------

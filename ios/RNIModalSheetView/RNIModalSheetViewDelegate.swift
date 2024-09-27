@@ -16,8 +16,13 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case mainSheetContent;
   };
   
-  public static var propKeyPathMap: Dictionary<String, PartialKeyPath<RNIModalSheetViewDelegate>> {
-    return [:];
+  public enum Events: String, CaseIterable {
+    case onModalWillPresent;
+    case onModalDidPresent;
+    case onModalWillShow;
+    case onModalDidShow;
+    case onModalWillHide;
+    case onModalDidHide;
   };
   
   public enum Events: String, CaseIterable {
@@ -58,7 +63,19 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // MARK: - Methods
   // ---------------
   
+  func discardCurrentModalControllerIfNeeded(){
+    guard let modalVC = self.modalSheetController,
+          !modalVC.isPresentedAsModal
+    else {
+      return;
+    };
+    
+    self.modalSheetController = nil;
+  };
 };
+
+// MARK: - RNIModalSheetViewDelegate+RNIContentViewDelegate
+// --------------------------------------------------------
 
 extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
 
@@ -154,8 +171,24 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           
           modalVC.mainSheetContentParent = mainSheetContentParent;
           modalVC.view.backgroundColor = .systemBackground;
+          modalVC.lifecycleEventDelegates.add(self);
           
-          closestVC.present(modalVC, animated: isAnimated);
+          self.dispatchEvent(
+            for: .onModalWillPresent,
+            withPayload: [
+              "isAnimated": isAnimated,
+            ]
+          );
+          
+          closestVC.present(modalVC, animated: isAnimated) {
+            self.dispatchEvent(
+              for: .onModalDidPresent,
+              withPayload: [
+                "isAnimated": isAnimated,
+              ]
+            );
+          };
+          
           resolveBlock([:]);
           
         case "dismissModal":
@@ -169,7 +202,7 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           );
           
           modalSheetController.dismiss(animated: isAnimated) {
-            self.modalSheetController = nil;
+            self.discardCurrentModalControllerIfNeeded();
           };
           
           resolveBlock([:]);
@@ -200,4 +233,62 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
     return false;
   };
   #endif
+};
+
+// MARK: - RNIModalSheetViewDelegate+ViewControllerLifecycleNotifiable
+// -------------------------------------------------------------------
+
+extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
+
+  public func notifyOnViewWillAppear(
+    sender: UIViewController,
+    isAnimated: Bool,
+    isFirstAppearance: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalWillShow,
+      withPayload: [
+        "isAnimated": isAnimated,
+        "isFirstAppearance": isFirstAppearance,
+      ]
+    );
+  };
+  
+  public func notifyOnViewDidAppear(
+    sender: UIViewController,
+    isAnimated: Bool,
+    isFirstAppearance: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalDidShow,
+      withPayload: [
+        "isAnimated": isAnimated,
+        "isFirstAppearance": isFirstAppearance,
+      ]
+    );
+  };
+  
+  public func notifyOnViewWillDisappear(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalWillHide,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
+  
+  public func notifyOnViewDidDisappear(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalDidHide,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
 };
