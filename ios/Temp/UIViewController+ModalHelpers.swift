@@ -119,6 +119,11 @@ extension UIViewController {
     
     return window.currentModalLevel;
   };
+  
+  public var modalMetrics: ModalViewControllerMetrics {
+    .init(viewController: self);
+  };
+  
   public var presentationControllerMetrics: PresentationControllerMetrics? {
     self.presentationController?.presentationControllerMetrics;
   };
