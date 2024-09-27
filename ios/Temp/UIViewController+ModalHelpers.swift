@@ -119,4 +119,7 @@ extension UIViewController {
     
     return window.currentModalLevel;
   };
+  public var presentationControllerMetrics: PresentationControllerMetrics? {
+    self.presentationController?.presentationControllerMetrics;
+  };
 };
