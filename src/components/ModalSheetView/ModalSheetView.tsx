@@ -41,6 +41,13 @@ export const ModalSheetView = React.forwardRef<
         ...commandArgs,
       });
     },
+    getModalMetrics: async () => {
+      if(nativeRef.current == null) {
+        throw Error("Unable to get ref to native sheet");
+      };
+
+      return await nativeRef.current.getModalMetrics();
+    },
   }));
 
   const shouldEnableDebugBackgroundColors = 

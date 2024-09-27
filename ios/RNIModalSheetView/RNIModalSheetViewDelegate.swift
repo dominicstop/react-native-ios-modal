@@ -173,6 +173,13 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           };
           
           resolveBlock([:]);
+          
+        case "getModalMetrics":
+          guard let modalSheetController = self.modalSheetController else {
+            throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
+          };
+          
+          resolveBlock(modalSheetController.baseEventObject as NSDictionary);
         
         default:
           throw RNIUtilitiesError(errorCode: .invalidValue);

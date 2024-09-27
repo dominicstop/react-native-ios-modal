@@ -22,6 +22,23 @@ open class RNIModalSheetViewController: UIViewController {
   
   public var positionConfigForMainSheetContent: AlignmentPositionConfig = .default;
   
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  public var baseEventObject: [String: Any] {
+    var eventDict: [String: Any] = [:];
+    
+    eventDict["modalViewControllerMetrics"] =
+      self.modalMetrics.synthesizedDictionaryJSON;
+    
+    if let presentationControllerMetrics = self.presentationControllerMetrics {
+      eventDict["presentationControllerMetrics"] =
+        presentationControllerMetrics.synthesizedDictionaryJSON;
+    };
+    
+    return eventDict;
+  };
+  
   // MARK: - View Controller Lifecycle
   // ---------------------------------
 

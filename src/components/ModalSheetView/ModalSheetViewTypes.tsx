@@ -5,12 +5,16 @@ import type { RemapObject } from "react-native-ios-utilities";
 import type { RNIModalSheetViewProps, RNIModalSheetViewRef } from "../../native_components/RNIModalSheetVIew";
 
 
+type ModalSheetViewRefInherited = Pick<RNIModalSheetViewRef,
+  | 'getModalMetrics'
+>;
+
 type ModalSheetViewRefInheritedRaw = Pick<RNIModalSheetViewRef,
   | 'presentModal'
   | 'dismissModal'
 >;
 
-export type ModalSheetViewRef = RemapObject<ModalSheetViewRefInheritedRaw, {
+type ModalSheetViewRefInheritedRemapped = RemapObject<ModalSheetViewRefInheritedRaw, {
   presentModal: (commandArgs?: {
     isAnimated?: boolean;
   }) => Promise<void>;
@@ -19,6 +23,11 @@ export type ModalSheetViewRef = RemapObject<ModalSheetViewRefInheritedRaw, {
     isAnimated?: boolean;
   }) => Promise<void>;
 }>;
+
+
+export type ModalSheetViewRef =
+    ModalSheetViewRefInherited
+  & ModalSheetViewRefInheritedRemapped;
 
 export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
   | 'onDidSetViewID'

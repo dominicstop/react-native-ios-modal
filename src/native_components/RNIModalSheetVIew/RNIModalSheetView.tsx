@@ -4,6 +4,7 @@ import { Helpers, type StateViewID, type StateReactTag } from 'react-native-ios-
 
 import { RNIModalSheetNativeView } from './RNIModalSheetNativeView';
 import type { RNIModalSheetViewProps, RNIModalSheetViewRef, } from './RNIModalSheetViewTypes';
+import type { ModalMetrics } from '../../types/ModalMetrics';
 
 
 export const RNIModalSheetView = React.forwardRef<
@@ -39,6 +40,18 @@ export const RNIModalSheetView = React.forwardRef<
         /* commandName: */ 'dismissModal',
         /* commandArgs: */ commandArgs,
       );
+    },
+    getModalMetrics: async () => {
+      if(viewID == null) return;
+      const module = Helpers.getRNIUtilitiesModule();
+
+      const result = await module.viewCommandRequest(
+        /* viewID     : */ viewID,
+        /* commandName: */ 'getModalMetrics',
+        /* commandArgs: */ {},
+      );
+
+      return result as any;
     },
   }));
 

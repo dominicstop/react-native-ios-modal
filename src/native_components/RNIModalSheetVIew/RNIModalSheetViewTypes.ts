@@ -4,6 +4,8 @@ import type { StateReactTag, StateViewID } from "react-native-ios-utilities";
 
 import type { RNIModalSheetNativeViewProps } from "./RNIModalSheetNativeView";
 
+import type { ModalMetrics } from "../../types/ModalMetrics";
+
 
 export type RNIModalSheetViewRef = {
   getViewID: () => StateViewID;
@@ -16,6 +18,8 @@ export type RNIModalSheetViewRef = {
   dismissModal: (commandArgs: {
     isAnimated: boolean;
   }) => Promise<void>;
+
+  getModalMetrics: () => Promise<ModalMetrics>;
 };
 
 export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheetNativeViewProps,
