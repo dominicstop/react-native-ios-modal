@@ -103,4 +103,19 @@ extension UIViewController {
     
     return presentedView.layer.animation(forKey: "position");
   };
+  
+  /// The current highest modal level in the window
+  ///
+  /// return value of `nil` means that there is no modal presented, and a
+  /// return value of `0` is the first presented modal, and so on...
+  ///
+  public var topmostModalLevel: Int? {
+    let window = self.view.window ?? UIApplication.shared.activeWindow;
+    
+    guard let window = window else {
+      return nil;
+    };
+    
+    return window.currentModalLevel;
+  };
 };
