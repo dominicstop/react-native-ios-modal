@@ -28,6 +28,9 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   
   public weak var sheetGesture: UIPanGestureRecognizer?;
   public weak var sheetDropShadowView: UIView?;
+  
+  public var sheetPresentationStateMachine:
+    ModalSheetPresentationStateMachine = .init();
     
   // MARK: - View Controller Lifecycle
   // ---------------------------------
@@ -55,6 +58,8 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     if presentationController.delegate != nil {
       self.presentationControllerDelegateProxy = self;
     };
+    
+    self.lifecycleEventDelegates.add(self.sheetPresentationStateMachine);
     
     presentationController.delegate = self;
     self._didSetup = true;
