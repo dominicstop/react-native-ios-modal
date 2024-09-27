@@ -49,18 +49,19 @@ extension UIViewController {
     return match;
   };
   
-  public var closestSheetPanGestureViaClimbingParentView: UIPanGestureRecognizer? {
+  public var closestSheetDropShadowView: UIView? {
     guard let targetClassName = PrivateSymbolString.classNameForDropShadowView.decodedString else {
       return nil;
     };
     
-    let matchingAncestorView = self.view.recursivelyFindParentView {
-         $0.className == targetClassName
-      && $0.gestureRecognizers?.count ?? 0 > 0;
+    return self.view.recursivelyFindParentView {
+      $0.className == targetClassName;
     };
-    
-    guard let matchingAncestorView = matchingAncestorView,
-          let gestureRecognizers = matchingAncestorView.gestureRecognizers
+  };
+  
+  public var closestSheetPanGestureViaClimbingParentView: UIPanGestureRecognizer? {    
+    guard let sheetDropShadowView = self.closestSheetDropShadowView,
+          let gestureRecognizers = sheetDropShadowView.gestureRecognizers
     else {
       return nil;
     };
