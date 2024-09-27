@@ -39,7 +39,7 @@ public protocol DictionaryRepresentationSynthesizing {
 // MARK: - DictionaryRepresentationSynthesizing+StaticDefault
 // ---------------------------------------------------------
 
-extension DictionaryRepresentationSynthesizing {
+public extension DictionaryRepresentationSynthesizing {
 
   // MARK: - Static Properties
   // -------------------------
@@ -48,26 +48,26 @@ extension DictionaryRepresentationSynthesizing {
     return nil;
   };
   
-  public static var synthesizedDictionaryIgnore: [String] {
+  static var synthesizedDictionaryIgnore: [String] {
     return [];
   };
   
-  public static var synthesizedDictionaryInlinedProperties: [PartialKeyPath<Self>] {
+  static var synthesizedDictionaryInlinedProperties: [PartialKeyPath<Self>] {
     return [];
   };
 };
 
-extension DictionaryRepresentationSynthesizing where Self: StringKeyPathMapping {
+public extension DictionaryRepresentationSynthesizing where Self: StringKeyPathMapping {
   
   static var synthesizedDictionaryExtraItemsKeyPathMap: StringToPartialKeyPathMap? {
     return self.partialKeyPathMap;
   };
   
-  public static var synthesizedDictionaryIgnore: [String] {
+  static var synthesizedDictionaryIgnore: [String] {
     return [];
   };
   
-  public static var synthesizedDictionaryInlinedProperties: [PartialKeyPath<Self>] {
+  static var synthesizedDictionaryInlinedProperties: [PartialKeyPath<Self>] {
     return [];
   };
 };
