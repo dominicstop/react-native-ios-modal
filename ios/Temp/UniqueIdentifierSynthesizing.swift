@@ -10,7 +10,7 @@ import DGSwiftUtilities
 
 
 public protocol UniqueIdentifierSynthesizing: AnyObject {
-  
+
   var synthesizedIntID: UInt64 { get };
   
   var synthesizedUUID: UUID { get };
@@ -18,6 +18,13 @@ public protocol UniqueIdentifierSynthesizing: AnyObject {
 
 // MARK: - UniqueIdentifierSynthesizing+Helpers
 // --------------------------------------------
+
+public extension UniqueIdentifierSynthesizing {
+  
+  var rawMemoryAddressAsString: String {
+    String(describing: Unmanaged.passUnretained(self).toOpaque());
+  };
+};
 
 public extension UniqueIdentifierSynthesizing where Self: NSObject {
 
