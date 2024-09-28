@@ -19,10 +19,15 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   public enum Events: String, CaseIterable {
     case onModalWillPresent;
     case onModalDidPresent;
+    
     case onModalWillShow;
     case onModalDidShow;
+    
     case onModalWillHide;
     case onModalDidHide;
+    
+    case onModalSheetStateWillChange;
+    case onModalSheetStateDidChange;    
   };
   
   public static var propKeyPathMap: PropKeyPathMap {

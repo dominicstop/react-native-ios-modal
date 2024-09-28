@@ -16,6 +16,9 @@ export interface NativeProps extends ViewProps {
   onModalWillHide?: BubblingEventHandler<{}>;
   onModalDidHide?: BubblingEventHandler<{}>;
 
+  onModalSheetStateWillChange?: BubblingEventHandler<{}>;
+  onModalSheetStateDidChange?: BubblingEventHandler<{}>;
+
   // value prop stubs
   reactChildrenCount: Int32;
 };

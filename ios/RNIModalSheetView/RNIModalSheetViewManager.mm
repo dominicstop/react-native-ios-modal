@@ -37,6 +37,9 @@ RNI_EXPORT_VIEW_EVENT(onModalDidShow, RCTBubblingEventBlock);
 RNI_EXPORT_VIEW_EVENT(onModalWillHide, RCTBubblingEventBlock);
 RNI_EXPORT_VIEW_EVENT(onModalDidHide, RCTBubblingEventBlock);
 
+RNI_EXPORT_VIEW_EVENT(onModalSheetStateWillChange, RCTBubblingEventBlock);
+RNI_EXPORT_VIEW_EVENT(onModalSheetStateDidChange, RCTBubblingEventBlock);
+
 #endif
 
 @end

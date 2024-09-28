@@ -44,6 +44,10 @@ export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
   | 'onModalDidShow'
   | 'onModalWillHide'
   | 'onModalDidHide'
+
+  // modal sheet events
+  | 'onModalSheetStateWillChange'
+  | 'onModalSheetStateDidChange'
 >;
 
 export type ModalSheetViewBaseProps = {
@@ -53,5 +57,4 @@ export type ModalSheetViewBaseProps = {
 export type ModalSheetViewProps = PropsWithChildren<
     ModalSheetViewInheritedProps 
   & ModalSheetViewBaseProps
-  & ViewProps
 >;

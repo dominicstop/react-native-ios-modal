@@ -6,6 +6,7 @@ import {
   type NativeProps as RNIModalSheetViewNativeComponentProps,
 } from './RNIModalSheetViewNativeComponent';
 
+import type { OnModalSheetStateDidChangeEvent, OnModalSheetStateWillChangeEvent } from './RNIModalSheetViewEvents';
 import type { OnModalWillPresentEvent, OnModalDidPresentEvent, OnModalWillShowEvent, OnModalDidShowEvent, OnModalWillHideEvent, OnModalDidHideEvent } from '../../types/CommonModalEvents';
 
 
@@ -23,6 +24,9 @@ export type RNIModalSheetNativeViewBaseProps = RemapObject<RNIModalSheetViewNati
   
   onModalWillHide: OnModalWillHideEvent;
   onModalDidHide: OnModalDidHideEvent;
+
+  onModalSheetStateWillChange: OnModalSheetStateWillChangeEvent;
+  onModalSheetStateDidChange: OnModalSheetStateDidChangeEvent;
 }>;
 
 export type RNIModalSheetNativeViewProps = 
