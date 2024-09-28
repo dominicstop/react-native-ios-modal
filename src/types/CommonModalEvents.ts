@@ -4,7 +4,7 @@ import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenT
 // MARK: Event Objects
 // -------------------
 
-export type OnModalWillPresentPayload = Readonly<{
+export type OnModalWillPresentEventPayload = Readonly<{
   isAnimated: boolean;
 }>;
 
@@ -34,7 +34,7 @@ export type OnModalDidHideEventPayload = Readonly<{
 // ------------
 
 export type OnModalWillPresentEvent = 
-  BubblingEventHandler<OnModalWillPresentPayload>;
+  BubblingEventHandler<OnModalWillPresentEventPayload>;
 
 export type OnModalDidPresentEvent = 
   BubblingEventHandler<OnModalDidPresentEventPayload>;
