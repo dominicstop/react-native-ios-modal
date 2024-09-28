@@ -85,6 +85,9 @@ export const ModalSheetView = React.forwardRef<
 
       return await nativeRef.current.getModalMetrics();
     },
+    getEventEmitter: () => {
+      return nativeRef.current!.getEventEmitter();
+    },
   }));
 
   const shouldEnableDebugBackgroundColors = 

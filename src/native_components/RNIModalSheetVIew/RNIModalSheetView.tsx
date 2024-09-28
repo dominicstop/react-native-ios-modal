@@ -1,10 +1,15 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+
 import { Helpers, type StateViewID, type StateReactTag } from 'react-native-ios-utilities';
+import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
 import { RNIModalSheetNativeView } from './RNIModalSheetNativeView';
+import { useLazyRef } from '../../hooks/useLazyRef';
+
 import type { RNIModalSheetViewProps, RNIModalSheetViewRef, } from './RNIModalSheetViewTypes';
 import type { ModalMetrics } from '../../types/ModalMetrics';
+import type { ModalSheetViewEventEmitter } from '../../functions/ModalSheetViewEventEmitter';
 
 
 export const RNIModalSheetView = React.forwardRef<
@@ -13,6 +18,9 @@ export const RNIModalSheetView = React.forwardRef<
 >((props, ref) => {
   const [viewID, setViewID] = React.useState<StateViewID>();
   const [reactTag, setReactTag] = React.useState<StateReactTag>();
+
+  const modalEventEmitterRef = 
+    useLazyRef<ModalSheetViewEventEmitter>(() => new TSEventEmitter());
   
   const [
     cachedModalMetrics, 
@@ -25,6 +33,9 @@ export const RNIModalSheetView = React.forwardRef<
     },
     getViewID: () => {
       return viewID;
+    },
+    getEventEmitter: () => {
+      return modalEventEmitterRef.current!;
     },
     presentModal: async (commandArgs) => {
       if(viewID == null) return;
@@ -81,6 +92,60 @@ export const RNIModalSheetView = React.forwardRef<
 
         props.onDidSetViewID?.(event);
         event.stopPropagation();
+      }}
+      onModalWillPresent={(event) => {
+        props.onModalWillPresent?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalWillPresent',
+          event.nativeEvent
+        );
+      }}
+      onModalDidPresent={(event) => {
+        props.onModalDidPresent?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalDidPresent',
+          event.nativeEvent
+        );
+      }}
+      onModalWillShow={(event) => {
+        props.onModalWillShow?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalWillShow',
+          event.nativeEvent
+        );
+      }}
+      onModalDidShow={(event) => {
+        props.onModalDidShow?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalDidShow',
+          event.nativeEvent
+        );
+      }}
+      onModalWillHide={(event) => {
+        props.onModalWillHide?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalWillHide',
+          event.nativeEvent
+        );
+      }}
+      onModalDidHide={(event) => {
+        props.onModalDidHide?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalDidHide',
+          event.nativeEvent
+        );
       }}
     >
       {props.children}

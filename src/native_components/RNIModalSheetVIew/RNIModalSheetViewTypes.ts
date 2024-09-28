@@ -1,3 +1,5 @@
+import type React from "react";
+
 import type { PropsWithChildren } from "react";
 import type { ViewProps } from "react-native";
 import type { StateReactTag, StateViewID } from "react-native-ios-utilities";
@@ -5,11 +7,14 @@ import type { StateReactTag, StateViewID } from "react-native-ios-utilities";
 import type { RNIModalSheetNativeViewProps } from "./RNIModalSheetNativeView";
 
 import type { ModalMetrics } from "../../types/ModalMetrics";
+import type { ModalSheetViewEventEmitter } from "../../functions/ModalSheetViewEventEmitter";
 
 
 export type RNIModalSheetViewRef = {
   getViewID: () => StateViewID;
   getReactTag: () => StateReactTag;
+  
+  getEventEmitter: () => ModalSheetViewEventEmitter;
   
   presentModal: (commandArgs: {
     isAnimated: boolean;
