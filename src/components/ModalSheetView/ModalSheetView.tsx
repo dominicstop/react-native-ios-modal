@@ -7,6 +7,8 @@ import type { ModalSheetViewContentProps } from './ModalSheetViewContentTypes';
 import type { ModalSheetContentMap } from './ModalSheetContentMap';
 
 import { RNIModalSheetView, type RNIModalSheetViewRef } from '../../native_components/RNIModalSheetVIew';
+import { ModalSheetViewContext, type ModalSheetViewContextType } from '../../context/ModalSheetViewContext';
+import { useLazyRef } from '../../hooks/useLazyRef';
 
 
 export const ModalSheetView = React.forwardRef<
@@ -42,14 +44,14 @@ export const ModalSheetView = React.forwardRef<
        !isModalContentLazy
     || shouldExplicitlyMountModalContents;
 
-  React.useImperativeHandle(ref, () => ({
+  const rawRef = useLazyRef<ModalSheetViewRef>(() => ({
     presentModal: async (commandArgs) => {
       if(nativeRef.current == null) {
         throw Error("Unable to get ref to native sheet");
       };
 
       const shouldWaitToMount = 
-           !shouldExplicitlyMountModalContents
+          !shouldExplicitlyMountModalContents
         && isModalContentLazy;
 
       setShouldExplicitlyMountModalContents(true);
@@ -99,6 +101,8 @@ export const ModalSheetView = React.forwardRef<
     },
   }));
 
+  React.useImperativeHandle(ref, () => rawRef.current!);
+
   const shouldEnableDebugBackgroundColors = 
     props.shouldEnableDebugBackgroundColors ?? false;
 
@@ -112,20 +116,26 @@ export const ModalSheetView = React.forwardRef<
     );
   });
 
-  return (
-    <RNIModalSheetView
-      {...props}
-      ref={ref => nativeRef.current = ref}
-      style={styles.nativeModalSheet}
-      onModalDidHide={(event) => {
-        setShouldExplicitlyMountModalContents(false);
+  const contextValue: ModalSheetViewContextType = {
+    getModalSheetViewRef: () => rawRef.current!
+  };
 
-        props.onModalDidHide?.(event);
-        event.stopPropagation();
-      }}
-    >
-      {children}
-    </RNIModalSheetView>
+  return (
+    <ModalSheetViewContext.Provider value={contextValue}>
+      <RNIModalSheetView
+        {...props}
+        ref={ref => nativeRef.current = ref}
+        style={styles.nativeModalSheet}
+        onModalDidHide={(event) => {
+          setShouldExplicitlyMountModalContents(false);
+
+          props.onModalDidHide?.(event);
+          event.stopPropagation();
+        }}
+      >
+        {children}
+      </RNIModalSheetView>
+    </ModalSheetViewContext.Provider>
   );
 });
 
