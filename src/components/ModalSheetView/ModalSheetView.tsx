@@ -60,10 +60,19 @@ export const ModalSheetView = React.forwardRef<
         }));
       };
 
-      await nativeRef.current.presentModal({
-        isAnimated: true,
-        ...commandArgs,
-      });
+      const eventEmitter = nativeRef.current!.getEventEmitter();
+
+      await Promise.all([
+        nativeRef.current.presentModal({
+          isAnimated: true,
+          ...commandArgs,
+        }),
+        new Promise<void>(resolve => {
+          eventEmitter.once('onModalDidShow', () => {
+            resolve();
+          });
+        }),
+      ]);
     },
     dismissModal: async (commandArgs) => {
       if(nativeRef.current == null) {
