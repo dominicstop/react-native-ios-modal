@@ -105,6 +105,12 @@ export const ModalSheetView = React.forwardRef<
       {...props}
       ref={ref => nativeRef.current = ref}
       style={styles.nativeModalSheet}
+      onModalDidHide={(event) => {
+        setShouldExplicitlyMountModalContents(false);
+
+        props.onModalDidHide?.(event);
+        event.stopPropagation();
+      }}
     >
       {children}
     </RNIModalSheetView>
