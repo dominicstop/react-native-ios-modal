@@ -171,7 +171,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     #endif
     
     self.sheetLifecycleEventDelegates.invoke {
-      $0.notifyOnSytemSheetPanGestureInvoked(
+      $0.notifyOnSystemSheetPanGestureInvoked(
         sender: self,
         panGesture: panGesture,
         gesturePoint: gesturePoint

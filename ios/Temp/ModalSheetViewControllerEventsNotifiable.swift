@@ -25,7 +25,7 @@ public protocol ModalSheetViewControllerEventsNotifiable: AnyObject {
     presentationController: UIPresentationController
   );
   
-  func notifyOnSytemSheetPanGestureInvoked(
+  func notifyOnSystemSheetPanGestureInvoked(
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer,
     gesturePoint: CGPoint
@@ -69,7 +69,7 @@ public extension ModalSheetViewControllerEventsNotifiable {
     // no-op
   };
   
-  func notifyOnSytemSheetPanGestureInvoked(
+  func notifyOnSystemSheetPanGestureInvoked(
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer,
     gesturePoint: CGPoint
