@@ -45,12 +45,11 @@ public class ModalSheetPresentationStateMachine {
     let prevState = self.prevState;
     let currentState = self.currentState;
     
-    
-    print(
-      "setStateExplicit",
-      "\n - state: \(prevState?.rawValue ?? "N/A") -> \(currentState.rawValue) -> \(nextState.rawValue)",
-      "\n"
-    );
+    // print(
+    //   "setStateExplicit",
+    //   "\n - state: \(prevState?.rawValue ?? "N/A") -> \(currentState.rawValue) -> \(nextState.rawValue)",
+    //   "\n"
+    // );
     
     #if DEBUG
     if Self._debugShouldLog {
@@ -300,6 +299,10 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer
   ) {
+    guard sender.isBeingDismissed else {
+      return;
+    };
+    
     switch panGesture.state {
       case .began, .changed:
         self.isSheetPanGestureActive = true;
