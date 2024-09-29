@@ -96,6 +96,10 @@ public enum ModalSheetState: String {
   };
   
   public func isGeneric(comparedTo otherState: Self) -> Bool {
+    guard self.isSameStep(comparedTo: otherState) else {
+      return false;
+    };
+    
     switch(self, otherState){
       case (.draggingViaGesture, let otherState) where otherState.isInPresentation:
         return false;
