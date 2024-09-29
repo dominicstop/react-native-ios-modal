@@ -1,6 +1,7 @@
 
 export * from './components/ModalSheetView';
 export * from './context/ModalSheetViewContext';
+export * from './hooks/useModalSheetViewEvents';
 
 export type * from './types/ModalViewControllerMetrics';
 export type * from './types/PresentationControllerMetrics';
