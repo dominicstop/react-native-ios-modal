@@ -177,6 +177,22 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
         gesturePoint: gesturePoint
       );
     };
+    
+    let shouldInvokeCombinedGestureHandler: Bool = {
+      if let scrollViewPanGesture = self.modalRootScrollViewGestureRecognizer {
+        let isScrollGestureActive = scrollViewPanGesture.state.isActive;
+        let didSystemPanGestureFail = panGesture.state == .failed;
+        
+        return !isScrollGestureActive || !didSystemPanGestureFail;
+      };
+      
+      return true;
+    }();
+    
+    if shouldInvokeCombinedGestureHandler {
+      self._handleCombinedSheetGesture(panGesture);
+    };
+  };
   
   @objc
   private func _handleSheetScrollViewGesture(
@@ -211,7 +227,34 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
         scrollView: scrollView
       );
     };
+    
+    let shouldInvokeCombinedGestureHandler = {
+      if let sheetGesture = self.sheetGesture {
+        return sheetGesture.state == .failed;
+      };
+      
+      let currentOffsetY = scrollView.contentOffset.y;
+      let initialOffsetY = self.sheetRootScrollViewInitialContentOffset.y;
+      
+      return currentOffsetY <= initialOffsetY;
+    }();
+    
+    if shouldInvokeCombinedGestureHandler {
+      self._handleCombinedSheetGesture(panGesture);
+    };
   };
+  
+  @objc
+  private func _handleCombinedSheetGesture(
+    _ panGesture: UIPanGestureRecognizer
+  ) {
+  
+    self.sheetLifecycleEventDelegates.invoke {
+      $0.notifyOnSheetBeingDraggedByPanGesture(
+        sender: self,
+        panGesture: panGesture
+      );
+    };
   };
   
   // MARK: - Debug-Related

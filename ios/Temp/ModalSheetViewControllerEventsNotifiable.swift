@@ -36,6 +36,11 @@ public protocol ModalSheetViewControllerEventsNotifiable: AnyObject {
     panGesture: UIPanGestureRecognizer,
     scrollView: UIScrollView
   );
+  
+  func notifyOnSheetBeingDraggedByPanGesture(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer
+  );
 };
 
 // MARK: - SheetViewControllerEventsNotifiable
@@ -76,6 +81,13 @@ public extension ModalSheetViewControllerEventsNotifiable {
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer,
     scrollView: UIScrollView
+  ) {
+    // no-op
+  };
+  
+  func notifyOnSheetBeingDraggedByPanGesture(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer
   ) {
     // no-op
   };
