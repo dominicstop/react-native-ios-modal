@@ -12,6 +12,7 @@ import DGSwiftUtilities
 open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier {
 
   private var _didSetup = false;
+  private var _didSetupRootScrollView = false;
   
   private(set) public var sheetLifecycleEventDelegates:
     MulticastDelegate<ModalSheetViewControllerEventsNotifiable> = .init();
@@ -29,6 +30,10 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   public weak var sheetGesture: UIPanGestureRecognizer?;
   public weak var sheetDropShadowView: UIView?;
   
+  public weak var sheetRootScrollView: UIScrollView?;
+  public weak var sheetRootScrollViewGesture: UIPanGestureRecognizer?;
+  public var sheetRootScrollViewInitialContentOffset: CGPoint = .zero;
+  
   public var sheetPresentationStateMachine:
     ModalSheetPresentationStateMachine = .init();
     
@@ -42,7 +47,18 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   
   public override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated);
-    self.setupSheetGestureIfNeeded();
+    
+    if self.isAppearingForTheFirstTime {
+      self.setupSheetGestureIfNeeded();
+    };
+  };
+  
+  public override func viewDidAppear(_ animated: Bool) {
+    if self.isAppearingForTheFirstTime {
+      self.setupRootScrollViewIfNeeded();
+    };
+    
+    super.viewDidAppear(animated);
   };
     
   // MARK: - Setup
@@ -81,6 +97,41 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     self.sheetGesture = closestSheetPanGesture;
   };
   
+  public func setupRootScrollViewIfNeeded(){
+    guard !self._didSetupRootScrollView else {
+      return;
+    };
+    
+    let rootScrollView =
+      self.view.recursivelyFindSubview(whereType: UIScrollView.self);
+      
+    guard let rootScrollView = rootScrollView else {
+      return;
+    };
+    
+    let scrollviewGestureRecognizers =
+      rootScrollView.recursivelyGetAllGestureRecognizers;
+      
+    let scrollViewPanGesture = scrollviewGestureRecognizers.first {
+      $0 is UIPanGestureRecognizer;
+    };
+    
+    guard let scrollViewPanGesture = scrollViewPanGesture as? UIPanGestureRecognizer else {
+      return;
+    };
+    
+    self.sheetRootScrollView = rootScrollView;
+    self.sheetRootScrollViewGesture = scrollViewPanGesture;
+    self.sheetRootScrollViewInitialContentOffset = rootScrollView.contentOffset;
+    
+    scrollViewPanGesture.addTarget(
+      self,
+      action: #selector(Self._handleSheetScrollViewGesture(_:))
+    );
+    
+    self._didSetupRootScrollView = true;
+  };
+  
   // MARK: - Methods
   // ---------------
   
@@ -94,7 +145,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   };
   
   @objc
-  private func _handleSheetGesture(_ panGesture: UIPanGestureRecognizer){
+  private func _handleSheetGesture(_ panGesture: UIPanGestureRecognizer) {
     guard let presentationController = self.presentationController,
           let presentedView = presentationController.presentedView
     else {
@@ -126,6 +177,41 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
         gesturePoint: gesturePoint
       );
     };
+  
+  @objc
+  private func _handleSheetScrollViewGesture(
+    _ panGesture: UIPanGestureRecognizer
+  ) {
+    guard let scrollView = self.sheetRootScrollView else {
+      return;
+    };
+  
+    #if DEBUG
+    if Self._debugShouldLogGesture {
+      print(
+        "ModalSheetViewControllerLifecycleNotifier.\(#function)",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - className:", self.className,
+        "\n - panGesture:", panGesture.debugDescription,
+        "\n - panGesture.state:", panGesture.state,
+        "\n - scrollView, contentOffset:", scrollView.contentOffset,
+        "\n - sheetRootScrollViewInitialContentOffset:", self.sheetRootScrollViewInitialContentOffset,
+        "\n - sheetGesture, state:", self.sheetGesture?.state.description ?? "N/A",
+        "\n - isBeingDismissed:", self.isBeingDismissed,
+        "\n - isBeingPresented:", self.isBeingPresented,
+        "\n"
+      );
+    };
+    #endif
+    
+    self.sheetLifecycleEventDelegates.invoke {
+      $0.notifyOnScrollViewPanGestureInvoked(
+        sender: self,
+        panGesture: panGesture,
+        scrollView: scrollView
+      );
+    };
+  };
   };
   
   // MARK: - Debug-Related

@@ -30,6 +30,12 @@ public protocol ModalSheetViewControllerEventsNotifiable: AnyObject {
     panGesture: UIPanGestureRecognizer,
     gesturePoint: CGPoint
   );
+  
+  func notifyOnScrollViewPanGestureInvoked(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer,
+    scrollView: UIScrollView
+  );
 };
 
 // MARK: - SheetViewControllerEventsNotifiable
@@ -62,6 +68,14 @@ public extension ModalSheetViewControllerEventsNotifiable {
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer,
     gesturePoint: CGPoint
+  ) {
+    // no-op
+  };
+  
+  func notifyOnScrollViewPanGestureInvoked(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer,
+    scrollView: UIScrollView
   ) {
     // no-op
   };
