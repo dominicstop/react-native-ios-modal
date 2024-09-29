@@ -60,6 +60,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     };
     
     self.lifecycleEventDelegates.add(self.sheetPresentationStateMachine);
+    self.sheetLifecycleEventDelegates.add(self.sheetPresentationStateMachine);
     
     presentationController.delegate = self;
     self._didSetup = true;
@@ -313,6 +314,31 @@ extension ModalSheetViewControllerLifecycleNotifier: UIAdaptivePresentationContr
   ) {
     self.presentationControllerDelegateProxy?
       .presentationControllerWillDismiss?(presentationController);
+      
+    #if DEBUG
+    if Self._debugShouldLogSheetEvents {
+      self.transitionCoordinator?.notifyWhenInteractionChanges { context in
+        print(
+          "ModalSheetViewControllerLifecycleNotifier.presentationControllerWillDismiss",
+          "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+          "\n - className:", self.className,
+          "\n - transitionCoordinator.notifyWhenInteractionChanges",
+          "\n - isBeingDismissed: ", self.isBeingDismissed,
+          "\n - isBeingPresented: ", self.isBeingPresented,
+          "\n - context: ", context.debugDescription ?? "N/A",
+          "\n - context, isCancelled: ", context.isCancelled,
+          "\n - context, isAnimated: ", context.isAnimated,
+          "\n - context, isInteractive: ", context.isInteractive,
+          "\n - context, isInterruptible: ", context.isInterruptible,
+          "\n - context, initiallyInteractive: ", context.initiallyInteractive,
+          "\n - context, percentComplete: ", context.percentComplete,
+          "\n - context, transitionDuration: ", context.transitionDuration,
+          "\n",
+          "\n"
+        );
+      };
+    };
+    #endif
 
     self.sheetLifecycleEventDelegates.invoke {
       $0.notifyOnSheetWillDismissViaGesture(

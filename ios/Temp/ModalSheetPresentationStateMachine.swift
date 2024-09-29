@@ -17,8 +17,22 @@ public class ModalSheetPresentationStateMachine {
   public var didPresent = false;
   public var didDismissAfterPresented = false;
   
+  public var isSheetPanGestureActive = false;
+  
   public var eventDelegates:
     MulticastDelegate<ModalSheetPresentationStateEventsNotifiable> = .init();
+
+  // MARK: - Computed Properties
+  // ---------------------------
+  
+  public var isPresentingForTheFirstTime: Bool {
+       self.currentState.isPresenting
+    && !self.didPresent;
+  };
+  
+  public var didPresentForTheFirstTime: Bool {
+    self.currentState.isPresented
+  };
     
   // MARK: - Methods
   // ---------------
@@ -31,14 +45,19 @@ public class ModalSheetPresentationStateMachine {
     let prevState = self.prevState;
     let currentState = self.currentState;
     
+    
+    print(
+      "setStateExplicit",
+      "\n - state: \(prevState?.rawValue ?? "N/A") -> \(currentState.rawValue) -> \(nextState.rawValue)",
+      "\n"
+    );
+    
     #if DEBUG
     if Self._debugShouldLog {
       print(
         "ModalSheetPresentationStateMachine.\(#function) - PRE",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
-        "\n - prevState:", prevState?.rawValue ?? "N/A",
-        "\n - currentState:", currentState,
-        "\n - arg, nextState:", nextState,
+        "\n - state: \(prevState?.rawValue ?? "N/A") -> \(currentState.rawValue) -> \(nextState.rawValue)",
         "\n - self.didPresent:", self.didPresent,
         "\n - self.didDismissAfterPresented:", self.didDismissAfterPresented,
         "\n"
@@ -97,24 +116,78 @@ public class ModalSheetPresentationStateMachine {
   };
   
   public func setState(nextState: ModalSheetState) {
-    #if DEBUG
-    if Self._debugShouldLog {
-      print(
-        "ModalSheetPresentationStateMachine.\(#function)",
-        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
-        "\n - arg, nextState:", nextState,
-        "\n"
-      );
-    };
-    #endif
+    var nextStateOverride: ModalSheetState? = nil;
     
     switch (self.prevState, self.currentState, nextState) {
+      case (_, .draggingViaGesture, .presenting):
+        nextStateOverride = .dismissViaGestureCancelling;
+        
+      case (.draggingViaGesture, .dismissViaGestureCancelling, let nextState)
+        where nextState.isPresented:
+        
+        nextStateOverride = .dismissViaGestureCancelled;
+        
+      case (.draggingViaGesture, .dismissingViaGesture, .dismissed):
+        nextStateOverride = .dismissedViaGesture;
       
       default:
         break;
     };
     
-    self.setStateExplicit(nextState: nextState);
+    let nextStateUpdated = nextStateOverride ?? nextState;
+    
+    #if DEBUG
+    if Self._debugShouldLog {
+      print(
+        "ModalSheetPresentationStateMachine.\(#function)",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - prevState:", self.prevState?.rawValue ?? "N/A",
+        "\n - currentState:", self.currentState.rawValue,
+        "\n - nextState, raw:", nextState,
+        "\n - nextState, override:", nextStateOverride?.rawValue ?? "N/A",
+        "\n"
+      );
+    };
+    #endif
+    
+    var isIllegalState = false;
+    
+    /// Don't allow:
+    /// * `dismissingViaGesture`        -> `dismissing`
+    /// * `dismissViaGestureCancelling` -> `presenting`
+    /// * `dismissedViaGesture`         -> `dismissed`
+    /// * etc.
+    ///
+    /// Keep state as specific as possible, i.e. don't overwrite specific state
+    /// w/ generic/simple state
+    ///
+    if nextStateUpdated.isGeneric(comparedTo: self.currentState) {
+      return;
+    };
+    
+    /// Don't allow:
+    /// * `dismissingViaGesture` -> `dismissing` -> `dismissingViaGesture`
+    ///
+    if self.currentState.isDraggingViaGesture,
+       nextStateUpdated == .dismissing,
+       self.isSheetPanGestureActive
+    {
+      return;
+    };
+    
+    /// Don't allow:
+    /// * `dismissingViaGesture` -> `draggingViaGesture`
+    ///
+    /// * happe
+    ///
+    ///
+    if self.currentState == .dismissingViaGesture,
+       nextStateUpdated == .draggingViaGesture
+    {
+      return;
+    };
+    
+    self.setStateExplicit(nextState: nextStateUpdated);
   };
   
   public func reset(){
@@ -139,22 +212,17 @@ public class ModalSheetPresentationStateMachine {
   // ---------------------
   
   #if DEBUG
-  public static var _debugShouldLog = true;
+  public static var _debugShouldLog = false;
   #endif
 };
 
 extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable {
-  
-  public func notifyOnViewDidLoad(sender: UIViewController) {
-    // no-op
-  };
 
   public func notifyOnViewWillAppear(
     sender: UIViewController,
     isAnimated: Bool,
     isFirstAppearance: Bool
   ) {
-    
     self.setState(nextState: .presenting);
   };
   
@@ -163,7 +231,6 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
     isAnimated: Bool,
     isFirstAppearance: Bool
   ) {
-    
     self.setState(nextState: .presenting);
   };
   
@@ -172,7 +239,6 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
     isAnimated: Bool,
     isFirstAppearance: Bool
   ) {
-    
     self.setState(nextState: .presented);
   };
   
@@ -180,7 +246,6 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
     sender: UIViewController,
     isAnimated: Bool
   ) {
-    
     self.setState(nextState: .dismissing);
   };
   
@@ -188,7 +253,69 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
     sender: UIViewController,
     isAnimated: Bool
   ) {
-  
     self.setState(nextState: .dismissed);
+  };
+};
+
+// MARK: - ModalSheetPresentationStateMachine+SheetViewControllerEventsNotifiable
+// ------------------------------------------------------------------------------
+
+extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNotifiable {
+  
+  public func notifyOnSheetDidAttemptToDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.setState(nextState: .presentingViaGestureCancelled);
+  };
+  
+  public func notifyOnSheetDidDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.setState(nextState: .dismissedViaGesture);
+  };
+  
+  public func notifyOnSheetWillDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    guard let transitionCoordinator = sender.transitionCoordinator else {
+      return;
+    };
+    
+    transitionCoordinator.notifyWhenInteractionChanges {
+      guard sender.isBeingDismissed,
+            $0.isAnimated
+      else {
+        return;
+      };
+      
+      self.setState(nextState: $0.isCancelled
+        ? .dismissViaGestureCancelling
+        : .dismissingViaGesture
+      );
+    };
+  };
+  
+  // TODO: Rename to `notifyOnSystemSheetPanGestureInvoked`
+  public func notifyOnSytemSheetPanGestureInvoked(
+    sender: UIViewController,
+    panGesture: UIPanGestureRecognizer,
+    gesturePoint: CGPoint
+  ) {
+    
+    switch panGesture.state {
+      case .began, .changed:
+        self.isSheetPanGestureActive = true;
+      
+      case .ended, .cancelled, .failed:
+        self.isSheetPanGestureActive = false;
+        
+      default:
+        break;
+    };
+  
+    self.setState(nextState: .draggingViaGesture);
   };
 };
