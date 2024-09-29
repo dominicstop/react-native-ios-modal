@@ -104,7 +104,7 @@ public enum ModalSheetState: String {
         return false;
       
       default:
-        return self.isSpecific && !otherState.isSpecific
+        return !self.isSpecific && otherState.isSpecific
     };
   };
 };
