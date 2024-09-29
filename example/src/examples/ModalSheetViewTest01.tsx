@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewMainContent, type ModalSheetViewRef } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewContext, ModalSheetViewMainContent, type ModalSheetViewRef } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
 import type { ModalMetrics } from '../../../src/types/ModalMetrics';
@@ -12,6 +12,7 @@ let shouldEnableModalEventsLogging = false;
 
 export function ModalSheetViewTest01(props: ExampleItemProps) {
   const modalSheetViewRef = React.useRef<ModalSheetViewRef | null>(null);
+  const modalContext = React.useContext(ModalSheetViewContext);
 
   const [
     modalMetrics,
@@ -78,6 +79,11 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
         subtitle={'Present content as sheet'}
         onPress={async () => {
           setShouldMountRecursiveContent(true);
+          console.log(
+            'ModalSheetViewTest01',
+            '\n - presenting modal...',
+            `\n - recursionLevel: ${recursionLevel}`
+          );
           await modalSheetViewRef.current?.presentModal();
           console.log(
             'ModalSheetViewTest01',
@@ -113,16 +119,11 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
             title={'Get modal metrics for prev. modal'}
             subtitle={'invoke `getModalMetrics`'}
             onPress={async () => {
+              const modalRef = modalContext?.getModalSheetViewRef();
 
-              const modalSheetViewRefPrev: ModalSheetViewRef | null = 
-                props.extraProps?.modalSheetViewRefPrev as any;
+              console.log({modalContext, modalRef});
               
-              if(modalSheetViewRefPrev == null){
-                return;
-              };
-
-              const modalMetrics = 
-                await modalSheetViewRefPrev.getModalMetrics();
+              const modalMetrics = await modalRef?.getModalMetrics();
 
               setModalMetrics(modalMetrics);
               console.log(
@@ -199,6 +200,28 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
 
           console.log(
             "ModalSheetViewTest01.onModalDidHide",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalSheetStateWillChange={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalSheetStateWillChange",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalSheetStateDidChange={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+          
+          console.log(
+            "ModalSheetViewTest01.onModalSheetStateDidChange",
             "\n - nativeEvent:", nativeEvent,
             "\n"
           );
