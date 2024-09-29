@@ -9,7 +9,7 @@ import { useLazyRef } from '../../hooks/useLazyRef';
 
 import type { RNIModalSheetViewProps, RNIModalSheetViewRef, } from './RNIModalSheetViewTypes';
 import type { ModalMetrics } from '../../types/ModalMetrics';
-import type { ModalSheetViewEventEmitter } from '../../functions/ModalSheetViewEventEmitter';
+import type { ModalSheetViewEventEmitter } from '../../types/ModalSheetViewEventEmitter';
 
 
 export const RNIModalSheetView = React.forwardRef<

@@ -7,7 +7,7 @@ import type { StateReactTag, StateViewID } from "react-native-ios-utilities";
 import type { RNIModalSheetNativeViewProps } from "./RNIModalSheetNativeView";
 
 import type { ModalMetrics } from "../../types/ModalMetrics";
-import type { ModalSheetViewEventEmitter } from "../../functions/ModalSheetViewEventEmitter";
+import type { ModalSheetViewEventEmitter } from "../../types/ModalSheetViewEventEmitter";
 
 
 export type RNIModalSheetViewRef = {

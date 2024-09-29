@@ -1,6 +1,6 @@
 import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 import type { RemapObject } from 'react-native-ios-utilities';
-import type { OnModalDidHideEventPayload, OnModalDidPresentEventPayload, OnModalDidShowEventPayload, OnModalWillHideEventPayload, OnModalWillPresentEventPayload, OnModalWillShowEventPayload } from '../types/CommonModalEvents';
+import type { OnModalDidHideEventPayload, OnModalDidPresentEventPayload, OnModalDidShowEventPayload, OnModalWillHideEventPayload, OnModalWillPresentEventPayload, OnModalWillShowEventPayload } from './CommonModalEvents';
 
 
 export enum ModalSheetViewEvents {
