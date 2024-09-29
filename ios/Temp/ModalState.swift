@@ -44,6 +44,10 @@ public enum ModalState: String {
     };
   };
   
+  public var isInPresentation: Bool {
+    self.isPresenting || self.isDismissing;
+  };
+  
   public var modalSheetState: ModalSheetState {
     switch self {
       case .presenting:

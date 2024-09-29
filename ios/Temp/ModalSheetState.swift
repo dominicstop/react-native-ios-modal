@@ -61,6 +61,11 @@ public enum ModalSheetState: String {
     self.modalState.isDismissed;
   };
   
+  public var isInPresentation: Bool {
+       !self.isDraggingViaGesture
+    && self.modalState.isInPresentation
+  };
+  
   public var isIdle: Bool {
     switch self {
       case .draggingViaGesture:
