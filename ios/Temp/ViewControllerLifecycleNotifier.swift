@@ -11,7 +11,7 @@ import DGSwiftUtilities
 
 open class ViewControllerLifecycleNotifier: UIViewController {
 
-  private(set) var isAppearingForTheFirstTime = true;
+  private(set) public var isAppearingForTheFirstTime = true;
 
   private(set) public var lifecycleEventDelegates:
     MulticastDelegate<ViewControllerLifecycleNotifiable> = .init();
