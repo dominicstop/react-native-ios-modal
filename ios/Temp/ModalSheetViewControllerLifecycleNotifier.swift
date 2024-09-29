@@ -32,7 +32,9 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   
   public weak var sheetRootScrollView: UIScrollView?;
   public weak var sheetRootScrollViewGesture: UIPanGestureRecognizer?;
-  public var sheetRootScrollViewInitialContentOffset: CGPoint = .zero;
+  
+  public var sheetRootScrollViewContentOffsetInitial: CGPoint = .zero;
+  private(set) public var sheetRootScrollViewGesturePointPrev: CGPoint?;
   
   public var sheetPresentationStateMachine:
     ModalSheetPresentationStateMachine = .init();
@@ -122,7 +124,7 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     
     self.sheetRootScrollView = rootScrollView;
     self.sheetRootScrollViewGesture = scrollViewPanGesture;
-    self.sheetRootScrollViewInitialContentOffset = rootScrollView.contentOffset;
+    self.sheetRootScrollViewContentOffsetInitial = rootScrollView.contentOffset;
     
     scrollViewPanGesture.addTarget(
       self,
@@ -201,24 +203,6 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
     guard let scrollView = self.sheetRootScrollView else {
       return;
     };
-  
-    #if DEBUG
-    if Self._debugShouldLogGesture {
-      print(
-        "ModalSheetViewControllerLifecycleNotifier.\(#function)",
-        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
-        "\n - className:", self.className,
-        "\n - panGesture:", panGesture.debugDescription,
-        "\n - panGesture.state:", panGesture.state,
-        "\n - scrollView, contentOffset:", scrollView.contentOffset,
-        "\n - sheetRootScrollViewInitialContentOffset:", self.sheetRootScrollViewInitialContentOffset,
-        "\n - sheetGesture, state:", self.sheetGesture?.state.description ?? "N/A",
-        "\n - isBeingDismissed:", self.isBeingDismissed,
-        "\n - isBeingPresented:", self.isBeingPresented,
-        "\n"
-      );
-    };
-    #endif
     
     self.sheetLifecycleEventDelegates.invoke {
       $0.notifyOnScrollViewPanGestureInvoked(
@@ -228,20 +212,61 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
       );
     };
     
-    let shouldInvokeCombinedGestureHandler = {
+    let gesturePointNext = panGesture.translation(in: self.view);
+    
+    let gesturePointCurrent =
+         self.sheetRootScrollViewGesturePointPrev
+      ?? scrollView.globalFrame?.origin
+      ?? scrollView.frame.origin;
+    
+    defer {
+      self.sheetRootScrollViewGesturePointPrev = panGesture.state.isActive
+        ? gesturePointNext
+        : nil;
+    };
+    
+    let shouldInvokeCombinedGestureHandler: Bool = {
+      let isMovingDownwards =
+        gesturePointNext.y > gesturePointCurrent.y;
+      
+      let isScrollViewAtInitialPosition =
+        scrollView.contentOffset.y == self.sheetRootScrollViewContentOffsetInitial.y;
+        
       if let sheetGesture = self.sheetGesture {
-        return sheetGesture.state == .failed;
+        return (
+             sheetGesture.state == .failed
+          && isMovingDownwards
+          && isScrollViewAtInitialPosition
+        );
       };
       
-      let currentOffsetY = scrollView.contentOffset.y;
-      let initialOffsetY = self.sheetRootScrollViewInitialContentOffset.y;
-      
-      return currentOffsetY <= initialOffsetY;
+      return (
+           isMovingDownwards
+        && isScrollViewAtInitialPosition
+      );
     }();
     
     if shouldInvokeCombinedGestureHandler {
       self._handleCombinedSheetGesture(panGesture);
     };
+    
+    #if DEBUG
+    if Self._debugShouldLogGesture {
+      print(
+        "ModalSheetViewControllerLifecycleNotifier.\(#function)",
+        "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
+        "\n - className:", self.className,
+        "\n - panGesture:", panGesture.debugDescription,
+        "\n - panGesture.state:", panGesture.state,
+        "\n - scrollView, contentOffset:", scrollView.contentOffset,
+        "\n - sheetRootScrollViewInitialContentOffset:", self.sheetRootScrollViewContentOffsetInitial,
+        "\n - sheetGesture, state:", self.sheetGesture?.state.description ?? "N/A",
+        "\n - isBeingDismissed:", self.isBeingDismissed,
+        "\n - isBeingPresented:", self.isBeingPresented,
+        "\n"
+      );
+    };
+    #endif
   };
   
   @objc
