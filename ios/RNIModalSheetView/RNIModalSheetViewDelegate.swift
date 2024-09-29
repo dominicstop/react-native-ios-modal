@@ -9,6 +9,7 @@ import UIKit
 import DGSwiftUtilities
 import react_native_ios_utilities
 
+
 @objc(RNIModalSheetViewDelegate)
 public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
 
@@ -27,7 +28,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case onModalDidHide;
     
     case onModalSheetStateWillChange;
-    case onModalSheetStateDidChange;    
+    case onModalSheetStateDidChange;
   };
   
   public static var propKeyPathMap: PropKeyPathMap {
@@ -67,6 +68,23 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   
   // MARK: - Methods
   // ---------------
+  
+  func createModalController() throws -> RNIModalSheetViewController {
+    guard let mainSheetContentParent = self.sheetMainContentParentView else {
+      throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
+    };
+  
+    let modalVC = RNIModalSheetViewController();
+    self.modalSheetController = modalVC;
+    
+    modalVC.mainSheetContentParent = mainSheetContentParent;
+    modalVC.view.backgroundColor = .systemBackground;
+    
+    modalVC.lifecycleEventDelegates.add(self);
+    modalVC.sheetPresentationStateMachine.eventDelegates.add(self);
+    
+    return modalVC;
+  };
   
   func discardCurrentModalControllerIfNeeded(){
     guard let modalVC = self.modalSheetController,
@@ -150,21 +168,12 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
             throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
           };
 
-          guard let mainSheetContentParent = self.sheetMainContentParentView else {
-            throw RNIUtilitiesError(errorCode: .unexpectedNilValue);
-          };
-          
           let isAnimated: Bool = commandArguments.getValueFromDictionary(
             forKey: "isAnimated",
             fallbackValue: true
           );
           
-          let modalVC = RNIModalSheetViewController();
-          self.modalSheetController = modalVC;
-          
-          modalVC.mainSheetContentParent = mainSheetContentParent;
-          modalVC.view.backgroundColor = .systemBackground;
-          modalVC.lifecycleEventDelegates.add(self);
+          let modalVC = try self.createModalController();
           
           self.dispatchEvent(
             for: .onModalWillPresent,
@@ -282,6 +291,49 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
       withPayload: [
         "isAnimated": isAnimated,
       ]
+    );
+  };
+};
+
+// MARK: - RNIModalSheetViewDelegate+ViewControllerLifecycleNotifiable
+// -------------------------------------------------------------------
+
+extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable {
+  
+  public func onModalSheetStateWillChange(
+    sender: ModalSheetPresentationStateMachine,
+    prevState: ModalSheetState?,
+    currentState: ModalSheetState,
+    nextState: ModalSheetState
+  ) {
+    var payload: Dictionary<String, Any> = [
+      "currentState": currentState.asDictionary,
+      "nextState": nextState.asDictionary
+    ];
+    
+    payload.unwrapAndMerge(withOther: [
+      "prevState": prevState?.asDictionary
+    ]);
+    
+    self.dispatchEvent(
+      for: .onModalSheetStateWillChange,
+      withPayload: payload
+    );
+  };
+  
+  public func onModalSheetStateDidChange(
+    sender: ModalSheetPresentationStateMachine,
+    prevState: ModalSheetState?,
+    currentState: ModalSheetState
+  ) {
+    let payload: Dictionary<String, Any> = [
+      "prevState": currentState.asDictionary,
+      "currentState": currentState.asDictionary
+    ];
+    
+    self.dispatchEvent(
+      for: .onModalSheetStateWillChange,
+      withPayload: payload
     );
   };
 };

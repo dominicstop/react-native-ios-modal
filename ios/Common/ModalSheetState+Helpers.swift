@@ -19,6 +19,6 @@ public extension ModalSheetState {
   };
   
   var asDictionary: [String : Any] {
-    self.asMetrics.synthesizedDictionary;
+    self.asMetrics.synthesizedDictionaryJSON;
   };
 };
