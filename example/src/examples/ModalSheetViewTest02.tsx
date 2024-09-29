@@ -70,6 +70,7 @@ function ModalContent(props: {
             isPresented: modalContext?.prevModalSheetStateMetrics?.isPresented,
             isDismissing: modalContext?.prevModalSheetStateMetrics?.isDismissing,
             isDismissed: modalContext?.prevModalSheetStateMetrics?.isDismissed,
+            isIdle: modalContext?.prevModalSheetStateMetrics?.isIdle,
             ...modalContext?.prevModalSheetStateMetrics,
           },
           currentState: {
@@ -79,6 +80,7 @@ function ModalContent(props: {
             isPresented: modalContext?.currentModalSheetStateMetrics.isPresented,
             isDismissing: modalContext?.currentModalSheetStateMetrics.isDismissing,
             isDismissed: modalContext?.currentModalSheetStateMetrics.isDismissed,
+            isIdle: modalContext?.currentModalSheetStateMetrics.isIdle,
             ...modalContext?.currentModalSheetStateMetrics,
           },
         }}
