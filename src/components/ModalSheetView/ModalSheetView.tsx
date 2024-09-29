@@ -10,6 +10,9 @@ import { RNIModalSheetView, type RNIModalSheetViewRef } from '../../native_compo
 import { ModalSheetViewContext, type ModalSheetViewContextType } from '../../context/ModalSheetViewContext';
 import { useLazyRef } from '../../hooks/useLazyRef';
 
+import { DEFAULT_MODAL_SHEET_VIEW_METRICS as MODAL_SHEET_STATE_METRICS_DEFAULT } from './ModalSheetViewConstants';
+import type { RNIModalSheetStateMetrics } from '../../types/RNIModalSheetStateMetrics';
+
 
 export const ModalSheetView = React.forwardRef<
   ModalSheetViewRef,
@@ -17,6 +20,16 @@ export const ModalSheetView = React.forwardRef<
 >((props, ref) => {
 
   const nativeRef = React.useRef<RNIModalSheetViewRef | null>();
+
+  const [
+    prevModalSheetStateMetrics,
+    setPrevModalSheetStateMetrics,
+  ] = React.useState<RNIModalSheetStateMetrics | undefined>();
+
+  const [
+    currentModalSheetStateMetrics,
+    setCurrentModalSheetStateMetrics,
+  ] = React.useState<RNIModalSheetStateMetrics>(MODAL_SHEET_STATE_METRICS_DEFAULT);
 
   const callbacksToInvokeOnNextRender = React.useRef<Array<() => void>>([]);
   React.useEffect(() => {
@@ -117,6 +130,8 @@ export const ModalSheetView = React.forwardRef<
   });
 
   const contextValue: ModalSheetViewContextType = {
+    prevModalSheetStateMetrics,
+    currentModalSheetStateMetrics,
     getModalSheetViewRef: () => rawRef.current!
   };
 
@@ -130,6 +145,13 @@ export const ModalSheetView = React.forwardRef<
           setShouldExplicitlyMountModalContents(false);
 
           props.onModalDidHide?.(event);
+          event.stopPropagation();
+        }}
+        onModalSheetStateDidChange={(event) => {
+          setPrevModalSheetStateMetrics(event.nativeEvent.prevState);
+          setCurrentModalSheetStateMetrics(event.nativeEvent.currentState);
+
+          props.onModalSheetStateDidChange?.(event);
           event.stopPropagation();
         }}
       >

@@ -1,7 +1,11 @@
 import React from 'react';
 import type { ModalSheetViewRef } from '../components/ModalSheetView';
+import type { RNIModalSheetStateMetrics } from '../types/RNIModalSheetStateMetrics';
 
 export type ModalSheetViewContextType = {
+  prevModalSheetStateMetrics: RNIModalSheetStateMetrics | undefined;
+  currentModalSheetStateMetrics: RNIModalSheetStateMetrics;
+  
   getModalSheetViewRef: () => ModalSheetViewRef;
 };
 
