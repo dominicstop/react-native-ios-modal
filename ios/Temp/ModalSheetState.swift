@@ -61,6 +61,10 @@ public enum ModalSheetState: String {
     self.modalState.isDismissed;
   };
   
+  public var isDraggingViaGesture: Bool {
+    self == .draggingViaGesture;
+  };
+  
   public var isInPresentation: Bool {
        !self.isDraggingViaGesture
     && self.modalState.isInPresentation
@@ -78,5 +82,29 @@ public enum ModalSheetState: String {
   
   public var simplified: Self {
     self.modalState.modalSheetState;
+  };
+  
+  public var isSpecific: Bool {
+    self.simplified != self;
+  };
+  
+  // MARK: - Functions
+  // -----------------
+  
+  public func isSameStep(comparedTo otherState: Self) -> Bool {
+    self.simplified == otherState.simplified;
+  };
+  
+  public func isGeneric(comparedTo otherState: Self) -> Bool {
+    switch(self, otherState){
+      case (.draggingViaGesture, let otherState) where otherState.isInPresentation:
+        return false;
+        
+      case (let currentState, .draggingViaGesture) where currentState.isInPresentation:
+        return false;
+      
+      default:
+        return self.isSpecific && !otherState.isSpecific
+    };
   };
 };
