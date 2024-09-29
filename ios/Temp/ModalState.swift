@@ -34,6 +34,16 @@ public enum ModalState: String {
     self == .dismissed;
   };
   
+  public var isIdle: Bool {
+    switch self {
+      case .presenting, .dismissing:
+        return false;
+        
+      default:
+        return true;
+    };
+  };
+  
   public var modalSheetState: ModalSheetState {
     switch self {
       case .presenting:

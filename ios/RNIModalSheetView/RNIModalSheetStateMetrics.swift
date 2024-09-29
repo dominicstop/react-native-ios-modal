@@ -17,6 +17,7 @@ public struct RNIModalSheetStateMetrics: DictionaryRepresentationSynthesizing {
   public var isPresented: Bool;
   public var isDismissing: Bool;
   public var isDismissed: Bool;
+  public var isIdle: Bool;
   
   public init(
     state: ModalSheetState,
@@ -24,7 +25,8 @@ public struct RNIModalSheetStateMetrics: DictionaryRepresentationSynthesizing {
     isPresenting: Bool,
     isPresented: Bool,
     isDismissing: Bool,
-    isDismissed: Bool
+    isDismissed: Bool,
+    isIdle: Bool
   ) {
     self.state = state;
     self.simplified = simplified;
@@ -32,6 +34,7 @@ public struct RNIModalSheetStateMetrics: DictionaryRepresentationSynthesizing {
     self.isPresented = isPresented;
     self.isDismissing = isDismissing;
     self.isDismissed = isDismissed;
+    self.isIdle = isIdle;
   };
   
   public init(fromModalSheetState state: ModalSheetState){
@@ -41,5 +44,6 @@ public struct RNIModalSheetStateMetrics: DictionaryRepresentationSynthesizing {
     self.isPresented = state.isPresented;
     self.isDismissing = state.isDismissing;
     self.isDismissed = state.isDismissed;
+    self.isIdle = state.isIdle;
   };
 };

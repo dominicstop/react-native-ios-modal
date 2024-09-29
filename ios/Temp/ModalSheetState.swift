@@ -16,6 +16,8 @@ public enum ModalSheetState: String {
   case presented;
   case dismissViaGestureCancelled;
   
+  case draggingViaGesture;
+  
   case dismissing;
   case dismissingViaGesture;
   case presentingViaGestureCanceling;
@@ -35,7 +37,7 @@ public enum ModalSheetState: String {
       case .presented, .dismissViaGestureCancelled:
         return .presented;
         
-      case .dismissing, .dismissingViaGesture, .presentingViaGestureCanceling:
+      case .dismissing, .dismissingViaGesture, .presentingViaGestureCanceling, .draggingViaGesture:
         return .dismissing;
         
       case .dismissed, .dismissedViaGesture, .presentingViaGestureCancelled:
@@ -57,6 +59,16 @@ public enum ModalSheetState: String {
   
   public var isDismissed: Bool {
     self.modalState.isDismissed;
+  };
+  
+  public var isIdle: Bool {
+    switch self {
+      case .draggingViaGesture:
+        return false;
+        
+      default:
+        return self.modalState.isIdle;
+    };
   };
   
   public var simplified: Self {

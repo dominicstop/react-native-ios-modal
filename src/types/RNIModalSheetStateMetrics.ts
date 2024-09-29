@@ -9,4 +9,5 @@ export type RNIModalSheetStateMetrics = {
   isPresented: boolean;
   isDismissing: boolean;
   isDismissed: boolean;
+  isIdle: boolean;
 };
