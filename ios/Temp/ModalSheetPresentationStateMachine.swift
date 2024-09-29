@@ -150,8 +150,6 @@ public class ModalSheetPresentationStateMachine {
     };
     #endif
     
-    var isIllegalState = false;
-    
     /// Don't allow:
     /// * `dismissingViaGesture`        -> `dismissing`
     /// * `dismissViaGestureCancelling` -> `presenting`
@@ -298,13 +296,10 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
     };
   };
   
-  // TODO: Rename to `notifyOnSystemSheetPanGestureInvoked`
-  public func notifyOnSytemSheetPanGestureInvoked(
+  public func notifyOnSheetBeingDraggedByPanGesture(
     sender: UIViewController,
-    panGesture: UIPanGestureRecognizer,
-    gesturePoint: CGPoint
+    panGesture: UIPanGestureRecognizer
   ) {
-    
     switch panGesture.state {
       case .began, .changed:
         self.isSheetPanGestureActive = true;
