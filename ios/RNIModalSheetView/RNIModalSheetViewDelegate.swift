@@ -326,13 +326,16 @@ extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable
     prevState: ModalSheetState?,
     currentState: ModalSheetState
   ) {
-    let payload: Dictionary<String, Any> = [
-      "prevState": currentState.asDictionary,
+    var payload: Dictionary<String, Any> = [
       "currentState": currentState.asDictionary
     ];
     
+    payload.unwrapAndMerge(withOther: [
+      "prevState": prevState?.asDictionary
+    ]);
+    
     self.dispatchEvent(
-      for: .onModalSheetStateWillChange,
+      for: .onModalSheetStateDidChange,
       withPayload: payload
     );
   };

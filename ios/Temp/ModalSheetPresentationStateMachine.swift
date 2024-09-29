@@ -24,6 +24,10 @@ public class ModalSheetPresentationStateMachine {
   // ---------------
   
   public func setStateExplicit(nextState: ModalSheetState){
+    guard self.currentState != nextState else {
+      return;
+    };
+    
     let prevState = self.prevState;
     let currentState = self.currentState;
     
