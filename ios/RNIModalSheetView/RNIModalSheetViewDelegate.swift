@@ -52,9 +52,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // ------------------------
   
   public var reactProps: NSDictionary = [:];
-  
-  // TBA
-  
+
   // MARK: Init
   // ----------
   
@@ -81,6 +79,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     modalVC.view.backgroundColor = .systemBackground;
     
     modalVC.lifecycleEventDelegates.add(self);
+    modalVC.modalLifecycleEventDelegates.add(self);
     modalVC.sheetPresentationStateMachine.eventDelegates.add(self);
     
     return modalVC;
@@ -174,22 +173,7 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
           );
           
           let modalVC = try self.createModalController();
-          
-          self.dispatchEvent(
-            for: .onModalWillPresent,
-            withPayload: [
-              "isAnimated": isAnimated,
-            ]
-          );
-          
-          closestVC.present(modalVC, animated: isAnimated) {
-            self.dispatchEvent(
-              for: .onModalDidPresent,
-              withPayload: [
-                "isAnimated": isAnimated,
-              ]
-            );
-          };
+          closestVC.present(modalVC, animated: isAnimated);
           
           resolveBlock([:]);
           
@@ -288,6 +272,33 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
   ) {
     self.dispatchEvent(
       for: .onModalDidHide,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
+};
+
+extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
+  
+  public func notifyOnModalWillPresent(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalWillPresent,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
+  
+  public func notifyOnModalDidPresent(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalDidPresent,
       withPayload: [
         "isAnimated": isAnimated,
       ]
