@@ -5,6 +5,8 @@ import type { HostComponent, ViewProps } from 'react-native';
 
 // stubs
 export interface NativeProps extends ViewProps {
+  // props
+  shouldAllowDismissalViaGesture?: boolean;
   // common/shared events
   onDidSetViewID?: BubblingEventHandler<{}>;
 

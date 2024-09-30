@@ -31,6 +31,7 @@ export type ModalSheetViewRef =
   & ModalSheetViewRefInheritedRemapped;
 
 export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
+  | 'shouldAllowDismissalViaGesture'
   | 'shouldEnableDebugBackgroundColors'
 
   // common view events

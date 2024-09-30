@@ -15,6 +15,7 @@ type RNIModalSheetViewNativeComponentBaseProps =
 
 export type RNIModalSheetNativeViewBaseProps = RemapObject<RNIModalSheetViewNativeComponentBaseProps, {
   reactChildrenCount: number;
+  shouldAllowDismissalViaGesture: boolean;
 
   onModalWillPresent: OnModalWillPresentEvent;
   onModalDidPresent: OnModalDidPresentEvent;

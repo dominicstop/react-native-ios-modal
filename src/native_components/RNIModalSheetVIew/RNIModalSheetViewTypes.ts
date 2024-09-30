@@ -27,6 +27,9 @@ export type RNIModalSheetViewRef = {
 };
 
 export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheetNativeViewProps,
+  // props
+  | 'shouldAllowDismissalViaGesture'
+  
   // shared/internal events
   | 'onDidSetViewID'
   

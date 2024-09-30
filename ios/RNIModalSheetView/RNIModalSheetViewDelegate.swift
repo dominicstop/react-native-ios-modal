@@ -35,7 +35,9 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   };
   
   public static var propKeyPathMap: PropKeyPathMap {
-    return [:];
+    return [
+      "shouldAllowDismissalViaGesture": \.shouldAllowDismissalViaGesture,
+    ];
   };
   
   // MARK: Properties
@@ -55,7 +57,13 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // ------------------------
   
   public var reactProps: NSDictionary = [:];
-
+  
+  public var shouldAllowDismissalViaGesture: Bool = true {
+    willSet {
+      self.modalSheetController?.shouldAllowDismissal = newValue;
+    }
+  };
+  
   // MARK: Init
   // ----------
   
@@ -80,6 +88,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     
     modalVC.mainSheetContentParent = mainSheetContentParent;
     modalVC.view.backgroundColor = .systemBackground;
+    modalVC.shouldAllowDismissal = self.shouldAllowDismissalViaGesture;
     
     modalVC.lifecycleEventDelegates.add(self);
     modalVC.modalLifecycleEventDelegates.add(self);
