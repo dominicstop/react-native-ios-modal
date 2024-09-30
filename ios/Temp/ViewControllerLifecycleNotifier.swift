@@ -58,9 +58,14 @@ open class ViewControllerLifecycleNotifier: UIViewController {
         "ViewControllerLifecycleNotifier.\(#function)",
         "\n - instance:", Unmanaged.passUnretained(self).toOpaque(),
         "\n - className:", self.className,
+        "\n - self:", self.debugDescription,
         "\n - animated:", animated,
         "\n - isBeingPresented:", self.isBeingPresented,
         "\n - isAppearingForTheFirstTime:", self.isAppearingForTheFirstTime,
+        "\n - presentationController:", self.presentationController.debugDescription,
+        "\n - transitionCoordinator:", self.transitionCoordinator?.debugDescription ?? "N/A",
+        "\n - presentingViewController:", self.presentingViewController?.debugDescription ?? "N/A",
+        "\n - presentingViewController.presentedViewController:", self.presentingViewController?.presentedViewController.debugDescription ?? "N/A",
         "\n"
       );
     };

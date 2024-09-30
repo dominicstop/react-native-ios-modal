@@ -9,7 +9,7 @@ import UIKit
 import DGSwiftUtilities
 
 
-open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier {
+open class ModalSheetViewControllerLifecycleNotifier: ModalViewControllerLifecycleNotifier {
 
   private var _didSetup = false;
   private var _didSetupRootScrollView = false;
@@ -56,11 +56,13 @@ open class ModalSheetViewControllerLifecycleNotifier: ViewControllerLifecycleNot
   };
   
   public override func viewDidAppear(_ animated: Bool) {
+    defer {
+      super.viewDidAppear(animated);
+    };
+    
     if self.isAppearingForTheFirstTime {
       self.setupRootScrollViewIfNeeded();
     };
-    
-    super.viewDidAppear(animated);
   };
     
   // MARK: - Setup
