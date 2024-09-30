@@ -182,6 +182,28 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
             "\n"
           );
         }}
+        onModalWillDismiss={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalWillDismiss",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalDidDismiss={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+
+          console.log(
+            "ModalSheetViewTest01.onModalDidDismiss",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
         onModalWillHide={({nativeEvent}) => {
           if(!shouldEnableModalEventsLogging) {
             return;

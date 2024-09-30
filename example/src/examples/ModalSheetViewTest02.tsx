@@ -26,6 +26,14 @@ function ModalContent(props: {
     logListDisplayRef.current?.addItem('onModalDidPresent');
   });
 
+  useModalSheetViewEvents('onModalWillDismiss', () => {
+    logListDisplayRef.current?.addItem('onModalWillDismiss');
+  });
+
+  useModalSheetViewEvents('onModalDidDismiss', () => {
+    logListDisplayRef.current?.addItem('onModalDidDismiss');
+  });
+
   useModalSheetViewEvents('onModalWillShow', () => {
     logListDisplayRef.current?.addItem('onModalWillShow');
   });
