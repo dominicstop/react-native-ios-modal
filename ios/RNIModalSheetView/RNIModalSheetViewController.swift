@@ -57,7 +57,7 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
     
     // MARK: Setup Constraints
     #if !RCT_NEW_ARCH_ENABLED
-    rootReactView.removeAllAncestorConstraints();
+    mainSheetContentParent.removeAllAncestorConstraints();
     #endif
     
     self.view.addSubview(mainSheetContentParent);
