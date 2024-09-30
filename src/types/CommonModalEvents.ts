@@ -12,6 +12,14 @@ export type OnModalDidPresentEventPayload = Readonly<{
   isAnimated: boolean;
 }>;
 
+export type OnModalWillDismissEventPayload = Readonly<{
+  isAnimated: boolean;
+}>;
+
+export type OnModalDidDidDismissEventPayload = Readonly<{
+  isAnimated: boolean;
+}>;
+
 export type OnModalWillShowEventPayload = Readonly<{
   isAnimated: boolean;
   isFirstAppearance: boolean;
@@ -38,6 +46,12 @@ export type OnModalWillPresentEvent =
 
 export type OnModalDidPresentEvent = 
   BubblingEventHandler<OnModalDidPresentEventPayload>;
+
+export type OnModalWillDismissEvent = 
+  BubblingEventHandler<OnModalWillDismissEventPayload>;
+
+export type OnModalDidDismissEvent = 
+  BubblingEventHandler<OnModalDidDidDismissEventPayload>;
 
 export type OnModalWillShowEvent = 
   BubblingEventHandler<OnModalWillShowEventPayload>;

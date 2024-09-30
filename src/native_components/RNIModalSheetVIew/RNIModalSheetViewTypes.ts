@@ -35,6 +35,8 @@ export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheet
   // common modal presentation events
   | 'onModalWillPresent'
   | 'onModalDidPresent'
+  | 'onModalWillDismiss'
+  | 'onModalDidDismiss'
   | 'onModalWillShow'
   | 'onModalDidShow'
   | 'onModalWillHide'

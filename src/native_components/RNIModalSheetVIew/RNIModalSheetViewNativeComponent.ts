@@ -11,6 +11,9 @@ export interface NativeProps extends ViewProps {
   onModalWillPresent?: BubblingEventHandler<{}>;
   onModalDidPresent?: BubblingEventHandler<{}>;
 
+  onModalWillDismiss: BubblingEventHandler<{}>;
+  onModalDidDismiss: BubblingEventHandler<{}>;
+
   onModalWillShow?: BubblingEventHandler<{}>;
   onModalDidShow?: BubblingEventHandler<{}>;
   onModalWillHide?: BubblingEventHandler<{}>;

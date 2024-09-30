@@ -21,6 +21,9 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case onModalWillPresent;
     case onModalDidPresent;
     
+    case onModalWillDismiss;
+    case onModalDidDismiss;
+    
     case onModalWillShow;
     case onModalDidShow;
     
@@ -299,6 +302,30 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
   ) {
     self.dispatchEvent(
       for: .onModalDidPresent,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
+  
+  public func notifyOnModalWillDismiss(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalWillDismiss,
+      withPayload: [
+        "isAnimated": isAnimated,
+      ]
+    );
+  };
+  
+  public func notifyOnModalDidDismiss(
+    sender: UIViewController,
+    isAnimated: Bool
+  ) {
+    self.dispatchEvent(
+      for: .onModalDidDismiss,
       withPayload: [
         "isAnimated": isAnimated,
       ]

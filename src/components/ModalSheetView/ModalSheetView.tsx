@@ -141,7 +141,7 @@ export const ModalSheetView = React.forwardRef<
         {...props}
         ref={ref => nativeRef.current = ref}
         style={styles.nativeModalSheet}
-        onModalDidHide={(event) => {
+        onModalDidDismiss={(event) => {
           setShouldExplicitlyMountModalContents(false);
 
           props.onModalDidHide?.(event);

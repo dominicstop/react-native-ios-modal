@@ -31,6 +31,9 @@ RNI_EXPORT_VIEW_EVENT(onDidSetViewID, RCTBubblingEventBlock)
 RNI_EXPORT_VIEW_EVENT(onModalWillPresent, RCTBubblingEventBlock);
 RNI_EXPORT_VIEW_EVENT(onModalDidPresent, RCTBubblingEventBlock);
 
+RNI_EXPORT_VIEW_EVENT(onModalWillDismiss, RCTBubblingEventBlock);
+RNI_EXPORT_VIEW_EVENT(onModalDidDismiss, RCTBubblingEventBlock);
+
 RNI_EXPORT_VIEW_EVENT(onModalWillShow, RCTBubblingEventBlock);
 RNI_EXPORT_VIEW_EVENT(onModalDidShow, RCTBubblingEventBlock);
 
