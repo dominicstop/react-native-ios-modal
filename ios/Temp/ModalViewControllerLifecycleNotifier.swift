@@ -91,6 +91,7 @@ open class ModalViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier
     
     transitionCoordinator.notifyWhenInteractionChanges { context in
       guard !context.isCancelled else {
+        self.isExplicitlyBeingDismissed = false;
         return;
       };
       
@@ -123,4 +124,15 @@ open class ModalViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier
       );
     };
   };
+  
+  // MARK: - Methods
+  // ---------------
+  
+  open override func dismiss(
+    animated flag: Bool,
+    completion: (() -> Void)? = nil
+  ) {
+    self.isExplicitlyBeingDismissed = true;
+    super.dismiss(animated: flag, completion: completion);
+  }
 };
