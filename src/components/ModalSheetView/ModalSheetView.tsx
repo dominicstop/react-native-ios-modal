@@ -48,7 +48,7 @@ export const ModalSheetView = React.forwardRef<
 
   const [
     modalSheetContentMap, 
-    setModalSheetContentMap
+    // setModalSheetContentMap
   ] = React.useState<ModalSheetContentMap>({});
 
   const isModalContentLazy = props.isModalContentLazy ?? true;
@@ -116,8 +116,8 @@ export const ModalSheetView = React.forwardRef<
 
   React.useImperativeHandle(ref, () => rawRef.current!);
 
-  const shouldEnableDebugBackgroundColors = 
-    props.shouldEnableDebugBackgroundColors ?? false;
+  // const shouldEnableDebugBackgroundColors = 
+  //  props.shouldEnableDebugBackgroundColors ?? false;
 
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(

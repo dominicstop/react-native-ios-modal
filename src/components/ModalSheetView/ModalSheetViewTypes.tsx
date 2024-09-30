@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from "react";
-import type { ViewProps } from "react-native";
 import type { RemapObject } from "react-native-ios-utilities";
 
 import type { RNIModalSheetViewProps, RNIModalSheetViewRef } from "../../native_components/RNIModalSheetVIew";

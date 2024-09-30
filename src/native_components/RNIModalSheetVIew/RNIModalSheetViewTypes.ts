@@ -1,5 +1,3 @@
-import type React from "react";
-
 import type { PropsWithChildren } from "react";
 import type { ViewProps } from "react-native";
 import type { StateReactTag, StateViewID } from "react-native-ios-utilities";
