@@ -2,9 +2,11 @@ import type { RNIModalSheetStateMetrics } from "../../types/RNIModalSheetStateMe
 
 export const DEFAULT_MODAL_SHEET_VIEW_METRICS: RNIModalSheetStateMetrics = {
   state: 'dismissed',
-  isDismissed: true,
-  isDismissing: false,
-  isPresented: false,
+  simplified: 'dismissed',
+  
   isPresenting: false,
-  simplified: 'dismissed'
+  isPresented: false,
+  isDismissing: false,
+  isDismissed: true,
+  isIdle: true,
 };
