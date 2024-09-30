@@ -144,7 +144,7 @@ export const ModalSheetView = React.forwardRef<
         onModalDidDismiss={(event) => {
           setShouldExplicitlyMountModalContents(false);
 
-          props.onModalDidHide?.(event);
+          props.onModalDidDismiss?.(event);
           event.stopPropagation();
         }}
         onModalSheetStateDidChange={(event) => {
