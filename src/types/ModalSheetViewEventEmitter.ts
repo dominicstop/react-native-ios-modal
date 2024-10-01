@@ -2,7 +2,7 @@ import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 import type { RemapObject } from 'react-native-ios-utilities';
 
 import type { OnModalDidDidDismissEventPayload, OnModalDidHideEventPayload, OnModalDidPresentEventPayload, OnModalDidShowEventPayload, OnModalWillDismissEventPayload, OnModalWillHideEventPayload, OnModalWillPresentEventPayload, OnModalWillShowEventPayload } from './CommonModalEvents';
-import type { OnModalSheetStateDidChangeEventPayload, OnModalSheetStateWillChangeEventPayload } from '../native_components/RNIModalSheetVIew';
+import type { OnModalSheetStateDidChangeEventPayload, OnModalSheetStateWillChangeEventPayload, onModalSheetDidAttemptToDismissViaGestureEventPayload, onModalSheetDidDismissViaGestureEventPayload, onModalSheetWillDismissViaGestureEventPayload } from '../native_components/RNIModalSheetVIew';
 
 
 export enum ModalSheetViewEvents {
@@ -15,6 +15,11 @@ export enum ModalSheetViewEvents {
   onModalDidShow = "onModalDidShow",
   onModalWillHide = "onModalWillHide",
   onModalDidHide = "onModalDidHide",
+
+  // presentation controller event delegates
+  onModalSheetWillDismissViaGesture = "onModalSheetWillDismissViaGesture",
+  onModalSheetDidDismissViaGesture = "onModalSheetDidDismissViaGesture",
+  onModalSheetDidAttemptToDismissViaGesture = "onModalSheetDidAttemptToDismissViaGesture",
 
   // modal sheet events
   onModalSheetStateWillChange = "onModalSheetStateWillChange",
@@ -32,6 +37,9 @@ export type ModalSheetViewEventEmitterMap = RemapObject<typeof ModalSheetViewEve
   onModalDidShow: OnModalDidShowEventPayload;
   onModalWillHide: OnModalWillHideEventPayload;
   onModalDidHide: OnModalDidHideEventPayload;
+  onModalSheetWillDismissViaGesture: onModalSheetWillDismissViaGestureEventPayload;
+  onModalSheetDidDismissViaGesture: onModalSheetDidDismissViaGestureEventPayload;
+  onModalSheetDidAttemptToDismissViaGesture: onModalSheetDidAttemptToDismissViaGestureEventPayload;
   onModalSheetStateWillChange: OnModalSheetStateWillChangeEventPayload;
   onModalSheetStateDidChange: OnModalSheetStateDidChangeEventPayload;
 }>;

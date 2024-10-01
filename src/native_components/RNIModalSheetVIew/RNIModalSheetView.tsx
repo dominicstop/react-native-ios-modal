@@ -165,6 +165,33 @@ export const RNIModalSheetView = React.forwardRef<
           event.nativeEvent
         );
       }}
+      onModalSheetWillDismissViaGesture={(event) => {
+        props.onModalSheetWillDismissViaGesture?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalSheetWillDismissViaGesture',
+          event.nativeEvent
+        );
+      }}
+      onModalSheetDidDismissViaGesture={(event) => {
+        props.onModalSheetDidDismissViaGesture?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalSheetDidDismissViaGesture',
+          event.nativeEvent
+        );
+      }}
+      onModalSheetDidAttemptToDismissViaGesture={(event) => {
+        props.onModalSheetDidAttemptToDismissViaGesture?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalSheetDidAttemptToDismissViaGesture',
+          event.nativeEvent
+        );
+      }}
       onModalSheetStateWillChange={(event) => {
         props.onModalSheetStateWillChange?.(event);
         event.stopPropagation();
