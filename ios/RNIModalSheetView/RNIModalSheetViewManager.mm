@@ -28,6 +28,7 @@ RCT_EXPORT_MODULE(RNIModalSheetView)
   return [[RNIModalSheetView new] initWithBridge:self.bridge];
 }
 
+RNI_EXPORT_VIEW_PROPERTY(reactChildrenCount, NSNumber);
 RNI_EXPORT_VIEW_PROPERTY(shouldAllowDismissalViaGesture, BOOL);
 
 RNI_EXPORT_VIEW_EVENT(onDidSetViewID, RCTBubblingEventBlock)

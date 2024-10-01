@@ -6,10 +6,13 @@ import type { HostComponent, ViewProps } from 'react-native';
 // stubs
 export interface NativeProps extends ViewProps {
   // props
+  reactChildrenCount: Int32;
   shouldAllowDismissalViaGesture?: boolean;
+
   // common/shared events
   onDidSetViewID?: BubblingEventHandler<{}>;
 
+  // common modal events
   onModalWillPresent?: BubblingEventHandler<{}>;
   onModalDidPresent?: BubblingEventHandler<{}>;
 
@@ -18,14 +21,13 @@ export interface NativeProps extends ViewProps {
 
   onModalWillShow?: BubblingEventHandler<{}>;
   onModalDidShow?: BubblingEventHandler<{}>;
+
   onModalWillHide?: BubblingEventHandler<{}>;
   onModalDidHide?: BubblingEventHandler<{}>;
 
+  // events
   onModalSheetStateWillChange?: BubblingEventHandler<{}>;
   onModalSheetStateDidChange?: BubblingEventHandler<{}>;
-
-  // value prop stubs
-  reactChildrenCount: Int32;
 };
 
 // stubs

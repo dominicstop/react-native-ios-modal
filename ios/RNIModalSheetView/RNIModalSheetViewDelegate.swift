@@ -36,6 +36,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   
   public static var propKeyPathMap: PropKeyPathMap {
     return [
+      "reactChildrenCount": \.reactChildrenCountProp,
       "shouldAllowDismissalViaGesture": \.shouldAllowDismissalViaGesture,
     ];
   };
@@ -57,6 +58,21 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   // ------------------------
   
   public var reactProps: NSDictionary = [:];
+  
+  public var reactChildrenCount: Int = 0;
+  var reactChildrenCountProp: NSNumber = 0 {
+    willSet {
+      let oldCount = self.reactChildrenCount;
+      let newCount = newValue.intValue;
+      
+      guard oldCount != newCount else {
+        return;
+      };
+      
+      self.reactChildrenCount = newCount;
+      // TODO: Add code for verifying child count before presenting
+    }
+  };
   
   public var shouldAllowDismissalViaGesture: Bool = true {
     willSet {
