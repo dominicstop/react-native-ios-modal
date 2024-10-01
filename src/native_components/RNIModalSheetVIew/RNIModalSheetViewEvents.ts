@@ -17,8 +17,23 @@ export type OnModalSheetStateDidChangeEventPayload = Readonly<{
   currentState: RNIModalSheetStateMetrics;
 }>;
 
+export type onModalSheetWillDismissViaGestureEventPayload = Readonly<{}>;
+
+export type onModalSheetDidDismissViaGestureEventPayload = Readonly<{}>;
+
+export type onModalSheetDidAttemptToDismissViaGestureEventPayload = Readonly<{}>;
+
 // MARK: Events
 // ------------
+
+export type onModalSheetWillDismissViaGestureEvent = 
+  BubblingEventHandler<onModalSheetWillDismissViaGestureEventPayload>;
+
+export type onModalSheetDidDismissViaGestureEvent = 
+  BubblingEventHandler<onModalSheetDidDismissViaGestureEventPayload>;
+
+export type onModalSheetDidAttemptToDismissViaGestureEvent = 
+  BubblingEventHandler<onModalSheetDidAttemptToDismissViaGestureEventPayload>;
 
 export type OnModalSheetStateWillChangeEvent = 
   BubblingEventHandler<OnModalSheetStateWillChangeEventPayload>;

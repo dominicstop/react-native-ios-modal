@@ -43,6 +43,11 @@ export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheet
   | 'onModalWillHide'
   | 'onModalDidHide'
 
+  // presentation controller delegate events
+  | 'onModalSheetWillDismissViaGesture'
+  | 'onModalSheetDidDismissViaGesture'
+  | 'onModalSheetDidAttemptToDismissViaGesture'
+
   // modal sheet events
   | 'onModalSheetStateWillChange'
   | 'onModalSheetStateDidChange'
@@ -50,7 +55,6 @@ export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheet
 
 export type RNIModalSheetViewBaseProps = {
   shouldEnableDebugBackgroundColors?: boolean;
-  contentContainerStyle?: ViewProps['style'];
 };
 
 export type RNIModalSheetViewProps = PropsWithChildren<

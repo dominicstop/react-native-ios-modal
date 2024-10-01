@@ -30,6 +30,10 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case onModalWillHide;
     case onModalDidHide;
     
+    case onModalSheetWillDismissViaGesture;
+    case onModalSheetDidDismissViaGesture;
+    case onModalSheetDidAttemptToDismissViaGesture;
+    
     case onModalSheetStateWillChange;
     case onModalSheetStateDidChange;
   };
@@ -307,6 +311,9 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
   };
 };
 
+// MARK: - RNIModalSheetViewDelegate+ModalViewControllerEventsNotifiable
+// ---------------------------------------------------------------------
+
 extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
   
   public func notifyOnModalWillPresent(
@@ -358,8 +365,8 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
   };
 };
 
-// MARK: - RNIModalSheetViewDelegate+ViewControllerLifecycleNotifiable
-// -------------------------------------------------------------------
+// MARK: - RNIModalSheetViewDelegate+ModalSheetPresentationStateEventsNotifiable
+// -----------------------------------------------------------------------------
 
 extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable {
   
@@ -400,6 +407,42 @@ extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable
     self.dispatchEvent(
       for: .onModalSheetStateDidChange,
       withPayload: payload
+    );
+  };
+};
+
+// MARK: - RNIModalSheetViewDelegate+ModalSheetViewControllerEventsNotifiable
+// --------------------------------------------------------------------------
+
+extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
+  
+  public func notifyOnSheetDidAttemptToDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.dispatchEvent(
+      for: .onModalSheetDidAttemptToDismissViaGesture,
+      withPayload: [:]
+    );
+  };
+  
+  public func notifyOnSheetDidDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.dispatchEvent(
+      for: .onModalSheetWillDismissViaGesture,
+      withPayload: [:]
+    );
+  };
+  
+  public func notifyOnSheetWillDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.dispatchEvent(
+      for: .onModalSheetDidDismissViaGesture,
+      withPayload: [:]
     );
   };
 };
