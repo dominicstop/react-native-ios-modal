@@ -62,7 +62,7 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
     <ExampleItemCard
       style={props.style}
       index={props.index}
-      title={'RNIDetachedViewTest02'}
+      title={'ModalSheetViewTest01'}
       description={[
         "TBA",
       ]}
@@ -244,6 +244,17 @@ export function ModalSheetViewTest01(props: ExampleItemProps) {
           
           console.log(
             "ModalSheetViewTest01.onModalSheetStateDidChange",
+            "\n - nativeEvent:", nativeEvent,
+            "\n"
+          );
+        }}
+        onModalFocusChange={({nativeEvent}) => {
+          if(!shouldEnableModalEventsLogging) {
+            return;
+          };
+          
+          console.log(
+            "ModalSheetViewTest01.onModalFocusChange",
             "\n - nativeEvent:", nativeEvent,
             "\n"
           );
