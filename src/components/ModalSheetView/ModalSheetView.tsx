@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Helpers } from 'react-native-ios-utilities';
 
 import type { ModalSheetViewProps, ModalSheetViewRef } from './ModalSheetViewTypes';
-import type { ModalSheetViewContentProps } from './ModalSheetViewContentTypes';
+import type { ModalSheetViewContentProps } from '../ModalSheetViewContent';
 import type { ModalSheetContentMap } from './ModalSheetContentMap';
 
 import { RNIModalSheetView, type RNIModalSheetViewRef } from '../../native_components/RNIModalSheetVIew';

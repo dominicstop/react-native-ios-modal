@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ModalSheetViewContent } from './ModalSheetViewContent';
 import type { ModalSheetViewMainContentProps } from './ModalSheetViewMainContentTypes';
-import { ModalSheetViewNativeIDKeys } from './ModalSheetViewNativeIDKeys';
+import { ModalSheetViewNativeIDKeys } from '../ModalSheetView/ModalSheetViewNativeIDKeys';
 
 
 export function ModalSheetViewMainContent(

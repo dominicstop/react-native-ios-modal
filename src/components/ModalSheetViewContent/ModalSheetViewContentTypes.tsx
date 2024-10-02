@@ -2,7 +2,7 @@ import type { ViewStyle } from 'react-native';
 import type { RNIWrapperViewProps } from 'react-native-ios-utilities';
 
 import type { RNIModalSheetViewProps } from "../../native_components/RNIModalSheetVIew";
-import type { ModalSheetContentMap } from "./ModalSheetContentMap";
+import type { ModalSheetContentMap } from "../ModalSheetView/ModalSheetContentMap";
 
 
 export type ModalSheetViewContentInheritedProps = Pick<RNIModalSheetViewProps, 

@@ -1,5 +1,7 @@
 
 export * from './components/ModalSheetView';
+export * from './components/ModalSheetViewContent';
+
 export * from './context/ModalSheetViewContext';
 export * from './hooks/useModalSheetViewEvents';
 

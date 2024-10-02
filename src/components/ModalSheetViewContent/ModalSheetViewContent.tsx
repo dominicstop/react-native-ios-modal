@@ -3,9 +3,8 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { RNIWrapperView, type StateViewID } from 'react-native-ios-utilities';
 
-import { DEFAULT_SHEET_CONTENT_ENTRY } from './ModalSheetContentMap';
+import { DEFAULT_SHEET_CONTENT_ENTRY } from '../ModalSheetView/ModalSheetContentMap';
 import type { ModalSheetViewContentProps } from './ModalSheetViewContentTypes';
-
 import { IS_USING_NEW_ARCH } from '../../constants/LibEnv';
 
 
