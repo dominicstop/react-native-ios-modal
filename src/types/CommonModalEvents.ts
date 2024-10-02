@@ -49,6 +49,7 @@ export type OnModalDidHideEventPayload = Readonly<{
 
 export type OnModalFocusChangeEventPayload = Readonly<{
   viewControllerInstanceID: string;
+  modalLevel: number;
   prevState?: ModalFocusState;
   currentState: ModalFocusState;
   nextState: ModalFocusState;

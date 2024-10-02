@@ -480,11 +480,17 @@ extension RNIModalSheetViewDelegate: ModalFocusEventNotifiable {
     currentState: ModalFocusState,
     nextState: ModalFocusState
   ) {
+  
+    let modalLevel =
+         viewController.modalRegistryEntry?.modalFocusIndex
+      ?? viewController.modalLevel
+      ?? -1;
     
     var payload: Dictionary<String, Any> = [
       "viewControllerInstanceID": viewController.synthesizedStringID,
       "currentState": currentState.rawValue,
       "nextState": nextState.rawValue,
+      "modalLevel":  modalLevel,
     ];
     
     payload.unwrapAndMerge(withOther: [
