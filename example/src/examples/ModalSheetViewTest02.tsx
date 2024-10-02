@@ -3,63 +3,36 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewContext, ModalSheetViewMainContent, useModalSheetViewEvents, type ModalSheetViewRef } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewContext, ModalSheetViewMainContent, useModalSheetViewEvents, type ModalSheetViewRef, type OnModalFocusChangeEventPayload } from 'react-native-ios-modal';
 
-import { LogListDisplay, type LogListDisplayRef } from '../components/LogListDisplay';
 import type { ExampleItemProps } from './SharedExampleTypes';
+import type { OnModalSheetStateWillChangeEventPayload } from '../../../src/native_components/RNIModalSheetVIew';
 
 
 function ModalContent(props: {
   recursionLevel?: number
 }){
   const nextModalRef = React.useRef<ModalSheetViewRef | null>(null);
-  const logListDisplayRef = React.useRef<LogListDisplayRef | null>(null);
+
+  const [
+    onModalSheetStateWillChangeEventPayload,
+    setOModalSheetStateWillChangeEventPayload,
+  ] = React.useState<OnModalSheetStateWillChangeEventPayload | null>(null);
+  
+  const [
+    focusChangeEventPayload,
+    setFocusChangeEventPayload
+  ] = React.useState<OnModalFocusChangeEventPayload | null>(null);
 
   const modalContext = React.useContext(ModalSheetViewContext);
   const recursionLevel = props.recursionLevel ?? 0;
-
-  useModalSheetViewEvents('onModalWillPresent', () => {
-    logListDisplayRef.current?.addItem('onModalWillPresent');
+  
+  useModalSheetViewEvents('onModalFocusChange', (eventPayload) => {
+    setFocusChangeEventPayload(eventPayload);
   });
 
-  useModalSheetViewEvents('onModalDidPresent', () => {
-    logListDisplayRef.current?.addItem('onModalDidPresent');
-  });
-
-  useModalSheetViewEvents('onModalWillDismiss', () => {
-    logListDisplayRef.current?.addItem('onModalWillDismiss');
-  });
-
-  useModalSheetViewEvents('onModalDidDismiss', () => {
-    logListDisplayRef.current?.addItem('onModalDidDismiss');
-  });
-
-  useModalSheetViewEvents('onModalWillShow', () => {
-    logListDisplayRef.current?.addItem('onModalWillShow');
-  });
-
-  useModalSheetViewEvents('onModalDidShow', () => {
-    logListDisplayRef.current?.addItem('onModalDidShow');
-  });
-
-  useModalSheetViewEvents('onModalWillHide', () => {
-    logListDisplayRef.current?.addItem('onModalWillHide');
-  });
-
-  useModalSheetViewEvents('onModalDidHide', () => {
-    logListDisplayRef.current?.addItem('onModalDidHide');
-  });
-
-  useModalSheetViewEvents('onModalFocusChange', () => {
-    logListDisplayRef.current?.addItem('onModalFocusChange');
-  });
-
-  useModalSheetViewEvents('onModalSheetStateWillChange', () => {
-    logListDisplayRef.current?.addItem('onModalSheetStateWillChange');
-  });
-
-  useModalSheetViewEvents('onModalSheetStateDidChange', () => {
-    logListDisplayRef.current?.addItem('onModalSheetStateDidChange');
+  useModalSheetViewEvents('onModalSheetStateWillChange', (eventPayload) => {
+    setOModalSheetStateWillChangeEventPayload(eventPayload);
   });
 
   return (
@@ -75,6 +48,9 @@ function ModalContent(props: {
       <ObjectPropertyDisplay
         recursiveStyle={styles.debugDisplayInner}
         object={{
+          viewControllerInstanceID: [
+            onModalSheetStateWillChangeEventPayload?.viewControllerInstanceID,
+          ],
           prevState: {
             state: modalContext?.prevModalSheetStateMetrics?.state,
             simplified: modalContext?.prevModalSheetStateMetrics?.simplified,
@@ -97,8 +73,16 @@ function ModalContent(props: {
           },
         }}
       />
-      <LogListDisplay
-        ref={ref => logListDisplayRef.current = ref}
+      <ObjectPropertyDisplay
+        recursiveStyle={styles.debugDisplayInner}
+        object={{
+          viewControllerInstanceID: [
+            focusChangeEventPayload?.viewControllerInstanceID
+          ],
+          prevState: focusChangeEventPayload?.prevState,
+          currentState: focusChangeEventPayload?.currentState,
+          nextState: focusChangeEventPayload?.nextState,
+        }}
       />
       <CardButton
         title={'Present Sheet Modal'}
@@ -134,7 +118,6 @@ function ModalContent(props: {
 
 export function ModalSheetViewTest02(props: ExampleItemProps) {
   const modalSheetViewRef = React.useRef<ModalSheetViewRef | null>(null);
-
   return (
     <ExampleItemCard
       style={props.style}
