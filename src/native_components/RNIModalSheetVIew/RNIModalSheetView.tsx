@@ -192,6 +192,15 @@ export const RNIModalSheetView = React.forwardRef<
           event.nativeEvent
         );
       }}
+      onModalFocusChange={(event) => {
+        props.onModalFocusChange?.(event);
+        event.stopPropagation();
+
+        modalEventEmitterRef.current!.emit(
+          'onModalFocusChange',
+          event.nativeEvent
+        );
+      }}
       onModalSheetStateWillChange={(event) => {
         props.onModalSheetStateWillChange?.(event);
         event.stopPropagation();

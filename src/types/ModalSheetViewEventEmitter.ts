@@ -1,7 +1,7 @@
 import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 import type { RemapObject } from 'react-native-ios-utilities';
 
-import type { OnModalDidDidDismissEventPayload, OnModalDidHideEventPayload, OnModalDidPresentEventPayload, OnModalDidShowEventPayload, OnModalWillDismissEventPayload, OnModalWillHideEventPayload, OnModalWillPresentEventPayload, OnModalWillShowEventPayload } from './CommonModalEvents';
+import type { OnModalDidDidDismissEventPayload, OnModalDidHideEventPayload, OnModalDidPresentEventPayload, OnModalDidShowEventPayload, OnModalFocusChangeEventPayload, OnModalWillDismissEventPayload, OnModalWillHideEventPayload, OnModalWillPresentEventPayload, OnModalWillShowEventPayload } from './CommonModalEvents';
 import type { OnModalSheetStateDidChangeEventPayload, OnModalSheetStateWillChangeEventPayload, onModalSheetDidAttemptToDismissViaGestureEventPayload, onModalSheetDidDismissViaGestureEventPayload, onModalSheetWillDismissViaGestureEventPayload } from '../native_components/RNIModalSheetVIew';
 
 
@@ -15,6 +15,7 @@ export enum ModalSheetViewEvents {
   onModalDidShow = "onModalDidShow",
   onModalWillHide = "onModalWillHide",
   onModalDidHide = "onModalDidHide",
+  onModalFocusChange = "onModalFocusChange",
 
   // presentation controller event delegates
   onModalSheetWillDismissViaGesture = "onModalSheetWillDismissViaGesture",
@@ -37,6 +38,8 @@ export type ModalSheetViewEventEmitterMap = RemapObject<typeof ModalSheetViewEve
   onModalDidShow: OnModalDidShowEventPayload;
   onModalWillHide: OnModalWillHideEventPayload;
   onModalDidHide: OnModalDidHideEventPayload;
+  onModalFocusChange: OnModalFocusChangeEventPayload;
+
   onModalSheetWillDismissViaGesture: onModalSheetWillDismissViaGestureEventPayload;
   onModalSheetDidDismissViaGesture: onModalSheetDidDismissViaGestureEventPayload;
   onModalSheetDidAttemptToDismissViaGesture: onModalSheetDidAttemptToDismissViaGestureEventPayload;
