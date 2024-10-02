@@ -226,10 +226,7 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
             fallbackValue: true
           );
           
-          modalSheetController.dismiss(animated: isAnimated) {
-            self.discardCurrentModalControllerIfNeeded();
-          };
-          
+          modalSheetController.dismiss(animated: isAnimated);
           resolveBlock([:]);
           
         case "getModalMetrics":
@@ -369,6 +366,8 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
         "isAnimated": isAnimated,
       ]
     );
+    
+    self.discardCurrentModalControllerIfNeeded();
   };
 };
 
