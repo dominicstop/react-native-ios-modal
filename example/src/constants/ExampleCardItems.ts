@@ -3,6 +3,7 @@ import { AppMetadataCard } from "../examples/AppMetadataCard";
 
 import { ModalSheetViewTest01 } from "../examples/ModalSheetViewTest01";
 import { ModalSheetViewTest02 } from "../examples/ModalSheetViewTest02";
+import { ModalSheetViewTest03 } from "../examples/ModalSheetViewTest03";
 
 import type { ExampleItemProps } from "../examples/SharedExampleTypes";
 import type { RouteEntry } from "./Routes";
@@ -52,6 +53,10 @@ export const EXAMPLE_ITEMS: Array<ExampleItem> = (() => {
     {
       type: 'card',
       component: ModalSheetViewTest02,
+    },
+    {
+      type: 'card',
+      component: ModalSheetViewTest03,
     },
   ]; 
 
