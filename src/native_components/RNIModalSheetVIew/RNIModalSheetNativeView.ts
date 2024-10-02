@@ -7,7 +7,7 @@ import {
 } from './RNIModalSheetViewNativeComponent';
 
 import type { OnModalSheetStateDidChangeEvent, OnModalSheetStateWillChangeEvent, onModalSheetWillDismissViaGestureEvent, onModalSheetDidDismissViaGestureEvent, onModalSheetDidAttemptToDismissViaGestureEvent } from './RNIModalSheetViewEvents';
-import type { OnModalWillPresentEvent, OnModalDidPresentEvent, OnModalWillShowEvent, OnModalDidShowEvent, OnModalWillHideEvent, OnModalDidHideEvent, OnModalWillDismissEvent, OnModalDidDismissEvent, OnModalFocusChangeEventPayload, OnModalFocusChangeEvent } from '../../types/CommonModalEvents';
+import type { OnModalWillPresentEvent, OnModalDidPresentEvent, OnModalWillShowEvent, OnModalDidShowEvent, OnModalWillHideEvent, OnModalDidHideEvent, OnModalWillDismissEvent, OnModalDidDismissEvent, OnModalFocusChangeEvent } from '../../types/CommonModalEvents';
 
 
 type RNIModalSheetViewNativeComponentBaseProps = 
