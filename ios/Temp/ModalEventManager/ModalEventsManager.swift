@@ -133,6 +133,14 @@ public final class ModalEventsManager {
       return
     };
     
+    let didDismiss =
+         modalVC.view.window == nil
+      || !modalVC.isPresentedAsModal;
+      
+    guard didDismiss else {
+      return;
+    };
+    
     let eventManager =
       ModalEventsManagerRegistry.shared.getManager(forWindow: targetWindow);
       
