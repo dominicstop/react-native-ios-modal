@@ -32,7 +32,7 @@ export const LogListDisplay = React.forwardRef<
   const maxItemsToShow = props.maxItemsToShow ?? 15;
 
   const recentEventsSorted = events.sort((a, b) =>  a.index - b.index);
-  const recentEvents = recentEventsSorted.reverse().slice(-maxItemsToShow);
+  const recentEvents = recentEventsSorted.slice(-maxItemsToShow);
 
   React.useImperativeHandle(ref, () => ({
     addItem: (itemTitle) => {
