@@ -142,7 +142,7 @@ public final class ModalEventsManager {
       
     let modalEntries = eventManager.modalRegistry.getEntriesGrouped();
       
-    modalEntries.topMostModal!.setModalFocusState(didDismiss
+    modalEntries.topMostModal?.setModalFocusState(didDismiss
       ? .blurred
       : .focused
     );
