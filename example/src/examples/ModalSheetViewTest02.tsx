@@ -50,6 +50,10 @@ function ModalContent(props: {
     logListDisplayRef.current?.addItem('onModalDidHide');
   });
 
+  useModalSheetViewEvents('onModalFocusChange', () => {
+    logListDisplayRef.current?.addItem('onModalFocusChange');
+  });
+
   useModalSheetViewEvents('onModalSheetStateWillChange', () => {
     logListDisplayRef.current?.addItem('onModalSheetStateWillChange');
   });
@@ -135,7 +139,7 @@ export function ModalSheetViewTest02(props: ExampleItemProps) {
     <ExampleItemCard
       style={props.style}
       index={props.index}
-      title={'RNIDetachedViewTest02'}
+      title={'ModalSheetViewTest02'}
       description={[
         "TBA",
       ]}
