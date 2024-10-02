@@ -5,20 +5,20 @@ import type { RNIModalSheetViewProps } from "../../native_components/RNIModalShe
 import type { ModalSheetContentMap } from "../ModalSheetView/ModalSheetContentMap";
 
 
-export type ModalSheetViewContentInheritedProps = Pick<RNIModalSheetViewProps, 
+export type ModalSheetContentInheritedProps = Pick<RNIModalSheetViewProps, 
   | 'shouldEnableDebugBackgroundColors'
 > & Pick<RNIWrapperViewProps,
   | 'onDidSetViewID'
   | 'nativeID'
 >;
 
-export type ModalSheetViewContentBaseProps = {
+export type ModalSheetContentBaseProps = {
   contentContainerStyle?: ViewStyle;
   isParentDetached?: boolean;
   modalSheetContentMap?: ModalSheetContentMap;
   shouldMountModalContent?: boolean;
 };
 
-export type ModalSheetViewContentProps = 
-  & ModalSheetViewContentInheritedProps
-  & ModalSheetViewContentBaseProps;
+export type ModalSheetContentProps = 
+  & ModalSheetContentInheritedProps
+  & ModalSheetContentBaseProps;

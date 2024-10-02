@@ -2,8 +2,8 @@
 export * from './components/ModalSheetView/ModalSheetView';
 export * from './components/ModalSheetView/ModalSheetViewTypes';
 
-export * from './components/ModalSheetViewContent/ModalSheetViewMainContent';
-export * from './components/ModalSheetViewContent/ModalSheetViewContentTypes';
+export * from './components/ModalSheetContent/ModalSheetMainContent';
+export * from './components/ModalSheetContent/ModalSheetContentTypes';
 
 export * from './context/ModalSheetViewContext';
 export * from './hooks/useModalSheetViewEvents';

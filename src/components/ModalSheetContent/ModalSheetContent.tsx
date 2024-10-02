@@ -4,12 +4,12 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { RNIWrapperView, type StateViewID } from 'react-native-ios-utilities';
 
 import { DEFAULT_SHEET_CONTENT_ENTRY } from '../ModalSheetView/ModalSheetContentMap';
-import type { ModalSheetViewContentProps } from './ModalSheetViewContentTypes';
+import type { ModalSheetContentProps } from './ModalSheetContentTypes';
 import { IS_USING_NEW_ARCH } from '../../constants/LibEnv';
 
 
-export function ModalSheetViewContent(
-  props: React.PropsWithChildren<ModalSheetViewContentProps>
+export function ModalSheetContent(
+  props: React.PropsWithChildren<ModalSheetContentProps>
 ) {
   const [viewID, setViewID] = React.useState<StateViewID>();
   

@@ -9,7 +9,7 @@ import type { ModalSheetContentMap } from './ModalSheetContentMap';
 
 import { DEFAULT_MODAL_SHEET_VIEW_METRICS } from './ModalSheetViewConstants';
 
-import type { ModalSheetViewContentProps } from '../ModalSheetViewContent/ModalSheetViewContentTypes';
+import type { ModalSheetContentProps } from '../ModalSheetContent/ModalSheetContentTypes';
 import type { RNIModalSheetStateMetrics } from '../../types/RNIModalSheetStateMetrics';
 
 import { ModalSheetViewContext, type ModalSheetViewContextType } from '../../context/ModalSheetViewContext';
@@ -123,7 +123,7 @@ export const ModalSheetView = React.forwardRef<
 
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(
-      child as React.ReactElement<ModalSheetViewContentProps>, 
+      child as React.ReactElement<ModalSheetContentProps>, 
       {
         modalSheetContentMap,
         shouldMountModalContent: shouldMountModalContents,

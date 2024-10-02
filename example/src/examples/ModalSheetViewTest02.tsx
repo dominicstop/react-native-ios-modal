@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewContext, ModalSheetViewMainContent, useModalSheetViewEvents, type ModalSheetViewRef, type OnModalFocusChangeEventPayload } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewContext, ModalSheetMainContent, useModalSheetViewEvents, type ModalSheetViewRef, type OnModalFocusChangeEventPayload } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
 import type { OnModalSheetStateWillChangeEventPayload } from '../../../src/native_components/RNIModalSheetVIew';
@@ -36,7 +36,7 @@ function ModalContent(props: {
   });
 
   return (
-    <ModalSheetViewMainContent
+    <ModalSheetMainContent
       // temp fix
       {...{...props}}
       contentContainerStyle={styles.modalContentContainer}
@@ -113,7 +113,7 @@ function ModalContent(props: {
         recursionLevel={recursionLevel + 1}
       />
     </ModalSheetView>
-    </ModalSheetViewMainContent>
+    </ModalSheetMainContent>
   );
 };
 
