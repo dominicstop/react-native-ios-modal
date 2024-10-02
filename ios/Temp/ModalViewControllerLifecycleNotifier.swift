@@ -168,13 +168,6 @@ extension ModalViewControllerLifecycleNotifier: ModalFocusEventNotifiable {
     currentState: ModalFocusState,
     nextState: ModalFocusState
   ) {
-    print(
-      "ModalViewControllerLifecycleNotifier.notifyForModalFocusStateChange",
-      "\n - instanceID", self.synthesizedStringID,
-      "\n - \(prevState?.rawValue ?? "N/A") -> \(currentState) -> \(nextState)",
-      "\n"
-    );
-    
     self.modalFocusEventDelegates.invoke {
       $0.notifyForModalFocusStateChange(
         prevState: prevState,
