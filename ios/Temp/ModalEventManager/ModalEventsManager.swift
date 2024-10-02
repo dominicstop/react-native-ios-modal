@@ -136,24 +136,29 @@ public final class ModalEventsManager {
     let didDismiss =
          modalVC.view.window == nil
       || !modalVC.isPresentedAsModal;
-      
-    guard didDismiss else {
-      return;
-    };
     
     let eventManager =
       ModalEventsManagerRegistry.shared.getManager(forWindow: targetWindow);
       
     let modalEntries = eventManager.modalRegistry.getEntriesGrouped();
       
-    modalEntries.topMostModal!.setModalFocusState(.blurred);
-    modalEntries.secondTopMostModal?.setModalFocusState(.focused);
+    modalEntries.topMostModal!.setModalFocusState(didDismiss
+      ? .blurred
+      : .focused
+    );
+    
+    modalEntries.secondTopMostModal?.setModalFocusState(didDismiss
+      ? .focused
+      : .blurred
+    );
     
     modalEntries.otherModals?.forEach {
       $0.setModalFocusState(.blurred);
     };
     
-    eventManager.modalRegistry.removeEntry(forViewController: modalVC);
+    if didDismiss {
+      eventManager.modalRegistry.removeEntry(forViewController: modalVC);
+    };
   };
 };
 
