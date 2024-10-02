@@ -79,6 +79,7 @@ function ModalContent(props: {
           viewControllerInstanceID: [
             focusChangeEventPayload?.viewControllerInstanceID
           ],
+          modalLevel: focusChangeEventPayload?.modalLevel,
           prevState: focusChangeEventPayload?.prevState,
           currentState: focusChangeEventPayload?.currentState,
           nextState: focusChangeEventPayload?.nextState,
