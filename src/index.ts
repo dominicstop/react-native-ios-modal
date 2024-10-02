@@ -5,6 +5,9 @@ export * from './components/ModalSheetView/ModalSheetViewTypes';
 export * from './components/ModalSheetContent/ModalSheetMainContent';
 export * from './components/ModalSheetContent/ModalSheetContentTypes';
 
+export * from './components/ModalSheetContent/ModalSheetBottomAttachedContentOverlay';
+export * from './components/ModalSheetContent/ModalSheetBottomAttachedContentOverlayTypes';
+
 export * from './context/ModalSheetViewContext';
 export * from './hooks/useModalSheetViewEvents';
 
