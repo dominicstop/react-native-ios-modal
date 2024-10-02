@@ -243,6 +243,10 @@ extension ModalSheetPresentationStateMachine: ViewControllerLifecycleNotifiable 
     sender: UIViewController,
     isAnimated: Bool
   ) {
+    guard !self.isSheetPanGestureActive else {
+      return;
+    };
+    
     self.setState(nextState: .dismissing);
   };
   
@@ -266,17 +270,12 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
     self.setState(nextState: .presentingViaGestureCancelled);
   };
   
-  public func notifyOnSheetDidDismissViaGesture(
-    sender: UIViewController,
-    presentationController: UIPresentationController
-  ) {
-    self.setState(nextState: .dismissedViaGesture);
-  };
-  
   public func notifyOnSheetWillDismissViaGesture(
     sender: UIViewController,
     presentationController: UIPresentationController
   ) {
+    self.isSheetPanGestureActive = true;
+    
     guard let transitionCoordinator = sender.transitionCoordinator else {
       return;
     };
@@ -295,6 +294,13 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
     };
   };
   
+  public func notifyOnSheetDidDismissViaGesture(
+    sender: UIViewController,
+    presentationController: UIPresentationController
+  ) {
+    self.setState(nextState: .dismissedViaGesture);
+  };
+  
   public func notifyOnSheetBeingDraggedByPanGesture(
     sender: UIViewController,
     panGesture: UIPanGestureRecognizer
@@ -306,6 +312,7 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
     switch panGesture.state {
       case .began, .changed:
         self.isSheetPanGestureActive = true;
+        self.setState(nextState: .draggingViaGesture);
       
       case .ended, .cancelled, .failed:
         self.isSheetPanGestureActive = false;
@@ -313,7 +320,5 @@ extension ModalSheetPresentationStateMachine: ModalSheetViewControllerEventsNoti
       default:
         break;
     };
-  
-    self.setState(nextState: .draggingViaGesture);
   };
 };
