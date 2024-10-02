@@ -137,6 +137,10 @@ extension RNIModalSheetViewDelegate: RNIContentViewDelegate {
 
   // MARK: Paper + Fabric
   // --------------------
+  
+  public func notifyOnInit(sender: RNIContentViewParentDelegate) {
+    ModalEventsManagerRegistry.shared.swizzleIfNeeded();
+  }
     
   public func notifyOnMountChildComponentView(
     sender: RNIContentViewParentDelegate,

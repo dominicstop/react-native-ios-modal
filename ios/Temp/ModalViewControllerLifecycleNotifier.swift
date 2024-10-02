@@ -17,8 +17,16 @@ open class ModalViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier
   private(set) public var modalLifecycleEventDelegates:
     MulticastDelegate<ModalViewControllerEventsNotifiable> = .init();
     
+  private(set) public var modalFocusEventDelegates:
+    MulticastDelegate<ModalFocusEventNotifiable> = .init();
+    
   // MARK: - View Controller Lifecycle
   // ---------------------------------
+  
+  public override func viewDidLoad() {
+    super.viewDidLoad();
+    ModalEventsManagerRegistry.shared.swizzleIfNeeded();
+  }
   
   public override func viewWillAppear(_ animated: Bool) {
     defer {
@@ -128,11 +136,51 @@ open class ModalViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier
   // MARK: - Methods
   // ---------------
   
+  open override func present(
+    _ viewControllerToPresent: UIViewController,
+    animated flag: Bool,
+    completion: (() -> Void)? = nil
+  ) {
+    if let modalVC = viewControllerToPresent as? ModalViewControllerLifecycleNotifier {
+      modalVC.isExplicitlySomeKindOfModal = true;
+    };
+    
+    super.present(
+      viewControllerToPresent,
+      animated: flag,
+      completion: completion
+    );
+  };
+  
   open override func dismiss(
     animated flag: Bool,
     completion: (() -> Void)? = nil
   ) {
     self.isExplicitlyBeingDismissed = true;
     super.dismiss(animated: flag, completion: completion);
-  }
+  };
+};
+
+extension ModalViewControllerLifecycleNotifier: ModalFocusEventNotifiable {
+  
+  public func notifyForModalFocusStateChange(
+    prevState: ModalFocusState?,
+    currentState: ModalFocusState,
+    nextState: ModalFocusState
+  ) {
+    print(
+      "ModalViewControllerLifecycleNotifier.notifyForModalFocusStateChange",
+      "\n - instanceID", self.synthesizedStringID,
+      "\n - \(prevState?.rawValue ?? "N/A") -> \(currentState) -> \(nextState)",
+      "\n"
+    );
+    
+    self.modalFocusEventDelegates.invoke {
+      $0.notifyForModalFocusStateChange(
+        prevState: prevState,
+        currentState: currentState,
+        nextState: nextState
+      );
+    };
+  };
 };
