@@ -30,7 +30,9 @@ export const LogListDisplay = React.forwardRef<
   
   const hasEvents = (events.length > 0);
   const maxItemsToShow = props.maxItemsToShow ?? 15;
-  const recentEvents = events.reverse().slice(-maxItemsToShow);
+
+  const recentEventsSorted = events.sort((a, b) =>  a.index - b.index);
+  const recentEvents = recentEventsSorted.reverse().slice(-maxItemsToShow);
 
   React.useImperativeHandle(ref, () => ({
     addItem: (itemTitle) => {
@@ -42,11 +44,14 @@ export const LogListDisplay = React.forwardRef<
 
       const ms = Helpers.pad(date.getMilliseconds(), 3);
       
-      setEvents((prevValue) => ([ ...prevValue, {
-        timestamp: `${h}:${m}:${s}.${ms}`,
-        itemTitle: itemTitle,
-        index: prevValue.length
-      }]));
+      setEvents((prevValue) => ([ 
+        ...prevValue, 
+        {
+          timestamp: `${h}:${m}:${s}.${ms}`,
+          itemTitle: itemTitle,
+          index: prevValue.length
+        }
+      ]));
     },
   }));
 
