@@ -70,7 +70,7 @@ public class ModalRegistry {
   
   public func getEntriesSorted() -> [ModalRegistryEntry] {
     self.registry.values.sorted {
-      $0.modalFocusIndex > $1.modalFocusIndex;
+      $0.modalFocusIndex < $1.modalFocusIndex;
     };
   };
   

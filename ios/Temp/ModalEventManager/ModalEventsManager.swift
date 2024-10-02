@@ -144,6 +144,8 @@ public final class ModalEventsManager {
     modalEntries.otherModals?.forEach {
       $0.setModalFocusState(.blurred);
     };
+    
+    eventManager.modalRegistry.removeEntry(forViewController: modalVC);
   };
 };
 
