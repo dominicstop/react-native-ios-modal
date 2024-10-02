@@ -8,4 +8,5 @@ export type * from './types/PresentationControllerMetrics';
 export type * from './types/ModalMetrics';
 export type * from './types/CommonModalEvents';
 export type * from './types/ModalSheetState';
+export type * from './types/ModalFocusState';
 export type * from './types/RNIModalSheetStateMetrics';

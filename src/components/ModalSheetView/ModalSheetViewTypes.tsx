@@ -46,6 +46,7 @@ export type ModalSheetViewInheritedProps = Pick<RNIModalSheetViewProps,
   | 'onModalDidShow'
   | 'onModalWillHide'
   | 'onModalDidHide'
+  | 'onModalFocusChange'
   
   // presentation controller delegate events
   | 'onModalSheetWillDismissViaGesture'

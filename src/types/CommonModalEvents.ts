@@ -1,4 +1,5 @@
 import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import type { ModalFocusState } from './ModalFocusState';
 
 
 // MARK: Event Objects
@@ -38,6 +39,12 @@ export type OnModalDidHideEventPayload = Readonly<{
   isAnimated: boolean;
 }>;
 
+export type OnModalFocusChangeEventPayload = Readonly<{
+  prevState?: ModalFocusState;
+  currentState: ModalFocusState;
+  nextState: ModalFocusState;
+}>;
+
 // MARK: Events
 // ------------
 
@@ -65,3 +72,5 @@ export type OnModalWillHideEvent =
 export type OnModalDidHideEvent = 
   BubblingEventHandler<OnModalDidHideEventPayload>;
 
+export type OnModalFocusChangeEvent =
+  BubblingEventHandler<OnModalFocusChangeEventPayload>;

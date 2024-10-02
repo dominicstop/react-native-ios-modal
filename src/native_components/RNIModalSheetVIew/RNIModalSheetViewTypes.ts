@@ -42,6 +42,7 @@ export type RNIModalSheetViewInheritedOptionalProps = Partial<Pick<RNIModalSheet
   | 'onModalDidShow'
   | 'onModalWillHide'
   | 'onModalDidHide'
+  | 'onModalFocusChange'
 
   // presentation controller delegate events
   | 'onModalSheetWillDismissViaGesture'

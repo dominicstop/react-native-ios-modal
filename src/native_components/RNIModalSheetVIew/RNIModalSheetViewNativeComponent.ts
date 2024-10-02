@@ -32,6 +32,8 @@ export interface NativeProps extends ViewProps {
   onModalWillHide?: BubblingEventHandler<{}>;
   onModalDidHide?: BubblingEventHandler<{}>;
 
+  onModalFocusChange?: BubblingEventHandler<{}>;
+
   // presentation controller delegate events
   /** 
    * From `UIAdaptivePresentationControllerDelegate`.

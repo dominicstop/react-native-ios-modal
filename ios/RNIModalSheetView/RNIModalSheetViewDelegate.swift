@@ -30,6 +30,8 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     case onModalWillHide;
     case onModalDidHide;
     
+    case onModalFocusChange;
+    
     case onModalSheetWillDismissViaGesture;
     case onModalSheetDidDismissViaGesture;
     case onModalSheetDidAttemptToDismissViaGesture;
@@ -113,6 +115,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     modalVC.lifecycleEventDelegates.add(self);
     modalVC.modalLifecycleEventDelegates.add(self);
     modalVC.sheetPresentationStateMachine.eventDelegates.add(self);
+    modalVC.modalFocusEventDelegates.add(self);
     
     return modalVC;
   };
@@ -447,6 +450,33 @@ extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
     self.dispatchEvent(
       for: .onModalSheetDidDismissViaGesture,
       withPayload: [:]
+    );
+  };
+};
+
+// MARK: - RNIModalSheetViewDelegate+ModalSheetViewControllerEventsNotifiable
+// --------------------------------------------------------------------------
+
+extension RNIModalSheetViewDelegate: ModalFocusEventNotifiable {
+  
+  public func notifyForModalFocusStateChange(
+    prevState: ModalFocusState?,
+    currentState: ModalFocusState,
+    nextState: ModalFocusState
+  ) {
+    
+    var payload: Dictionary<String, Any> = [
+      "currentState": currentState.rawValue,
+      "nextState": nextState.rawValue,
+    ];
+    
+    payload.unwrapAndMerge(withOther: [
+      "prevState": prevState?.rawValue,
+    ]);
+  
+    self.dispatchEvent(
+      for: .onModalFocusChange,
+      withPayload: payload
     );
   };
 };
