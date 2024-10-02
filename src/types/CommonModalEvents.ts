@@ -6,40 +6,49 @@ import type { ModalFocusState } from './ModalFocusState';
 // -------------------
 
 export type OnModalWillPresentEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalDidPresentEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalWillDismissEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalDidDidDismissEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalWillShowEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
   isFirstAppearance: boolean;
 }>;
 
 export type OnModalDidShowEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
   isFirstAppearance: boolean;
 }>;
 
 export type OnModalWillHideEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalDidHideEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   isAnimated: boolean;
 }>;
 
 export type OnModalFocusChangeEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   prevState?: ModalFocusState;
   currentState: ModalFocusState;
   nextState: ModalFocusState;

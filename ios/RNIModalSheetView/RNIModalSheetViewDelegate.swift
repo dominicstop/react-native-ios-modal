@@ -270,6 +270,7 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
     self.dispatchEvent(
       for: .onModalWillShow,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
         "isFirstAppearance": isFirstAppearance,
       ]
@@ -284,6 +285,7 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
     self.dispatchEvent(
       for: .onModalDidShow,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
         "isFirstAppearance": isFirstAppearance,
       ]
@@ -297,6 +299,7 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
     self.dispatchEvent(
       for: .onModalWillHide,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -309,6 +312,7 @@ extension RNIModalSheetViewDelegate: ViewControllerLifecycleNotifiable {
     self.dispatchEvent(
       for: .onModalDidHide,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -327,6 +331,7 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
     self.dispatchEvent(
       for: .onModalWillPresent,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -339,6 +344,7 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
     self.dispatchEvent(
       for: .onModalDidPresent,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -351,6 +357,7 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
     self.dispatchEvent(
       for: .onModalWillDismiss,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -363,6 +370,7 @@ extension RNIModalSheetViewDelegate: ModalViewControllerEventsNotifiable {
     self.dispatchEvent(
       for: .onModalDidDismiss,
       withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
         "isAnimated": isAnimated,
       ]
     );
@@ -388,6 +396,7 @@ extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable
     ];
     
     payload.unwrapAndMerge(withOther: [
+      "viewControllerInstanceID": self.modalSheetController?.synthesizedStringID,
       "prevState": prevState?.asDictionary
     ]);
     
@@ -407,6 +416,7 @@ extension RNIModalSheetViewDelegate: ModalSheetPresentationStateEventsNotifiable
     ];
     
     payload.unwrapAndMerge(withOther: [
+      "viewControllerInstanceID": self.modalSheetController?.synthesizedStringID,
       "prevState": prevState?.asDictionary
     ]);
     
@@ -428,7 +438,9 @@ extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
   ) {
     self.dispatchEvent(
       for: .onModalSheetDidAttemptToDismissViaGesture,
-      withPayload: [:]
+      withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
+      ]
     );
   };
   
@@ -438,7 +450,9 @@ extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
   ) {
     self.dispatchEvent(
       for: .onModalSheetWillDismissViaGesture,
-      withPayload: [:]
+      withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
+      ]
     );
   };
   
@@ -448,7 +462,9 @@ extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
   ) {
     self.dispatchEvent(
       for: .onModalSheetDidDismissViaGesture,
-      withPayload: [:]
+      withPayload: [
+        "viewControllerInstanceID": sender.synthesizedStringID,
+      ]
     );
   };
 };
@@ -466,6 +482,7 @@ extension RNIModalSheetViewDelegate: ModalFocusEventNotifiable {
   ) {
     
     var payload: Dictionary<String, Any> = [
+      "viewControllerInstanceID": viewController.synthesizedStringID,
       "currentState": currentState.rawValue,
       "nextState": nextState.rawValue,
     ];

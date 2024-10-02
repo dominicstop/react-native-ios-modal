@@ -7,21 +7,29 @@ import type { RNIModalSheetStateMetrics } from '../../types/RNIModalSheetStateMe
 // -------------------
 
 export type OnModalSheetStateWillChangeEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   prevState?: RNIModalSheetStateMetrics;
   currentState: RNIModalSheetStateMetrics;
   nextState: RNIModalSheetStateMetrics;
 }>;
 
 export type OnModalSheetStateDidChangeEventPayload = Readonly<{
+  viewControllerInstanceID: string;
   prevState: RNIModalSheetStateMetrics;
   currentState: RNIModalSheetStateMetrics;
 }>;
 
-export type onModalSheetWillDismissViaGestureEventPayload = Readonly<{}>;
+export type onModalSheetWillDismissViaGestureEventPayload = Readonly<{
+  viewControllerInstanceID: string;
+}>;
 
-export type onModalSheetDidDismissViaGestureEventPayload = Readonly<{}>;
+export type onModalSheetDidDismissViaGestureEventPayload = Readonly<{
+  viewControllerInstanceID: string;
+}>;
 
-export type onModalSheetDidAttemptToDismissViaGestureEventPayload = Readonly<{}>;
+export type onModalSheetDidAttemptToDismissViaGestureEventPayload = Readonly<{
+  viewControllerInstanceID: string;
+}>;
 
 // MARK: Events
 // ------------
