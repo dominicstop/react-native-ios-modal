@@ -35,6 +35,10 @@ public class ModalRegistryEntry {
   };
   
   public func setModalFocusState(_ modalStateNext: ModalFocusState){
+    guard let viewController = self.viewController else {
+      return;
+    };
+    
     let modalStatePrev = self.modalFocusStatePrev;
     let modalStateCurrent = self.modalFocusState;
     
@@ -47,6 +51,7 @@ public class ModalRegistryEntry {
     
     if let eventDelegate = self.viewController as? ModalFocusEventNotifiable {
       eventDelegate.notifyForModalFocusStateChange(
+        forViewController: viewController,
         prevState: modalStatePrev,
         currentState: modalStateCurrent,
         nextState: modalStateNext

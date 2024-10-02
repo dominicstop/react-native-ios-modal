@@ -164,12 +164,14 @@ open class ModalViewControllerLifecycleNotifier: ViewControllerLifecycleNotifier
 extension ModalViewControllerLifecycleNotifier: ModalFocusEventNotifiable {
   
   public func notifyForModalFocusStateChange(
+    forViewController viewController: UIViewController,
     prevState: ModalFocusState?,
     currentState: ModalFocusState,
     nextState: ModalFocusState
   ) {
     self.modalFocusEventDelegates.invoke {
       $0.notifyForModalFocusStateChange(
+        forViewController: viewController,
         prevState: prevState,
         currentState: currentState,
         nextState: nextState

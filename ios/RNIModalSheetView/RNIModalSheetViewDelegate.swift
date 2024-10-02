@@ -459,6 +459,7 @@ extension RNIModalSheetViewDelegate: ModalSheetViewControllerEventsNotifiable {
 extension RNIModalSheetViewDelegate: ModalFocusEventNotifiable {
   
   public func notifyForModalFocusStateChange(
+    forViewController viewController: UIViewController,
     prevState: ModalFocusState?,
     currentState: ModalFocusState,
     nextState: ModalFocusState

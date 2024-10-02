@@ -10,6 +10,7 @@ import Foundation
 public protocol ModalFocusEventNotifiable: AnyObject {
 
   func notifyForModalFocusStateChange(
+    forViewController viewController: UIViewController,
     prevState: ModalFocusState?,
     currentState: ModalFocusState,
     nextState: ModalFocusState
@@ -22,6 +23,7 @@ public protocol ModalFocusEventNotifiable: AnyObject {
 public extension ModalFocusEventNotifiable {
 
   func notifyForModalFocusStateChange(
+    forViewController viewController: UIViewController,
     prevState: ModalFocusState?,
     currentState: ModalFocusState,
     nextState: ModalFocusState
