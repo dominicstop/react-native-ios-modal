@@ -3,10 +3,9 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ExampleItemCard, ObjectPropertyDisplay, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewContext, ModalSheetMainContent, type ModalSheetViewRef } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewContext, ModalSheetMainContent, type ModalSheetViewRef, type ModalMetrics } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
-import type { ModalMetrics } from '../../../src/types/ModalMetrics';
 
 let shouldEnableModalEventsLogging = false;
 
