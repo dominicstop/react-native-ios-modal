@@ -6,9 +6,15 @@
 //
 
 import Foundation
-
+import DGSwiftUtilities
 
 public enum ViewPositionHorizontal {
+
+  public typealias Identifier = ViewPositionHorizontalIdentifier;
+
+  // MARK: - Case Members
+  // --------------------
+  
   case stretch;
   case stretchPercent(percent: CGFloat);
   
@@ -355,5 +361,41 @@ public enum ViewPositionHorizontal {
     constraints.unwrapThenAppend(groupedConstraints.constraintTrailingMin);
 
     return constraints;
+  };
+};
+
+// MARK: ViewPositionHorizontal+Helpers
+// ------------------------------------
+
+public extension ViewPositionHorizontal {
+  
+  func findConstraint(
+    inConstraints constraints: [NSLayoutConstraint],
+    withIdentifier identifierPreset: Identifier
+  ) -> NSLayoutConstraint? {
+    
+    constraints.first {
+      $0.identifier == identifierPreset.identifier;
+    };
+  };
+  
+  func findConstraint(
+    inView view: UIView,
+    withIdentifier identifierPreset: Identifier
+  ) -> NSLayoutConstraint? {
+    
+    view.constraints.first {
+      $0.identifier == identifierPreset.identifier;
+    };
+  };
+  
+  func recursivelyFindConstraint(
+    inView view: UIView,
+    withIdentifier identifierPreset: Identifier
+  ) -> NSLayoutConstraint? {
+    
+    view.recursivelyFindConstraint(
+      withIdentifier: identifierPreset.identifier
+    );
   };
 };
