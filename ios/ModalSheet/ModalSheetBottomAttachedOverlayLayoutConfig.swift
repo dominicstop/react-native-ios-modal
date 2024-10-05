@@ -10,6 +10,11 @@ import Foundation
 
 public struct ModalSheetBottomAttachedOverlayLayoutConfig {
 
+  typealias Presets = ModalSheetBottomAttachedOverlayLayoutConfigPreset;
+  
+  // MARK: - Properties
+  // ------------------
+
   public var horizontalPositionMode: ViewPositionHorizontal;
   
   public var marginLeft: CGFloat;
@@ -17,6 +22,9 @@ public struct ModalSheetBottomAttachedOverlayLayoutConfig {
   
   public var marginBottom: ModalSheetBottomDistance;
   public var paddingBottom: ModalSheetBottomDistance;
+  
+  // MARK: - Init
+  // ------------
   
   init(
     horizontalPositionMode: ViewPositionHorizontal,
@@ -31,6 +39,9 @@ public struct ModalSheetBottomAttachedOverlayLayoutConfig {
     self.marginBottom = marginBottom;
     self.paddingBottom = paddingBottom;
   };
+  
+  // MARK: - Functions
+  // -----------------
   
   public func createExternalHorizontalConstraints(
     forView childView: UIView,
@@ -74,4 +85,13 @@ public struct ModalSheetBottomAttachedOverlayLayoutConfig {
       attachingTo: parentView
     );
   };
+};
+
+// MARK: - ModalSheetBottomAttachedOverlayLayoutConfig+StaticAlias
+// ---------------------------------------------------------------
+
+public extension ModalSheetBottomAttachedOverlayLayoutConfig {
+  
+  static let `default`: Self =
+    ModalSheetBottomAttachedOverlayLayoutConfigPreset.stretchWithSafeAreaPadding.config;
 };
