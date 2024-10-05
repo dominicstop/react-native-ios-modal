@@ -3,11 +3,11 @@ import * as React from 'react';
 import { ModalSheetContent } from './ModalSheetContent';
 import { ModalSheetViewNativeIDKeys } from '../ModalSheetView/ModalSheetViewNativeIDKeys';
 
-import type { ModalSheetViewBottomAttachedContentOverlayProps } from './ModalSheetBottomAttachedContentOverlayTypes';
+import type { ModalSheetBottomAttachedContentOverlayProps } from './ModalSheetBottomAttachedContentOverlayTypes';
 
 
-export function ModalSheetViewBottomAttachedContentOverlay(
-  props: React.PropsWithChildren<ModalSheetViewBottomAttachedContentOverlayProps>
+export function ModalSheetBottomAttachedContentOverlay(
+  props: React.PropsWithChildren<ModalSheetBottomAttachedContentOverlayProps>
 ) {
   const { children, ...otherProps } = props;
   return (

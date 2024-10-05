@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ExampleItemCard, CardButton, Colors } from 'react-native-ios-utilities';
-import { ModalSheetView, ModalSheetViewContext, ModalSheetMainContent, type ModalSheetViewRef, ModalSheetViewBottomAttachedContentOverlay } from 'react-native-ios-modal';
+import { ModalSheetView, ModalSheetViewContext, ModalSheetMainContent, type ModalSheetViewRef, ModalSheetBottomAttachedContentOverlay } from 'react-native-ios-modal';
 
 import type { ExampleItemProps } from './SharedExampleTypes';
 
@@ -41,7 +41,7 @@ export function ModalSheetViewTest04(props: ExampleItemProps) {
             </Text>
           </View>
         </ModalSheetMainContent>
-        <ModalSheetViewBottomAttachedContentOverlay
+        <ModalSheetBottomAttachedContentOverlay
           contentContainerStyle={styles.modalBottomOverlayContent}
         >
           <View style={styles.bottomContentDummy}>
@@ -49,7 +49,7 @@ export function ModalSheetViewTest04(props: ExampleItemProps) {
               {'Bottom Content'}
             </Text>
           </View>
-        </ModalSheetViewBottomAttachedContentOverlay>
+        </ModalSheetBottomAttachedContentOverlay>
       </ModalSheetView>
     </ExampleItemCard>
   );
