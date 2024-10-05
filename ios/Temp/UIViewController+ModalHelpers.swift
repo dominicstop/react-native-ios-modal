@@ -49,7 +49,7 @@ extension UIViewController {
     return match;
   };
   
-  public var closestSheetDropShadowView: UIView? {
+  public var closestSheetDropShadowViewViaClimbingAncestorViews: UIView? {
     guard let targetClassName = PrivateSymbolString.classNameForDropShadowView.decodedString else {
       return nil;
     };
@@ -57,6 +57,28 @@ extension UIViewController {
     return self.view.recursivelyFindParentView {
       $0.className == targetClassName;
     };
+  };
+  
+  public var closestSheetDropShadowViewViaClimbingNextResponders: UIView? {
+    guard let targetClassName = PrivateSymbolString.classNameForDropShadowView.decodedString else {
+      return nil;
+    };
+    
+    let match = self.recursivelyFindNextResponder {
+      $0.className == targetClassName;
+    };
+    
+    return match as? UIView;
+  };
+  
+  public var closestSheetDropShadowViewViaPresentationController: UIView? {
+    self.presentationController?.presentedView;
+  };
+  
+  public var closestSheetDropShadowView: UIView? {
+       self.closestSheetDropShadowViewViaPresentationController
+    ?? self.closestSheetDropShadowViewViaClimbingAncestorViews
+    ?? self.closestSheetDropShadowViewViaClimbingNextResponders;
   };
   
   public var closestSheetPanGestureViaClimbingParentView: UIPanGestureRecognizer? {    
