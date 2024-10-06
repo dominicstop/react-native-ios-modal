@@ -938,7 +938,7 @@ PODS:
   - React-Mapbuffer (0.74.2):
     - glog
     - React-debug
-  - react-native-ios-modal (3.0.0-1):
+  - react-native-ios-modal (3.0.0-5):
     - ComputableLayout
     - DGSwiftUtilities
     - DoubleConversion
@@ -963,7 +963,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-ios-utilities (5.0.0-44):
+  - react-native-ios-utilities (5.0.0-45):
     - ComputableLayout (~> 0.7)
     - DGSwiftUtilities (~> 0.29)
     - DoubleConversion
@@ -1550,8 +1550,8 @@ SPEC CHECKSUMS:
   React-jsitracing: 0fa7f78d8fdda794667cb2e6f19c874c1cf31d7e
   React-logger: 29fa3e048f5f67fe396bc08af7606426d9bd7b5d
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
-  react-native-ios-modal: a63d3c8d2fd18d1b6d0702859975b30906b6497c
-  react-native-ios-utilities: 3d7948c46726b4de8b4e62bbe44f6b108fea63e1
+  react-native-ios-modal: 0aec2ee33f10ebcf3d8c4f0aa5daa317ad8df693
+  react-native-ios-utilities: 9504bdbf79354d874a03d398769e973edc4c55ff
   react-native-safe-area-context: f0d592c427d75508f2a7cd7375f533cc9283cd8a
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: ff7efaff7098639db5631236cfd91d60abff04c0

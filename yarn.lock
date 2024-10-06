@@ -9188,7 +9188,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.74.2
     react-native-codegen: ^0.70.7
-    react-native-ios-utilities: v5.0.0-44
+    react-native-ios-utilities: next
     react-native-safe-area-context: ^4.11.0
     react-native-screens: ^3.34.0
   languageName: unknown
@@ -9209,7 +9209,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.74.2
     react-native-builder-bob: ^0.20.0
-    react-native-ios-utilities: v5.0.0-44
+    react-native-ios-utilities: next
     release-it: ^15.0.0
     turbo: ^1.10.7
     typescript: ^5.2.2
@@ -9220,13 +9220,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-ios-utilities@npm:v5.0.0-44":
-  version: 5.0.0-44
-  resolution: "react-native-ios-utilities@npm:5.0.0-44"
+"react-native-ios-utilities@npm:next":
+  version: 5.0.0-45
+  resolution: "react-native-ios-utilities@npm:5.0.0-45"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: f96505c95c3a3f8cf23b8d532d88ee79b598345b552dbd46c3b69d83fae4626f65bd80330d191cb1899c751a7669227908c63ba70f2d1981db18685222d6877b
+  checksum: 9a531f0c8484d1d6912e5367080cce55e4cfc1b84a80f7eb70743b4f990e3ee7e6719d54a096fe5613c18b946f6e9e12aa43b6b89fb81cbe64d0a154e7f6101d
   languageName: node
   linkType: hard
 
