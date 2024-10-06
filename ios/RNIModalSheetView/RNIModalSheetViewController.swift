@@ -22,6 +22,8 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
   private(set) public weak var mainSheetContent: RNIWrapperViewContent?;
   
   public var positionConfigForMainSheetContent: AlignmentPositionConfig = .default;
+
+  public var bottomOverlayController: RNIModalSheetBottomAttachedOverlayController?;
   
   // MARK: - Computed Properties
   // ---------------------------
@@ -46,6 +48,36 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
   public override func viewDidLoad() {
     super.viewDidLoad();
   
+    self.setupMainContent();
+    //self.setupBottomOverlayIfNeeded();
+  };
+  
+  public override func viewIsAppearing(_ animated: Bool) {
+    self.setupBottomOverlayIfNeeded();
+  };
+
+  public override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews();
+    
+    guard let mainSheetContentParent = self.mainSheetContentParent else {
+      return;
+    };
+    
+    self.positionConfigForMainSheetContent.setIntrinsicContentSizeOverrideIfNeeded(
+      forRootReactView: mainSheetContentParent,
+      withSize: self.view.bounds.size
+    );
+    
+    self.positionConfigForMainSheetContent.applySize(
+      toRootReactView: mainSheetContentParent,
+      attachingTo: self.view
+    );
+  };
+  
+  // MARK: Methods
+  // --------------
+  
+  func setupMainContent(){
     guard let mainSheetContentParent = self.mainSheetContentParent,
           let mainSheetContent = mainSheetContentParent.contentDelegate as? RNIWrapperViewContent
     else {
@@ -91,27 +123,31 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
       );
     };
   };
-
-  public override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews();
-    
-    guard let mainSheetContentParent = self.mainSheetContentParent else {
+  
+  func setupBottomOverlayIfNeeded(){
+    guard let bottomOverlayController = self.bottomOverlayController,
+          let targetView = self.closestSheetDropShadowView?.superview
+    else {
       return;
     };
-    
-    self.positionConfigForMainSheetContent.setIntrinsicContentSizeOverrideIfNeeded(
-      forRootReactView: mainSheetContentParent,
-      withSize: self.view.bounds.size
+
+    // let the child setup constraints + add itself as it's subview...
+    // but, is this okay?
+    //
+    // wouldn't it be better if the logic for layout be handled in the child
+    // vc's `didMove` lifecycle method?
+    //
+    //
+    bottomOverlayController.attachView(
+      anchoredToBottomEdgesOf: targetView,
+      withSheetContainerView: self.view
     );
     
-    self.positionConfigForMainSheetContent.applySize(
-      toRootReactView: mainSheetContentParent,
-      attachingTo: self.view
-    );
+    targetView.bringSubviewToFront(bottomOverlayController.view);
+    
+    self.addChild(bottomOverlayController);
+    bottomOverlayController.didMove(toParent: parent);
   };
-  
-  // MARK: Methods
-  // --------------
 };
 
 extension RNIModalSheetViewController: RNIViewLifecycle {

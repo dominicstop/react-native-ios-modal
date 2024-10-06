@@ -56,7 +56,7 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
   public var modalSheetController: RNIModalSheetViewController?;
   public var sheetMainContentParentView: RNIContentViewParentDelegate?;
   
-  public var sheetBottomAttachedOverlayController: RNIModalSheetDecorationController?;
+  public var sheetBottomAttachedOverlayController: RNIModalSheetBottomAttachedOverlayController?;
   public var sheetBottomAttachedOverlayParentView: RNIContentViewParentDelegate?;
   
   // MARK: - Properties - RNIContentViewDelegate
@@ -121,24 +121,17 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     modalVC.sheetPresentationStateMachine.eventDelegates.add(self);
     modalVC.modalFocusEventDelegates.add(self);
     
-    if let sheetBottomAttachedOverlayParentView = self.sheetBottomAttachedOverlayParentView {
-      let childVC = RNIModalSheetDecorationController();
-      self.sheetBottomAttachedOverlayController = childVC;
-      
-      childVC.rootReactView = sheetBottomAttachedOverlayParentView;
-      
-      childVC.positionConfig = .init(
-        horizontalAlignment: .stretchTarget,
-        verticalAlignment: .targetBottom
-      );
-      
-      childVC.view.backgroundColor = .red;
-      childVC.view.alpha = 0.5;
-      
-      modalVC.view.addSubview(childVC.view);
-      modalVC.addChild(childVC);
-      childVC.didMove(toParent: modalVC);
-    };
+    // TODO: TEMP!!
+    let childVC = RNIModalSheetBottomAttachedOverlayController();
+    modalVC.bottomOverlayController = childVC;
+    
+    // if let sheetBottomAttachedOverlayParentView = self.sheetBottomAttachedOverlayParentView {
+    //   let childVC = RNIModalSheetBottomAttachedOverlayController();
+    //   self.sheetBottomAttachedOverlayController = childVC;
+    //   modalVC.bottomAttachedOverlayController = childVC;
+    //
+    //   childVC.mainContentView = sheetBottomAttachedOverlayParentView;
+    // };
     
     return modalVC;
   };
