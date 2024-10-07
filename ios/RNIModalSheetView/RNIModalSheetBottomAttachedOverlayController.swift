@@ -68,23 +68,57 @@ extension RNIContentViewController: RNIViewLifecycle {
   }
 };
 
+extension RNIModalSheetBottomAttachedOverlayController: EntranceAnimationTransitioning {
 
-
-
-public class DummyContentController: UIViewController {
-  public override func viewDidLoad() {
-    self.view.backgroundColor = .blue;
+  public func createEntranceAnimationBlocks() -> (
+    start: () -> Void,
+    end: () -> Void
+  ) {
+    let initialTransform = Transform3D(
+      translateY: 100
+    );
     
-    let size = self.view.bounds.size;
-    
-    self.view.translatesAutoresizingMaskIntoConstraints = false;
-    NSLayoutConstraint.activate([
-      self.view.heightAnchor.constraint(equalToConstant: 100),
-    ]);
-  };
+    let finalTransform = Transform3D(
+      translateY: 0
+    );
   
-  public override func viewWillLayoutSubviews() {
-    let size = self.view.bounds.size;
-    print(size);
-  }
+    return (
+      start: {
+        //self.view.alpha = 0;
+        self.view.layer.transform = initialTransform.transform;
+      },
+      end: {
+        //self.view.alpha = 1;
+        self.view.layer.transform = finalTransform.transform;
+      }
+    );
+  };
+};
+
+extension RNIModalSheetBottomAttachedOverlayController: ExitAnimationTransitioning {
+
+  public func createExitAnimationBlocks() -> (
+    start: () -> Void,
+    end: () -> Void
+  ) {
+    
+    let initialTransform = Transform3D(
+      translateY: 0
+    );
+    
+    let finalTransform = Transform3D(
+      translateY: 100
+    );
+  
+    return (
+      start: {
+        //self.view.alpha = 0;
+        self.view.layer.transform = initialTransform.transform;
+      },
+      end: {
+        //self.view.alpha = 1;
+        self.view.layer.transform = finalTransform.transform;
+      }
+    );
+  };
 };

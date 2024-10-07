@@ -54,7 +54,14 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
   
   public override func viewIsAppearing(_ animated: Bool) {
     self.setupBottomOverlayIfNeeded();
+    super.viewIsAppearing(animated);
+    self.setupEntranceAnimation();
   };
+  
+  public override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated);
+    self.setupExitAnimation();
+  }
   
   // MARK: Methods
   // --------------
@@ -122,6 +129,37 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
     
     self.addChild(bottomOverlayController);
     bottomOverlayController.didMove(toParent: parent);
+  };
+  
+  func setupEntranceAnimation(){
+    guard let transitionCoordinator = self.transitionCoordinator else {
+      return;
+    };
+    
+    
+    if let bottomOverlayController = self.bottomOverlayController {
+      let animationBlocks = bottomOverlayController.createEntranceAnimationBlocks();
+      
+      animationBlocks.start();
+      transitionCoordinator.animate { context in
+        animationBlocks.end();
+      };
+    };
+  };
+  
+  func setupExitAnimation(){
+    guard let transitionCoordinator = self.transitionCoordinator else {
+      return;
+    };
+    
+    if let bottomOverlayController = self.bottomOverlayController {
+      let animationBlocks = bottomOverlayController.createExitAnimationBlocks();
+      
+      animationBlocks.start();
+      transitionCoordinator.animate { context in
+        animationBlocks.end();
+      };
+    };
   };
 };
 
