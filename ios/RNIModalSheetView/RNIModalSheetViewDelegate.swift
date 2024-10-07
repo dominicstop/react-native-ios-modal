@@ -120,18 +120,14 @@ public final class RNIModalSheetViewDelegate: UIView, RNIContentView {
     modalVC.modalLifecycleEventDelegates.add(self);
     modalVC.sheetPresentationStateMachine.eventDelegates.add(self);
     modalVC.modalFocusEventDelegates.add(self);
-    
-    // TODO: TEMP!!
-    let childVC = RNIModalSheetBottomAttachedOverlayController();
-    modalVC.bottomOverlayController = childVC;
-    
-    // if let sheetBottomAttachedOverlayParentView = self.sheetBottomAttachedOverlayParentView {
-    //   let childVC = RNIModalSheetBottomAttachedOverlayController();
-    //   self.sheetBottomAttachedOverlayController = childVC;
-    //   modalVC.bottomAttachedOverlayController = childVC;
-    //
-    //   childVC.mainContentView = sheetBottomAttachedOverlayParentView;
-    // };
+        
+    if let sheetBottomAttachedOverlayParentView = self.sheetBottomAttachedOverlayParentView {
+      let childVC = RNIModalSheetBottomAttachedOverlayController();
+      self.sheetBottomAttachedOverlayController = childVC;
+      modalVC.bottomOverlayController = childVC;
+      
+      childVC.reactParentView = sheetBottomAttachedOverlayParentView;
+    };
     
     return modalVC;
   };
