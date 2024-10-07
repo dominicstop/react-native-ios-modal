@@ -21,13 +21,13 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
   public weak var mainSheetContentParent: RNIContentViewParentDelegate?;
   private(set) public weak var mainSheetContent: RNIWrapperViewContent?;
   
-  public var positionConfigForMainSheetContent: AlignmentPositionConfig = .default;
-
+  public var mainSheetContentController: RNIContentViewController?;
   public var bottomOverlayController: RNIModalSheetBottomAttachedOverlayController?;
   
   // MARK: - Computed Properties
   // ---------------------------
   
+  // TODO: TEMP!
   public var baseEventObject: [String: Any] {
     var eventDict: [String: Any] = [:];
     
@@ -55,24 +55,6 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
   public override func viewIsAppearing(_ animated: Bool) {
     self.setupBottomOverlayIfNeeded();
   };
-
-  public override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews();
-    
-    guard let mainSheetContentParent = self.mainSheetContentParent else {
-      return;
-    };
-    
-    self.positionConfigForMainSheetContent.setIntrinsicContentSizeOverrideIfNeeded(
-      forRootReactView: mainSheetContentParent,
-      withSize: self.view.bounds.size
-    );
-    
-    self.positionConfigForMainSheetContent.applySize(
-      toRootReactView: mainSheetContentParent,
-      attachingTo: self.view
-    );
-  };
   
   // MARK: Methods
   // --------------
@@ -87,41 +69,35 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
     self.mainSheetContent = mainSheetContent;
     mainSheetContentParent.reactViewLifecycleDelegates.add(self);
     
-    // MARK: Setup Constraints
-    #if !RCT_NEW_ARCH_ENABLED
-    mainSheetContentParent.removeAllAncestorConstraints();
-    #endif
+    let contentVC = RNIContentViewController();
+    contentVC.reactContentParentView = mainSheetContentParent;
+    contentVC.contentSizingMode = .sizingFromNative;
+    contentVC.contentPositioningMode = .stretch;
     
-    self.view.addSubview(mainSheetContentParent);
-    mainSheetContentParent.translatesAutoresizingMaskIntoConstraints = false;
-        
-    let constraints = self.positionConfigForMainSheetContent.createConstraints(
-      forView: mainSheetContentParent,
-      attachingTo: self.view,
-      enclosingView: self.view
-    );
-    
-    NSLayoutConstraint.activate(constraints);
-    
-    // MARK: Set Initial Size
-    let hasValidSize = !self.view.bounds.size.isZero;
-    if hasValidSize {
-      self.positionConfigForMainSheetContent.setIntrinsicContentSizeOverrideIfNeeded(
-        forRootReactView: mainSheetContentParent,
-        withSize: self.view.bounds.size
-      );
+    self.addChild(contentVC);
+    defer {
+      contentVC.didMove(toParent: self);
     };
     
-    let shouldSetSize =
-         hasValidSize
-      && self.positionConfigForMainSheetContent.isStretchingOnBothAxis;
-      
-    if shouldSetSize {
-      self.positionConfigForMainSheetContent.applySize(
-        toRootReactView: mainSheetContentParent,
-        attachingTo: self.view
-      );
-    };
+    // MARK: Setup Layout
+    
+    self.view.addSubview(contentVC.view);
+    contentVC.view.translatesAutoresizingMaskIntoConstraints = false;
+    
+    NSLayoutConstraint.activate([
+      contentVC.view.leadingAnchor.constraint(
+        equalTo: self.view.leadingAnchor
+      ),
+      contentVC.view.trailingAnchor.constraint(
+        equalTo: self.view.trailingAnchor
+      ),
+      contentVC.view.topAnchor.constraint(
+        equalTo: self.view.topAnchor
+      ),
+      contentVC.view.bottomAnchor.constraint(
+        equalTo: self.view.bottomAnchor
+      ),
+    ]);
   };
   
   func setupBottomOverlayIfNeeded(){
@@ -136,7 +112,6 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
     //
     // wouldn't it be better if the logic for layout be handled in the child
     // vc's `didMove` lifecycle method?
-    //
     //
     bottomOverlayController.attachView(
       anchoredToBottomEdgesOf: targetView,
