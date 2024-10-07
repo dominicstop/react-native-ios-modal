@@ -48,6 +48,15 @@ export function ModalSheetViewTest04(props: ExampleItemProps) {
             <Text>
               {'Bottom Content'}
             </Text>
+            <Text>
+              {'Bottom Content'}
+            </Text>
+            <Text>
+              {'Bottom Content'}
+            </Text>
+            <Text>
+              {'Bottom Content'}
+            </Text>
           </View>
         </ModalSheetBottomAttachedContentOverlay>
       </ModalSheetView>
@@ -78,5 +87,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PURPLE[100],
   },
   bottomContentDummy: {
+    backgroundColor: Colors.PURPLE[200],
   },
 });
