@@ -7,6 +7,7 @@
 
 import Foundation
 import DGSwiftUtilities
+import react_native_ios_utilities
 
 
 /// Should this really be an enum?
@@ -60,6 +61,11 @@ public enum RNIContentSizingMode: String {
       default:
         return false;
     };
+  };
+  
+  public var isSizingWidthOrHeightFromReact: Bool {
+       self.isSizingHeightFromReact
+    || self.isSizingWidthFromReact;
   };
   
   // MARK: Functions
@@ -127,5 +133,127 @@ public enum RNIContentSizingMode: String {
       isSizingWidthFromNative: horizontalAlignmentPosition.isStretching,
       isSizingHeightFromNative: verticalAlignmentPosition.isStretching
     );
+  };
+  
+  public func updateReactSizeIfNeeded(
+    forReactParent reactParentView: RNIContentViewParentDelegate,
+    withNewSize newSize: CGSize
+  ){
+    
+    switch self {
+      case .sizingFromReact:
+        return;
+        
+      case .sizingFromNative:
+        let didSizeChange =
+             reactParentView.intrinsicContentSize.width != newSize.width
+          || reactParentView.intrinsicContentSize.height != newSize.height;
+          
+        guard didSizeChange else {
+          return;
+        };
+        
+        reactParentView.setSize(newSize);
+        reactParentView.intrinsicContentSizeOverride = newSize;
+        reactParentView.invalidateIntrinsicContentSize();
+        
+      case .sizingWidthFromReactAndHeightFromNative:
+        let oldReactHeight = reactParentView.intrinsicContentSize.height;
+        let newReactHeight = newSize.height;
+        
+        guard newReactHeight != oldReactHeight else {
+          return;
+        };
+        
+        reactParentView.intrinsicContentSizeOverride = .init(
+          width: 0,
+          height: newReactHeight
+        );
+        
+        reactParentView.invalidateIntrinsicContentSize();
+        
+        #if RCT_NEW_ARCH_ENABLED
+        reactParentView.requestToUpdateState(
+          .init(
+            minSize: .init(width: 0, height: newReactHeight),
+            shouldSetMinWidth: true,
+            maxSize: .init(width: 0, height: newReactHeight),
+            shouldSetMaxHeight: true
+          )
+        );
+        #else
+        guard let shadowView = reactParentView.cachedShadowView else {
+          return;
+        };
+        
+        let didChange =
+             CGFloat(shadowView.minHeight.value) != newReactHeight
+          || CGFloat(shadowView.maxHeight.value) != newReactHeight;
+          
+        guard didChange else {
+          return;
+        };
+        
+        shadowView.minHeight = .init(
+          value: Float(newReactHeight),
+          unit: .point
+        );
+        
+        shadowView.maxHeight = .init(
+          value: Float(newReactHeight),
+          unit: .point
+        );
+        
+        shadowView.dirtyLayout();
+        #endif
+        
+      case .sizingHeightFromReactAndWidthFromNative:
+        let oldReactWidth = reactParentView.intrinsicContentSize.width;
+        let newReactWidth = newSize.width;
+        
+        guard newReactWidth != oldReactWidth else {
+          return;
+        };
+        
+        reactParentView.intrinsicContentSizeOverride = .init(
+          width: newReactWidth,
+          height: 0
+        );
+        
+        #if RCT_NEW_ARCH_ENABLED
+        reactParentView.requestToUpdateState(
+          .init(
+            minSize: .init(width: newReactWidth, height: 0),
+            shouldSetMinWidth: true,
+            maxSize: .init(width: newReactWidth, height: 0),
+            shouldSetMaxHeight: true
+          )
+        );
+        #else
+        guard let shadowView = reactParentView.cachedShadowView else {
+          return;
+        };
+        
+        let didChange =
+             CGFloat(shadowView.minWidth.value) != newReactWidth
+          || CGFloat(shadowView.maxWidth.value) != newReactWidth;
+          
+        guard didChange else {
+          return;
+        };
+        
+        shadowView.minWidth = .init(
+          value: Float(newWidth),
+          unit: .point
+        );
+        
+        shadowView.maxWidth = .init(
+          value: Float(newWidth),
+          unit: .point
+        );
+        
+        shadowView.dirtyLayout();
+        #endif
+    };
   };
 };
