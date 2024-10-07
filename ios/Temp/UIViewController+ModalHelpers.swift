@@ -146,7 +146,7 @@ extension UIViewController {
     .init(viewController: self);
   };
   
-  public var presentationControllerMetrics: PresentationControllerMetrics? {
+  public var presentationControllerMetrics: RNIPresentationControllerMetrics? {
     self.presentationController?.presentationControllerMetrics;
   };
 };

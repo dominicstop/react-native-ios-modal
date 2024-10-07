@@ -1,5 +1,5 @@
 //
-//  PresentationControllerMetrics.swift
+//  RNIPresentationControllerMetrics.swift
 //  react-native-ios-modal
 //
 //  Created by Dominic Go on 9/27/24.
@@ -9,7 +9,7 @@ import UIKit
 import DGSwiftUtilities
 
 
-public struct PresentationControllerMetrics: DictionaryRepresentationSynthesizing {
+public struct RNIPresentationControllerMetrics: DictionaryRepresentationSynthesizing {
 
   public var instanceID: String;
 

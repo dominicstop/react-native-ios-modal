@@ -10,7 +10,7 @@ import UIKit
 
 extension UIPresentationController {
   
-  public var presentationControllerMetrics: PresentationControllerMetrics {
+  public var presentationControllerMetrics: RNIPresentationControllerMetrics {
     .init(from: self);
   };
 };
