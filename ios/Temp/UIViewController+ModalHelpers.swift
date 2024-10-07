@@ -142,7 +142,7 @@ extension UIViewController {
     return window.currentModalLevel;
   };
   
-  public var modalMetrics: ModalViewControllerMetrics {
+  public var modalMetrics: RNIModalViewControllerMetrics {
     .init(viewController: self);
   };
   
