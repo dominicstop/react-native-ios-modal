@@ -156,8 +156,20 @@ open class RNIModalSheetViewController: ModalSheetViewControllerLifecycleNotifie
       let animationBlocks = bottomOverlayController.createExitAnimationBlocks();
       
       animationBlocks.start();
-      transitionCoordinator.animate { context in
-        animationBlocks.end();
+      transitionCoordinator.animate {
+        if $0.isCancelled {
+          animationBlocks.start();
+        
+        } else {
+          animationBlocks.end();
+        };
+        
+      } completion: { context in
+        guard context.isCancelled else {
+          return
+        };
+        
+        animationBlocks.start();
       };
     };
   };
