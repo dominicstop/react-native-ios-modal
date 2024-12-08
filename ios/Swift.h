@@ -9,7 +9,7 @@
 // the module.
 // Otherwise, it's available only locally with double-quoted imports.
 #if __has_include(<react_native_ios_modal/react_native_ios_modal-Swift.h>)
-#import "<react_native_ios_modal/react_native_ios_modal-Swift.h>"
+#import <react_native_ios_modal/react_native_ios_modal-Swift.h>
 #else
 #import "react_native_ios_modal-Swift.h"
 #endif

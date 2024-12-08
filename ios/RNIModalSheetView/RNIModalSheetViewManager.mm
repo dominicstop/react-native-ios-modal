@@ -12,7 +12,7 @@
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
 
-#import "react-native-ios-utilities/RNIBaseViewUtils.h"
+#import <react_native_ios_utilities/RNIBaseViewUtils.h>
 
 
 @interface RNIModalSheetViewManager : RCTViewManager
