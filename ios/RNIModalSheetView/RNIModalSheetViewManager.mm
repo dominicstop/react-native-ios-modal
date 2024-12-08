@@ -25,7 +25,7 @@ RCT_EXPORT_MODULE(RNIModalSheetView)
 #ifndef RCT_NEW_ARCH_ENABLED
 - (UIView *)view
 {
-  return [[RNIModalSheetView new] initWithBridge:self.bridge];
+  return [[RNIModalSheetView alloc] initWithBridge:self.bridge];
 }
 
 RNI_EXPORT_VIEW_PROPERTY(reactChildrenCount, NSNumber);
