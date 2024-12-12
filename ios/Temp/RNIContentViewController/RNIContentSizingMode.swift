@@ -243,12 +243,12 @@ public enum RNIContentSizingMode: String {
         };
         
         shadowView.minWidth = .init(
-          value: Float(newWidth),
+          value: Float(newReactWidth),
           unit: .point
         );
         
         shadowView.maxWidth = .init(
-          value: Float(newWidth),
+          value: Float(newReactWidth),
           unit: .point
         );
         
