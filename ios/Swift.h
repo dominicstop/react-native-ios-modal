@@ -10,10 +10,13 @@
 // Otherwise, it's available only locally with double-quoted imports.
 #if __has_include(<react_native_ios_modal/react_native_ios_modal-Swift.h>)
 #import <react_native_ios_modal/react_native_ios_modal-Swift.h>
+
+#elif __has_include(<react-native-ios-modal/react_native_ios_modal-Swift.h>)
+#import <react-native-ios-modal/react_native_ios_modal-Swift.h>
+
 #else
 #import "react_native_ios_modal-Swift.h"
 #endif
-
 
 // #import <react-native-ios-utilities/react-native-ios-utilities-Swift.h>
 // #import "<react_native_ios_utilities/react_native_ios_utilities-Swift.h>"
