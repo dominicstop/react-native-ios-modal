@@ -8,7 +8,7 @@
 #if __cplusplus
 #pragma once
 
-#include "RNIHeaderUtils.h"
+#include "RNIModalHeaderUtils.h"
 #import RNI_UTILITIES_HEADER(RNIBaseViewShadowNode.h)
 #import RNI_UTILITIES_HEADER(RNIBaseViewProps.h)
 #import RNI_UTILITIES_HEADER(RNIBaseViewEventEmitter.h)

@@ -6,7 +6,7 @@
 //
 
 #import "RNIModalSheetView.h"
-#import "RNIHeaderUtils.h"
+#import "RNIModalHeaderUtils.h"
 #import "../Swift.h"
 
 #import RNI_UTILITIES_HEADER(RNIBaseView.h)

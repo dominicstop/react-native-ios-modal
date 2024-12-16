@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 6/6/24.
 //
 
-#import "RNIHeaderUtils.h"
+#import "RNIModalHeaderUtils.h"
 #import RNI_UTILITIES_HEADER(RNIBaseView.h)
 
 #if RCT_NEW_ARCH_ENABLED

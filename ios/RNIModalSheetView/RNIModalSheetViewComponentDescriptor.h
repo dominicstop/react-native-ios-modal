@@ -11,7 +11,7 @@
 #include "RNIModalSheetViewShadowNode.h"
 #include "RNIBaseViewComponentDescriptor.h"
 
-#include "RNIHeaderUtils.h"
+#include "RNIModalHeaderUtils.h"
 #import RNI_UTILITIES_HEADER(RNIBaseViewState.h)
 
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
