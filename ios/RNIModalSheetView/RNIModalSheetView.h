@@ -5,11 +5,8 @@
 //  Created by Dominic Go on 6/6/24.
 //
 
-#if __has_include(<react_native_ios_utilities/RNIBaseView.h>)
-#import <react_native_ios_utilities/RNIBaseView.h>
-#else
-#import <react-native-ios-utilities/RNIBaseView.h>
-#endif
+#import "RNIHeaderUtils.h"
+#import RNI_UTILITIES_HEADER(RNIBaseView.h)
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/RCTViewComponentView.h>
